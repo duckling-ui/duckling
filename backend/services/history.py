@@ -19,7 +19,7 @@ class HistoryService:
         input_format: str = None,
         settings: Dict[str, Any] = None,
         file_size: float = None
-    ) -> Conversion:
+    ) -> Dict[str, Any]:
         """
         Create a new history entry.
 
@@ -32,7 +32,7 @@ class HistoryService:
             file_size: File size in bytes
 
         Returns:
-            Created Conversion object
+            Dictionary representation of the created entry
         """
         with get_db_session() as session:
             entry = Conversion(
@@ -47,9 +47,9 @@ class HistoryService:
             session.add(entry)
             session.commit()
 
-            # Refresh to get the committed state
+            # Refresh to get the committed state and convert to dict before session closes
             session.refresh(entry)
-            return entry
+            return entry.to_dict()
 
     def update_status(
         self,
@@ -58,7 +58,7 @@ class HistoryService:
         confidence: float = None,
         error_message: str = None,
         output_path: str = None
-    ) -> Optional[Conversion]:
+    ) -> Optional[Dict[str, Any]]:
         """
         Update the status of a conversion entry.
 
@@ -70,7 +70,7 @@ class HistoryService:
             output_path: Path to output files
 
         Returns:
-            Updated Conversion object or None if not found
+            Dictionary representation of updated entry or None if not found
         """
         with get_db_session() as session:
             entry = session.query(Conversion).filter_by(id=job_id).first()
@@ -90,7 +90,7 @@ class HistoryService:
 
             session.commit()
             session.refresh(entry)
-            return entry
+            return entry.to_dict()
 
     def get_entry(self, job_id: str) -> Optional[Dict[str, Any]]:
         """

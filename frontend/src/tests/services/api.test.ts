@@ -18,7 +18,10 @@ describe('API Service', () => {
     vi.clearAllMocks();
   });
 
-  it('creates axios instance with correct config', () => {
+  it('creates axios instance with correct config', async () => {
+    // Import the API module to trigger axios.create
+    await import('../../services/api');
+
     expect(axios.create).toHaveBeenCalledWith({
       baseURL: '/api',
       headers: {

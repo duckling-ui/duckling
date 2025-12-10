@@ -258,6 +258,15 @@ docling-ui/
 └── docker-compose.yml      # Docker configuration
 ```
 
+## Documentation
+
+Comprehensive documentation is available in the [docs/](docs/) directory:
+
+- **[Architecture](docs/ARCHITECTURE.md)** - System design and component overview
+- **[API Reference](docs/API.md)** - Complete API documentation
+- **[Configuration](docs/CONFIGURATION.md)** - All settings and options
+- **[Deployment](docs/DEPLOYMENT.md)** - Production deployment guide
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.

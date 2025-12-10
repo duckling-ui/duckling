@@ -1,10 +1,10 @@
 {
   "ocr": {
     "enabled": true,
-    "language": "en",
+    "language": "de",
     "force_full_page_ocr": false,
     "backend": "ocrmac",
-    "use_gpu": true,
+    "use_gpu": false,
     "confidence_threshold": 0.5,
     "bitmap_area_threshold": 0.05
   },
@@ -26,12 +26,12 @@
     "default_format": "markdown"
   },
   "performance": {
-    "device": "mps",
-    "num_threads": 6,
+    "device": "auto",
+    "num_threads": 4,
     "document_timeout": null
   },
   "chunking": {
-    "enabled": true,
+    "enabled": false,
     "max_tokens": 512,
     "merge_peers": true
   }

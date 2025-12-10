@@ -1,12 +1,17 @@
 """Flask application entry point for Docling UI."""
 
 import os
-from flask import Flask, jsonify
+from pathlib import Path
+from flask import Flask, jsonify, send_from_directory, abort
 from flask_cors import CORS
+import markdown
 
 from config import get_config
 from models.database import init_db
 from routes import convert_bp, settings_bp, history_bp
+
+# Docs directory path
+DOCS_DIR = Path(__file__).parent.parent / "docs"
 
 
 def create_app(config_class=None):
@@ -73,6 +78,90 @@ def create_app(config_class=None):
                 {"id": "text", "name": "Plain Text", "extension": ".txt"}
             ]
         })
+
+    # Documentation endpoints
+    @app.route("/api/docs")
+    def list_docs():
+        """List available documentation files."""
+        docs = []
+        if DOCS_DIR.exists():
+            for doc_file in DOCS_DIR.glob("*.md"):
+                if doc_file.name.endswith(".png.md"):
+                    continue  # Skip placeholder files
+                docs.append({
+                    "id": doc_file.stem.lower(),
+                    "name": doc_file.stem.replace("_", " ").title(),
+                    "filename": doc_file.name
+                })
+        return jsonify({
+            "docs": sorted(docs, key=lambda x: x["name"]),
+            "base_url": "/api/docs"
+        })
+
+    @app.route("/api/docs/<doc_name>")
+    def get_doc(doc_name):
+        """Get a documentation file rendered as HTML."""
+        # Try with .md extension
+        doc_path = DOCS_DIR / f"{doc_name}.md"
+        if not doc_path.exists():
+            # Try uppercase
+            doc_path = DOCS_DIR / f"{doc_name.upper()}.md"
+        if not doc_path.exists():
+            # Try title case
+            doc_path = DOCS_DIR / f"{doc_name.title()}.md"
+        if not doc_path.exists():
+            abort(404)
+
+        # Read and convert markdown to HTML
+        md_content = doc_path.read_text(encoding="utf-8")
+        html_content = markdown.markdown(
+            md_content,
+            extensions=['tables', 'fenced_code', 'codehilite', 'toc']
+        )
+
+        return jsonify({
+            "name": doc_path.stem,
+            "filename": doc_path.name,
+            "content_md": md_content,
+            "content_html": html_content
+        })
+
+    @app.route("/api/docs/<doc_name>/raw")
+    def get_doc_raw(doc_name):
+        """Get raw markdown content of a documentation file."""
+        doc_path = DOCS_DIR / f"{doc_name}.md"
+        if not doc_path.exists():
+            doc_path = DOCS_DIR / f"{doc_name.upper()}.md"
+        if not doc_path.exists():
+            abort(404)
+
+        return send_from_directory(DOCS_DIR, doc_path.name, mimetype="text/markdown")
+
+    @app.route("/api/docs/images/<path:filename>")
+    def get_doc_image(filename):
+        """Serve images from the docs directory."""
+        # Security: only allow image extensions
+        allowed_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp'}
+        ext = Path(filename).suffix.lower()
+        if ext not in allowed_extensions:
+            abort(404)
+
+        image_path = DOCS_DIR / filename
+        if not image_path.exists():
+            abort(404)
+
+        # Determine mimetype
+        mimetypes = {
+            '.png': 'image/png',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.gif': 'image/gif',
+            '.svg': 'image/svg+xml',
+            '.webp': 'image/webp'
+        }
+        mimetype = mimetypes.get(ext, 'application/octet-stream')
+
+        return send_from_directory(DOCS_DIR, filename, mimetype=mimetype)
 
     # Error handlers
     @app.errorhandler(400)

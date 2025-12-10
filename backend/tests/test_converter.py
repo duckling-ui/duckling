@@ -47,7 +47,7 @@ class TestConverterService:
     def test_service_initialization(self):
         """Test service initialization."""
         service = ConverterService()
-        assert service._converter is None
+        assert service._default_converter is None
 
     def test_create_job(self):
         """Test creating a job through the service."""

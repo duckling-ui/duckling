@@ -36,10 +36,10 @@ class TestHistoryService:
             file_size=1024
         )
 
-        assert entry.id == "test-123"
-        assert entry.filename == "test_file.pdf"
-        assert entry.original_filename == "Original Document.pdf"
-        assert entry.status == "pending"
+        assert entry["id"] == "test-123"
+        assert entry["filename"] == "test_file.pdf"
+        assert entry["original_filename"] == "Original Document.pdf"
+        assert entry["status"] == "pending"
 
     def test_get_entry(self):
         """Test retrieving a history entry."""
@@ -75,9 +75,9 @@ class TestHistoryService:
             confidence=0.95
         )
 
-        assert updated.status == "completed"
-        assert updated.confidence == 0.95
-        assert updated.completed_at is not None
+        assert updated["status"] == "completed"
+        assert updated["confidence"] == 0.95
+        assert updated["completed_at"] is not None
 
     def test_update_status_with_error(self):
         """Test updating entry status with error."""
@@ -94,8 +94,8 @@ class TestHistoryService:
             error_message="Conversion failed"
         )
 
-        assert updated.status == "failed"
-        assert updated.error_message == "Conversion failed"
+        assert updated["status"] == "failed"
+        assert updated["error_message"] == "Conversion failed"
 
     def test_get_all(self):
         """Test getting all entries."""
