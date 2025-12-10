@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { useDropzone, FileRejection } from 'react-dropzone';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface DropZoneProps {
@@ -45,7 +45,7 @@ export default function DropZone({
   const [error, setError] = useState<string | null>(null);
 
   const onDrop = useCallback(
-    (acceptedFiles: File[], rejectedFiles: { file: File; errors: { message: string }[] }[]) => {
+    (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       setError(null);
 
       if (rejectedFiles.length > 0) {
@@ -76,19 +76,19 @@ export default function DropZone({
 
   return (
     <div className="w-full">
-      <motion.div
-        {...getRootProps()}
-        className={`
-          relative overflow-hidden rounded-2xl border-2 border-dashed p-12
-          transition-all duration-300 cursor-pointer
-          ${isDragActive ? 'border-primary-500 bg-primary-500/10' : 'border-dark-600 hover:border-dark-500'}
-          ${isDragAccept ? 'border-primary-400 bg-primary-500/15' : ''}
-          ${isDragReject ? 'border-red-500 bg-red-500/10' : ''}
-          ${disabled || isUploading ? 'opacity-50 cursor-not-allowed' : ''}
-        `}
-        whileHover={!disabled && !isUploading ? { scale: 1.01 } : {}}
-        whileTap={!disabled && !isUploading ? { scale: 0.99 } : {}}
-      >
+      <div {...getRootProps()}>
+        <motion.div
+          className={`
+            relative overflow-hidden rounded-2xl border-2 border-dashed p-12
+            transition-all duration-300 cursor-pointer
+            ${isDragActive ? 'border-primary-500 bg-primary-500/10' : 'border-dark-600 hover:border-dark-500'}
+            ${isDragAccept ? 'border-primary-400 bg-primary-500/15' : ''}
+            ${isDragReject ? 'border-red-500 bg-red-500/10' : ''}
+            ${disabled || isUploading ? 'opacity-50 cursor-not-allowed' : ''}
+          `}
+          whileHover={!disabled && !isUploading ? { scale: 1.01 } : undefined}
+          whileTap={!disabled && !isUploading ? { scale: 0.99 } : undefined}
+        >
         <input {...getInputProps()} />
 
         {/* Background gradient effect */}
@@ -210,7 +210,8 @@ export default function DropZone({
             }}
           />
         )}
-      </motion.div>
+        </motion.div>
+      </div>
 
       {/* Error message */}
       <AnimatePresence>

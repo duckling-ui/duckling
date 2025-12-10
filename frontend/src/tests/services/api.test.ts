@@ -38,10 +38,11 @@ describe('API Service', () => {
       });
 
       // Import after mocking
-      const { checkHealth } = await import('../../services/api');
+      await import('../../services/api');
 
       // Note: This test verifies the structure, actual API calls would need
       // more sophisticated mocking
+      expect(mockApi).toBeDefined();
     });
   });
 

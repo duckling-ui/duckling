@@ -17,7 +17,7 @@ import {
   updateChunkingSettings,
   getFormats,
 } from '../services/api';
-import type { ConversionSettings } from '../types';
+// ConversionSettings type is used in the settings API responses
 
 // Main settings hook
 export function useSettings() {

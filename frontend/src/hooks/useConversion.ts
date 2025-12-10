@@ -46,8 +46,8 @@ export function useConversion(options: UseConversionOptions = {}) {
   const [batchMode, setBatchMode] = useState(false);
   const [batchProgress, setBatchProgress] = useState({ completed: 0, total: 0 });
 
-  const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const batchPollRef = useRef<NodeJS.Timeout | null>(null);
+  const pollIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const batchPollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Upload mutation (single file)
   const uploadMutation = useMutation({

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import ExportOptions from '../../components/ExportOptions';
 
@@ -7,6 +7,7 @@ describe('ExportOptions', () => {
   const mockOnNewConversion = vi.fn();
 
   const defaultProps = {
+    jobId: 'test-job-123',
     formatsAvailable: ['markdown', 'html', 'json'],
     preview: '# Test Document\n\nThis is a preview.',
     onDownload: mockOnDownload,
