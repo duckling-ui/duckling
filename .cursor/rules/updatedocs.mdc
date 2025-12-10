@@ -1,0 +1,25 @@
+---
+name: UpdateDocs
+description: Rules for updating the documentation
+alwaysApply: true
+---
+
+## Rules
+
+### 1. Always update the documentation
+Always update the documentation.
+
+### 2. Always update changelog
+Always update the changelog.
+
+### 3. Always update README
+Always update the README.
+
+### 4. Always update CONTRIBUTING.md
+Always update the CONTRIBUTING.md.
+
+### 5. Always update SECURITY.md
+Always update the SECURITY.md.
+
+### 6. Always update LICENSE
+Always update the LICENSE.

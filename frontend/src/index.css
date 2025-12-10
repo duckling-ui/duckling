@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #475569;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(20, 184, 166, 0.3);
+  color: inherit;
+}
+
+/* Base styles */
+body {
+  @apply bg-dark-950 text-dark-100 font-sans antialiased;
+  background-image:
+    radial-gradient(ellipse at top left, rgba(20, 184, 166, 0.05) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(20, 184, 166, 0.03) 0%, transparent 50%);
+  min-height: 100vh;
+}
+
+/* Code blocks */
+pre, code {
+  @apply font-mono;
+}
+
+/* Focus styles */
+*:focus-visible {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-dark-900;
+}
+
+/* Custom utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .glass {
+    @apply bg-dark-900/80 backdrop-blur-xl border border-dark-700/50;
+  }
+
+  .glass-hover {
+    @apply hover:bg-dark-800/80 hover:border-dark-600/50 transition-all duration-200;
+  }
+}
+
+/* Dropzone styles */
+.dropzone-active {
+  @apply border-primary-500 bg-primary-500/10;
+}
+
+/* Progress bar animation */
+.progress-bar {
+  background: linear-gradient(
+    90deg,
+    #14b8a6 0%,
+    #2dd4bf 50%,
+    #14b8a6 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+

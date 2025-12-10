@@ -1,0 +1,25 @@
+---
+name: Tests
+description: Rules for testing
+alwaysApply: true
+---
+
+## Rules
+
+### 1. Always create a test suite
+Always create a test suite.
+
+### 2. Always create a test file
+Always create a test file.
+
+### 3. Always create a test suite summary
+Always create a test suite summary.
+
+### 4. Always update the test suite summary
+Always update the test suite summary.
+
+### 5. Always update the test file
+Always update the test file.
+
+### 6. Always run the test
+Always run the test.
