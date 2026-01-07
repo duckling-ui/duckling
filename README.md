@@ -1,8 +1,17 @@
-# Docling UI
+# Duckling
+
+[![Tests](https://github.com/davidgs/duckling/actions/workflows/test.yml/badge.svg)](https://github.com/davidgs/duckling/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Node.js 18+](https://img.shields.io/badge/node.js-18+-green.svg)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-18-61dafb.svg)](https://react.dev/)
+[![Flask](https://img.shields.io/badge/Flask-3.0-black.svg)](https://flask.palletsprojects.com/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6.svg)](https://www.typescriptlang.org/)
 
 A modern, user-friendly graphical interface for [Docling](https://github.com/docling-project/docling) - the powerful document conversion library by IBM.
 
-![Docling UI Screenshot](docs/screenshot.png)
+![Duckling Screenshot](docs/screenshot.png)
 
 ## Features
 
@@ -57,8 +66,8 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/docling-ui.git
-   cd docling-ui
+   git clone https://github.com/davidgs/duckling.git
+   cd duckling
    ```
 
 2. **Set up the backend**:
@@ -225,7 +234,7 @@ npm test
 ### Project Structure
 
 ```
-docling-ui/
+duckling/
 ├── backend/
 │   ├── app.py              # Flask application
 │   ├── config.py           # Configuration & defaults
@@ -260,12 +269,36 @@ docling-ui/
 
 ## Documentation
 
-Comprehensive documentation is available in the [docs/](docs/) directory:
+Comprehensive documentation is available using MkDocs:
 
-- **[Architecture](docs/ARCHITECTURE.md)** - System design and component overview
-- **[API Reference](docs/API.md)** - Complete API documentation
-- **[Configuration](docs/CONFIGURATION.md)** - All settings and options
-- **[Deployment](docs/DEPLOYMENT.md)** - Production deployment guide
+### View Documentation Locally
+
+```bash
+# Install documentation dependencies
+pip install -r requirements-docs.txt
+
+# Serve documentation locally
+mkdocs serve
+```
+
+Then open `http://localhost:8000` in your browser.
+
+### Build Documentation
+
+```bash
+mkdocs build
+```
+
+The built documentation will be in the `site/` directory.
+
+### Documentation Sections
+
+- **[Getting Started](docs/getting-started/index.md)** - Installation and quick start
+- **[User Guide](docs/user-guide/index.md)** - Features and configuration
+- **[API Reference](docs/api/index.md)** - Complete API documentation
+- **[Architecture](docs/architecture/index.md)** - System design and components
+- **[Deployment](docs/deployment/index.md)** - Production deployment guide
+- **[Contributing](docs/contributing/index.md)** - How to contribute
 
 ## Contributing
 

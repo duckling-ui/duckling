@@ -1,4 +1,4 @@
-"""Flask application entry point for Docling UI."""
+"""Flask application entry point for Duckling."""
 
 import os
 from pathlib import Path
@@ -48,7 +48,7 @@ def create_app(config_class=None):
         """Health check endpoint."""
         return jsonify({
             "status": "healthy",
-            "service": "docling-ui-backend"
+            "service": "duckling-backend"
         })
 
     # Supported formats endpoint
@@ -140,13 +140,26 @@ def create_app(config_class=None):
     @app.route("/api/docs/images/<path:filename>")
     def get_doc_image(filename):
         """Serve images from the docs directory."""
+        # Security: prevent path traversal attacks
+        # Normalize the filename and ensure it doesn't escape DOCS_DIR
+        safe_filename = Path(filename).name  # Strip any directory components
+        if safe_filename != filename or '..' in filename:
+            abort(403)  # Forbidden - potential path traversal attempt
+
         # Security: only allow image extensions
         allowed_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp'}
-        ext = Path(filename).suffix.lower()
+        ext = Path(safe_filename).suffix.lower()
         if ext not in allowed_extensions:
             abort(404)
 
-        image_path = DOCS_DIR / filename
+        image_path = DOCS_DIR / safe_filename
+
+        # Double-check the resolved path is within DOCS_DIR
+        try:
+            image_path.resolve().relative_to(DOCS_DIR.resolve())
+        except ValueError:
+            abort(403)  # Path escapes DOCS_DIR
+
         if not image_path.exists():
             abort(404)
 
@@ -161,7 +174,7 @@ def create_app(config_class=None):
         }
         mimetype = mimetypes.get(ext, 'application/octet-stream')
 
-        return send_from_directory(DOCS_DIR, filename, mimetype=mimetype)
+        return send_from_directory(DOCS_DIR, safe_filename, mimetype=mimetype)
 
     # Error handlers
     @app.errorhandler(400)
@@ -188,5 +201,10 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    # Use environment variables for production safety
+    import os
+    debug_mode = os.getenv("FLASK_DEBUG", "false").lower() == "true"
+    host = os.getenv("FLASK_HOST", "127.0.0.1")  # Default to localhost, not 0.0.0.0
+    port = int(os.getenv("FLASK_PORT", "5001"))
+    app.run(host=host, port=port, debug=debug_mode)
 

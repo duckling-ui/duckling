@@ -32,6 +32,7 @@ env/
 *.swp
 *.swo
 *~
+.cursor/
 
 # Testing
 .coverage
@@ -50,6 +51,9 @@ yarn-error.log*
 # Build
 frontend/dist/
 frontend/build/
+
+# MkDocs
+site/
 
 # Environment
 .env

@@ -222,10 +222,17 @@ class HistoryService:
         Returns:
             List of matching entries
         """
+        # Sanitize input: limit length and escape SQL wildcards
+        if not query or len(query) > 200:
+            return []
+        
+        # Escape SQL LIKE wildcards in user input
+        sanitized_query = query.replace('%', r'\%').replace('_', r'\_')
+        
         with get_db_session() as session:
             entries = session.query(Conversion).filter(
-                Conversion.original_filename.ilike(f"%{query}%")
-            ).order_by(desc(Conversion.created_at)).limit(limit).all()
+                Conversion.original_filename.ilike(f"%{sanitized_query}%", escape='\\')
+            ).order_by(desc(Conversion.created_at)).limit(min(limit, 100)).all()
             return [entry.to_dict() for entry in entries]
 
     def cleanup_old_entries(self, days: int = 30) -> int:

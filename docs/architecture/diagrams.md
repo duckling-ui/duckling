@@ -1,10 +1,6 @@
-# Duckling Diagrams
+# Architecture Diagrams
 
-Mermaid diagrams for architecture documentation.
-
-> **Note**: These diagrams are now rendered live in the [MkDocs documentation](docs/architecture/diagrams.md). You can also paste them into [mermaid.live](https://mermaid.live/) to export as PNG/SVG.
-
----
+Visual diagrams for Duckling architecture.
 
 ## System Architecture Overview
 
@@ -31,7 +27,7 @@ flowchart LR
 
 ---
 
-## Simpler Architecture (Recommended)
+## Simple Architecture
 
 ```mermaid
 graph LR
@@ -159,6 +155,8 @@ sequenceDiagram
 
 ## Scaling Architecture
 
+For production deployments with high traffic:
+
 ```mermaid
 graph LR
     LB[Load Balancer]
@@ -233,3 +231,18 @@ graph LR
     style Mac fill:#8b5cf6,color:#fff
     style Rapid fill:#f59e0b,color:#fff
 ```
+
+---
+
+## Static Diagram Images
+
+For environments that don't support Mermaid rendering, static images are available:
+
+- [System Architecture](../arch.png)
+- [Detailed Layer View](../Detailed-Layer-View.png)
+- [Conversion Pipeline](../ConversionPipeline.png)
+- [Batch Processing](../BatchProcessing.png)
+- [Scaling Architecture](../ScalingArchitecture.png)
+- [Component Tree](../ComponentTree.png)
+- [OCR Options](../OCR.png)
+

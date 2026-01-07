@@ -1,4 +1,4 @@
-# Docling UI Frontend Dockerfile
+# Duckling Frontend Dockerfile
 FROM node:20-alpine as builder
 
 WORKDIR /app

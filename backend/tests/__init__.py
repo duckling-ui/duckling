@@ -1,2 +1,2 @@
-"""Test package for Docling UI backend."""
+"""Test package for Duckling backend."""
 

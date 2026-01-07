@@ -1,18 +1,6 @@
-# Docling UI Configuration Guide
+# Configuration Guide
 
-This guide covers all configuration options for Docling UI.
-
-## Table of Contents
-
-- [Environment Variables](#environment-variables)
-- [OCR Settings](#ocr-settings)
-- [Table Settings](#table-settings)
-- [Image Settings](#image-settings)
-- [Performance Settings](#performance-settings)
-- [Chunking Settings](#chunking-settings)
-- [Output Settings](#output-settings)
-
----
+Complete reference for all Duckling configuration options.
 
 ## Environment Variables
 
@@ -40,6 +28,9 @@ DEBUG=False
 MAX_CONTENT_LENGTH=209715200   # 200MB for production
 ```
 
+!!! danger "Security Warning"
+    Never use the default `SECRET_KEY` in production. Generate a secure random key.
+
 ---
 
 ## OCR Settings
@@ -51,7 +42,7 @@ OCR (Optical Character Recognition) extracts text from images and scanned docume
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
 | `enabled` | boolean | `true` | Enable/disable OCR processing |
-| `backend` | string | `"ocrmac"` | OCR engine to use |
+| `backend` | string | `"easyocr"` | OCR engine to use |
 | `language` | string | `"en"` | Primary language for recognition |
 | `force_full_page_ocr` | boolean | `false` | OCR entire page vs detected regions |
 | `use_gpu` | boolean | `false` | Enable GPU acceleration (EasyOCR only) |
@@ -60,65 +51,72 @@ OCR (Optical Character Recognition) extracts text from images and scanned docume
 
 ### OCR Backends
 
-#### EasyOCR
-- **Best for**: Multi-language documents, accuracy
-- **GPU Support**: Yes (CUDA)
-- **Languages**: 80+ languages
-- **Note**: May have initialization issues on some systems
+=== "EasyOCR"
 
-```json
-{
-  "ocr": {
-    "backend": "easyocr",
-    "use_gpu": true,
-    "language": "en"
-  }
-}
-```
+    Best for multi-language documents with accuracy requirements.
 
-#### Tesseract
-- **Best for**: Simple documents, server deployments
-- **GPU Support**: No
-- **Languages**: 100+ languages
-- **Requires**: Tesseract installed on system
+    ```json
+    {
+      "ocr": {
+        "backend": "easyocr",
+        "use_gpu": true,
+        "language": "en"
+      }
+    }
+    ```
 
-```json
-{
-  "ocr": {
-    "backend": "tesseract",
-    "language": "eng"
-  }
-}
-```
+    - **GPU Support**: Yes (CUDA)
+    - **Languages**: 80+
+    - **Note**: May have initialization issues on some systems
 
-#### macOS Vision (ocrmac)
-- **Best for**: macOS users, reliability
-- **GPU Support**: Uses Apple Neural Engine
-- **Languages**: System-dependent
-- **Requires**: macOS 10.15+
+=== "Tesseract"
 
-```json
-{
-  "ocr": {
-    "backend": "ocrmac",
-    "language": "en"
-  }
-}
-```
+    Classic, reliable OCR engine for simple documents.
 
-#### RapidOCR
-- **Best for**: Speed, lightweight deployments
-- **GPU Support**: No (ONNX runtime)
-- **Languages**: Limited
+    ```json
+    {
+      "ocr": {
+        "backend": "tesseract",
+        "language": "eng"
+      }
+    }
+    ```
 
-```json
-{
-  "ocr": {
-    "backend": "rapidocr",
-    "language": "en"
-  }
-}
-```
+    - **GPU Support**: No
+    - **Languages**: 100+
+    - **Requires**: Tesseract installed on system
+
+=== "macOS Vision"
+
+    Native macOS OCR using Apple's Vision framework.
+
+    ```json
+    {
+      "ocr": {
+        "backend": "ocrmac",
+        "language": "en"
+      }
+    }
+    ```
+
+    - **GPU Support**: Uses Apple Neural Engine
+    - **Requires**: macOS 10.15+
+
+=== "RapidOCR"
+
+    Fast, lightweight OCR using ONNX runtime.
+
+    ```json
+    {
+      "ocr": {
+        "backend": "rapidocr",
+        "language": "en"
+      }
+    }
+    ```
+
+    - **GPU Support**: No
+    - **Languages**: Limited
 
 ### Supported Languages
 
@@ -133,20 +131,6 @@ OCR (Optical Character Recognition) extracts text from images and scanned docume
 | `nl` | Dutch | `th` | Thai |
 | `pl` | Polish | `vi` | Vietnamese |
 | `ru` | Russian | `tr` | Turkish |
-
-### Example: Multi-language Document
-
-```json
-{
-  "ocr": {
-    "enabled": true,
-    "backend": "easyocr",
-    "language": "en",
-    "force_full_page_ocr": true,
-    "confidence_threshold": 0.3
-  }
-}
-```
 
 ---
 
@@ -165,36 +149,38 @@ Configure how tables are detected and extracted from documents.
 
 ### Detection Modes
 
-#### Accurate Mode
-- Higher precision table detection
-- Better cell boundary recognition
-- Slower processing
-- Recommended for complex tables
+=== "Accurate Mode"
 
-```json
-{
-  "tables": {
-    "enabled": true,
-    "mode": "accurate",
-    "do_cell_matching": true
-  }
-}
-```
+    ```json
+    {
+      "tables": {
+        "enabled": true,
+        "mode": "accurate",
+        "do_cell_matching": true
+      }
+    }
+    ```
 
-#### Fast Mode
-- Faster processing
-- Good for simple tables
-- May miss complex structures
+    - Higher precision table detection
+    - Better cell boundary recognition
+    - Slower processing
+    - Recommended for complex tables
 
-```json
-{
-  "tables": {
-    "enabled": true,
-    "mode": "fast",
-    "do_cell_matching": false
-  }
-}
-```
+=== "Fast Mode"
+
+    ```json
+    {
+      "tables": {
+        "enabled": true,
+        "mode": "fast",
+        "do_cell_matching": false
+      }
+    }
+    ```
+
+    - Faster processing
+    - Good for simple tables
+    - May miss complex structures
 
 ---
 
@@ -213,34 +199,36 @@ Configure image extraction and processing.
 | `generate_table_images` | boolean | `true` | Extract tables as images |
 | `images_scale` | float | `1.0` | Scale factor for images (0.1-4.0) |
 
-### Example: High-Quality Image Extraction
+### Example Configurations
 
-```json
-{
-  "images": {
-    "extract": true,
-    "classify": true,
-    "generate_page_images": true,
-    "generate_picture_images": true,
-    "generate_table_images": true,
-    "images_scale": 2.0
-  }
-}
-```
+=== "High Quality"
 
-### Example: Minimal (Text Only)
+    ```json
+    {
+      "images": {
+        "extract": true,
+        "classify": true,
+        "generate_page_images": true,
+        "generate_picture_images": true,
+        "generate_table_images": true,
+        "images_scale": 2.0
+      }
+    }
+    ```
 
-```json
-{
-  "images": {
-    "extract": false,
-    "classify": false,
-    "generate_page_images": false,
-    "generate_picture_images": false,
-    "generate_table_images": false
-  }
-}
-```
+=== "Minimal (Text Only)"
+
+    ```json
+    {
+      "images": {
+        "extract": false,
+        "classify": false,
+        "generate_page_images": false,
+        "generate_picture_images": false,
+        "generate_table_images": false
+      }
+    }
+    ```
 
 ---
 
@@ -265,47 +253,49 @@ Optimize processing speed and resource usage.
 | `cuda` | NVIDIA GPU acceleration | Linux/Windows with NVIDIA GPU |
 | `mps` | Apple Metal Performance Shaders | macOS with Apple Silicon |
 
-### Example: High Performance (GPU)
+### Example Configurations
 
-```json
-{
-  "performance": {
-    "device": "cuda",
-    "num_threads": 8,
-    "document_timeout": null
-  }
-}
-```
+=== "High Performance (GPU)"
 
-### Example: Resource-Constrained
+    ```json
+    {
+      "performance": {
+        "device": "cuda",
+        "num_threads": 8,
+        "document_timeout": null
+      }
+    }
+    ```
 
-```json
-{
-  "performance": {
-    "device": "cpu",
-    "num_threads": 2,
-    "document_timeout": 60
-  }
-}
-```
+=== "Resource-Constrained"
 
-### Example: Apple Silicon Mac
+    ```json
+    {
+      "performance": {
+        "device": "cpu",
+        "num_threads": 2,
+        "document_timeout": 60
+      }
+    }
+    ```
 
-```json
-{
-  "performance": {
-    "device": "mps",
-    "num_threads": 4,
-    "document_timeout": null
-  }
-}
-```
+=== "Apple Silicon"
+
+    ```json
+    {
+      "performance": {
+        "device": "mps",
+        "num_threads": 4,
+        "document_timeout": null
+      }
+    }
+    ```
 
 ---
 
 ## Chunking Settings
 
-Configure document chunking for RAG (Retrieval-Augmented Generation) applications.
+Configure document chunking for RAG applications.
 
 ### Configuration Options
 
@@ -315,53 +305,31 @@ Configure document chunking for RAG (Retrieval-Augmented Generation) application
 | `max_tokens` | int | `512` | Maximum tokens per chunk |
 | `merge_peers` | boolean | `true` | Merge undersized chunks |
 
-### How Chunking Works
+### Example Configurations
 
-1. Document is split into semantic chunks
-2. Each chunk respects document structure (headings, paragraphs)
-3. Chunks include metadata (headings hierarchy, page numbers)
-4. Undersized chunks can be merged with similar neighbors
+=== "RAG-Optimized"
 
-### Example: RAG-Optimized
-
-```json
-{
-  "chunking": {
-    "enabled": true,
-    "max_tokens": 512,
-    "merge_peers": true
-  }
-}
-```
-
-### Example: Large Context Windows
-
-```json
-{
-  "chunking": {
-    "enabled": true,
-    "max_tokens": 2048,
-    "merge_peers": false
-  }
-}
-```
-
-### Chunk Output Format
-
-```json
-{
-  "chunks": [
+    ```json
     {
-      "id": 1,
-      "text": "Introduction to machine learning...",
-      "meta": {
-        "headings": ["Chapter 1", "Introduction"],
-        "page": 1
+      "chunking": {
+        "enabled": true,
+        "max_tokens": 512,
+        "merge_peers": true
       }
     }
-  ]
-}
-```
+    ```
+
+=== "Large Context Windows"
+
+    ```json
+    {
+      "chunking": {
+        "enabled": true,
+        "max_tokens": 2048,
+        "merge_peers": false
+      }
+    }
+    ```
 
 ---
 
@@ -369,22 +337,9 @@ Configure document chunking for RAG (Retrieval-Augmented Generation) application
 
 Configure default output format.
 
-### Configuration Options
-
 | Setting | Type | Default | Description |
 |---------|------|---------|-------------|
 | `default_format` | string | `"markdown"` | Default export format |
-
-### Available Formats
-
-| Format | Extension | Description |
-|--------|-----------|-------------|
-| `markdown` | `.md` | Formatted text with headers, lists, links |
-| `html` | `.html` | Web-ready format with styling |
-| `json` | `.json` | Full document structure |
-| `text` | `.txt` | Plain text without formatting |
-| `doctags` | `.doctags` | Tagged document format |
-| `document_tokens` | `.tokens.json` | Token-level representation |
 
 ---
 
@@ -394,7 +349,7 @@ Configure default output format.
 {
   "ocr": {
     "enabled": true,
-    "backend": "ocrmac",
+    "backend": "easyocr",
     "language": "en",
     "force_full_page_ocr": false,
     "use_gpu": false,

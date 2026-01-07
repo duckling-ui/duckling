@@ -20,24 +20,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **MkDocs Documentation**: Migrated documentation to MkDocs with Material theme
   - Modern, searchable documentation site
   - Dark/light theme toggle
-  - Mermaid diagram support for live-rendered architecture diagrams
-  - Improved navigation with tabs and sections
-  - Code syntax highlighting with copy buttons
-  - Responsive design for mobile viewing
-  - Abbreviation tooltips for technical terms
-- New documentation structure:
-  - Getting Started guide with installation, quick start, and Docker sections
-  - User Guide with features, formats, and configuration
-  - API Reference split into conversion, settings, and history sections
-  - Architecture documentation with system overview, components, and diagrams
-  - Deployment guide with production, scaling, and security sections
-  - Contributing guide with development setup, code style, and testing
+  - Mermaid diagram support
+  - Improved navigation and organization
 
 ### Changed
 
-- Documentation reorganized for better discoverability
-- All Mermaid diagrams now render live in the documentation
-- Improved code examples with syntax highlighting
+- Documentation structure reorganized for better navigation
+- All diagrams converted to Mermaid format for live rendering
 
 ## [2.1.0] - 2024-12-11
 
@@ -131,28 +120,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Settings Panel**: Completely redesigned with all new options
-  - OCR section with backend selection and advanced options
-  - Table section with mode selection
-  - Image section with generation options
-  - Performance section with device and thread settings
-  - RAG/Chunking section with token configuration
-  - Slider controls for numeric settings
-  - Better organization and descriptions
-
 - **Export Options**: Enhanced with tabs for different content types
-  - Formats tab for export options
-  - Images tab with download buttons
-  - Tables tab with CSV export and preview
-  - Chunks tab with RAG chunk viewer
-
 - **DropZone**: Updated with format categories and batch mode support
-
-- **Converter Service**: Major refactoring
-  - Dynamic pipeline options based on settings
-  - Support for all OCR backends
-  - Image and table extraction
-  - Chunk generation
-  - Better error handling
+- **Converter Service**: Major refactoring for dynamic pipeline options
 
 ### Fixed
 
@@ -164,10 +134,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **OCR Support**: Full OCR integration using EasyOCR
-  - Support for 14+ languages including English, German, French, Spanish, Chinese, Japanese, Korean, Arabic
-  - Force Full Page OCR option for fully scanned documents
-  - Configurable OCR settings in the Settings panel
-- **Improved Confidence Calculation**: Now calculates average confidence from Docling's layout predictions
+  - Support for 14+ languages
+  - Force Full Page OCR option
+  - Configurable OCR settings
+- **Improved Confidence Calculation**: Average confidence from layout predictions
 
 ### Changed
 
@@ -180,62 +150,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release of Duckling
 - **Frontend Features**:
-  - Drag-and-drop file upload with validation
-  - Real-time conversion progress indicator
-  - Multi-format export options (Markdown, HTML, JSON, DocTags, Plain Text)
-  - Settings panel for OCR, table extraction, and image handling
-  - Conversion history panel with search functionality
-  - Beautiful dark theme with teal accent color
-  - Responsive design for desktop and tablet
-  - Animated transitions using Framer Motion
+  - Drag-and-drop file upload
+  - Real-time conversion progress
+  - Multi-format export options
+  - Settings panel
+  - Conversion history panel
+  - Dark theme with teal accent
+  - Responsive design
+  - Animated transitions
 
 - **Backend Features**:
-  - Flask REST API with CORS support
-  - Async document conversion using Docling
-  - SQLite-based conversion history
-  - File upload management with automatic cleanup
-  - Configurable conversion settings
-  - Health check and format listing endpoints
+  - Flask REST API with CORS
+  - Async document conversion
+  - SQLite-based history
+  - File upload management
+  - Configurable settings
+  - Health check endpoint
 
 - **Supported Input Formats**:
-  - PDF documents
-  - Microsoft Word (.docx)
-  - Microsoft PowerPoint (.pptx)
-  - Microsoft Excel (.xlsx)
-  - HTML files
-  - Markdown files
-  - CSV files
-  - Images (PNG, JPG, JPEG, TIFF, GIF, WebP, BMP)
-  - Audio files (WAV, MP3)
-  - WebVTT subtitles
-  - AsciiDoc files
-  - XML files
+  - PDF, Word, PowerPoint, Excel
+  - HTML, Markdown, CSV
+  - Images (PNG, JPG, TIFF, etc.)
+  - AsciiDoc, XML
 
 - **Export Formats**:
-  - Markdown
-  - HTML
-  - JSON (lossless)
-  - DocTags
-  - Plain Text
-
-- **Configuration Options**:
-  - OCR enable/disable with language selection
-  - Table structure extraction
-  - Image extraction and classification
-  - Default output format preference
+  - Markdown, HTML, JSON
+  - DocTags, Plain Text
 
 - **Developer Experience**:
-  - Comprehensive test suites (pytest, vitest)
-  - Docker and Docker Compose support
-  - TypeScript for type safety
+  - Comprehensive test suites
+  - Docker support
+  - TypeScript
   - ESLint configuration
-  - Clear project structure
 
 ### Security
 
 - Input validation for file uploads
 - File type restrictions
-- Maximum file size limits (100MB default)
+- Maximum file size limits
 - Secure filename handling
 
 ## [Unreleased]

@@ -34,7 +34,7 @@ describe('API Service', () => {
     it('should call health endpoint', async () => {
       const mockApi = axios.create();
       (mockApi.get as ReturnType<typeof vi.fn>).mockResolvedValue({
-        data: { status: 'healthy', service: 'docling-ui-backend' },
+        data: { status: 'healthy', service: 'duckling-backend' },
       });
 
       // Import after mocking

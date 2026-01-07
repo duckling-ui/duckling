@@ -1,4 +1,4 @@
-"""Configuration settings for the Docling UI backend."""
+"""Configuration settings for the Duckling backend."""
 
 import os
 from pathlib import Path

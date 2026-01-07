@@ -116,7 +116,7 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                   <h2 className="text-lg font-bold text-dark-100">
                     Documentation
                   </h2>
-                  <p className="text-sm text-dark-400">Docling UI Reference</p>
+                  <p className="text-sm text-dark-400">Duckling Reference</p>
                 </div>
               </div>
               <button

@@ -18,7 +18,7 @@ class TestHealthEndpoint:
         assert response.status_code == 200
         data = json.loads(response.data)
         assert data["status"] == "healthy"
-        assert data["service"] == "docling-ui-backend"
+        assert data["service"] == "duckling-backend"
 
 
 class TestFormatsEndpoint:

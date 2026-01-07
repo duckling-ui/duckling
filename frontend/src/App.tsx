@@ -76,7 +76,7 @@ export default function App() {
                 </svg>
               </div>
               <div>
-                <h1 className="text-lg font-bold text-dark-100">Docling UI</h1>
+                <h1 className="text-lg font-bold text-dark-100">Duckling</h1>
                 <p className="text-xs text-dark-500">Document Conversion</p>
               </div>
             </div>

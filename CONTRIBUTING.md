@@ -1,6 +1,6 @@
-# Contributing to Docling UI
+# Contributing to Duckling
 
-Thank you for your interest in contributing to Docling UI! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to Duckling! This document provides guidelines and instructions for contributing.
 
 ## Code of Conduct
 
@@ -154,7 +154,7 @@ docs(readme): update installation instructions
 ## Project Structure
 
 ```
-docling-ui/
+duckling/
 ├── backend/
 │   ├── app.py              # Flask application entry
 │   ├── config.py           # Configuration
@@ -226,5 +226,5 @@ Contributors will be recognized in:
 - CHANGELOG.md for significant contributions
 - README.md contributors section
 
-Thank you for contributing to Docling UI!
+Thank you for contributing to Duckling!
 

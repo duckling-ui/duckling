@@ -1,0 +1,187 @@
+# Duckling Documentation
+# MkDocs configuration file
+# https://www.mkdocs.org/
+
+site_name: Duckling
+site_description: A modern, user-friendly graphical interface for Docling - the powerful document conversion library by IBM
+site_author: Duckling Contributors
+site_url: https://davidgs.github.io/duckling/
+
+# Repository
+repo_name: davidgs/duckling
+repo_url: https://github.com/davidgs/duckling
+edit_uri: edit/main/docs/
+
+# Copyright
+copyright: Copyright &copy; 2024-2026 Duckling Contributors
+
+# Validation - exclude snippet files from nav warnings
+validation:
+  nav:
+    not_found: warn
+    omitted_files: ignore
+
+# Theme Configuration
+theme:
+  name: material
+  language: en
+  palette:
+    # Dark mode (default)
+    - scheme: slate
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    # Light mode
+    - scheme: default
+      primary: teal
+      accent: cyan
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/file-document-multiple
+  features:
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.tabs.link
+    - content.code.copy
+    - content.code.annotate
+    - content.action.edit
+    - content.action.view
+
+# Plugins
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
+  - minify:
+      minify_html: true
+
+# Extensions
+markdown_extensions:
+  # Python Markdown
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      permalink_title: Anchor link to this section
+      toc_depth: 3
+
+  # PyMdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: davidgs
+      repo: duckling
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      auto_append:
+        - includes/abbreviations.md
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Navigation
+nav:
+  - Home: index.md
+  - Getting Started:
+    - getting-started/index.md
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+    - Docker: getting-started/docker.md
+  - User Guide:
+    - user-guide/index.md
+    - Features: user-guide/features.md
+    - Supported Formats: user-guide/formats.md
+    - Configuration: user-guide/configuration.md
+  - API Reference:
+    - api/index.md
+    - Conversion: api/conversion.md
+    - Settings: api/settings.md
+    - History: api/history.md
+  - Architecture:
+    - architecture/index.md
+    - System Overview: architecture/overview.md
+    - Components: architecture/components.md
+    - Diagrams: architecture/diagrams.md
+  - Deployment:
+    - deployment/index.md
+    - Production: deployment/production.md
+    - Scaling: deployment/scaling.md
+    - Security: deployment/security.md
+  - Contributing:
+    - contributing/index.md
+    - Development Setup: contributing/development.md
+    - Code Style: contributing/code-style.md
+    - Testing: contributing/testing.md
+  - Changelog: changelog.md
+
+# Extra
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/davidgs/duckling
+      name: Duckling on GitHub
+  generator: false
+  analytics:
+    provider: google
+    property: G-XXXXXXXXXX
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
