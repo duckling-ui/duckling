@@ -76,6 +76,10 @@ export default function ExportOptions({
   const [chunks, setChunks] = useState<DocumentChunk[]>([]);
   const [loadingContent, setLoadingContent] = useState(false);
 
+  // Image preview state
+  const [imageUrls, setImageUrls] = useState<Record<number, string>>({});
+  const [selectedImage, setSelectedImage] = useState<ExtractedImage | null>(null);
+
   // Load extracted content when tab changes
   useEffect(() => {
     const loadContent = async () => {
@@ -84,6 +88,18 @@ export default function ExportOptions({
         if (activeTab === 'images' && images.length === 0 && imagesCount > 0) {
           const response = await getExtractedImages(jobId);
           setImages(response.images);
+
+          // Load image previews
+          const urls: Record<number, string> = {};
+          for (const image of response.images) {
+            try {
+              const blob = await downloadExtractedImage(jobId, image.id);
+              urls[image.id] = URL.createObjectURL(blob);
+            } catch (err) {
+              console.error(`Error loading image ${image.id}:`, err);
+            }
+          }
+          setImageUrls(urls);
         } else if (activeTab === 'tables' && tables.length === 0 && tablesCount > 0) {
           const response = await getExtractedTables(jobId);
           setTables(response.tables);
@@ -99,6 +115,13 @@ export default function ExportOptions({
     };
     loadContent();
   }, [activeTab, jobId, images.length, tables.length, chunks.length, imagesCount, tablesCount, chunksCount]);
+
+  // Cleanup image URLs on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(imageUrls).forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [imageUrls]);
 
   const handleDownloadImage = async (imageId: number, filename: string) => {
     try {
@@ -161,7 +184,7 @@ export default function ExportOptions({
         </motion.div>
         <h2 className="text-2xl font-bold text-dark-100 mb-2">Conversion Complete!</h2>
         <div className="flex items-center justify-center gap-4 text-dark-400">
-          {confidence !== undefined && (
+          {confidence != null && confidence > 0 && (
             <span>
               Confidence: <span className="text-primary-400 font-medium">{(confidence * 100).toFixed(1)}%</span>
             </span>
@@ -295,32 +318,65 @@ export default function ExportOptions({
                   No images extracted from this document
                 </div>
               ) : (
-                <div className="space-y-3 max-h-96 overflow-y-auto">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[500px] overflow-y-auto">
                   {images.map((image) => (
-                    <div
+                    <motion.div
                       key={image.id}
-                      className="bg-dark-800/50 rounded-xl p-4 flex items-center gap-4"
+                      className="bg-dark-800/50 rounded-xl overflow-hidden group cursor-pointer"
+                      whileHover={{ scale: 1.02 }}
+                      onClick={() => setSelectedImage(image)}
                     >
-                      <div className="w-12 h-12 bg-dark-700 rounded-lg flex items-center justify-center">
-                        <svg className="w-6 h-6 text-dark-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                        </svg>
+                      {/* Image thumbnail */}
+                      <div className="aspect-square relative bg-dark-900">
+                        {imageUrls[image.id] ? (
+                          <img
+                            src={imageUrls[image.id]}
+                            alt={image.caption || image.filename}
+                            className="w-full h-full object-contain"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <svg className="w-8 h-8 text-dark-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                            </svg>
+                          </div>
+                        )}
+                        {/* Hover overlay */}
+                        <div className="absolute inset-0 bg-dark-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedImage(image);
+                            }}
+                            className="p-2 bg-dark-800/80 hover:bg-dark-700 rounded-lg transition-colors"
+                            title="View full size"
+                          >
+                            <svg className="w-5 h-5 text-dark-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                            </svg>
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDownloadImage(image.id, image.filename);
+                            }}
+                            className="p-2 bg-dark-800/80 hover:bg-dark-700 rounded-lg transition-colors"
+                            title="Download"
+                          >
+                            <svg className="w-5 h-5 text-dark-200" viewBox="0 0 20 20" fill="currentColor">
+                              <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                            </svg>
+                          </button>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-dark-200 truncate">{image.filename}</p>
+                      {/* Image info */}
+                      <div className="p-2">
+                        <p className="text-xs text-dark-300 truncate font-medium">{image.filename}</p>
                         {image.caption && (
-                          <p className="text-sm text-dark-400 truncate">{image.caption}</p>
+                          <p className="text-xs text-dark-500 truncate">{image.caption}</p>
                         )}
                       </div>
-                      <button
-                        onClick={() => handleDownloadImage(image.id, image.filename)}
-                        className="p-2 bg-dark-700 hover:bg-dark-600 rounded-lg transition-colors"
-                      >
-                        <svg className="w-5 h-5 text-dark-300" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
-                        </svg>
-                      </button>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               )}
@@ -496,6 +552,97 @@ export default function ExportOptions({
           )}
         </div>
       </div>
+
+      {/* Image lightbox modal */}
+      <AnimatePresence>
+        {selectedImage && imageUrls[selectedImage.id] && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-dark-950/90 backdrop-blur-sm p-4"
+            onClick={() => setSelectedImage(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative max-w-4xl max-h-[90vh] w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setSelectedImage(null)}
+                className="absolute -top-12 right-0 p-2 text-dark-400 hover:text-dark-200 transition-colors"
+              >
+                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              {/* Image container */}
+              <div className="bg-dark-900 rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src={imageUrls[selectedImage.id]}
+                  alt={selectedImage.caption || selectedImage.filename}
+                  className="w-full h-auto max-h-[70vh] object-contain"
+                />
+
+                {/* Image info bar */}
+                <div className="p-4 bg-dark-800 flex items-center justify-between">
+                  <div className="flex-1 min-w-0">
+                    <p className="font-medium text-dark-200">{selectedImage.filename}</p>
+                    {selectedImage.caption && (
+                      <p className="text-sm text-dark-400 truncate">{selectedImage.caption}</p>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => handleDownloadImage(selectedImage.id, selectedImage.filename)}
+                    className="ml-4 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-dark-950 font-medium rounded-lg transition-colors flex items-center gap-2"
+                  >
+                    <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                    Download
+                  </button>
+                </div>
+              </div>
+
+              {/* Navigation arrows if multiple images */}
+              {images.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const currentIndex = images.findIndex(img => img.id === selectedImage.id);
+                      const prevIndex = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
+                      setSelectedImage(images[prevIndex]);
+                    }}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 p-2 bg-dark-800/80 hover:bg-dark-700 rounded-full transition-colors"
+                  >
+                    <svg className="w-6 h-6 text-dark-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const currentIndex = images.findIndex(img => img.id === selectedImage.id);
+                      const nextIndex = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
+                      setSelectedImage(images[nextIndex]);
+                    }}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 p-2 bg-dark-800/80 hover:bg-dark-700 rounded-full transition-colors"
+                  >
+                    <svg className="w-6 h-6 text-dark-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

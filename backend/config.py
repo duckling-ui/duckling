@@ -4,7 +4,18 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+# Load .env file from the backend directory
+BACKEND_DIR_FOR_ENV = Path(__file__).parent.absolute()
+env_path = BACKEND_DIR_FOR_ENV / ".env"
+_env_loaded = load_dotenv(dotenv_path=env_path)
+
+# Debug: print whether .env was loaded (only when running directly)
+if __name__ != "__main__":
+    import sys
+    if env_path.exists():
+        print(f"[config] Loaded .env from: {env_path}", file=sys.stderr)
+    else:
+        print(f"[config] WARNING: .env file not found at: {env_path}", file=sys.stderr)
 
 # Base directories
 BASE_DIR = Path(__file__).parent.parent.absolute()
@@ -37,7 +48,7 @@ class Config:
     # Allowed file extensions
     ALLOWED_EXTENSIONS = {
         "pdf", "docx", "pptx", "xlsx", "html", "htm",
-        "md", "markdown", "csv", "png", "jpg", "jpeg",
+        "md", "markdown", "MD", "csv", "png", "jpg", "jpeg",
         "tiff", "tif", "gif", "webp", "bmp",
         "wav", "mp3", "vtt", "xml", "json", "asciidoc", "adoc"
     }
@@ -128,7 +139,7 @@ SUPPORTED_INPUT_FORMATS = [
     {"id": "pptx", "name": "PowerPoint", "extensions": [".pptx"], "icon": "presentation"},
     {"id": "xlsx", "name": "Excel Spreadsheet", "extensions": [".xlsx"], "icon": "spreadsheet"},
     {"id": "html", "name": "HTML", "extensions": [".html", ".htm"], "icon": "code"},
-    {"id": "md", "name": "Markdown", "extensions": [".md", ".markdown"], "icon": "document"},
+    {"id": "md", "name": "Markdown", "extensions": [".md", ".markdown", ".MD"], "icon": "document"},
     {"id": "image", "name": "Image", "extensions": [".png", ".jpg", ".jpeg", ".tiff", ".tif", ".gif", ".webp", ".bmp"], "icon": "image"},
     {"id": "asciidoc", "name": "AsciiDoc", "extensions": [".asciidoc", ".adoc"], "icon": "document"},
     {"id": "xml_pubmed", "name": "PubMed XML", "extensions": [".xml"], "icon": "document"},

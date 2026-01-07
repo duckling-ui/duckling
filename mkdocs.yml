@@ -24,6 +24,7 @@ validation:
 # Theme Configuration
 theme:
   name: material
+  custom_dir: docs/overrides
   language: en
   palette:
     # Dark mode (default)
@@ -165,6 +166,7 @@ nav:
     - Development Setup: contributing/development.md
     - Code Style: contributing/code-style.md
     - Testing: contributing/testing.md
+    - Code of Conduct: contributing/code-of-conduct.md
   - Changelog: changelog.md
 
 # Extra

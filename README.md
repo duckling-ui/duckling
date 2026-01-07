@@ -20,6 +20,7 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 - **Multi-Format Support**: Convert PDFs, Word docs, PowerPoints, Excel files, HTML, Markdown, images, and more
 - **Multiple Export Formats**: Export to Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks, or plain text
 - **Image & Table Extraction**: Extract embedded images and tables with CSV export
+- **Image Preview Gallery**: View extracted images as thumbnails with full-size lightbox viewer
 - **RAG-Ready Chunking**: Generate document chunks optimized for RAG applications
 - **Advanced OCR**: Multiple OCR backends with GPU acceleration support
 - **Real-Time Progress**: Watch your document conversion progress in real-time

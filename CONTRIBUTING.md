@@ -4,7 +4,9 @@ Thank you for your interest in contributing to Duckling! This document provides 
 
 ## Code of Conduct
 
-By participating in this project, you agree to maintain a respectful and inclusive environment for everyone.
+By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.MD), which is based on the Contributor Covenant 3.0. We are committed to providing a welcoming, safe, and inclusive environment for everyone.
+
+Please read the full [Code of Conduct](CODE_OF_CONDUCT.MD) before contributing.
 
 ## How to Contribute
 

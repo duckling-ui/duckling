@@ -10,20 +10,20 @@ interface DropZoneProps {
   multiple?: boolean;
 }
 
-// Supported file extensions
+// Supported file extensions (include both lowercase and uppercase variants)
 const ACCEPTED_EXTENSIONS = {
-  'application/pdf': ['.pdf'],
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
-  'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx'],
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-  'text/html': ['.html', '.htm'],
-  'text/markdown': ['.md', '.markdown'],
-  'text/csv': ['.csv'],
-  'image/*': ['.png', '.jpg', '.jpeg', '.tiff', '.tif', '.gif', '.webp', '.bmp'],
-  'audio/*': ['.wav', '.mp3'],
-  'text/vtt': ['.vtt'],
-  'application/xml': ['.xml'],
-  'text/plain': ['.txt', '.asciidoc', '.adoc'],
+  'application/pdf': ['.pdf', '.PDF'],
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx', '.DOCX'],
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['.pptx', '.PPTX'],
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx', '.XLSX'],
+  'text/html': ['.html', '.htm', '.HTML', '.HTM'],
+  'text/markdown': ['.md', '.markdown', '.MD', '.MARKDOWN'],
+  'text/csv': ['.csv', '.CSV'],
+  'image/*': ['.png', '.jpg', '.jpeg', '.tiff', '.tif', '.gif', '.webp', '.bmp', '.PNG', '.JPG', '.JPEG', '.TIFF', '.TIF', '.GIF', '.WEBP', '.BMP'],
+  'audio/*': ['.wav', '.mp3', '.WAV', '.MP3'],
+  'text/vtt': ['.vtt', '.VTT'],
+  'application/xml': ['.xml', '.XML'],
+  'text/plain': ['.txt', '.asciidoc', '.adoc', '.TXT', '.ASCIIDOC', '.ADOC'],
 };
 
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB

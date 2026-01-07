@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2026-01-07
+
+### Added
+
+- **Image Preview Gallery**: Extracted images now display as visual thumbnails
+  - Grid layout with actual image previews instead of icons
+  - Hover actions for quick view and download
+  - Full-size lightbox modal with navigation arrows
+  - Click to view full-size image with download option
+  - Keyboard-friendly navigation between images
+
+### Changed
+
+- **Confidence Display**: Improved confidence score handling
+  - Confidence now only displays when valid (non-null, greater than 0)
+  - Better handling of documents without OCR/layout analysis (e.g., markdown files)
+  - Enhanced confidence extraction from Docling results
+
+### Fixed
+
+- **Environment Variables**: Backend now correctly loads `.env` file from the backend directory
+  - Explicit path specification for `load_dotenv()` ensures reliable loading
+  - Debug mode properly controlled by `DEBUG` environment variable
+- **Case-Insensitive File Extensions**: File uploads now accept uppercase extensions (e.g., `.MD`, `.PDF`)
+  - Frontend accepts both uppercase and lowercase extensions
+  - Backend normalizes extensions to lowercase for Docling compatibility
+- **Confidence Score**: Fixed issue where confidence was always showing 0.0%
+  - Now correctly handles `null` confidence values
+  - Hidden for documents without confidence data
+
 ## [2.3.0] - 2026-01-07
 
 ### Changed

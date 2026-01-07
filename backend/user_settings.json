@@ -1,7 +1,7 @@
 {
   "ocr": {
     "enabled": true,
-    "language": "de",
+    "language": "en",
     "force_full_page_ocr": false,
     "backend": "ocrmac",
     "use_gpu": false,
@@ -31,7 +31,7 @@
     "document_timeout": null
   },
   "chunking": {
-    "enabled": false,
+    "enabled": true,
     "max_tokens": 512,
     "merge_peers": true
   }

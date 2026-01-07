@@ -52,6 +52,8 @@ class FileManager:
         # Generate unique filename to avoid collisions
         unique_id = str(uuid.uuid4())[:8]
         name, ext = os.path.splitext(safe_filename)
+        # Normalize extension to lowercase for Docling compatibility
+        ext = ext.lower()
         unique_filename = f"{name}_{unique_id}{ext}"
 
         # Save the file
@@ -80,6 +82,8 @@ class FileManager:
 
         unique_id = str(uuid.uuid4())[:8]
         name, ext = os.path.splitext(safe_filename)
+        # Normalize extension to lowercase for Docling compatibility
+        ext = ext.lower()
         unique_filename = f"{name}_{unique_id}{ext}"
 
         save_path = self.upload_folder / unique_filename

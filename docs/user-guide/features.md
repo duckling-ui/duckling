@@ -91,6 +91,19 @@ Extract embedded images from documents.
 | Generate Table Images | Extract tables as images |
 | Image Scale | Output scale factor (0.1x - 4.0x) |
 
+### Image Preview Gallery
+
+After conversion, extracted images are displayed in a visual gallery:
+
+- **Thumbnail Grid**: View all images as thumbnails in a responsive grid
+- **Hover Actions**: Quick access to view and download buttons on hover
+- **Lightbox Viewer**: Click any image to view full-size in a modal
+- **Navigation**: Use arrow buttons to browse through multiple images
+- **Download**: Download individual images directly from the gallery or lightbox
+
+!!! tip "Image Formats"
+    All extracted images are saved as PNG format for maximum compatibility.
+
 ## RAG Chunking
 
 Generate document chunks optimized for Retrieval-Augmented Generation.

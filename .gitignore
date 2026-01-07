@@ -32,8 +32,9 @@ env/
 *.swp
 *.swo
 *~
-.cursor/
 
+.cursor
+.cursorrules
 # Testing
 .coverage
 htmlcov/

@@ -32,11 +32,19 @@ This section covers everything you need to know to contribute effectively.
 
     [:octicons-arrow-right-24: Testing Guide](testing.md)
 
+-   :material-handshake:{ .lg .middle } __Code of Conduct__
+
+    ---
+
+    Community guidelines and standards
+
+    [:octicons-arrow-right-24: Code of Conduct](code-of-conduct.md)
+
 </div>
 
 ## Code of Conduct
 
-By participating in this project, you agree to maintain a respectful and inclusive environment for everyone.
+By participating in this project, you agree to abide by our [Code of Conduct](code-of-conduct.md), which is based on the Contributor Covenant 3.0. We are committed to providing a welcoming and inclusive environment for everyone.
 
 ## How to Contribute
 

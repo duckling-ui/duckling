@@ -62,7 +62,7 @@ def create_app(config_class=None):
                 {"id": "pptx", "name": "PowerPoint", "extensions": [".pptx"]},
                 {"id": "xlsx", "name": "Excel", "extensions": [".xlsx"]},
                 {"id": "html", "name": "HTML", "extensions": [".html", ".htm"]},
-                {"id": "md", "name": "Markdown", "extensions": [".md", ".markdown"]},
+                {"id": "md", "name": "Markdown", "extensions": [".md", ".markdown", ".MD"]},
                 {"id": "csv", "name": "CSV", "extensions": [".csv"]},
                 {"id": "image", "name": "Image", "extensions": [".png", ".jpg", ".jpeg", ".tiff", ".tif", ".gif", ".webp", ".bmp"]},
                 {"id": "audio", "name": "Audio", "extensions": [".wav", ".mp3"]},
@@ -85,8 +85,8 @@ def create_app(config_class=None):
         """List available documentation files."""
         docs = []
         if DOCS_DIR.exists():
-            for doc_file in DOCS_DIR.glob("*.md"):
-                if doc_file.name.endswith(".png.md"):
+            for doc_file in DOCS_DIR.glob("*.md", "*.MD"):
+                if doc_file.name.endswith(".png.md") or doc_file.name.endswith(".png.MD"):
                     continue  # Skip placeholder files
                 docs.append({
                     "id": doc_file.stem.lower(),
@@ -201,9 +201,9 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    # Use environment variables for production safety
-    import os
-    debug_mode = os.getenv("FLASK_DEBUG", "false").lower() == "true"
+    # Use configuration and environment variables
+    from config import Config
+    debug_mode = Config.DEBUG or os.getenv("FLASK_DEBUG", "false").lower() == "true"
     host = os.getenv("FLASK_HOST", "127.0.0.1")  # Default to localhost, not 0.0.0.0
     port = int(os.getenv("FLASK_PORT", "5001"))
     app.run(host=host, port=port, debug=debug_mode)

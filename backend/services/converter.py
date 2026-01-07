@@ -698,23 +698,56 @@ class ConverterService:
 
         try:
             # Iterate through all pages
-            for page in result.pages:
-                if page.predictions and page.predictions.layout:
-                    # Get confidence from each cluster in the layout prediction
-                    for cluster in page.predictions.layout.clusters:
-                        if hasattr(cluster, 'confidence') and cluster.confidence is not None:
-                            confidences.append(cluster.confidence)
-                        # Also check children clusters
-                        if hasattr(cluster, 'children'):
-                            for child in cluster.children:
-                                if hasattr(child, 'confidence') and child.confidence is not None:
-                                    confidences.append(child.confidence)
+            if hasattr(result, 'pages'):
+                for page in result.pages:
+                    # Try multiple ways to access confidence based on Docling version
+                    if hasattr(page, 'predictions') and page.predictions:
+                        predictions = page.predictions
+
+                        # Try layout predictions
+                        if hasattr(predictions, 'layout') and predictions.layout:
+                            layout = predictions.layout
+                            if hasattr(layout, 'clusters'):
+                                for cluster in layout.clusters:
+                                    if hasattr(cluster, 'confidence') and cluster.confidence is not None:
+                                        confidences.append(cluster.confidence)
+                                    # Also check children clusters
+                                    if hasattr(cluster, 'children'):
+                                        for child in cluster.children:
+                                            if hasattr(child, 'confidence') and child.confidence is not None:
+                                                confidences.append(child.confidence)
+
+                        # Try OCR predictions if available
+                        if hasattr(predictions, 'ocr') and predictions.ocr:
+                            ocr = predictions.ocr
+                            if hasattr(ocr, 'cells'):
+                                for cell in ocr.cells:
+                                    if hasattr(cell, 'confidence') and cell.confidence is not None:
+                                        confidences.append(cell.confidence)
+
+                    # Also try page-level confidence
+                    if hasattr(page, 'confidence') and page.confidence is not None:
+                        confidences.append(page.confidence)
+
+            # Also check document-level metadata for confidence
+            if hasattr(result, 'document') and result.document:
+                doc = result.document
+                if hasattr(doc, 'metadata') and doc.metadata:
+                    meta = doc.metadata
+                    if hasattr(meta, 'confidence') and meta.confidence is not None:
+                        confidences.append(meta.confidence)
 
             if confidences:
-                return sum(confidences) / len(confidences)
+                avg_confidence = sum(confidences) / len(confidences)
+                print(f"[confidence] Found {len(confidences)} confidence values, average: {avg_confidence:.4f}")
+                return avg_confidence
+            else:
+                print("[confidence] No confidence values found in result")
         except Exception as e:
             # Log the error but don't fail the conversion
             print(f"Error calculating confidence: {e}")
+            import traceback
+            traceback.print_exc()
 
         return None
 
