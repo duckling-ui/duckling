@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   getSettings,
@@ -16,6 +17,9 @@ import {
   getChunkingSettings,
   updateChunkingSettings,
   getFormats,
+  getOcrBackendsStatus,
+  installOcrBackend,
+  type OcrBackendStatus,
 } from '../services/api';
 // ConversionSettings type is used in the settings API responses
 
@@ -57,28 +61,62 @@ export function useSettings() {
 // OCR settings hook
 export function useOcrSettings() {
   const queryClient = useQueryClient();
+  const [installError, setInstallError] = useState<string | null>(null);
 
   const ocrQuery = useQuery({
     queryKey: ['settings', 'ocr'],
     queryFn: getOcrSettings,
   });
 
+  const backendsQuery = useQuery({
+    queryKey: ['settings', 'ocr', 'backends'],
+    queryFn: getOcrBackendsStatus,
+  });
+
   const updateMutation = useMutation({
-    mutationFn: updateOcrSettings,
+    mutationFn: ({ settings, autoInstall }: { settings: Parameters<typeof updateOcrSettings>[0]; autoInstall?: boolean }) =>
+      updateOcrSettings(settings, autoInstall),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['settings'] });
+      queryClient.invalidateQueries({ queryKey: ['settings', 'ocr', 'backends'] });
+      setInstallError(null);
+    },
+    onError: (error: any) => {
+      // Check if it's a backend not installed error
+      if (error.response?.data?.pip_installable) {
+        setInstallError(error.response.data.error);
+      }
     },
   });
+
+  const installMutation = useMutation({
+    mutationFn: installOcrBackend,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['settings', 'ocr', 'backends'] });
+      setInstallError(null);
+    },
+  });
+
+  // Enhanced updateOcr that can auto-install
+  const updateOcr = (settings: Parameters<typeof updateOcrSettings>[0], autoInstall = false) => {
+    updateMutation.mutate({ settings, autoInstall });
+  };
 
   return {
     ocr: ocrQuery.data?.ocr,
     availableLanguages: ocrQuery.data?.available_languages || [],
     availableBackends: ocrQuery.data?.available_backends || [],
+    backendsStatus: backendsQuery.data?.backends || [] as OcrBackendStatus[],
+    currentPlatform: backendsQuery.data?.current_platform || '',
     options: ocrQuery.data?.options || {},
-    isLoading: ocrQuery.isLoading,
+    isLoading: ocrQuery.isLoading || backendsQuery.isLoading,
     error: ocrQuery.error,
-    updateOcr: updateMutation.mutate,
+    updateOcr,
     isUpdating: updateMutation.isPending,
+    installBackend: installMutation.mutate,
+    isInstalling: installMutation.isPending,
+    installError,
+    clearInstallError: () => setInstallError(null),
   };
 }
 

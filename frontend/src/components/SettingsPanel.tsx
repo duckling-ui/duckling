@@ -1,5 +1,5 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useAllSettings } from '../hooks/useSettings';
+import { motion, AnimatePresence } from "framer-motion";
+import { useAllSettings } from "../hooks/useSettings";
 
 interface SettingsPanelProps {
   isOpen: boolean;
@@ -7,7 +7,16 @@ interface SettingsPanelProps {
 }
 
 export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
-  const { ocr, tables, images, output, performance, chunking, isLoading, settings } = useAllSettings();
+  const {
+    ocr,
+    tables,
+    images,
+    output,
+    performance,
+    chunking,
+    isLoading,
+    settings,
+  } = useAllSettings();
 
   return (
     <AnimatePresence>
@@ -24,10 +33,10 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
           {/* Panel */}
           <motion.div
-            initial={{ x: '100%' }}
+            initial={{ x: "100%" }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed right-0 top-0 h-full w-full max-w-lg bg-dark-900 border-l border-dark-700 z-50 overflow-y-auto"
           >
             {/* Header */}
@@ -37,7 +46,11 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 onClick={onClose}
                 className="p-2 hover:bg-dark-800 rounded-lg transition-colors"
               >
-                <svg className="w-5 h-5 text-dark-400" viewBox="0 0 20 20" fill="currentColor">
+                <svg
+                  className="w-5 h-5 text-dark-400"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
                   <path
                     fillRule="evenodd"
                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
@@ -54,7 +67,10 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
             ) : (
               <div className="p-6 space-y-6">
                 {/* OCR Settings */}
-                <SettingsSection title="OCR (Optical Character Recognition)" icon="eye">
+                <SettingsSection
+                  title="OCR (Optical Character Recognition)"
+                  icon="eye"
+                >
                   <ToggleSetting
                     label="Enable OCR"
                     description="Extract text from scanned documents and images"
@@ -62,21 +78,201 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     onChange={(enabled) => ocr.updateOcr({ enabled })}
                     disabled={ocr.isUpdating}
                   />
-                  <SelectSetting
-                    label="OCR Backend"
-                    description="Engine used for text recognition"
-                    value={ocr.ocr?.backend ?? 'easyocr'}
-                    options={ocr.availableBackends.map((b) => ({
-                      value: b.id,
-                      label: b.name,
-                    }))}
-                    onChange={(backend) => ocr.updateOcr({ backend })}
-                    disabled={ocr.isUpdating || !ocr.ocr?.enabled}
-                  />
+                  <div className="space-y-2">
+                    <SelectSetting
+                      label="OCR Backend"
+                      description="Engine used for text recognition"
+                      value={ocr.ocr?.backend ?? "easyocr"}
+                      options={ocr.availableBackends.map((b) => {
+                        const status = ocr.backendsStatus.find(
+                          (s) => s.id === b.id
+                        );
+                        let statusLabel = "";
+                        if (status?.available) {
+                          statusLabel = " ✓";
+                        } else if (status?.requires_system_install) {
+                          statusLabel = " ⚠ (needs system install)";
+                        } else if (status?.installed) {
+                          statusLabel = " (not configured)";
+                        } else {
+                          statusLabel = " (not installed)";
+                        }
+                        return {
+                          value: b.id,
+                          label: `${b.name}${statusLabel}`,
+                        };
+                      })}
+                      onChange={(backend) => ocr.updateOcr({ backend }, true)}
+                      disabled={
+                        ocr.isUpdating || ocr.isInstalling || !ocr.ocr?.enabled
+                      }
+                    />
+
+                    {/* Backend status indicator */}
+                    {ocr.ocr?.backend &&
+                      (() => {
+                        const status = ocr.backendsStatus.find(
+                          (s) => s.id === ocr.ocr?.backend
+                        );
+                        if (!status) return null;
+
+                        if (status.available) {
+                          return (
+                            <div className="flex items-center gap-2 text-xs text-green-400">
+                              <svg
+                                className="w-3.5 h-3.5"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                              {status.name} is installed and ready
+                            </div>
+                          );
+                        }
+
+                        // Show system install requirement BEFORE the pip-installable check
+                        if (status.requires_system_install) {
+                          return (
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2 text-xs text-orange-400">
+                                <svg
+                                  className="w-3.5 h-3.5"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                                Requires manual system installation
+                              </div>
+                              <div className="p-3 bg-dark-800/50 rounded-lg border border-dark-700 space-y-2">
+                                <p className="text-xs text-dark-300">
+                                  <strong>{status.name}</strong> cannot be
+                                  installed from this UI. Please install it
+                                  manually:
+                                </p>
+                                {status.id === "tesseract" && (
+                                  <div className="space-y-1 text-xs text-dark-400 font-mono">
+                                    <p>
+                                      <span className="text-dark-500">
+                                        # macOS:
+                                      </span>{" "}
+                                      brew install tesseract
+                                    </p>
+                                    <p>
+                                      <span className="text-dark-500">
+                                        # Ubuntu:
+                                      </span>{" "}
+                                      apt-get install tesseract-ocr
+                                    </p>
+                                    <p>
+                                      <span className="text-dark-500">
+                                        # Windows:
+                                      </span>{" "}
+                                      Download from GitHub
+                                    </p>
+                                  </div>
+                                )}
+                                {status.note &&
+                                  !status.id.includes("tesseract") && (
+                                    <p className="text-xs text-dark-400">
+                                      {status.note}
+                                    </p>
+                                  )}
+                              </div>
+                            </div>
+                          );
+                        }
+
+                        if (!status.installed && status.pip_installable) {
+                          return (
+                            <div className="space-y-2">
+                              <div className="flex items-center gap-2 text-xs text-yellow-400">
+                                <svg
+                                  className="w-3.5 h-3.5"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                                {status.name} is not installed
+                              </div>
+                              <button
+                                onClick={() => ocr.installBackend(status.id)}
+                                disabled={ocr.isInstalling}
+                                className="px-3 py-1.5 bg-primary-500 hover:bg-primary-600 disabled:bg-dark-600 text-dark-950 text-xs font-medium rounded-lg transition-colors flex items-center gap-2"
+                              >
+                                {ocr.isInstalling ? (
+                                  <>
+                                    <div className="w-3 h-3 border-2 border-dark-950 border-t-transparent rounded-full animate-spin" />
+                                    Installing...
+                                  </>
+                                ) : (
+                                  <>
+                                    <svg
+                                      className="w-3.5 h-3.5"
+                                      viewBox="0 0 20 20"
+                                      fill="currentColor"
+                                    >
+                                      <path
+                                        fillRule="evenodd"
+                                        d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                                        clipRule="evenodd"
+                                      />
+                                    </svg>
+                                    Install {status.name}
+                                  </>
+                                )}
+                              </button>
+                              {status.note && (
+                                <p className="text-xs text-dark-500">
+                                  {status.note}
+                                </p>
+                              )}
+                            </div>
+                          );
+                        }
+
+                        if (status.error) {
+                          return (
+                            <div className="text-xs text-red-400">
+                              Error: {status.error}
+                            </div>
+                          );
+                        }
+
+                        return null;
+                      })()}
+
+                    {/* Install error message */}
+                    {ocr.installError && (
+                      <div className="p-2 bg-red-500/10 border border-red-500/30 rounded-lg text-xs text-red-400">
+                        {ocr.installError}
+                        <button
+                          onClick={() => ocr.clearInstallError()}
+                          className="ml-2 underline hover:no-underline"
+                        >
+                          Dismiss
+                        </button>
+                      </div>
+                    )}
+                  </div>
                   <SelectSetting
                     label="OCR Language"
                     description="Primary language for text recognition"
-                    value={ocr.ocr?.language ?? 'en'}
+                    value={ocr.ocr?.language ?? "en"}
                     options={ocr.availableLanguages.map((lang) => ({
                       value: lang.code,
                       label: lang.name,
@@ -88,7 +284,9 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     label="Force Full Page OCR"
                     description="OCR the entire page instead of just detected text regions"
                     checked={ocr.ocr?.force_full_page_ocr ?? false}
-                    onChange={(force_full_page_ocr) => ocr.updateOcr({ force_full_page_ocr })}
+                    onChange={(force_full_page_ocr) =>
+                      ocr.updateOcr({ force_full_page_ocr })
+                    }
                     disabled={ocr.isUpdating || !ocr.ocr?.enabled}
                   />
                   <ToggleSetting
@@ -96,7 +294,11 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     description="Enable GPU acceleration (EasyOCR only)"
                     checked={ocr.ocr?.use_gpu ?? false}
                     onChange={(use_gpu) => ocr.updateOcr({ use_gpu })}
-                    disabled={ocr.isUpdating || !ocr.ocr?.enabled || ocr.ocr?.backend !== 'easyocr'}
+                    disabled={
+                      ocr.isUpdating ||
+                      !ocr.ocr?.enabled ||
+                      ocr.ocr?.backend !== "easyocr"
+                    }
                   />
                   <SliderSetting
                     label="Confidence Threshold"
@@ -105,7 +307,9 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     min={0}
                     max={1}
                     step={0.05}
-                    onChange={(confidence_threshold) => ocr.updateOcr({ confidence_threshold })}
+                    onChange={(confidence_threshold) =>
+                      ocr.updateOcr({ confidence_threshold })
+                    }
                     disabled={ocr.isUpdating || !ocr.ocr?.enabled}
                   />
                 </SettingsSection>
@@ -122,7 +326,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                   <SelectSetting
                     label="Detection Mode"
                     description="Balance between speed and accuracy"
-                    value={tables.tables?.mode ?? 'accurate'}
+                    value={tables.tables?.mode ?? "accurate"}
                     options={tables.availableModes.map((m) => ({
                       value: m.id,
                       label: m.name,
@@ -134,14 +338,18 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     label="Structure Extraction"
                     description="Preserve table structure and cell relationships"
                     checked={tables.tables?.structure_extraction ?? true}
-                    onChange={(structure_extraction) => tables.updateTables({ structure_extraction })}
+                    onChange={(structure_extraction) =>
+                      tables.updateTables({ structure_extraction })
+                    }
                     disabled={tables.isUpdating || !tables.tables?.enabled}
                   />
                   <ToggleSetting
                     label="Cell Matching"
                     description="Match cell content to table structure"
                     checked={tables.tables?.do_cell_matching ?? true}
-                    onChange={(do_cell_matching) => tables.updateTables({ do_cell_matching })}
+                    onChange={(do_cell_matching) =>
+                      tables.updateTables({ do_cell_matching })
+                    }
                     disabled={tables.isUpdating || !tables.tables?.enabled}
                   />
                 </SettingsSection>
@@ -166,21 +374,27 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     label="Generate Page Images"
                     description="Create images of each page"
                     checked={images.images?.generate_page_images ?? false}
-                    onChange={(generate_page_images) => images.updateImages({ generate_page_images })}
+                    onChange={(generate_page_images) =>
+                      images.updateImages({ generate_page_images })
+                    }
                     disabled={images.isUpdating}
                   />
                   <ToggleSetting
                     label="Generate Picture Images"
                     description="Extract embedded pictures as separate files"
                     checked={images.images?.generate_picture_images ?? true}
-                    onChange={(generate_picture_images) => images.updateImages({ generate_picture_images })}
+                    onChange={(generate_picture_images) =>
+                      images.updateImages({ generate_picture_images })
+                    }
                     disabled={images.isUpdating}
                   />
                   <ToggleSetting
                     label="Generate Table Images"
                     description="Extract tables as images"
                     checked={images.images?.generate_table_images ?? true}
-                    onChange={(generate_table_images) => images.updateImages({ generate_table_images })}
+                    onChange={(generate_table_images) =>
+                      images.updateImages({ generate_table_images })
+                    }
                     disabled={images.isUpdating}
                   />
                   <SliderSetting
@@ -190,7 +404,9 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     min={0.1}
                     max={4.0}
                     step={0.1}
-                    onChange={(images_scale) => images.updateImages({ images_scale })}
+                    onChange={(images_scale) =>
+                      images.updateImages({ images_scale })
+                    }
                     disabled={images.isUpdating}
                   />
                 </SettingsSection>
@@ -200,12 +416,14 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                   <SelectSetting
                     label="Processing Device"
                     description="Hardware for document processing"
-                    value={performance.performance?.device ?? 'auto'}
+                    value={performance.performance?.device ?? "auto"}
                     options={performance.availableDevices.map((d) => ({
                       value: d.id,
                       label: d.name,
                     }))}
-                    onChange={(device) => performance.updatePerformance({ device })}
+                    onChange={(device) =>
+                      performance.updatePerformance({ device })
+                    }
                     disabled={performance.isUpdating}
                   />
                   <NumberSetting
@@ -214,7 +432,9 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     value={performance.performance?.num_threads ?? 4}
                     min={1}
                     max={32}
-                    onChange={(num_threads) => performance.updatePerformance({ num_threads })}
+                    onChange={(num_threads) =>
+                      performance.updatePerformance({ num_threads })
+                    }
                     disabled={performance.isUpdating}
                   />
                   <NumberSetting
@@ -223,7 +443,11 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     value={performance.performance?.document_timeout ?? 0}
                     min={0}
                     max={3600}
-                    onChange={(document_timeout) => performance.updatePerformance({ document_timeout: document_timeout || null })}
+                    onChange={(document_timeout) =>
+                      performance.updatePerformance({
+                        document_timeout: document_timeout || null,
+                      })
+                    }
                     disabled={performance.isUpdating}
                   />
                 </SettingsSection>
@@ -243,15 +467,23 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     value={chunking.chunking?.max_tokens ?? 512}
                     min={64}
                     max={8192}
-                    onChange={(max_tokens) => chunking.updateChunking({ max_tokens })}
-                    disabled={chunking.isUpdating || !chunking.chunking?.enabled}
+                    onChange={(max_tokens) =>
+                      chunking.updateChunking({ max_tokens })
+                    }
+                    disabled={
+                      chunking.isUpdating || !chunking.chunking?.enabled
+                    }
                   />
                   <ToggleSetting
                     label="Merge Peers"
                     description="Combine undersized chunks with similar metadata"
                     checked={chunking.chunking?.merge_peers ?? true}
-                    onChange={(merge_peers) => chunking.updateChunking({ merge_peers })}
-                    disabled={chunking.isUpdating || !chunking.chunking?.enabled}
+                    onChange={(merge_peers) =>
+                      chunking.updateChunking({ merge_peers })
+                    }
+                    disabled={
+                      chunking.isUpdating || !chunking.chunking?.enabled
+                    }
                   />
                 </SettingsSection>
 
@@ -260,12 +492,14 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                   <SelectSetting
                     label="Default Format"
                     description="Preferred output format for downloads"
-                    value={output.output?.default_format ?? 'markdown'}
+                    value={output.output?.default_format ?? "markdown"}
                     options={output.availableFormats.map((fmt) => ({
                       value: fmt.id,
                       label: fmt.name,
                     }))}
-                    onChange={(default_format) => output.updateOutput({ default_format })}
+                    onChange={(default_format) =>
+                      output.updateOutput({ default_format })
+                    }
                     disabled={output.isUpdating}
                   />
                 </SettingsSection>
@@ -280,7 +514,11 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     {settings.isResetting ? (
                       <div className="w-4 h-4 border-2 border-dark-400 border-t-transparent rounded-full animate-spin" />
                     ) : (
-                      <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                      <svg
+                        className="w-4 h-4"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
                         <path
                           fillRule="evenodd"
                           d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z"
@@ -383,9 +621,19 @@ interface ToggleSettingProps {
   disabled?: boolean;
 }
 
-function ToggleSetting({ label, description, checked, onChange, disabled }: ToggleSettingProps) {
+function ToggleSetting({
+  label,
+  description,
+  checked,
+  onChange,
+  disabled,
+}: ToggleSettingProps) {
   return (
-    <div className={`flex items-start justify-between gap-4 ${disabled ? 'opacity-50' : ''}`}>
+    <div
+      className={`flex items-start justify-between gap-4 ${
+        disabled ? "opacity-50" : ""
+      }`}
+    >
       <div className="flex-1">
         <p className="text-sm font-medium text-dark-200">{label}</p>
         <p className="text-xs text-dark-400 mt-0.5">{description}</p>
@@ -395,14 +643,14 @@ function ToggleSetting({ label, description, checked, onChange, disabled }: Togg
         disabled={disabled}
         className={`
           relative w-11 h-6 rounded-full transition-colors duration-200
-          ${checked ? 'bg-primary-500' : 'bg-dark-600'}
-          ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}
+          ${checked ? "bg-primary-500" : "bg-dark-600"}
+          ${disabled ? "cursor-not-allowed" : "cursor-pointer"}
         `}
       >
         <motion.div
           className="absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm"
-          animate={{ left: checked ? '24px' : '4px' }}
-          transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+          animate={{ left: checked ? "24px" : "4px" }}
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
         />
       </button>
     </div>
@@ -419,9 +667,16 @@ interface SelectSettingProps {
   disabled?: boolean;
 }
 
-function SelectSetting({ label, description, value, options, onChange, disabled }: SelectSettingProps) {
+function SelectSetting({
+  label,
+  description,
+  value,
+  options,
+  onChange,
+  disabled,
+}: SelectSettingProps) {
   return (
-    <div className={`${disabled ? 'opacity-50' : ''}`}>
+    <div className={`${disabled ? "opacity-50" : ""}`}>
       <div className="mb-2">
         <p className="text-sm font-medium text-dark-200">{label}</p>
         <p className="text-xs text-dark-400 mt-0.5">{description}</p>
@@ -454,15 +709,26 @@ interface SliderSettingProps {
   disabled?: boolean;
 }
 
-function SliderSetting({ label, description, value, min, max, step, onChange, disabled }: SliderSettingProps) {
+function SliderSetting({
+  label,
+  description,
+  value,
+  min,
+  max,
+  step,
+  onChange,
+  disabled,
+}: SliderSettingProps) {
   return (
-    <div className={`${disabled ? 'opacity-50' : ''}`}>
+    <div className={`${disabled ? "opacity-50" : ""}`}>
       <div className="mb-2 flex items-center justify-between">
         <div>
           <p className="text-sm font-medium text-dark-200">{label}</p>
           <p className="text-xs text-dark-400 mt-0.5">{description}</p>
         </div>
-        <span className="text-sm font-mono text-primary-400">{value.toFixed(2)}</span>
+        <span className="text-sm font-mono text-primary-400">
+          {value.toFixed(2)}
+        </span>
       </div>
       <input
         type="range"
@@ -493,9 +759,17 @@ interface NumberSettingProps {
   disabled?: boolean;
 }
 
-function NumberSetting({ label, description, value, min, max, onChange, disabled }: NumberSettingProps) {
+function NumberSetting({
+  label,
+  description,
+  value,
+  min,
+  max,
+  onChange,
+  disabled,
+}: NumberSettingProps) {
   return (
-    <div className={`${disabled ? 'opacity-50' : ''}`}>
+    <div className={`${disabled ? "opacity-50" : ""}`}>
       <div className="mb-2">
         <p className="text-sm font-medium text-dark-200">{label}</p>
         <p className="text-xs text-dark-400 mt-0.5">{description}</p>
@@ -512,4 +786,3 @@ function NumberSetting({ label, description, value, min, max, onChange, disabled
     </div>
   );
 }
-

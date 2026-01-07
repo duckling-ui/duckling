@@ -1,6 +1,9 @@
 """Settings API endpoints."""
 
 import json
+import subprocess
+import sys
+import platform
 from pathlib import Path
 from flask import Blueprint, request, jsonify
 
@@ -16,6 +19,155 @@ from config import (
 )
 
 settings_bp = Blueprint("settings", __name__)
+
+# OCR backend package mappings
+OCR_PACKAGES = {
+    "easyocr": {
+        "packages": ["easyocr"],
+        "pip_installable": True,
+        "description": "EasyOCR - Multi-language OCR with GPU support",
+        "note": "First run will download language models (~100MB per language)"
+    },
+    "tesseract": {
+        "packages": ["pytesseract"],
+        "pip_installable": True,
+        "system_dependency": True,
+        "description": "Tesseract OCR - Classic OCR engine",
+        "note": "Requires Tesseract to be installed on your system (brew install tesseract / apt-get install tesseract-ocr)"
+    },
+    "ocrmac": {
+        "packages": ["ocrmac"],
+        "pip_installable": True,
+        "platform": "darwin",
+        "description": "macOS Vision OCR - Native Apple OCR",
+        "note": "macOS only - uses built-in Vision framework"
+    },
+    "rapidocr": {
+        "packages": ["rapidocr-onnxruntime"],
+        "pip_installable": True,
+        "description": "RapidOCR - Fast OCR with ONNX runtime",
+        "note": "Lightweight and fast, good for CPU-only systems"
+    }
+}
+
+
+def check_ocr_backend_installed(backend: str) -> dict:
+    """Check if an OCR backend is installed and available."""
+    result = {
+        "backend": backend,
+        "installed": False,
+        "available": False,
+        "error": None
+    }
+
+    try:
+        if backend == "easyocr":
+            import easyocr
+            result["installed"] = True
+            result["available"] = True
+        elif backend == "tesseract":
+            import pytesseract
+            result["installed"] = True
+            # Check if tesseract binary is available
+            try:
+                pytesseract.get_tesseract_version()
+                result["available"] = True
+            except Exception as e:
+                result["error"] = f"pytesseract installed but Tesseract binary not found: {e}"
+        elif backend == "ocrmac":
+            if platform.system() != "Darwin":
+                result["error"] = "OcrMac is only available on macOS"
+            else:
+                import ocrmac
+                result["installed"] = True
+                result["available"] = True
+        elif backend == "rapidocr":
+            try:
+                from rapidocr_onnxruntime import RapidOCR
+                result["installed"] = True
+                result["available"] = True
+            except ImportError:
+                # Try alternative import
+                try:
+                    import rapidocr_onnxruntime
+                    result["installed"] = True
+                    result["available"] = True
+                except ImportError:
+                    pass
+    except ImportError as e:
+        result["error"] = f"Package not installed: {e}"
+    except Exception as e:
+        result["error"] = str(e)
+
+    return result
+
+
+def install_ocr_backend(backend: str) -> dict:
+    """Install an OCR backend package."""
+    if backend not in OCR_PACKAGES:
+        return {"success": False, "error": f"Unknown backend: {backend}"}
+
+    pkg_info = OCR_PACKAGES[backend]
+
+    # Check platform compatibility
+    if "platform" in pkg_info and platform.system().lower() != pkg_info["platform"]:
+        return {
+            "success": False,
+            "error": f"{backend} is only available on {pkg_info['platform']}"
+        }
+
+    # Check if system dependency is required
+    if pkg_info.get("system_dependency"):
+        return {
+            "success": False,
+            "error": f"{backend} requires system-level installation. {pkg_info.get('note', '')}",
+            "requires_system_install": True
+        }
+
+    # Install pip packages
+    packages = pkg_info["packages"]
+    results = []
+
+    for package in packages:
+        try:
+            print(f"[settings] Installing {package}...")
+            result = subprocess.run(
+                [sys.executable, "-m", "pip", "install", package],
+                capture_output=True,
+                text=True,
+                timeout=300  # 5 minute timeout
+            )
+
+            if result.returncode == 0:
+                results.append({"package": package, "success": True})
+                print(f"[settings] Successfully installed {package}")
+            else:
+                results.append({
+                    "package": package,
+                    "success": False,
+                    "error": result.stderr
+                })
+                print(f"[settings] Failed to install {package}: {result.stderr}")
+        except subprocess.TimeoutExpired:
+            results.append({
+                "package": package,
+                "success": False,
+                "error": "Installation timed out"
+            })
+        except Exception as e:
+            results.append({
+                "package": package,
+                "success": False,
+                "error": str(e)
+            })
+
+    all_success = all(r["success"] for r in results)
+
+    return {
+        "success": all_success,
+        "packages": results,
+        "note": pkg_info.get("note", "")
+    }
 
 # Settings file path
 SETTINGS_FILE = BACKEND_DIR / "user_settings.json"
@@ -126,6 +278,89 @@ def get_formats():
     })
 
 
+@settings_bp.route("/settings/ocr/backends", methods=["GET"])
+def get_ocr_backends_status():
+    """Get status of all OCR backends (installed/available)."""
+    backends_status = []
+
+    for backend in OCR_BACKENDS:
+        backend_id = backend["id"]
+        status = check_ocr_backend_installed(backend_id)
+        pkg_info = OCR_PACKAGES.get(backend_id, {})
+
+        backends_status.append({
+            "id": backend_id,
+            "name": backend["name"],
+            "description": backend["description"],
+            "installed": status["installed"],
+            "available": status["available"],
+            "error": status["error"],
+            "pip_installable": pkg_info.get("pip_installable", False),
+            "requires_system_install": pkg_info.get("system_dependency", False),
+            "platform": pkg_info.get("platform"),
+            "note": pkg_info.get("note", "")
+        })
+
+    return jsonify({
+        "backends": backends_status,
+        "current_platform": platform.system().lower()
+    })
+
+
+@settings_bp.route("/settings/ocr/backends/<backend_id>/check", methods=["GET"])
+def check_ocr_backend(backend_id: str):
+    """Check if a specific OCR backend is installed and available."""
+    if backend_id not in [b["id"] for b in OCR_BACKENDS]:
+        return jsonify({"error": f"Unknown backend: {backend_id}"}), 404
+
+    status = check_ocr_backend_installed(backend_id)
+    pkg_info = OCR_PACKAGES.get(backend_id, {})
+
+    return jsonify({
+        **status,
+        "pip_installable": pkg_info.get("pip_installable", False),
+        "requires_system_install": pkg_info.get("system_dependency", False),
+        "note": pkg_info.get("note", "")
+    })
+
+
+@settings_bp.route("/settings/ocr/backends/<backend_id>/install", methods=["POST"])
+def install_ocr_backend_endpoint(backend_id: str):
+    """Install an OCR backend package."""
+    if backend_id not in [b["id"] for b in OCR_BACKENDS]:
+        return jsonify({"error": f"Unknown backend: {backend_id}"}), 404
+
+    # Check if already installed
+    status = check_ocr_backend_installed(backend_id)
+    if status["available"]:
+        return jsonify({
+            "message": f"{backend_id} is already installed and available",
+            "already_installed": True
+        })
+
+    # Try to install
+    result = install_ocr_backend(backend_id)
+
+    if result["success"]:
+        # Verify installation
+        new_status = check_ocr_backend_installed(backend_id)
+        return jsonify({
+            "message": f"Successfully installed {backend_id}",
+            "success": True,
+            "installed": new_status["installed"],
+            "available": new_status["available"],
+            "note": result.get("note", "")
+        })
+    else:
+        return jsonify({
+            "message": f"Failed to install {backend_id}",
+            "success": False,
+            "error": result.get("error", "Unknown error"),
+            "requires_system_install": result.get("requires_system_install", False),
+            "packages": result.get("packages", [])
+        }), 400
+
+
 @settings_bp.route("/settings/ocr", methods=["GET"])
 def get_ocr_settings():
     """Get OCR-specific settings."""
@@ -181,6 +416,41 @@ def update_ocr_settings():
         valid_backends = [b["id"] for b in OCR_BACKENDS]
         if ocr_settings["backend"] not in valid_backends:
             return jsonify({"error": f"backend must be one of: {', '.join(valid_backends)}"}), 400
+
+        # Check if the backend is available, offer to install if not
+        backend_status = check_ocr_backend_installed(ocr_settings["backend"])
+        if not backend_status["available"]:
+            # Check if auto_install flag is set
+            auto_install = request.args.get("auto_install", "false").lower() == "true"
+
+            if auto_install:
+                # Try to install the backend
+                install_result = install_ocr_backend(ocr_settings["backend"])
+                if not install_result["success"]:
+                    return jsonify({
+                        "error": f"Backend '{ocr_settings['backend']}' is not available and installation failed",
+                        "install_error": install_result.get("error"),
+                        "requires_system_install": install_result.get("requires_system_install", False),
+                        "backend_status": backend_status
+                    }), 400
+                # Re-check after installation
+                backend_status = check_ocr_backend_installed(ocr_settings["backend"])
+                if not backend_status["available"]:
+                    return jsonify({
+                        "error": f"Backend '{ocr_settings['backend']}' installed but not available",
+                        "backend_status": backend_status
+                    }), 400
+            else:
+                # Return info about the unavailable backend
+                pkg_info = OCR_PACKAGES.get(ocr_settings["backend"], {})
+                return jsonify({
+                    "error": f"Backend '{ocr_settings['backend']}' is not installed",
+                    "backend_status": backend_status,
+                    "pip_installable": pkg_info.get("pip_installable", False),
+                    "requires_system_install": pkg_info.get("system_dependency", False),
+                    "note": pkg_info.get("note", ""),
+                    "hint": "Add ?auto_install=true to automatically install pip-installable backends"
+                }), 400
 
     if "force_full_page_ocr" in ocr_settings:
         if not isinstance(ocr_settings["force_full_page_ocr"], bool):

@@ -1,15 +1,41 @@
 """Conversion API endpoints."""
 
 import os
+import json
+from pathlib import Path
 from flask import Blueprint, request, jsonify, send_file
 from werkzeug.exceptions import BadRequest, NotFound
 
 from services.converter import converter_service, ConversionStatus
 from services.file_manager import file_manager
 from services.history import history_service
-from config import DEFAULT_CONVERSION_SETTINGS, OUTPUT_FOLDER
+from config import DEFAULT_CONVERSION_SETTINGS, OUTPUT_FOLDER, BACKEND_DIR
 
 convert_bp = Blueprint("convert", __name__)
+
+# Settings file path (same as in settings.py)
+SETTINGS_FILE = BACKEND_DIR / "user_settings.json"
+
+
+def load_user_settings() -> dict:
+    """Load user settings from file or return defaults."""
+    if SETTINGS_FILE.exists():
+        try:
+            with open(SETTINGS_FILE, "r") as f:
+                saved = json.load(f)
+                # Deep merge with defaults to ensure all keys exist
+                settings = DEFAULT_CONVERSION_SETTINGS.copy()
+                def deep_merge(base, updates):
+                    for key, value in updates.items():
+                        if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+                            deep_merge(base[key], value)
+                        else:
+                            base[key] = value
+                deep_merge(settings, saved)
+                return settings
+        except (json.JSONDecodeError, IOError):
+            pass
+    return DEFAULT_CONVERSION_SETTINGS.copy()
 
 
 @convert_bp.route("/convert", methods=["POST"])
@@ -36,22 +62,25 @@ def upload_and_convert():
     if not file_manager.allowed_file(file.filename):
         raise BadRequest(f"File type not allowed. Allowed types: {', '.join(file_manager.upload_folder.parent.name)}")
 
-    # Parse settings if provided
-    settings = DEFAULT_CONVERSION_SETTINGS.copy()
+    # Load saved user settings as the base (not defaults)
+    settings = load_user_settings()
+
+    # Override with any settings provided in the request
     if "settings" in request.form:
         try:
-            import json
-            user_settings = json.loads(request.form["settings"])
-            # Deep merge settings
+            request_settings = json.loads(request.form["settings"])
+            # Deep merge request settings on top of user settings
             def deep_merge(base, updates):
                 for key, value in updates.items():
                     if key in base and isinstance(base[key], dict) and isinstance(value, dict):
                         deep_merge(base[key], value)
                     else:
                         base[key] = value
-            deep_merge(settings, user_settings)
+            deep_merge(settings, request_settings)
         except json.JSONDecodeError:
             pass
+
+    print(f"[convert] Using OCR backend: {settings.get('ocr', {}).get('backend', 'unknown')}")
 
     # Save the uploaded file
     saved_path, safe_filename, file_size = file_manager.save_upload(file)
@@ -115,21 +144,24 @@ def upload_and_convert_batch():
     if not files or all(f.filename == "" for f in files):
         raise BadRequest("No files selected")
 
-    # Parse settings if provided
-    settings = DEFAULT_CONVERSION_SETTINGS.copy()
+    # Load saved user settings as the base (not defaults)
+    settings = load_user_settings()
+
+    # Override with any settings provided in the request
     if "settings" in request.form:
         try:
-            import json
-            user_settings = json.loads(request.form["settings"])
+            request_settings = json.loads(request.form["settings"])
             def deep_merge(base, updates):
                 for key, value in updates.items():
                     if key in base and isinstance(base[key], dict) and isinstance(value, dict):
                         deep_merge(base[key], value)
                     else:
                         base[key] = value
-            deep_merge(settings, user_settings)
+            deep_merge(settings, request_settings)
         except json.JSONDecodeError:
             pass
+
+    print(f"[convert/batch] Using OCR backend: {settings.get('ocr', {}).get('backend', 'unknown')}")
 
     jobs = []
     for file in files:

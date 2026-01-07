@@ -185,9 +185,59 @@ export const updateOcrSettings = async (
     use_gpu: boolean;
     confidence_threshold: number;
     bitmap_area_threshold: number;
-  }>
+  }>,
+  autoInstall = false
 ): Promise<{ message: string; ocr: any }> => {
-  const response = await api.put('/settings/ocr', settings);
+  const response = await api.put(`/settings/ocr${autoInstall ? '?auto_install=true' : ''}`, settings);
+  return response.data;
+};
+
+// OCR Backend management
+export interface OcrBackendStatus {
+  id: string;
+  name: string;
+  description: string;
+  installed: boolean;
+  available: boolean;
+  error: string | null;
+  pip_installable: boolean;
+  requires_system_install: boolean;
+  platform: string | null;
+  note: string;
+}
+
+export const getOcrBackendsStatus = async (): Promise<{
+  backends: OcrBackendStatus[];
+  current_platform: string;
+}> => {
+  const response = await api.get('/settings/ocr/backends');
+  return response.data;
+};
+
+export const checkOcrBackend = async (backendId: string): Promise<{
+  backend: string;
+  installed: boolean;
+  available: boolean;
+  error: string | null;
+  pip_installable: boolean;
+  requires_system_install: boolean;
+  note: string;
+}> => {
+  const response = await api.get(`/settings/ocr/backends/${backendId}/check`);
+  return response.data;
+};
+
+export const installOcrBackend = async (backendId: string): Promise<{
+  message: string;
+  success: boolean;
+  installed?: boolean;
+  available?: boolean;
+  already_installed?: boolean;
+  error?: string;
+  requires_system_install?: boolean;
+  note?: string;
+}> => {
+  const response = await api.post(`/settings/ocr/backends/${backendId}/install`);
   return response.data;
 };
 

@@ -132,6 +132,12 @@ PUT /api/settings/ocr
 Content-Type: application/json
 ```
 
+**Query Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `auto_install` | boolean | If `true`, automatically install pip-installable backends |
+
 ### Response/Request
 
 ```json
@@ -156,6 +162,112 @@ Content-Type: application/json
     {"id": "ocrmac", "name": "macOS Vision", "description": "Native macOS OCR (Mac only)"},
     {"id": "rapidocr", "name": "RapidOCR", "description": "Fast OCR with ONNX runtime"}
   ]
+}
+```
+
+---
+
+## OCR Backend Management
+
+### Get All Backend Status
+
+```http
+GET /api/settings/ocr/backends
+```
+
+Returns installation status for all OCR backends.
+
+### Response
+
+```json
+{
+  "backends": [
+    {
+      "id": "easyocr",
+      "name": "EasyOCR",
+      "description": "General-purpose OCR with GPU support",
+      "installed": true,
+      "available": true,
+      "error": null,
+      "pip_installable": true,
+      "requires_system_install": false,
+      "platform": null,
+      "note": "First run will download language models (~100MB per language)"
+    },
+    {
+      "id": "tesseract",
+      "name": "Tesseract",
+      "description": "Classic OCR engine",
+      "installed": false,
+      "available": false,
+      "error": "Package not installed",
+      "pip_installable": true,
+      "requires_system_install": true,
+      "platform": null,
+      "note": "Requires Tesseract to be installed on your system"
+    }
+  ],
+  "current_platform": "darwin"
+}
+```
+
+### Check Specific Backend
+
+```http
+GET /api/settings/ocr/backends/{backend_id}/check
+```
+
+### Response
+
+```json
+{
+  "backend": "easyocr",
+  "installed": true,
+  "available": true,
+  "error": null,
+  "pip_installable": true,
+  "requires_system_install": false,
+  "note": "First run will download language models"
+}
+```
+
+### Install Backend
+
+```http
+POST /api/settings/ocr/backends/{backend_id}/install
+```
+
+Installs a pip-installable OCR backend.
+
+### Response (Success)
+
+```json
+{
+  "message": "Successfully installed easyocr",
+  "success": true,
+  "installed": true,
+  "available": true,
+  "note": "First run will download language models"
+}
+```
+
+### Response (Already Installed)
+
+```json
+{
+  "message": "easyocr is already installed and available",
+  "already_installed": true
+}
+```
+
+### Response (Requires System Install)
+
+```json
+{
+  "message": "Failed to install tesseract",
+  "success": false,
+  "error": "tesseract requires system-level installation",
+  "requires_system_install": true
 }
 ```
 

@@ -33,6 +33,28 @@ Extract text from scanned documents and images.
 | **macOS Vision** | Native Apple OCR | Apple Neural Engine | Mac users |
 | **RapidOCR** | Fast, lightweight | No | Speed-critical |
 
+### Automatic Backend Installation
+
+Duckling can automatically install OCR backends when you select them:
+
+1. Open **Settings** panel
+2. Select an OCR backend from the dropdown
+3. If the backend is not installed, you'll see an **Install** button
+4. Click to automatically install via pip
+
+!!! note "Installation Requirements"
+    - **EasyOCR, OcrMac, RapidOCR**: Can be installed automatically via pip
+    - **Tesseract**: Requires system-level installation first:
+      - macOS: `brew install tesseract`
+      - Ubuntu/Debian: `apt-get install tesseract-ocr`
+      - Windows: Download from [GitHub releases](https://github.com/UB-Mannheim/tesseract/wiki)
+
+The Settings panel shows the status of each backend:
+
+- ✓ **Installed and ready** - Backend is available for use
+- ⚠ **Not installed** - Click to install (pip-installable backends)
+- ℹ **Requires system installation** - Follow manual installation instructions
+
 ### Language Support
 
 28+ languages including:

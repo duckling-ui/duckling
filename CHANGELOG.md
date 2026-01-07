@@ -16,12 +16,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Click to view full-size image with download option
   - Keyboard-friendly navigation between images
 
+- **OCR Backend Auto-Installation**: Automatic installation of OCR engines
+  - Settings panel shows installation status for each OCR backend
+  - One-click installation for pip-installable backends (EasyOCR, OcrMac, RapidOCR)
+  - Clear status indicators (✓ installed, not installed, requires system install)
+  - Helpful notes for backends requiring system-level installation (Tesseract)
+  - New API endpoints for backend status and installation:
+    - `GET /api/settings/ocr/backends` - Get status of all backends
+    - `GET /api/settings/ocr/backends/<id>/check` - Check specific backend
+    - `POST /api/settings/ocr/backends/<id>/install` - Install a backend
+
 ### Changed
 
 - **Confidence Display**: Improved confidence score handling
   - Confidence now only displays when valid (non-null, greater than 0)
   - Better handling of documents without OCR/layout analysis (e.g., markdown files)
   - Enhanced confidence extraction from Docling results
+
+- **Settings Application**: User settings now properly apply to conversions
+  - Conversion endpoints load saved user settings instead of defaults
+  - OCR backend selection now correctly affects document processing
 
 ### Fixed
 
@@ -34,6 +48,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Confidence Score**: Fixed issue where confidence was always showing 0.0%
   - Now correctly handles `null` confidence values
   - Hidden for documents without confidence data
+- **OCR Backend Selection**: Changing OCR backend in settings now works correctly
+  - Settings are properly loaded and applied during conversion
 
 ## [2.3.0] - 2026-01-07
 
