@@ -3,8 +3,8 @@
     "enabled": true,
     "language": "en",
     "force_full_page_ocr": false,
-    "backend": "ocrmac",
-    "use_gpu": false,
+    "backend": "rapidocr",
+    "use_gpu": true,
     "confidence_threshold": 0.5,
     "bitmap_area_threshold": 0.05
   },
@@ -26,7 +26,7 @@
     "default_format": "markdown"
   },
   "performance": {
-    "device": "auto",
+    "device": "mps",
     "num_threads": 4,
     "document_timeout": null
   },

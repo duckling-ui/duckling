@@ -48,6 +48,8 @@ logger = logging.getLogger(__name__)
 
 convert_bp = Blueprint("convert", __name__)
 
+# Settings file path (same as in settings.py)
+SETTINGS_FILE = BACKEND_DIR / "user_settings.json"
 
 def load_user_settings() -> dict:
     """Load user settings from database (per session) or return defaults."""
