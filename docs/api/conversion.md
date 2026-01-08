@@ -92,6 +92,106 @@ curl -X POST http://localhost:5001/api/convert/batch \
 
 ---
 
+## Convert Document from URL
+
+```http
+POST /api/convert/url
+Content-Type: application/json
+```
+
+### Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `url` | string | Yes | URL of the document to convert |
+| `settings` | object | No | Conversion settings override |
+
+### Example Request
+
+```bash
+curl -X POST http://localhost:5001/api/convert/url \
+  -H "Content-Type: application/json" \
+  -d '{
+    "url": "https://example.com/document.pdf",
+    "settings": {"ocr": {"enabled": true}}
+  }'
+```
+
+### Response (202 Accepted)
+
+```json
+{
+  "job_id": "550e8400-e29b-41d4-a716-446655440000",
+  "filename": "document.pdf",
+  "source_url": "https://example.com/document.pdf",
+  "input_format": "pdf",
+  "status": "processing",
+  "message": "Conversion started"
+}
+```
+
+---
+
+## Batch Convert Documents from URLs
+
+```http
+POST /api/convert/url/batch
+Content-Type: application/json
+```
+
+### Parameters
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `urls` | string[] | Yes | Array of URLs to convert |
+| `settings` | object | No | Conversion settings override |
+
+### Example Request
+
+```bash
+curl -X POST http://localhost:5001/api/convert/url/batch \
+  -H "Content-Type: application/json" \
+  -d '{
+    "urls": [
+      "https://example.com/doc1.pdf",
+      "https://example.com/doc2.docx",
+      "https://example.com/page.html"
+    ]
+  }'
+```
+
+### Response (202 Accepted)
+
+```json
+{
+  "jobs": [
+    {
+      "job_id": "550e8400-e29b-41d4-a716-446655440001",
+      "url": "https://example.com/doc1.pdf",
+      "filename": "doc1.pdf",
+      "input_format": "pdf",
+      "status": "processing"
+    },
+    {
+      "job_id": "550e8400-e29b-41d4-a716-446655440002",
+      "url": "https://example.com/doc2.docx",
+      "filename": "doc2.docx",
+      "input_format": "docx",
+      "status": "processing"
+    },
+    {
+      "url": "https://example.com/invalid",
+      "status": "rejected",
+      "error": "File type not allowed"
+    }
+  ],
+  "total": 3,
+  "message": "Started 2 conversions"
+}
+```
+
+---
+
 ## Get Conversion Status
 
 ```http

@@ -4,24 +4,54 @@ Get started with Duckling in 5 minutes.
 
 ## Starting the Application
 
-### Terminal 1: Backend
+Choose your preferred method:
 
-```bash
-cd backend
-source venv/bin/activate  # Windows: venv\Scripts\activate
-python app.py
-```
+=== "Docker (Recommended)"
 
-The API will be available at `http://localhost:5001`
+    The fastest way to get started - no dependencies to install!
 
-### Terminal 2: Frontend
+    **Option 1: Pre-built Images (Fastest)**
+    ```bash
+    # Download the compose file
+    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml
 
-```bash
-cd frontend
-npm run dev
-```
+    # Start Duckling
+    docker-compose -f docker-compose.prebuilt.yml up -d
+    ```
 
-The UI will be available at `http://localhost:3000`
+    **Option 2: Build Locally**
+    ```bash
+    # Clone and start
+    git clone https://github.com/davidgs/duckling.git
+    cd duckling
+    docker-compose up --build
+    ```
+
+    The UI will be available at `http://localhost:3000`
+
+    !!! tip "First Run"
+        The first startup may take a few minutes as Docker downloads/builds the images.
+
+=== "Manual Setup"
+
+    ### Terminal 1: Backend
+
+    ```bash
+    cd backend
+    source venv/bin/activate  # Windows: venv\Scripts\activate
+    python app.py
+    ```
+
+    The API will be available at `http://localhost:5001`
+
+    ### Terminal 2: Frontend
+
+    ```bash
+    cd frontend
+    npm run dev
+    ```
+
+    The UI will be available at `http://localhost:3000`
 
 ## Your First Conversion
 
@@ -29,19 +59,37 @@ The UI will be available at `http://localhost:3000`
 
 Navigate to `http://localhost:3000` in your browser.
 
+<figure markdown="span">
+  ![Duckling Interface](../assets/screenshots/ui/dropzone-empty.png){ loading=lazy }
+  <figcaption>The main Duckling interface</figcaption>
+</figure>
+
 ### 2. Upload a Document
 
 Drag and drop a PDF, Word document, or image onto the drop zone, or click to browse.
 
-![Drop Zone](../screenshot.png)
+<figure markdown="span">
+  ![Uploading Document](../assets/screenshots/ui/dropzone-uploading.png){ loading=lazy }
+  <figcaption>Upload progress indicator</figcaption>
+</figure>
 
 ### 3. Watch the Progress
 
 The conversion progress will be displayed in real-time.
 
+<figure markdown="span">
+  ![Conversion Progress](../assets/screenshots/features/conversion-progress.png){ loading=lazy }
+  <figcaption>Real-time conversion progress</figcaption>
+</figure>
+
 ### 4. Download Results
 
 Once complete, choose your export format:
+
+<figure markdown="span">
+  ![Conversion Complete](../assets/screenshots/features/conversion-complete.png){ loading=lazy }
+  <figcaption>Conversion complete with export options</figcaption>
+</figure>
 
 - **Markdown** - Great for documentation
 - **HTML** - Web-ready output
@@ -81,6 +129,11 @@ To convert multiple files at once:
 1. Toggle **Batch Mode** in the header
 2. Drag multiple files onto the drop zone
 3. All files will be processed simultaneously
+
+<figure markdown="span">
+  ![Batch Mode](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+  <figcaption>Batch mode with multiple files</figcaption>
+</figure>
 
 !!! tip "Performance"
     Batch processing uses a job queue with a maximum of 2 concurrent conversions to prevent memory exhaustion.

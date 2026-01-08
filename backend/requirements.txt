@@ -9,4 +9,3 @@ pytest-cov==4.1.0
 werkzeug==3.1.4
 gunicorn==23.0.0
 markdown==3.5.1
-

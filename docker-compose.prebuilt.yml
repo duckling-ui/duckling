@@ -1,0 +1,55 @@
+# Duckling Pre-built Images Docker Compose
+# Usage: docker-compose -f docker-compose.prebuilt.yml up -d
+#
+# This uses pre-built images from Docker Hub (or your registry)
+# To use your own registry, set DOCKER_REGISTRY environment variable:
+#   DOCKER_REGISTRY=ghcr.io/yourusername docker-compose -f docker-compose.prebuilt.yml up -d
+
+services:
+  backend:
+    image: ${DOCKER_REGISTRY:-davidgs}/duckling-backend:${VERSION:-latest}
+    container_name: duckling-backend
+    ports:
+      - "5001:5001"
+    volumes:
+      - duckling-uploads:/app/uploads
+      - duckling-outputs:/app/outputs
+      - duckling-data:/app/data
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=false
+      - DEBUG=False
+      - SECRET_KEY=${SECRET_KEY:-please-change-this-secret-key}
+      - FLASK_HOST=0.0.0.0
+      - FLASK_PORT=5001
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - duckling-network
+
+  frontend:
+    image: ${DOCKER_REGISTRY:-davidgs}/duckling-frontend:${VERSION:-latest}
+    container_name: duckling-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - duckling-network
+
+networks:
+  duckling-network:
+    driver: bridge
+
+volumes:
+  duckling-uploads:
+  duckling-outputs:
+  duckling-data:
+

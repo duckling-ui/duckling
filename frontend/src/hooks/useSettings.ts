@@ -16,10 +16,17 @@ import {
   updatePerformanceSettings,
   getChunkingSettings,
   updateChunkingSettings,
+  getEnrichmentSettings,
+  updateEnrichmentSettings,
   getFormats,
   getOcrBackendsStatus,
   installOcrBackend,
+  getEnrichmentModelsStatus,
+  downloadEnrichmentModel,
+  getModelDownloadProgress,
   type OcrBackendStatus,
+  type EnrichmentModelInfo,
+  type ModelDownloadProgress,
 } from '../services/api';
 // ConversionSettings type is used in the settings API responses
 
@@ -252,6 +259,97 @@ export function useChunkingSettings() {
   };
 }
 
+// Enrichment settings hook
+export function useEnrichmentSettings() {
+  const queryClient = useQueryClient();
+  const [downloadingModels, setDownloadingModels] = useState<Record<string, boolean>>({});
+  const [downloadProgress, setDownloadProgress] = useState<Record<string, ModelDownloadProgress>>({});
+
+  const enrichmentQuery = useQuery({
+    queryKey: ['settings', 'enrichment'],
+    queryFn: getEnrichmentSettings,
+  });
+
+  const modelsQuery = useQuery({
+    queryKey: ['settings', 'enrichment', 'models'],
+    queryFn: getEnrichmentModelsStatus,
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: updateEnrichmentSettings,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['settings'] });
+    },
+  });
+
+  const downloadModelMutation = useMutation({
+    mutationFn: async (modelId: string) => {
+      setDownloadingModels(prev => ({ ...prev, [modelId]: true }));
+      setDownloadProgress(prev => ({
+        ...prev,
+        [modelId]: { model_id: modelId, status: 'downloading', progress: 0, message: 'Starting download...' }
+      }));
+
+      try {
+        const result = await downloadEnrichmentModel(modelId);
+
+        // Update progress based on result
+        if (result.success) {
+          setDownloadProgress(prev => ({
+            ...prev,
+            [modelId]: { model_id: modelId, status: 'completed', progress: 100, message: result.message || 'Download complete!' }
+          }));
+        } else {
+          setDownloadProgress(prev => ({
+            ...prev,
+            [modelId]: { model_id: modelId, status: 'error', progress: 0, message: result.error || 'Download failed' }
+          }));
+        }
+
+        return result;
+      } catch (error) {
+        setDownloadProgress(prev => ({
+          ...prev,
+          [modelId]: { model_id: modelId, status: 'error', progress: 0, message: String(error) }
+        }));
+        throw error;
+      } finally {
+        // Small delay before clearing the loading state so user sees the result
+        setTimeout(() => {
+          setDownloadingModels(prev => ({ ...prev, [modelId]: false }));
+        }, 1500);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['settings', 'enrichment'] });
+      queryClient.invalidateQueries({ queryKey: ['settings', 'enrichment', 'models'] });
+    },
+    onError: (error, modelId) => {
+      console.error('Download failed:', modelId, error);
+      setDownloadProgress(prev => ({
+        ...prev,
+        [modelId]: { model_id: modelId, status: 'error', progress: 0, message: String(error) }
+      }));
+    },
+  });
+
+  return {
+    enrichment: enrichmentQuery.data?.enrichment,
+    modelsStatus: enrichmentQuery.data?.models_status || {},
+    options: enrichmentQuery.data?.options || {},
+    models: modelsQuery.data?.models || [] as EnrichmentModelInfo[],
+    isLoading: enrichmentQuery.isLoading,
+    isLoadingModels: modelsQuery.isLoading,
+    error: enrichmentQuery.error,
+    updateEnrichment: updateMutation.mutate,
+    isUpdating: updateMutation.isPending,
+    downloadModel: downloadModelMutation.mutate,
+    downloadingModels,
+    downloadProgress,
+    downloadError: downloadModelMutation.error,
+  };
+}
+
 // Formats hook
 export function useFormats() {
   const formatsQuery = useQuery({
@@ -273,6 +371,7 @@ export function useAllSettings() {
   const ocr = useOcrSettings();
   const tables = useTableSettings();
   const images = useImageSettings();
+  const enrichment = useEnrichmentSettings();
   const output = useOutputSettings();
   const performance = usePerformanceSettings();
   const chunking = useChunkingSettings();
@@ -282,6 +381,7 @@ export function useAllSettings() {
     ocr,
     tables,
     images,
+    enrichment,
     output,
     performance,
     chunking,
@@ -290,6 +390,7 @@ export function useAllSettings() {
       ocr.isLoading ||
       tables.isLoading ||
       images.isLoading ||
+      enrichment.isLoading ||
       output.isLoading ||
       performance.isLoading ||
       chunking.isLoading,

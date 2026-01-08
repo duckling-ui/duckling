@@ -11,6 +11,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
     ocr,
     tables,
     images,
+    enrichment,
     output,
     performance,
     chunking,
@@ -487,6 +488,209 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                   />
                 </SettingsSection>
 
+                {/* Enrichment Settings */}
+                <SettingsSection title="Document Enrichment" icon="sparkles">
+                  <ToggleSetting
+                    label="Code Enrichment"
+                    description="Enhance code blocks with language detection"
+                    checked={enrichment.enrichment?.code_enrichment ?? false}
+                    onChange={(code_enrichment) =>
+                      enrichment.updateEnrichment({ code_enrichment })
+                    }
+                    disabled={enrichment.isUpdating}
+                  />
+                  <ToggleSetting
+                    label="Formula Enrichment"
+                    description="Extract LaTeX from mathematical formulas"
+                    checked={enrichment.enrichment?.formula_enrichment ?? false}
+                    onChange={(formula_enrichment) =>
+                      enrichment.updateEnrichment({ formula_enrichment })
+                    }
+                    disabled={enrichment.isUpdating}
+                  />
+                  <ToggleSetting
+                    label="Picture Classification"
+                    description="Classify images by type (figure, chart, photo, etc.)"
+                    checked={
+                      enrichment.enrichment?.picture_classification ?? false
+                    }
+                    onChange={(picture_classification) =>
+                      enrichment.updateEnrichment({ picture_classification })
+                    }
+                    disabled={enrichment.isUpdating}
+                  />
+                  <ToggleSetting
+                    label="Picture Description"
+                    description="Generate AI captions for images (slower)"
+                    checked={
+                      enrichment.enrichment?.picture_description ?? false
+                    }
+                    onChange={(picture_description) =>
+                      enrichment.updateEnrichment({ picture_description })
+                    }
+                    disabled={enrichment.isUpdating}
+                  />
+                  {(enrichment.enrichment?.picture_description ||
+                    enrichment.enrichment?.formula_enrichment) && (
+                    <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                      <p className="text-xs text-yellow-400">
+                        ⚠️ Enrichment features may require additional model
+                        downloads and significantly increase processing time.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Model Pre-Download Section */}
+                  {enrichment.models && enrichment.models.length > 0 && (
+                    <div className="mt-4 pt-4 border-t border-dark-700">
+                      <h4 className="text-sm font-medium text-dark-200 mb-3">
+                        Pre-Download Models
+                      </h4>
+                      <p className="text-xs text-dark-400 mb-3">
+                        Download models ahead of time to avoid delays during
+                        document processing.
+                      </p>
+                      <div className="space-y-2">
+                        {enrichment.models.map((model) => (
+                          <div
+                            key={model.id}
+                            className={`p-3 bg-dark-800 rounded-lg ${
+                              model.error ? "border border-yellow-500/30" : ""
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sm text-dark-200">
+                                    {model.name}
+                                  </span>
+                                  {model.downloaded ? (
+                                    <span className="text-xs text-green-400">
+                                      ✓ Ready
+                                    </span>
+                                  ) : model.error ? (
+                                    <span className="text-xs text-yellow-400">
+                                      ⚠ Unavailable
+                                    </span>
+                                  ) : (
+                                    <span className="text-xs text-dark-500">
+                                      ~{model.size_mb}MB
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-xs text-dark-500 truncate">
+                                  {model.description}
+                                </p>
+                              </div>
+
+                              {/* Action buttons */}
+                              {!model.error &&
+                                !model.downloaded &&
+                                !enrichment.downloadingModels[model.id] && (
+                                  <button
+                                    onClick={() =>
+                                      enrichment.downloadModel(model.id)
+                                    }
+                                    className="ml-3 px-3 py-1.5 text-xs bg-primary-500/20 text-primary-400
+                                           hover:bg-primary-500/30 rounded-lg transition-colors"
+                                  >
+                                    Download
+                                  </button>
+                                )}
+
+                              {enrichment.downloadingModels[model.id] && (
+                                <div className="ml-3 w-5 h-5 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
+                              )}
+
+                              {model.downloaded && (
+                                <span className="ml-3 text-green-500">
+                                  <svg
+                                    className="w-5 h-5"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Error/upgrade message */}
+                            {model.error && (
+                              <div className="mt-2 p-2 bg-yellow-500/10 rounded text-xs text-yellow-400">
+                                {model.error}
+                              </div>
+                            )}
+
+                            {/* Download Progress */}
+                            {enrichment.downloadingModels[model.id] &&
+                              enrichment.downloadProgress[model.id] && (
+                                <div className="mt-2">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <div className="flex-1 h-1.5 bg-dark-700 rounded-full overflow-hidden">
+                                      <div
+                                        className={`h-full transition-all duration-300 ${
+                                          enrichment.downloadProgress[model.id]
+                                            .status === "error"
+                                            ? "bg-red-500"
+                                            : "bg-primary-500"
+                                        }`}
+                                        style={{
+                                          width: `${
+                                            enrichment.downloadProgress[
+                                              model.id
+                                            ].progress
+                                          }%`,
+                                        }}
+                                      />
+                                    </div>
+                                    <span className="text-xs text-dark-400">
+                                      {
+                                        enrichment.downloadProgress[model.id]
+                                          .progress
+                                      }
+                                      %
+                                    </span>
+                                  </div>
+                                  <p
+                                    className={`text-xs ${
+                                      enrichment.downloadProgress[model.id]
+                                        .status === "error"
+                                        ? "text-red-400"
+                                        : "text-dark-400"
+                                    }`}
+                                  >
+                                    {
+                                      enrichment.downloadProgress[model.id]
+                                        .message
+                                    }
+                                  </p>
+                                </div>
+                              )}
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Docling upgrade hint */}
+                      {enrichment.models.some((m) => m.requires_upgrade) && (
+                        <div className="mt-3 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                          <p className="text-xs text-blue-400">
+                            💡 <strong>Tip:</strong> Upgrade Docling to enable
+                            enrichment features:
+                          </p>
+                          <code className="mt-1 block text-xs text-blue-300 bg-blue-500/10 p-2 rounded font-mono">
+                            pip install --upgrade docling
+                          </code>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </SettingsSection>
+
                 {/* Output Settings */}
                 <SettingsSection title="Output Preferences" icon="document">
                   <SelectSetting
@@ -587,6 +791,13 @@ function SettingsSection({ title, icon, children }: SettingsSectionProps) {
         strokeLinecap="round"
         strokeLinejoin="round"
         d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 00.658-.663 48.422 48.422 0 00-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 01-.61-.58v0z"
+      />
+    ),
+    sparkles: (
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"
       />
     ),
   };

@@ -5,9 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.4.0] - 2026-01-07
+## [2.4.0] - 2026-01-08
 
 ### Added
+
+- **Custom Branding**: Updated UI with Duckling logo and version display
+  - Custom duckling.png logo in header and favicon
+  - Version badge (v0.0.4) displayed next to app name
+  - Logo used in MkDocs documentation site
+
+- **URL-Based Document Conversion**: Convert documents directly from URLs
+  - Single URL input with validation
+  - Batch URL mode for converting multiple documents from URLs
+  - Toggle between local file upload and URL input modes
+  - Automatic file type detection from URL path and Content-Type headers
+  - Support for Content-Disposition header filename extraction
+  - Same file type restrictions as local uploads (PDF, DOCX, HTML, etc.)
+  - **Automatic image extraction from HTML pages**: When converting HTML from URLs, images are automatically downloaded, embedded, and made available in the Image Preview Gallery
+  - New API endpoints:
+    - `POST /api/convert/url` - Convert single document from URL
+    - `POST /api/convert/url/batch` - Convert multiple documents from URLs
+
+- **Document Enrichment Options**: New settings for Docling's enrichment features
+  - **Code Enrichment**: Enhance code blocks with language detection and syntax highlighting
+  - **Formula Enrichment**: Extract LaTeX representations from mathematical formulas
+  - **Picture Classification**: Classify images by type (figure, chart, diagram, photo, etc.)
+  - **Picture Description**: Generate AI captions for images using vision-language models
+  - New API endpoints: `GET/PUT /api/settings/enrichment`
+  - Warning displayed when features that increase processing time are enabled
+
+- **Enrichment Model Pre-Download**: Download AI models before processing documents
+  - View download status for each enrichment model in Settings
+  - One-click download for Picture Classifier, Picture Describer, Formula Recognizer, Code Detector
+  - Progress indicator during model downloads
+  - Model size displayed (~200MB to ~2GB depending on model)
+  - **Version checking**: Shows clear error messages when Docling version is too old
+  - **Upgrade hints**: Displays `pip install --upgrade docling` command when upgrade needed
+  - New API endpoints:
+    - `GET /api/settings/enrichment/models` - List all models with status
+    - `GET /api/settings/enrichment/models/<id>/status` - Check specific model
+    - `POST /api/settings/enrichment/models/<id>/download` - Trigger download
+    - `GET /api/settings/enrichment/models/<id>/progress` - Get download progress
 
 - **Image Preview Gallery**: Extracted images now display as visual thumbnails
   - Grid layout with actual image previews instead of icons
@@ -26,6 +64,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `GET /api/settings/ocr/backends/<id>/check` - Check specific backend
     - `POST /api/settings/ocr/backends/<id>/install` - Install a backend
 
+- **Format-Specific Preview**: Preview panel now shows content in the selected export format
+  - Preview updates dynamically when switching between export formats
+  - Content is fetched and cached for each format
+  - Format name displayed in preview header
+
+- **Rendered vs Raw Preview Mode**: Toggle between rendered and raw views for HTML and Markdown
+  - HTML: View rendered HTML in isolated iframe or raw HTML source code
+  - Markdown: View rendered markdown with proper table support (using `marked` library) or raw source
+  - JSON: Automatically pretty-printed for readability
+  - Other formats: Displayed as raw text
+
+- **Enhanced Docker Support**: Comprehensive Docker deployment options
+  - Multi-stage Dockerfiles for optimized production images
+  - `docker-compose.yml` for development with local builds
+  - `docker-compose.prod.yml` for production overrides with resource limits
+  - `docker-compose.prebuilt.yml` for using pre-built images from registry
+  - Build script (`scripts/docker-build.sh`) for easy image building and pushing
+  - Automatic MkDocs documentation build during Docker build process
+  - Support for custom registries and version tagging
+  - Multi-platform builds (linux/amd64, linux/arm64)
+  - Health checks for both frontend and backend containers
+  - Non-root user for improved security
+  - Fixed nginx proxy configuration for documentation assets
+  - Fixed database initialization race condition with multiple workers
+
+- **Collapsible Documentation Navigation**: Improved docs panel sidebar
+  - Documents grouped by category (API, Architecture, Contributing, etc.)
+  - Collapsible sections with smooth animations
+  - Expand/collapse all buttons
+  - Item count badges for each section
+  - Visual hierarchy with indentation and border lines
+
 ### Changed
 
 - **Confidence Display**: Improved confidence score handling
@@ -38,6 +108,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - OCR backend selection now correctly affects document processing
 
 ### Fixed
+
+- **Multi-Worker Content Retrieval**: Fixed issues where content wasn't accessible when running with multiple Gunicorn workers
+  - Images, tables, and results endpoints now fall back to scanning output directory on disk
+  - Export content endpoint now falls back to reading files from disk
+  - Works correctly in Docker with multiple workers where job data may be in different worker's memory
+  - Properly returns empty arrays instead of 404 errors when no images/tables were extracted
+  - Image count now correctly includes all image types (PNG, JPG, SVG, GIF, WebP, BMP)
+
+- **HTML Preview in UI**: Fixed rendered HTML preview showing plain text
+  - Export content API now correctly returns HTML content for preview
+  - Fallback to disk-based file reading when job not in memory
+
+- **URL Image Extraction**: Fixed issue where local/relative images weren't extracted from HTML pages
+  - Updated regex to handle unquoted `src` attributes (e.g., `src=/path/to/image.png`)
+  - Now correctly extracts both quoted and unquoted image URLs
+  - Properly resolves relative URLs against the base URL
+
+- **Documentation Panel**: Now serves pre-built MkDocs site for full feature support
+  - Serves from `site/` directory with auto-build capability
+  - Full MkDocs Material theme with icons, admonitions, and Mermaid diagrams
+  - Embedded iframe display with navigation sidebar
+  - "Open in new tab" button for full documentation experience
+  - **Auto-build**: Backend automatically builds docs if MkDocs is installed and site doesn't exist
+  - **Build button**: UI shows "Build Documentation" button when docs aren't built
+  - **Rebuild button**: Footer includes rebuild option to refresh documentation
+  - New API endpoint: `POST /api/docs/build` to trigger documentation build
+  - Removed mermaid dependency from frontend (handled by MkDocs)
 
 - **Environment Variables**: Backend now correctly loads `.env` file from the backend directory
   - Explicit path specification for `load_dotenv()` ensures reliable loading

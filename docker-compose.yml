@@ -1,36 +1,59 @@
-version: '3.8'
+# Duckling Docker Compose Configuration
+# Usage:
+#   Development: docker-compose up --build
+#   Production:  docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+#   With pre-built images: docker-compose -f docker-compose.prebuilt.yml up -d
 
 services:
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      target: production
+    image: duckling-backend:latest
+    container_name: duckling-backend
     ports:
       - "5001:5001"
     volumes:
       - ./uploads:/app/uploads
       - ./outputs:/app/outputs
+      - ./backend/data:/app/data
+      - ./docs:/app/docs:ro
+      - ./site:/app/site:ro
+      - ./mkdocs.yml:/app/mkdocs.yml:ro
     environment:
       - FLASK_ENV=development
+      - FLASK_DEBUG=true
       - DEBUG=True
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - FLASK_HOST=0.0.0.0
+      - FLASK_PORT=5001
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5001/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - duckling-network
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      target: production
+    image: duckling-frontend:latest
+    container_name: duckling-frontend
     ports:
       - "3000:3000"
     depends_on:
-      - backend
-    environment:
-      - VITE_API_URL=http://backend:5001
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - duckling-network
 
-volumes:
-  uploads:
-  outputs:
-
+networks:
+  duckling-network:
+    driver: bridge

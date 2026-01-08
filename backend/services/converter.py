@@ -228,6 +228,7 @@ class ConverterService:
         table_settings = settings.get("tables", {})
         image_settings = settings.get("images", {})
         perf_settings = settings.get("performance", {})
+        enrichment_settings = settings.get("enrichment", {})
 
         ocr_enabled = ocr_settings.get("enabled", True)
         table_enabled = table_settings.get("enabled", True)
@@ -239,7 +240,7 @@ class ConverterService:
         if settings_hash in self._converters:
             return self._converters[settings_hash]
 
-        # Build pipeline options
+        # Build pipeline options with enrichment features
         pipeline_options = PdfPipelineOptions(
             do_ocr=ocr_enabled,
             do_table_structure=table_enabled,
@@ -248,7 +249,22 @@ class ConverterService:
             generate_table_images=image_settings.get("generate_table_images", True),
             images_scale=image_settings.get("images_scale", 1.0),
             accelerator_options=self._get_accelerator_options(settings),
+            # Enrichment options
+            do_code_enrichment=enrichment_settings.get("code_enrichment", False),
+            do_formula_enrichment=enrichment_settings.get("formula_enrichment", False),
+            do_picture_classification=enrichment_settings.get("picture_classification", False),
+            do_picture_description=enrichment_settings.get("picture_description", False),
         )
+
+        # Log enrichment settings
+        if any([enrichment_settings.get("code_enrichment"),
+                enrichment_settings.get("formula_enrichment"),
+                enrichment_settings.get("picture_classification"),
+                enrichment_settings.get("picture_description")]):
+            print(f"[converter] Enrichment enabled - code: {enrichment_settings.get('code_enrichment', False)}, "
+                  f"formula: {enrichment_settings.get('formula_enrichment', False)}, "
+                  f"pic_class: {enrichment_settings.get('picture_classification', False)}, "
+                  f"pic_desc: {enrichment_settings.get('picture_description', False)}")
 
         # Set document timeout if specified
         timeout = perf_settings.get("document_timeout")
@@ -300,9 +316,17 @@ class ConverterService:
             self._default_converter = self._get_converter()
         return self._default_converter
 
-    def create_job(self, input_path: str, original_filename: str, settings: Dict[str, Any] = None) -> ConversionJob:
-        """Create a new conversion job."""
-        job_id = str(uuid.uuid4())
+    def create_job(self, input_path: str, original_filename: str, settings: Dict[str, Any] = None, job_id: str = None) -> ConversionJob:
+        """Create a new conversion job.
+
+        Args:
+            input_path: Path to the input file
+            original_filename: Original filename
+            settings: Conversion settings
+            job_id: Optional pre-assigned job ID (generated if not provided)
+        """
+        if job_id is None:
+            job_id = str(uuid.uuid4())
         job = ConversionJob(job_id, input_path, original_filename, settings)
 
         with self._lock:
@@ -604,7 +628,20 @@ class ConverterService:
                 # Extract images
                 image_settings = job.settings.get("images", {})
                 if image_settings.get("extract", True):
-                    job.extracted_images = self._extract_images(doc, output_base, job)
+                    docling_images = self._extract_images(doc, output_base, job)
+
+                    # Merge with pre-extracted images (from URL HTML downloads)
+                    pre_extracted = getattr(job, 'extracted_images', []) or []
+                    if pre_extracted:
+                        # Pre-extracted images were already saved, just need to renumber
+                        # to avoid conflicts with Docling-extracted images
+                        max_id = max([img.get('id', 0) for img in pre_extracted], default=0)
+                        for img in docling_images:
+                            img['id'] = img['id'] + max_id
+                        job.extracted_images = pre_extracted + docling_images
+                        print(f"[converter] Merged {len(pre_extracted)} pre-extracted + {len(docling_images)} docling images")
+                    else:
+                        job.extracted_images = docling_images
 
                 # Extract tables
                 table_settings = job.settings.get("tables", {})
@@ -789,31 +826,61 @@ class ConverterService:
     def get_output_content(self, job_id: str, format_type: str) -> Optional[str]:
         """Get the output content for a specific format."""
         job = self.get_job(job_id)
-        if not job or job.status != ConversionStatus.COMPLETED:
-            return None
+        if job and job.status == ConversionStatus.COMPLETED:
+            output_path = job.output_paths.get(format_type)
+            if output_path:
+                path = Path(output_path)
+                if path.exists():
+                    return path.read_text(encoding="utf-8")
 
-        output_path = job.output_paths.get(format_type)
-        if not output_path:
-            return None
+        # Fallback: Check output directory directly (for multi-worker scenarios)
+        output_dir = OUTPUT_FOLDER / job_id
+        if output_dir.exists():
+            format_extensions = {
+                "markdown": ".md",
+                "html": ".html",
+                "json": ".json",
+                "text": ".txt",
+                "doctags": ".doctags",
+                "document_tokens": ".tokens.json",
+                "chunks": ".chunks.json"
+            }
+            ext = format_extensions.get(format_type)
+            if ext:
+                files = list(output_dir.glob(f"*{ext}"))
+                if files:
+                    return files[0].read_text(encoding="utf-8")
 
-        path = Path(output_path)
-        if path.exists():
-            return path.read_text(encoding="utf-8")
         return None
 
     def get_output_path(self, job_id: str, format_type: str) -> Optional[Path]:
         """Get the output file path for a specific format."""
         job = self.get_job(job_id)
-        if not job or job.status != ConversionStatus.COMPLETED:
-            return None
+        if job and job.status == ConversionStatus.COMPLETED:
+            output_path = job.output_paths.get(format_type)
+            if output_path:
+                path = Path(output_path)
+                if path.exists():
+                    return path
 
-        output_path = job.output_paths.get(format_type)
-        if not output_path:
-            return None
+        # Fallback: Check output directory directly (for multi-worker scenarios)
+        output_dir = OUTPUT_FOLDER / job_id
+        if output_dir.exists():
+            format_extensions = {
+                "markdown": ".md",
+                "html": ".html",
+                "json": ".json",
+                "text": ".txt",
+                "doctags": ".doctags",
+                "document_tokens": ".tokens.json",
+                "chunks": ".chunks.json"
+            }
+            ext = format_extensions.get(format_type)
+            if ext:
+                files = list(output_dir.glob(f"*{ext}"))
+                if files:
+                    return files[0]
 
-        path = Path(output_path)
-        if path.exists():
-            return path
         return None
 
     def get_extracted_images(self, job_id: str) -> List[Dict]:

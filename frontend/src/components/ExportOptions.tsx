@@ -1,7 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getExtractedImages, getExtractedTables, getDocumentChunks, downloadExtractedImage, downloadTableCsv } from '../services/api';
+import { marked } from 'marked';
+import { getExtractedImages, getExtractedTables, getDocumentChunks, downloadExtractedImage, downloadTableCsv, getExportContent } from '../services/api';
 import type { ExtractedImage, ExtractedTable, DocumentChunk } from '../types';
+
+// Configure marked for GFM (GitHub Flavored Markdown) with tables
+marked.setOptions({
+  gfm: true,
+  breaks: true,
+});
 
 interface ExportOptionsProps {
   jobId: string;
@@ -14,6 +21,8 @@ interface ExportOptionsProps {
   tablesCount?: number;
   chunksCount?: number;
 }
+
+type PreviewMode = 'rendered' | 'raw';
 
 const FORMAT_INFO: Record<string, { name: string; icon: string; description: string }> = {
   markdown: {
@@ -69,12 +78,17 @@ export default function ExportOptions({
   const [selectedFormat, setSelectedFormat] = useState<string>('markdown');
   const [showPreview, setShowPreview] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>('formats');
+  const [previewMode, setPreviewMode] = useState<PreviewMode>('rendered');
 
   // Extracted content state
   const [images, setImages] = useState<ExtractedImage[]>([]);
   const [tables, setTables] = useState<ExtractedTable[]>([]);
   const [chunks, setChunks] = useState<DocumentChunk[]>([]);
   const [loadingContent, setLoadingContent] = useState(false);
+
+  // Format-specific content cache
+  const [formatContent, setFormatContent] = useState<Record<string, string>>({});
+  const [loadingFormat, setLoadingFormat] = useState(false);
 
   // Image preview state
   const [imageUrls, setImageUrls] = useState<Record<number, string>>({});
@@ -122,6 +136,54 @@ export default function ExportOptions({
       Object.values(imageUrls).forEach(url => URL.revokeObjectURL(url));
     };
   }, [imageUrls]);
+
+  // Load content for selected format
+  useEffect(() => {
+    const loadFormatContent = async () => {
+      // Skip if we already have this format's content cached
+      if (formatContent[selectedFormat]) return;
+
+      // Use the initial preview for markdown if available
+      if (selectedFormat === 'markdown' && preview) {
+        setFormatContent(prev => ({ ...prev, markdown: preview }));
+        return;
+      }
+
+      setLoadingFormat(true);
+      try {
+        const response = await getExportContent(jobId, selectedFormat);
+        setFormatContent(prev => ({ ...prev, [selectedFormat]: response.content }));
+      } catch (error) {
+        console.error(`Error loading ${selectedFormat} content:`, error);
+      } finally {
+        setLoadingFormat(false);
+      }
+    };
+
+    if (activeTab === 'formats') {
+      loadFormatContent();
+    }
+  }, [selectedFormat, jobId, activeTab, formatContent, preview]);
+
+  // Check if current format supports rendered view
+  const supportsRenderedView = useMemo(() => {
+    return ['markdown', 'html'].includes(selectedFormat);
+  }, [selectedFormat]);
+
+  // Get the current preview content
+  const currentPreviewContent = useMemo(() => {
+    return formatContent[selectedFormat] || preview || '';
+  }, [formatContent, selectedFormat, preview]);
+
+  // Render markdown to HTML using marked library
+  const renderMarkdown = (md: string): string => {
+    try {
+      return marked.parse(md) as string;
+    } catch (error) {
+      console.error('Error parsing markdown:', error);
+      return `<pre>${md}</pre>`;
+    }
+  };
 
   const handleDownloadImage = async (imageId: number, filename: string) => {
     try {
@@ -521,33 +583,108 @@ export default function ExportOptions({
         {/* Preview */}
         <div className="glass rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-dark-100">Preview</h3>
-            <button
-              onClick={() => setShowPreview(!showPreview)}
-              className="text-sm text-dark-400 hover:text-dark-200 transition-colors"
-            >
-              {showPreview ? 'Hide' : 'Show'}
-            </button>
+            <div className="flex items-center gap-3">
+              <h3 className="text-lg font-semibold text-dark-100">Preview</h3>
+              <span className="text-xs text-dark-500 bg-dark-800 px-2 py-1 rounded">
+                {FORMAT_INFO[selectedFormat]?.name || selectedFormat}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              {/* Rendered/Raw toggle for HTML and Markdown */}
+              {supportsRenderedView && (
+                <div className="flex items-center bg-dark-800 rounded-lg p-0.5">
+                  <button
+                    onClick={() => setPreviewMode('rendered')}
+                    className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
+                      previewMode === 'rendered'
+                        ? 'bg-primary-500 text-dark-950'
+                        : 'text-dark-400 hover:text-dark-200'
+                    }`}
+                  >
+                    Rendered
+                  </button>
+                  <button
+                    onClick={() => setPreviewMode('raw')}
+                    className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
+                      previewMode === 'raw'
+                        ? 'bg-primary-500 text-dark-950'
+                        : 'text-dark-400 hover:text-dark-200'
+                    }`}
+                  >
+                    Raw
+                  </button>
+                </div>
+              )}
+              <button
+                onClick={() => setShowPreview(!showPreview)}
+                className="text-sm text-dark-400 hover:text-dark-200 transition-colors"
+              >
+                {showPreview ? 'Hide' : 'Show'}
+              </button>
+            </div>
           </div>
-          <AnimatePresence>
-            {showPreview && preview && (
+          <AnimatePresence mode="wait">
+            {showPreview && (
               <motion.div
+                key={`${selectedFormat}-${previewMode}`}
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 className="overflow-hidden"
               >
-                <div className="bg-dark-950 rounded-xl p-4 max-h-[500px] overflow-y-auto">
-                  <pre className="text-sm text-dark-300 font-mono whitespace-pre-wrap break-words">
-                    {preview}
-                  </pre>
-                </div>
+                {loadingFormat ? (
+                  <div className="bg-dark-950 rounded-xl p-8 flex items-center justify-center">
+                    <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
+                  </div>
+                ) : currentPreviewContent ? (
+                  <div className="bg-dark-950 rounded-xl p-4 max-h-[500px] overflow-y-auto">
+                    {/* Rendered HTML view - use iframe to isolate styles */}
+                    {selectedFormat === 'html' && previewMode === 'rendered' ? (
+                      <iframe
+                        srcDoc={currentPreviewContent}
+                        className="w-full min-h-[400px] rounded-lg border border-dark-700 bg-white"
+                        sandbox="allow-same-origin"
+                        title="HTML Preview"
+                      />
+                    ) : /* Rendered Markdown view */
+                    selectedFormat === 'markdown' && previewMode === 'rendered' ? (
+                      <div
+                        className="prose prose-invert prose-sm max-w-none
+                          prose-headings:text-dark-100 prose-p:text-dark-300
+                          prose-a:text-primary-400 prose-strong:text-dark-200
+                          prose-code:text-primary-300 prose-code:bg-dark-800 prose-code:px-1 prose-code:rounded
+                          prose-pre:bg-dark-900 prose-pre:border prose-pre:border-dark-700"
+                        dangerouslySetInnerHTML={{ __html: renderMarkdown(currentPreviewContent) }}
+                      />
+                    ) : /* JSON formatted view */
+                    selectedFormat === 'json' ? (
+                      <pre className="text-sm text-dark-300 font-mono whitespace-pre-wrap break-words">
+                        {(() => {
+                          try {
+                            return JSON.stringify(JSON.parse(currentPreviewContent), null, 2);
+                          } catch {
+                            return currentPreviewContent;
+                          }
+                        })()}
+                      </pre>
+                    ) : /* Raw view for all other formats */
+                    (
+                      <pre className="text-sm text-dark-300 font-mono whitespace-pre-wrap break-words">
+                        {currentPreviewContent}
+                      </pre>
+                    )}
+                  </div>
+                ) : (
+                  <div className="bg-dark-950 rounded-xl p-8 text-center">
+                    <p className="text-dark-500">No preview available for this format</p>
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
-          {!preview && (
-            <div className="bg-dark-950 rounded-xl p-8 text-center">
-              <p className="text-dark-500">No preview available</p>
+          {!showPreview && (
+            <div className="bg-dark-950 rounded-xl p-4 text-center">
+              <p className="text-dark-500 text-sm">Click "Show" to view preview</p>
             </div>
           )}
         </div>

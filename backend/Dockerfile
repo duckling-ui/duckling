@@ -1,29 +1,70 @@
 # Duckling Backend Dockerfile
-FROM python:3.11-slim
+# Multi-stage build for optimized production image
+
+FROM python:3.11-slim AS base
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+  PYTHONUNBUFFERED=1 \
+  PIP_NO_CACHE_DIR=1 \
+  PIP_DISABLE_PIP_VERSION_CHECK=1
 
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+# Note: libgl1-mesa-glx replaced with libgl1 for newer Debian versions
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  build-essential \
+  curl \
+  libgl1 \
+  libglib2.0-0 \
+  libsm6 \
+  libxext6 \
+  libxrender1 \
+  libgomp1 \
+  poppler-utils \
+  tesseract-ocr \
+  && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for caching
+# Development stage
+FROM base AS development
+
 COPY requirements.txt .
+RUN pip install -r requirements.txt
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+
+# Create directories
+RUN mkdir -p /app/uploads /app/outputs /app/data
+
+EXPOSE 5001
+
+CMD ["python", "app.py"]
+
+# Production stage
+FROM base AS production
+
+# Copy requirements and install
+COPY requirements.txt .
+RUN pip install -r requirements.txt gunicorn
 
 # Copy application code
 COPY . .
 
-# Create directories
-RUN mkdir -p /app/uploads /app/outputs
+# Create directories with proper permissions
+RUN mkdir -p /app/uploads /app/outputs /app/data \
+  && chmod -R 755 /app/uploads /app/outputs /app/data
 
-# Expose port
+# Create non-root user for security
+RUN useradd --create-home --shell /bin/bash appuser \
+  && chown -R appuser:appuser /app
+USER appuser
+
 EXPOSE 5001
 
-# Run the application
-CMD ["python", "app.py"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:5001/api/health || exit 1
 
+# Run with Gunicorn for production
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "4", "--threads", "2", "--timeout", "300", "app:app"]

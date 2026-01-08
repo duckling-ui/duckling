@@ -34,5 +34,10 @@
     "enabled": true,
     "max_tokens": 512,
     "merge_peers": true
+  },
+  "enrichment": {
+    "picture_classification": false,
+    "picture_description": true,
+    "code_enrichment": false
   }
 }

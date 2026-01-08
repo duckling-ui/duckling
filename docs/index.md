@@ -66,6 +66,20 @@ Duckling provides an intuitive web interface for converting documents using IBM'
 
 Get started in minutes:
 
+=== "Docker (Recommended)"
+
+    **One-command start with pre-built images:**
+    ```bash
+    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
+    ```
+
+    **Or build locally:**
+    ```bash
+    git clone https://github.com/davidgs/duckling.git
+    cd duckling
+    docker-compose up --build
+    ```
+
 === "Local Development"
 
     ```bash
@@ -84,12 +98,6 @@ Get started in minutes:
     cd frontend
     npm install
     npm run dev
-    ```
-
-=== "Docker"
-
-    ```bash
-    docker-compose up --build
     ```
 
 Access the application at `http://localhost:3000`

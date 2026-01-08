@@ -35,6 +35,12 @@ GET /api/settings
     "generate_table_images": true,
     "images_scale": 1.0
   },
+  "enrichment": {
+    "code_enrichment": false,
+    "formula_enrichment": false,
+    "picture_classification": false,
+    "picture_description": false
+  },
   "output": {
     "default_format": "markdown"
   },
@@ -332,6 +338,91 @@ Content-Type: application/json
   }
 }
 ```
+
+---
+
+## Enrichment Settings
+
+### Get Enrichment Settings
+
+```http
+GET /api/settings/enrichment
+```
+
+### Response
+
+```json
+{
+  "enrichment": {
+    "code_enrichment": false,
+    "formula_enrichment": false,
+    "picture_classification": false,
+    "picture_description": false
+  },
+  "options": {
+    "code_enrichment": {
+      "description": "Enhance code blocks with language detection and syntax highlighting",
+      "default": false,
+      "note": "May increase processing time"
+    },
+    "formula_enrichment": {
+      "description": "Extract LaTeX representations from mathematical formulas",
+      "default": false,
+      "note": "Enables better formula rendering in exports"
+    },
+    "picture_classification": {
+      "description": "Classify images by type (figure, chart, diagram, photo, etc.)",
+      "default": false,
+      "note": "Adds semantic tags to extracted images"
+    },
+    "picture_description": {
+      "description": "Generate descriptive captions for images using AI vision models",
+      "default": false,
+      "note": "Requires additional model download, significantly increases processing time"
+    }
+  }
+}
+```
+
+### Update Enrichment Settings
+
+```http
+PUT /api/settings/enrichment
+Content-Type: application/json
+```
+
+### Request
+
+```json
+{
+  "code_enrichment": true,
+  "formula_enrichment": true
+}
+```
+
+### Response
+
+```json
+{
+  "message": "Enrichment settings updated",
+  "enrichment": {
+    "code_enrichment": true,
+    "formula_enrichment": true,
+    "picture_classification": false,
+    "picture_description": false
+  }
+}
+```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `code_enrichment` | boolean | Enhance code blocks with language detection |
+| `formula_enrichment` | boolean | Extract LaTeX from mathematical formulas |
+| `picture_classification` | boolean | Classify images by semantic type |
+| `picture_description` | boolean | Generate AI captions for images |
+
+!!! warning "Processing Time"
+    Enabling `formula_enrichment` and especially `picture_description` can significantly increase document processing time.
 
 ---
 

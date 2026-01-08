@@ -274,5 +274,51 @@
   color: #2dd4bf;
 }
 
+/* Mermaid diagrams */
+.docs-content .mermaid-diagram {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: #0f172a;
+  border: 1px solid #374151;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+}
 
+.docs-content .mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
 
+/* Style mermaid SVG elements for dark theme */
+.docs-content .mermaid-diagram .node rect,
+.docs-content .mermaid-diagram .node circle,
+.docs-content .mermaid-diagram .node ellipse,
+.docs-content .mermaid-diagram .node polygon,
+.docs-content .mermaid-diagram .node path {
+  stroke: #4ecca3 !important;
+}
+
+.docs-content .mermaid-diagram .edgeLabel {
+  background-color: #1e293b !important;
+  color: #e5e7eb !important;
+}
+
+.docs-content .mermaid-diagram .label {
+  color: #e5e7eb !important;
+}
+
+.docs-content .mermaid-diagram .edgePath .path {
+  stroke: #6b7280 !important;
+}
+
+.docs-content .mermaid-diagram .marker {
+  fill: #6b7280 !important;
+  stroke: #6b7280 !important;
+}
+
+/* Code blocks that might contain mermaid - hide language label */
+.docs-content pre code.language-mermaid {
+  display: block;
+}

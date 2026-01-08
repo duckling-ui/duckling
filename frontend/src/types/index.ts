@@ -57,6 +57,13 @@ export interface ChunkingSettings {
   merge_peers: boolean;
 }
 
+export interface EnrichmentSettings {
+  code_enrichment: boolean;
+  formula_enrichment: boolean;
+  picture_classification: boolean;
+  picture_description: boolean;
+}
+
 export interface OutputSettings {
   default_format: string;
 }
@@ -65,6 +72,7 @@ export interface ConversionSettings {
   ocr: OcrSettings;
   tables: TableSettings;
   images: ImageSettings;
+  enrichment: EnrichmentSettings;
   output: OutputSettings;
   performance: PerformanceSettings;
   chunking: ChunkingSettings;
@@ -255,6 +263,15 @@ export interface ChunkingSettingsResponse {
     default: any;
     min?: number;
     max?: number;
+  }>;
+}
+
+export interface EnrichmentSettingsResponse {
+  enrichment: EnrichmentSettings;
+  options: Record<string, {
+    description: string;
+    default: boolean;
+    note?: string;
   }>;
 }
 

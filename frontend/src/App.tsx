@@ -1,13 +1,17 @@
-import { useState, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useConversion } from './hooks/useConversion';
-import DropZone from './components/DropZone';
-import ConversionProgress from './components/ConversionProgress';
-import ExportOptions from './components/ExportOptions';
-import SettingsPanel from './components/SettingsPanel';
-import HistoryPanel from './components/HistoryPanel';
-import DocsPanel from './components/DocsPanel';
-import type { HistoryEntry, ConversionResult } from './types';
+import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useConversion } from "./hooks/useConversion";
+import DropZone from "./components/DropZone";
+import ConversionProgress from "./components/ConversionProgress";
+import ExportOptions from "./components/ExportOptions";
+import SettingsPanel from "./components/SettingsPanel";
+import HistoryPanel from "./components/HistoryPanel";
+import DocsPanel from "./components/DocsPanel";
+import { convertFromUrl, convertFromUrlsBatch } from "./services/api";
+import type { HistoryEntry, ConversionResult } from "./types";
+
+// App version from package.json
+const APP_VERSION = "0.0.5";
 
 export default function App() {
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -33,10 +37,10 @@ export default function App() {
     selectBatchResult,
   } = useConversion({
     onComplete: (result: ConversionResult) => {
-      console.log('Conversion complete:', result);
+      console.log("Conversion complete:", result);
     },
     onError: (error: string) => {
-      console.error('Conversion error:', error);
+      console.error("Conversion error:", error);
     },
   });
 
@@ -54,13 +58,62 @@ export default function App() {
     [uploadFiles]
   );
 
-  const handleHistorySelect = useCallback(
-    (entry: HistoryEntry) => {
-      setHistoryOpen(false);
-      console.log('Selected history entry:', entry);
+  const handleUrlSubmitted = useCallback(
+    async (url: string) => {
+      try {
+        // Use the conversion hook's state management
+        const response = await convertFromUrl(url);
+        // Start polling for status using the job_id
+        if (response.job_id) {
+          // Manually trigger the conversion flow with existing job_id
+          uploadFile(
+            new File([], response.filename || "url-document"),
+            response.job_id
+          );
+        }
+      } catch (error) {
+        console.error("URL conversion error:", error);
+        // Show error to user
+        reset();
+      }
     },
-    []
+    [uploadFile, reset]
   );
+
+  const handleUrlsSubmitted = useCallback(
+    async (urls: string[]) => {
+      try {
+        const response = await convertFromUrlsBatch(urls);
+        // Handle batch response similar to file batch
+        if (response.jobs && response.jobs.length > 0) {
+          // Get valid jobs that are processing
+          const validJobs = response.jobs.filter(
+            (j) => j.status === "processing" && j.job_id
+          );
+          if (validJobs.length > 0) {
+            // Use the first job to trigger the conversion flow
+            const firstJob = validJobs[0];
+            uploadFile(
+              new File([], firstJob.filename || "url-document"),
+              firstJob.job_id
+            );
+          } else {
+            // All jobs failed
+            console.error("All URL conversions were rejected");
+          }
+        }
+      } catch (error) {
+        console.error("Batch URL conversion error:", error);
+        reset();
+      }
+    },
+    [uploadFile, reset]
+  );
+
+  const handleHistorySelect = useCallback((entry: HistoryEntry) => {
+    setHistoryOpen(false);
+    console.log("Selected history entry:", entry);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -70,13 +123,18 @@ export default function App() {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center">
-                <svg className="w-5 h-5 text-dark-950" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M6 2a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6H6zm7 1.5L18.5 9H13V3.5zM8 12h8v2H8v-2zm0 4h8v2H8v-2z" />
-                </svg>
-              </div>
+              <img
+                src="/duckling.png"
+                alt="Duckling Logo"
+                className="w-10 h-10 rounded-lg"
+              />
               <div>
-                <h1 className="text-lg font-bold text-dark-100">Duckling</h1>
+                <div className="flex items-center gap-2">
+                  <h1 className="text-lg font-bold text-dark-100">Duckling</h1>
+                  <span className="px-1.5 py-0.5 text-[10px] font-medium bg-primary-500/20 text-primary-400 rounded">
+                    v{APP_VERSION}
+                  </span>
+                </div>
                 <p className="text-xs text-dark-500">Document Conversion</p>
               </div>
             </div>
@@ -88,14 +146,24 @@ export default function App() {
                 onClick={() => setBatchModeEnabled(!batchModeEnabled)}
                 className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                   batchModeEnabled
-                    ? 'bg-primary-500 text-dark-950'
-                    : 'bg-dark-800 text-dark-400 hover:text-dark-200'
+                    ? "bg-primary-500 text-dark-950"
+                    : "bg-dark-800 text-dark-400 hover:text-dark-200"
                 }`}
                 title="Toggle batch mode for multiple file uploads"
               >
                 <span className="flex items-center gap-1.5">
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
+                  <svg
+                    className="w-4 h-4"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
+                    />
                   </svg>
                   Batch
                 </span>
@@ -155,7 +223,11 @@ export default function App() {
                     strokeLinejoin="round"
                     d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z"
                   />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
                 </svg>
               </button>
             </div>
@@ -168,7 +240,7 @@ export default function App() {
         <div className="w-full max-w-5xl">
           <AnimatePresence mode="wait">
             {/* Idle state - show dropzone */}
-            {state === 'idle' && (
+            {state === "idle" && (
               <motion.div
                 key="idle"
                 initial={{ opacity: 0, y: 20 }}
@@ -191,8 +263,8 @@ export default function App() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
                   >
-                    Transform PDFs, Word documents, presentations, images, and more into
-                    structured formats ready for AI processing.
+                    Transform PDFs, Word documents, presentations, images, and
+                    more into structured formats ready for AI processing.
                   </motion.p>
                 </div>
                 <motion.div
@@ -203,6 +275,8 @@ export default function App() {
                   <DropZone
                     onFileAccepted={handleFileAccepted}
                     onFilesAccepted={handleFilesAccepted}
+                    onUrlSubmitted={handleUrlSubmitted}
+                    onUrlsSubmitted={handleUrlsSubmitted}
                     isUploading={isUploading}
                     multiple={batchModeEnabled}
                   />
@@ -216,17 +290,23 @@ export default function App() {
                   className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8"
                 >
                   {[
-                    { icon: '👁️', label: 'OCR', desc: 'Extract text from images' },
-                    { icon: '📊', label: 'Tables', desc: 'Export to CSV' },
-                    { icon: '🖼️', label: 'Images', desc: 'Extract figures' },
-                    { icon: '🧩', label: 'RAG', desc: 'Document chunks' },
+                    {
+                      icon: "👁️",
+                      label: "OCR",
+                      desc: "Extract text from images",
+                    },
+                    { icon: "📊", label: "Tables", desc: "Export to CSV" },
+                    { icon: "🖼️", label: "Images", desc: "Extract figures" },
+                    { icon: "🧩", label: "RAG", desc: "Document chunks" },
                   ].map((feature) => (
                     <div
                       key={feature.label}
                       className="glass rounded-xl p-4 text-center"
                     >
                       <span className="text-2xl">{feature.icon}</span>
-                      <p className="font-medium text-dark-200 mt-2">{feature.label}</p>
+                      <p className="font-medium text-dark-200 mt-2">
+                        {feature.label}
+                      </p>
                       <p className="text-xs text-dark-500">{feature.desc}</p>
                     </div>
                   ))}
@@ -235,7 +315,7 @@ export default function App() {
             )}
 
             {/* Uploading state */}
-            {state === 'uploading' && (
+            {state === "uploading" && (
               <motion.div
                 key="uploading"
                 initial={{ opacity: 0, y: 20 }}
@@ -244,14 +324,18 @@ export default function App() {
               >
                 <ConversionProgress
                   progress={5}
-                  message={batchModeEnabled ? `Uploading files...` : "Uploading file..."}
+                  message={
+                    batchModeEnabled
+                      ? `Uploading files...`
+                      : "Uploading file..."
+                  }
                   filename={currentJob?.filename}
                 />
               </motion.div>
             )}
 
             {/* Processing state */}
-            {state === 'processing' && (
+            {state === "processing" && (
               <motion.div
                 key="processing"
                 initial={{ opacity: 0, y: 20 }}
@@ -276,7 +360,7 @@ export default function App() {
             )}
 
             {/* Complete state */}
-            {state === 'complete' && result && (
+            {state === "complete" && result && (
               <motion.div
                 key="complete"
                 initial={{ opacity: 0, y: 20 }}
@@ -294,21 +378,30 @@ export default function App() {
                 ) : (
                   <ExportOptions
                     jobId={result.job_id}
-                    formatsAvailable={result.formats_available || result.result?.formats_available || ['markdown']}
+                    formatsAvailable={
+                      result.formats_available ||
+                      result.result?.formats_available || ["markdown"]
+                    }
                     preview={result.result?.markdown_preview}
                     onDownload={downloadFormat}
                     onNewConversion={reset}
                     confidence={result.confidence}
-                    imagesCount={result.images_count || result.result?.images_count || 0}
-                    tablesCount={result.tables_count || result.result?.tables_count || 0}
-                    chunksCount={result.chunks_count || result.result?.chunks_count || 0}
+                    imagesCount={
+                      result.images_count || result.result?.images_count || 0
+                    }
+                    tablesCount={
+                      result.tables_count || result.result?.tables_count || 0
+                    }
+                    chunksCount={
+                      result.chunks_count || result.result?.chunks_count || 0
+                    }
                   />
                 )}
               </motion.div>
             )}
 
             {/* Error state */}
-            {state === 'error' && (
+            {state === "error" && (
               <motion.div
                 key="error"
                 initial={{ opacity: 0, y: 20 }}
@@ -332,8 +425,12 @@ export default function App() {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-bold text-dark-100 mb-2">Conversion Failed</h3>
-                  <p className="text-dark-400 mb-6">{error || 'An unexpected error occurred'}</p>
+                  <h3 className="text-xl font-bold text-dark-100 mb-2">
+                    Conversion Failed
+                  </h3>
+                  <p className="text-dark-400 mb-6">
+                    {error || "An unexpected error occurred"}
+                  </p>
                   <button
                     onClick={reset}
                     className="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-dark-950 font-semibold rounded-xl transition-colors duration-200"
@@ -350,7 +447,7 @@ export default function App() {
       {/* Footer */}
       <footer className="py-4 text-center text-dark-500 text-sm">
         <p>
-          Powered by{' '}
+          Powered by{" "}
           <a
             href="https://github.com/docling-project/docling"
             target="_blank"
@@ -363,7 +460,10 @@ export default function App() {
       </footer>
 
       {/* Panels */}
-      <SettingsPanel isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <SettingsPanel
+        isOpen={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+      />
       <HistoryPanel
         isOpen={historyOpen}
         onClose={() => setHistoryOpen(false)}
@@ -387,11 +487,18 @@ interface BatchProgressProps {
   statusMessage: string;
 }
 
-function BatchProgress({ jobs, progress, batchProgress, statusMessage }: BatchProgressProps) {
+function BatchProgress({
+  jobs,
+  progress,
+  batchProgress,
+  statusMessage,
+}: BatchProgressProps) {
   return (
     <div className="glass rounded-2xl p-8 max-w-2xl mx-auto">
       <div className="text-center mb-6">
-        <h3 className="text-xl font-bold text-dark-100 mb-2">Processing Files</h3>
+        <h3 className="text-xl font-bold text-dark-100 mb-2">
+          Processing Files
+        </h3>
         <p className="text-dark-400">{statusMessage}</p>
       </div>
 
@@ -399,7 +506,9 @@ function BatchProgress({ jobs, progress, batchProgress, statusMessage }: BatchPr
       <div className="mb-6">
         <div className="flex justify-between text-sm text-dark-400 mb-2">
           <span>Overall Progress</span>
-          <span>{batchProgress.completed}/{batchProgress.total} files</span>
+          <span>
+            {batchProgress.completed}/{batchProgress.total} files
+          </span>
         </div>
         <div className="h-3 bg-dark-700 rounded-full overflow-hidden">
           <motion.div
@@ -417,38 +526,62 @@ function BatchProgress({ jobs, progress, batchProgress, statusMessage }: BatchPr
           <div
             key={index}
             className={`p-3 rounded-lg ${
-              job.status === 'completed' ? 'bg-green-500/10' :
-              job.status === 'failed' || job.status === 'rejected' ? 'bg-red-500/10' :
-              'bg-dark-800/50'
+              job.status === "completed"
+                ? "bg-green-500/10"
+                : job.status === "failed" || job.status === "rejected"
+                ? "bg-red-500/10"
+                : "bg-dark-800/50"
             }`}
           >
             <div className="flex items-center gap-3">
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                job.status === 'completed' ? 'bg-green-500' :
-                job.status === 'failed' || job.status === 'rejected' ? 'bg-red-500' :
-                'bg-dark-600'
-              }`}>
-                {job.status === 'completed' ? (
-                  <svg className="w-4 h-4 text-white" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+              <div
+                className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                  job.status === "completed"
+                    ? "bg-green-500"
+                    : job.status === "failed" || job.status === "rejected"
+                    ? "bg-red-500"
+                    : "bg-dark-600"
+                }`}
+              >
+                {job.status === "completed" ? (
+                  <svg
+                    className="w-4 h-4 text-white"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                      clipRule="evenodd"
+                    />
                   </svg>
-                ) : job.status === 'failed' || job.status === 'rejected' ? (
-                  <svg className="w-4 h-4 text-white" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                ) : job.status === "failed" || job.status === "rejected" ? (
+                  <svg
+                    className="w-4 h-4 text-white"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
                   </svg>
                 ) : (
                   <div className="w-3 h-3 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-dark-200 truncate">{job.job.filename}</p>
+                <p className="text-sm font-medium text-dark-200 truncate">
+                  {job.job.filename}
+                </p>
                 {job.error && (
                   <p className="text-xs text-red-400 truncate">{job.error}</p>
                 )}
               </div>
               <span className="text-xs text-dark-500">{job.progress}%</span>
             </div>
-            {job.status === 'processing' && (
+            {job.status === "processing" && (
               <div className="mt-2 h-1 bg-dark-700 rounded-full overflow-hidden">
                 <motion.div
                   className="h-full bg-primary-500"
@@ -478,7 +611,13 @@ interface BatchResultsProps {
   onNewConversion: () => void;
 }
 
-function BatchResults({ jobs, selectedResult, onSelectResult, onDownload, onNewConversion }: BatchResultsProps) {
+function BatchResults({
+  jobs,
+  selectedResult,
+  onSelectResult,
+  onDownload,
+  onNewConversion,
+}: BatchResultsProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleSelect = (index: number) => {
@@ -486,8 +625,10 @@ function BatchResults({ jobs, selectedResult, onSelectResult, onDownload, onNewC
     onSelectResult(index);
   };
 
-  const successfulJobs = jobs.filter(j => j.status === 'completed');
-  const failedJobs = jobs.filter(j => j.status === 'failed' || j.status === 'rejected');
+  const successfulJobs = jobs.filter((j) => j.status === "completed");
+  const failedJobs = jobs.filter(
+    (j) => j.status === "failed" || j.status === "rejected"
+  );
 
   return (
     <motion.div
@@ -500,7 +641,7 @@ function BatchResults({ jobs, selectedResult, onSelectResult, onDownload, onNewC
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+          transition={{ type: "spring", stiffness: 200, damping: 15 }}
           className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-500/20 flex items-center justify-center"
         >
           <svg
@@ -510,14 +651,24 @@ function BatchResults({ jobs, selectedResult, onSelectResult, onDownload, onNewC
             stroke="currentColor"
             strokeWidth="2"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5 13l4 4L19 7"
+            />
           </svg>
         </motion.div>
-        <h2 className="text-2xl font-bold text-dark-100 mb-2">Batch Conversion Complete!</h2>
+        <h2 className="text-2xl font-bold text-dark-100 mb-2">
+          Batch Conversion Complete!
+        </h2>
         <p className="text-dark-400">
-          <span className="text-green-400">{successfulJobs.length} succeeded</span>
+          <span className="text-green-400">
+            {successfulJobs.length} succeeded
+          </span>
           {failedJobs.length > 0 && (
-            <>, <span className="text-red-400">{failedJobs.length} failed</span></>
+            <>
+              , <span className="text-red-400">{failedJobs.length} failed</span>
+            </>
           )}
         </p>
       </div>
@@ -525,40 +676,67 @@ function BatchResults({ jobs, selectedResult, onSelectResult, onDownload, onNewC
       <div className="grid lg:grid-cols-3 gap-6">
         {/* File list */}
         <div className="glass rounded-2xl p-4">
-          <h3 className="text-lg font-semibold text-dark-100 mb-4">Converted Files</h3>
+          <h3 className="text-lg font-semibold text-dark-100 mb-4">
+            Converted Files
+          </h3>
           <div className="space-y-2 max-h-96 overflow-y-auto">
             {jobs.map((job, index) => (
               <button
                 key={index}
-                onClick={() => job.status === 'completed' && handleSelect(index)}
-                disabled={job.status !== 'completed'}
+                onClick={() =>
+                  job.status === "completed" && handleSelect(index)
+                }
+                disabled={job.status !== "completed"}
                 className={`w-full p-3 rounded-lg text-left transition-colors ${
-                  job.status === 'completed'
+                  job.status === "completed"
                     ? selectedIndex === index
-                      ? 'bg-primary-500/20 border border-primary-500/50'
-                      : 'bg-dark-800/50 hover:bg-dark-700/50'
-                    : 'bg-dark-800/30 opacity-50 cursor-not-allowed'
+                      ? "bg-primary-500/20 border border-primary-500/50"
+                      : "bg-dark-800/50 hover:bg-dark-700/50"
+                    : "bg-dark-800/30 opacity-50 cursor-not-allowed"
                 }`}
               >
                 <div className="flex items-center gap-3">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
-                    job.status === 'completed' ? 'bg-green-500/20 text-green-400' :
-                    'bg-red-500/20 text-red-400'
-                  }`}>
-                    {job.status === 'completed' ? (
-                      <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  <div
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      job.status === "completed"
+                        ? "bg-green-500/20 text-green-400"
+                        : "bg-red-500/20 text-red-400"
+                    }`}
+                  >
+                    {job.status === "completed" ? (
+                      <svg
+                        className="w-4 h-4"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                     ) : (
-                      <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                      <svg
+                        className="w-4 h-4"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
                       </svg>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-dark-200 truncate">{job.job.filename}</p>
+                    <p className="text-sm font-medium text-dark-200 truncate">
+                      {job.job.filename}
+                    </p>
                     {job.error && (
-                      <p className="text-xs text-red-400 truncate">{job.error}</p>
+                      <p className="text-xs text-red-400 truncate">
+                        {job.error}
+                      </p>
                     )}
                     {job.result?.confidence && (
                       <p className="text-xs text-dark-500">
@@ -588,8 +766,16 @@ function BatchResults({ jobs, selectedResult, onSelectResult, onDownload, onNewC
                     onClick={() => onDownload(format)}
                     className="p-3 bg-dark-800/50 hover:bg-dark-700/50 rounded-lg text-sm font-medium text-dark-200 transition-colors flex items-center gap-2"
                   >
-                    <svg className="w-4 h-4 text-dark-400" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                    <svg
+                      className="w-4 h-4 text-dark-400"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                     {format.toUpperCase()}
                   </button>
@@ -601,7 +787,8 @@ function BatchResults({ jobs, selectedResult, onSelectResult, onDownload, onNewC
                 <div className="bg-dark-950 rounded-xl p-4 max-h-64 overflow-y-auto">
                   <pre className="text-sm text-dark-300 font-mono whitespace-pre-wrap break-words">
                     {selectedResult.result.markdown_preview.slice(0, 1000)}
-                    {selectedResult.result.markdown_preview.length > 1000 && '...'}
+                    {selectedResult.result.markdown_preview.length > 1000 &&
+                      "..."}
                   </pre>
                 </div>
               )}
@@ -626,4 +813,3 @@ function BatchResults({ jobs, selectedResult, onSelectResult, onDownload, onNewC
     </motion.div>
   );
 }
-

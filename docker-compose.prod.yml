@@ -1,0 +1,31 @@
+# Duckling Production Docker Compose Override
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+services:
+  backend:
+    build:
+      target: production
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=false
+      - DEBUG=False
+      - SECRET_KEY=${SECRET_KEY:-please-change-this-secret-key}
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
+
+  frontend:
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+

@@ -1,17 +1,71 @@
 """Flask application entry point for Duckling."""
 
 import os
+import subprocess
+import logging
 from pathlib import Path
 from flask import Flask, jsonify, send_from_directory, abort
 from flask_cors import CORS
-import markdown
 
 from config import get_config
 from models.database import init_db
 from routes import convert_bp, settings_bp, history_bp
 
-# Docs directory path
-DOCS_DIR = Path(__file__).parent.parent / "docs"
+logger = logging.getLogger(__name__)
+
+# Docs directories - handle both Docker and local environments
+BACKEND_DIR = Path(__file__).parent.absolute()
+
+# In Docker, files are at /app/; locally, they're at parent of backend
+if BACKEND_DIR == Path("/app"):
+    # Running in Docker
+    PROJECT_ROOT = BACKEND_DIR
+    DOCS_DIR = BACKEND_DIR / "docs"
+    SITE_DIR = BACKEND_DIR / "site"
+else:
+    # Running locally
+    PROJECT_ROOT = BACKEND_DIR.parent
+    DOCS_DIR = PROJECT_ROOT / "docs"
+    SITE_DIR = PROJECT_ROOT / "site"
+
+
+def build_docs():
+    """Build the MkDocs documentation site."""
+    if not DOCS_DIR.exists():
+        logger.warning(f"Docs directory not found at {DOCS_DIR}, skipping docs build")
+        print(f"Docs directory not found, skipping docs build")
+        return False
+
+    mkdocs_yml = PROJECT_ROOT / "mkdocs.yml"
+    if not mkdocs_yml.exists():
+        logger.warning(f"mkdocs.yml not found at {mkdocs_yml}, skipping docs build")
+        print(f"mkdocs.yml not found, skipping docs build")
+        return False
+
+    try:
+        logger.info("Building documentation with MkDocs...")
+        result = subprocess.run(
+            ["mkdocs", "build", "--strict"],
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            timeout=120  # 2 minute timeout
+        )
+        if result.returncode == 0:
+            logger.info("Documentation built successfully")
+            return True
+        else:
+            logger.error(f"MkDocs build failed: {result.stderr}")
+            return False
+    except FileNotFoundError:
+        logger.warning("MkDocs not installed. Install with: pip install mkdocs mkdocs-material")
+        return False
+    except subprocess.TimeoutExpired:
+        logger.error("MkDocs build timed out")
+        return False
+    except Exception as e:
+        logger.error(f"Error building docs: {e}")
+        return False
 
 
 def create_app(config_class=None):
@@ -79,102 +133,128 @@ def create_app(config_class=None):
             ]
         })
 
-    # Documentation endpoints
+    # Documentation endpoints - serve from MkDocs built site
     @app.route("/api/docs")
     def list_docs():
-        """List available documentation files."""
+        """List available documentation pages from the MkDocs site."""
         docs = []
-        if DOCS_DIR.exists():
-            for doc_file in DOCS_DIR.glob("*.md", "*.MD"):
-                if doc_file.name.endswith(".png.md") or doc_file.name.endswith(".png.MD"):
-                    continue  # Skip placeholder files
+        site_exists = SITE_DIR.exists() and (SITE_DIR / "index.html").exists()
+
+        # Auto-build docs if site doesn't exist
+        if not site_exists:
+            logger.info("Documentation site not found, attempting to build...")
+            if build_docs():
+                site_exists = True
+
+        if site_exists:
+            # Find all index.html files in subdirectories (each represents a page)
+            for html_file in SITE_DIR.rglob("index.html"):
+                rel_path = html_file.parent.relative_to(SITE_DIR)
+
+                # Skip root index and assets
+                if str(rel_path) == ".":
+                    docs.append({
+                        "id": "index",
+                        "name": "Home",
+                        "path": ""
+                    })
+                    continue
+
+                if "assets" in str(rel_path) or "search" in str(rel_path):
+                    continue
+
+                # Create doc entry
+                parts = rel_path.parts
+                doc_id = "_".join(parts)
+
+                # Create readable name
+                if len(parts) > 1:
+                    category = parts[0].replace("-", " ").replace("_", " ").title()
+                    name = parts[-1].replace("-", " ").replace("_", " ").title()
+                    display_name = f"{category}: {name}"
+                else:
+                    display_name = parts[0].replace("-", " ").replace("_", " ").title()
+
                 docs.append({
-                    "id": doc_file.stem.lower(),
-                    "name": doc_file.stem.replace("_", " ").title(),
-                    "filename": doc_file.name
+                    "id": doc_id,
+                    "name": display_name,
+                    "path": str(rel_path)
                 })
+
         return jsonify({
             "docs": sorted(docs, key=lambda x: x["name"]),
-            "base_url": "/api/docs"
+            "base_url": "/api/docs/site",
+            "site_built": site_exists
         })
 
-    @app.route("/api/docs/<doc_name>")
-    def get_doc(doc_name):
-        """Get a documentation file rendered as HTML."""
-        # Try with .md extension
-        doc_path = DOCS_DIR / f"{doc_name}.md"
-        if not doc_path.exists():
-            # Try uppercase
-            doc_path = DOCS_DIR / f"{doc_name.upper()}.md"
-        if not doc_path.exists():
-            # Try title case
-            doc_path = DOCS_DIR / f"{doc_name.title()}.md"
-        if not doc_path.exists():
-            abort(404)
+    @app.route("/api/docs/build", methods=["POST"])
+    def build_docs_endpoint():
+        """Manually trigger a documentation build."""
+        success = build_docs()
+        if success:
+            return jsonify({
+                "success": True,
+                "message": "Documentation built successfully"
+            })
+        else:
+            return jsonify({
+                "success": False,
+                "message": "Failed to build documentation. Check server logs for details."
+            }), 500
 
-        # Read and convert markdown to HTML
-        md_content = doc_path.read_text(encoding="utf-8")
-        html_content = markdown.markdown(
-            md_content,
-            extensions=['tables', 'fenced_code', 'codehilite', 'toc']
-        )
+    @app.route("/api/docs/site/")
+    @app.route("/api/docs/site/<path:path>")
+    def serve_docs_site(path=""):
+        """Serve the MkDocs built site."""
+        site_exists = SITE_DIR.exists() and (SITE_DIR / "index.html").exists()
 
-        return jsonify({
-            "name": doc_path.stem,
-            "filename": doc_path.name,
-            "content_md": md_content,
-            "content_html": html_content
-        })
+        # Try to auto-build if site doesn't exist
+        if not site_exists:
+            if build_docs():
+                site_exists = True
 
-    @app.route("/api/docs/<doc_name>/raw")
-    def get_doc_raw(doc_name):
-        """Get raw markdown content of a documentation file."""
-        doc_path = DOCS_DIR / f"{doc_name}.md"
-        if not doc_path.exists():
-            doc_path = DOCS_DIR / f"{doc_name.upper()}.md"
-        if not doc_path.exists():
-            abort(404)
+        if not site_exists:
+            abort(404, "Documentation site not built. Run 'mkdocs build' or POST to /api/docs/build")
 
-        return send_from_directory(DOCS_DIR, doc_path.name, mimetype="text/markdown")
+        # Default to index.html
+        if not path or path.endswith("/"):
+            path = path + "index.html" if path else "index.html"
 
-    @app.route("/api/docs/images/<path:filename>")
-    def get_doc_image(filename):
-        """Serve images from the docs directory."""
-        # Security: prevent path traversal attacks
-        # Normalize the filename and ensure it doesn't escape DOCS_DIR
-        safe_filename = Path(filename).name  # Strip any directory components
-        if safe_filename != filename or '..' in filename:
-            abort(403)  # Forbidden - potential path traversal attempt
-
-        # Security: only allow image extensions
-        allowed_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp'}
-        ext = Path(safe_filename).suffix.lower()
-        if ext not in allowed_extensions:
-            abort(404)
-
-        image_path = DOCS_DIR / safe_filename
-
-        # Double-check the resolved path is within DOCS_DIR
+        # Security: ensure path is within SITE_DIR
+        full_path = SITE_DIR / path
         try:
-            image_path.resolve().relative_to(DOCS_DIR.resolve())
+            full_path.resolve().relative_to(SITE_DIR.resolve())
         except ValueError:
-            abort(403)  # Path escapes DOCS_DIR
+            abort(403)
 
-        if not image_path.exists():
-            abort(404)
+        if not full_path.exists():
+            # Try adding index.html for directory paths
+            if (SITE_DIR / path / "index.html").exists():
+                path = path + "/index.html"
+            else:
+                abort(404)
 
         # Determine mimetype
+        ext = Path(path).suffix.lower()
         mimetypes = {
+            '.html': 'text/html',
+            '.css': 'text/css',
+            '.js': 'application/javascript',
+            '.json': 'application/json',
             '.png': 'image/png',
             '.jpg': 'image/jpeg',
             '.jpeg': 'image/jpeg',
             '.gif': 'image/gif',
             '.svg': 'image/svg+xml',
-            '.webp': 'image/webp'
+            '.webp': 'image/webp',
+            '.woff': 'font/woff',
+            '.woff2': 'font/woff2',
+            '.ttf': 'font/ttf',
+            '.eot': 'application/vnd.ms-fontobject',
         }
         mimetype = mimetypes.get(ext, 'application/octet-stream')
 
-        return send_from_directory(DOCS_DIR, safe_filename, mimetype=mimetype)
+        return send_from_directory(SITE_DIR, path, mimetype=mimetype)
 
     # Error handlers
     @app.errorhandler(400)
@@ -207,4 +287,3 @@ if __name__ == "__main__":
     host = os.getenv("FLASK_HOST", "127.0.0.1")  # Default to localhost, not 0.0.0.0
     port = int(os.getenv("FLASK_PORT", "5001"))
     app.run(host=host, port=port, debug=debug_mode)
-

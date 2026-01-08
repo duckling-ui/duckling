@@ -264,17 +264,34 @@ export function useConversion(options: UseConversionOptions = {}) {
     };
   }, [stopPolling, stopBatchPolling]);
 
-  // Upload single file
+  // Upload single file or start tracking an existing job (for URL conversions)
   const uploadFile = useCallback(
-    (file: File, settings?: Partial<ConversionSettings>) => {
+    (file: File, existingJobId?: string, settings?: Partial<ConversionSettings>) => {
       setBatchMode(false);
-      setState('uploading');
       setError(null);
       setResult(null);
       setBatchJobs([]);
-      uploadMutation.mutate({ file, settings });
+
+      if (existingJobId) {
+        // URL conversion - job already started, just poll for status
+        setCurrentJob({
+          job_id: existingJobId,
+          filename: file.name || 'url-document',
+          input_format: 'unknown',
+          status: 'processing',
+          message: 'Processing URL...'
+        });
+        setState('processing');
+        setProgress(0);
+        setStatusMessage('Processing document from URL...');
+        startPolling(existingJobId);
+      } else {
+        // Regular file upload
+        setState('uploading');
+        uploadMutation.mutate({ file, settings });
+      }
     },
-    [uploadMutation]
+    [uploadMutation, startPolling]
   );
 
   // Upload multiple files
@@ -284,7 +301,7 @@ export function useConversion(options: UseConversionOptions = {}) {
 
       if (files.length === 1) {
         // Single file, use regular upload
-        uploadFile(files[0], settings);
+        uploadFile(files[0], undefined, settings);
         return;
       }
 

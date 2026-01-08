@@ -81,6 +81,30 @@ export const uploadAndConvertBatch = async (
   return response.data;
 };
 
+// URL conversion
+export const convertFromUrl = async (
+  url: string,
+  settings?: Partial<ConversionSettings>
+): Promise<ConversionJob & { source_url: string }> => {
+  const response = await api.post('/convert/url', {
+    url,
+    settings,
+  });
+  return response.data;
+};
+
+// Batch URL conversion
+export const convertFromUrlsBatch = async (
+  urls: string[],
+  settings?: Partial<ConversionSettings>
+): Promise<BatchConversionResponse & { jobs: (BatchConversionResponse['jobs'][0] & { url?: string })[] }> => {
+  const response = await api.post('/convert/url/batch', {
+    urls,
+    settings,
+  });
+  return response.data;
+};
+
 export const getConversionStatus = async (jobId: string): Promise<ConversionStatus> => {
   const response = await api.get(`/convert/${jobId}/status`);
   return response.data;
@@ -321,6 +345,96 @@ export const updateChunkingSettings = async (
   }>
 ): Promise<{ message: string; chunking: any }> => {
   const response = await api.put('/settings/chunking', settings);
+  return response.data;
+};
+
+// Enrichment settings
+export interface EnrichmentModelStatus {
+  model_id: string;
+  model_name: string;
+  downloaded: boolean;
+  available: boolean;
+  size_mb: number;
+}
+
+export interface EnrichmentSettingsResponse {
+  enrichment: {
+    code_enrichment: boolean;
+    formula_enrichment: boolean;
+    picture_classification: boolean;
+    picture_description: boolean;
+  };
+  models_status: Record<string, EnrichmentModelStatus>;
+  options: Record<string, {
+    description: string;
+    default: boolean;
+    note?: string;
+    model_size_mb?: number;
+  }>;
+}
+
+export interface EnrichmentModelInfo {
+  id: string;
+  name: string;
+  description: string;
+  feature: string;
+  model_name: string;
+  size_mb: number;
+  note: string;
+  downloaded: boolean;
+  available: boolean;
+  error?: string;
+  requires_upgrade?: boolean;
+  docling_version?: string;
+  min_docling_version?: string;
+}
+
+export interface EnrichmentModelsResponse {
+  models: EnrichmentModelInfo[];
+}
+
+export interface ModelDownloadProgress {
+  model_id: string;
+  status: 'idle' | 'downloading' | 'completed' | 'error';
+  progress: number;
+  message: string;
+}
+
+export const getEnrichmentSettings = async (): Promise<EnrichmentSettingsResponse> => {
+  const response = await api.get('/settings/enrichment');
+  return response.data;
+};
+
+export const updateEnrichmentSettings = async (
+  settings: Partial<{
+    code_enrichment: boolean;
+    formula_enrichment: boolean;
+    picture_classification: boolean;
+    picture_description: boolean;
+  }>
+): Promise<{ message: string; enrichment: any }> => {
+  const response = await api.put('/settings/enrichment', settings);
+  return response.data;
+};
+
+// Enrichment models
+export const getEnrichmentModelsStatus = async (): Promise<EnrichmentModelsResponse> => {
+  const response = await api.get('/settings/enrichment/models');
+  return response.data;
+};
+
+export const getEnrichmentModelStatus = async (modelId: string): Promise<EnrichmentModelInfo & { download_progress: ModelDownloadProgress }> => {
+  const response = await api.get(`/settings/enrichment/models/${modelId}/status`);
+  return response.data;
+};
+
+export const downloadEnrichmentModel = async (modelId: string): Promise<{ success: boolean; message: string; model_id: string; already_downloaded?: boolean; error?: string }> => {
+  const response = await api.post(`/settings/enrichment/models/${modelId}/download`);
+  return response.data;
+};
+
+export const getModelDownloadProgress = async (modelId: string): Promise<ModelDownloadProgress> => {
+  const response = await api.get(`/settings/enrichment/models/${modelId}/progress`);
   return response.data;
 };
 

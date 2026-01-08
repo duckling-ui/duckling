@@ -18,16 +18,23 @@ if __name__ != "__main__":
         print(f"[config] WARNING: .env file not found at: {env_path}", file=sys.stderr)
 
 # Base directories
-BASE_DIR = Path(__file__).parent.parent.absolute()
 BACKEND_DIR = Path(__file__).parent.absolute()
 
-# Upload and output directories
-UPLOAD_FOLDER = BASE_DIR / "uploads"
-OUTPUT_FOLDER = BASE_DIR / "outputs"
+# Determine if running in Docker (check for /app directory structure)
+if BACKEND_DIR == Path("/app"):
+    # Running in Docker - use /app as base
+    BASE_DIR = BACKEND_DIR
+    UPLOAD_FOLDER = Path("/app/uploads")
+    OUTPUT_FOLDER = Path("/app/outputs")
+else:
+    # Running locally - use parent of backend as base
+    BASE_DIR = BACKEND_DIR.parent.absolute()
+    UPLOAD_FOLDER = BASE_DIR / "uploads"
+    OUTPUT_FOLDER = BASE_DIR / "outputs"
 
-# Ensure directories exist
-UPLOAD_FOLDER.mkdir(exist_ok=True)
-OUTPUT_FOLDER.mkdir(exist_ok=True)
+# Ensure directories exist (with parents to handle Docker volume mounts)
+UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
+OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
 
 # Database configuration
 DATABASE_PATH = BACKEND_DIR / "history.db"
@@ -116,6 +123,12 @@ DEFAULT_CONVERSION_SETTINGS = {
         "generate_picture_images": True,
         "generate_table_images": True,
         "images_scale": 1.0
+    },
+    "enrichment": {
+        "code_enrichment": False,  # Enhance code blocks with language detection
+        "formula_enrichment": False,  # Extract LaTeX from mathematical formulas
+        "picture_classification": False,  # Classify images (figure, chart, etc.)
+        "picture_description": False  # Generate captions using vision-language models
     },
     "output": {
         "default_format": "markdown"

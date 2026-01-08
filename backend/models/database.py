@@ -1,6 +1,7 @@
 """SQLite database models for conversion history."""
 
 import json
+import threading
 from datetime import datetime
 from sqlalchemy import create_engine, Column, String, Float, DateTime, Text
 from sqlalchemy.ext.declarative import declarative_base
@@ -13,6 +14,10 @@ from config import DATABASE_URL
 engine = create_engine(DATABASE_URL, echo=False)
 session_factory = sessionmaker(bind=engine)
 db = scoped_session(session_factory)
+
+# Lock for database initialization
+_init_lock = threading.Lock()
+_initialized = False
 
 Base = declarative_base()
 
@@ -66,7 +71,20 @@ class Conversion(Base):
 
 def init_db():
     """Initialize the database, creating tables if they don't exist."""
-    Base.metadata.create_all(engine)
+    global _initialized
+
+    # Use lock to prevent race conditions between workers
+    with _init_lock:
+        if _initialized:
+            return
+
+        try:
+            # create_all already uses checkfirst=True by default
+            Base.metadata.create_all(engine)
+            _initialized = True
+        except Exception:
+            # Table might already exist from another process, that's OK
+            _initialized = True
 
 
 @contextmanager

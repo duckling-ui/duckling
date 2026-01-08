@@ -16,7 +16,8 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 ## Features
 
 - **Drag-and-Drop Upload**: Simply drag your documents onto the interface
-- **Batch Processing**: Convert multiple files at once
+- **URL-Based Conversion**: Convert documents directly from URLs with automatic image extraction for HTML pages
+- **Batch Processing**: Convert multiple files or URLs at once
 - **Multi-Format Support**: Convert PDFs, Word docs, PowerPoints, Excel files, HTML, Markdown, images, and more
 - **Multiple Export Formats**: Export to Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks, or plain text
 - **Image & Table Extraction**: Extract embedded images and tables with CSV export
@@ -104,11 +105,35 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 
 ### Using Docker
 
+**Quick Start (Build Locally):**
 ```bash
 docker-compose up --build
 ```
 
+**Using Pre-built Images:**
+```bash
+# Download and run pre-built images
+curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml
+docker-compose -f docker-compose.prebuilt.yml up -d
+```
+
+**Production Deployment:**
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
 Access the application at `http://localhost:3000`
+
+**Build Docker Images:**
+```bash
+# Build images locally
+./scripts/docker-build.sh
+
+# Build and push to registry
+./scripts/docker-build.sh --push --registry yourusername
+```
+
+See [Docker Deployment Guide](docs/getting-started/docker.md) for detailed instructions.
 
 ## Configuration
 
@@ -272,13 +297,29 @@ duckling/
 
 Comprehensive documentation is available using MkDocs:
 
+### In-App Documentation
+
+The documentation is available directly in the Duckling UI. Click the **Documentation** button in the header to open the docs panel.
+
+**Note**: The documentation must be built before it can be viewed in the UI. You can either:
+
+1. **Build manually** (recommended for development):
+   ```bash
+   pip install -r requirements-docs.txt
+   mkdocs build
+   ```
+
+2. **Build from the UI**: Click the "Build Documentation" button in the docs panel if the site hasn't been built yet.
+
+3. **Auto-build**: The backend will automatically attempt to build the docs if MkDocs is installed and the site doesn't exist.
+
 ### View Documentation Locally
 
 ```bash
 # Install documentation dependencies
 pip install -r requirements-docs.txt
 
-# Serve documentation locally
+# Serve documentation with live reload (for editing)
 mkdocs serve
 ```
 
@@ -290,7 +331,7 @@ Then open `http://localhost:8000` in your browser.
 mkdocs build
 ```
 
-The built documentation will be in the `site/` directory.
+The built documentation will be in the `site/` directory and served at `/api/docs/site/` by the backend.
 
 ### Documentation Sections
 

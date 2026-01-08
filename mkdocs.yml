@@ -46,7 +46,8 @@ theme:
     code: JetBrains Mono
   icon:
     repo: fontawesome/brands/github
-    logo: material/file-document-multiple
+  logo: assets/duckling.png
+  favicon: assets/duckling.png
   features:
     - navigation.instant
     - navigation.instant.prefetch
@@ -144,6 +145,7 @@ nav:
   - User Guide:
     - user-guide/index.md
     - Features: user-guide/features.md
+    - Screenshots: user-guide/screenshots.md
     - Supported Formats: user-guide/formats.md
     - Configuration: user-guide/configuration.md
   - API Reference:
