@@ -132,6 +132,7 @@ export function useConversion(options: UseConversionOptions = {}) {
       // Continue polling even if one request fails
       console.error('Status poll error:', err);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- stopPolling is intentionally excluded to avoid infinite re-renders
   }, [onComplete, onError]);
 
   // Batch polling
@@ -213,6 +214,7 @@ export function useConversion(options: UseConversionOptions = {}) {
     }
 
     return updatedJobs;
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- stopBatchPolling is intentionally excluded to avoid infinite re-renders
   }, []);
 
   const startPolling = useCallback(
@@ -224,6 +226,7 @@ export function useConversion(options: UseConversionOptions = {}) {
       // Initial poll
       pollStatus(jobId);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- stopPolling is intentionally excluded to avoid infinite re-renders
     [pollStatus, pollInterval]
   );
 
@@ -246,6 +249,7 @@ export function useConversion(options: UseConversionOptions = {}) {
       // Initial poll
       pollBatchStatus(initialJobs);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- stopBatchPolling is intentionally excluded to avoid infinite re-renders
     [pollBatchStatus, pollInterval]
   );
 

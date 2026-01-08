@@ -211,7 +211,7 @@ export const updateOcrSettings = async (
     bitmap_area_threshold: number;
   }>,
   autoInstall = false
-): Promise<{ message: string; ocr: any }> => {
+): Promise<{ message: string; ocr: Record<string, unknown> }> => {
   const response = await api.put(`/settings/ocr${autoInstall ? '?auto_install=true' : ''}`, settings);
   return response.data;
 };
@@ -277,7 +277,7 @@ export const updateTableSettings = async (
     mode: string;
     do_cell_matching: boolean;
   }>
-): Promise<{ message: string; tables: any }> => {
+): Promise<{ message: string; tables: Record<string, unknown> }> => {
   const response = await api.put('/settings/tables', settings);
   return response.data;
 };
@@ -296,7 +296,7 @@ export const updateImageSettings = async (
     generate_table_images: boolean;
     images_scale: number;
   }>
-): Promise<{ message: string; images: any }> => {
+): Promise<{ message: string; images: Record<string, unknown> }> => {
   const response = await api.put('/settings/images', settings);
   return response.data;
 };
@@ -327,7 +327,7 @@ export const updatePerformanceSettings = async (
     num_threads: number;
     document_timeout: number | null;
   }>
-): Promise<{ message: string; performance: any }> => {
+): Promise<{ message: string; performance: Record<string, unknown> }> => {
   const response = await api.put('/settings/performance', settings);
   return response.data;
 };
@@ -343,7 +343,7 @@ export const updateChunkingSettings = async (
     max_tokens: number;
     merge_peers: boolean;
   }>
-): Promise<{ message: string; chunking: any }> => {
+): Promise<{ message: string; chunking: Record<string, unknown> }> => {
   const response = await api.put('/settings/chunking', settings);
   return response.data;
 };
@@ -412,7 +412,7 @@ export const updateEnrichmentSettings = async (
     picture_classification: boolean;
     picture_description: boolean;
   }>
-): Promise<{ message: string; enrichment: any }> => {
+): Promise<{ message: string; enrichment: Record<string, unknown> }> => {
   const response = await api.put('/settings/enrichment', settings);
   return response.data;
 };

@@ -212,7 +212,7 @@ export interface OcrSettingsResponse {
   }[];
   options: Record<string, {
     description: string;
-    default: any;
+    default: string | number | boolean | null;
     min?: number;
     max?: number;
   }>;
@@ -227,7 +227,7 @@ export interface TableSettingsResponse {
   }[];
   options: Record<string, {
     description: string;
-    default: any;
+    default: string | number | boolean;
   }>;
 }
 
@@ -235,7 +235,7 @@ export interface ImageSettingsResponse {
   images: ImageSettings;
   options: Record<string, {
     description: string;
-    default: any;
+    default: string | number | boolean;
     min?: number;
     max?: number;
   }>;
@@ -250,7 +250,7 @@ export interface PerformanceSettingsResponse {
   }[];
   options: Record<string, {
     description: string;
-    default: any;
+    default: string | number | boolean | null;
     min?: number;
     max?: number;
   }>;
@@ -260,7 +260,7 @@ export interface ChunkingSettingsResponse {
   chunking: ChunkingSettings;
   options: Record<string, {
     description: string;
-    default: any;
+    default: string | number | boolean;
     min?: number;
     max?: number;
   }>;

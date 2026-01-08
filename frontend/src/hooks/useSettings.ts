@@ -23,7 +23,6 @@ import {
   installOcrBackend,
   getEnrichmentModelsStatus,
   downloadEnrichmentModel,
-  getModelDownloadProgress,
   type OcrBackendStatus,
   type EnrichmentModelInfo,
   type ModelDownloadProgress,
@@ -88,10 +87,11 @@ export function useOcrSettings() {
       queryClient.invalidateQueries({ queryKey: ['settings', 'ocr', 'backends'] });
       setInstallError(null);
     },
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       // Check if it's a backend not installed error
-      if (error.response?.data?.pip_installable) {
-        setInstallError(error.response.data.error);
+      const axiosError = error as { response?: { data?: { pip_installable?: boolean; error?: string } } };
+      if (axiosError.response?.data?.pip_installable) {
+        setInstallError(axiosError.response.data.error || 'Installation error');
       }
     },
   });

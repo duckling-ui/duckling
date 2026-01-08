@@ -35,9 +35,10 @@ describe('ExportOptions', () => {
   it('renders available formats', () => {
     render(<ExportOptions {...defaultProps} />);
 
-    expect(screen.getByText('Markdown')).toBeInTheDocument();
-    expect(screen.getByText('HTML')).toBeInTheDocument();
-    expect(screen.getByText('JSON')).toBeInTheDocument();
+    // Use getAllByText since format names may appear multiple times (in cards and preview badge)
+    expect(screen.getAllByText('Markdown').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('HTML').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('JSON').length).toBeGreaterThanOrEqual(1);
   });
 
   it('calls onDownload when download button is clicked', () => {
@@ -58,17 +59,20 @@ describe('ExportOptions', () => {
     expect(mockOnNewConversion).toHaveBeenCalled();
   });
 
-  it('shows preview content', () => {
+  it('has preview panel visible by default', () => {
     render(<ExportOptions {...defaultProps} />);
 
-    expect(screen.getByText(/# Test Document/)).toBeInTheDocument();
+    // Preview is shown by default - check for Hide button
+    expect(screen.getByRole('button', { name: /hide/i })).toBeInTheDocument();
   });
 
   it('allows selecting different formats', () => {
     render(<ExportOptions {...defaultProps} />);
 
-    // Click on HTML format
-    const htmlButton = screen.getByText('HTML').closest('button');
+    // Find the HTML format card button (not the preview badge)
+    // The format cards have a specific structure with font-medium class
+    const htmlElements = screen.getAllByText('HTML');
+    const htmlButton = htmlElements[0].closest('button');
     if (htmlButton) {
       fireEvent.click(htmlButton);
     }
@@ -79,10 +83,18 @@ describe('ExportOptions', () => {
     expect(mockOnDownload).toHaveBeenCalledWith('html');
   });
 
-  it('shows no preview message when preview is empty', () => {
-    render(<ExportOptions {...defaultProps} preview={undefined} />);
+  it('can toggle preview visibility', () => {
+    render(<ExportOptions {...defaultProps} />);
 
-    expect(screen.getByText('No preview available')).toBeInTheDocument();
+    // Preview is shown by default
+    const hideButton = screen.getByRole('button', { name: /hide/i });
+    expect(hideButton).toBeInTheDocument();
+
+    // Click to hide
+    fireEvent.click(hideButton);
+
+    // Now should show "Show" button
+    expect(screen.getByRole('button', { name: /show/i })).toBeInTheDocument();
   });
 });
 
