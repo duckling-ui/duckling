@@ -1,0 +1,56 @@
+name: Feature request
+description: Suggest an idea or enhancement for Duckling
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Duckling!
+
+        Tip: include screenshots/mockups if you have them.
+
+  - type: checkboxes
+    id: preflight
+    attributes:
+      label: Preflight checklist
+      options:
+        - label: I searched existing issues and didn’t find a duplicate
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / use-case
+      description: What problem are you trying to solve?
+      placeholder: As a ..., I want ..., so that ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What would you like to see added/changed?
+      placeholder: Describe the feature at a high level.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: Any alternative approaches or workarounds?
+    validations:
+      required: false
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Additional context
+      description: Links, screenshots, examples, constraints, etc.
+    validations:
+      required: false
+
+

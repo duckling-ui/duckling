@@ -1,0 +1,10 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability report
+    about: Please do NOT open a public issue for security reports. Follow our security policy instead.
+    url: https://github.com/davidgs/duckling/blob/main/SECURITY.md
+  - name: Documentation
+    about: Read the docs (getting started, user guide, API reference, deployment, contributing).
+    url: https://github.com/davidgs/duckling/blob/main/docs/index.md
+
+
