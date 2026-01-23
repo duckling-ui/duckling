@@ -68,6 +68,7 @@ Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konv
 
 </div>
 
+
 ## Schnellstart
 
 Siehe **Getting Started**, um Duckling mit Docker oder lokal in der Entwicklung zu installieren und auszuführen.
@@ -155,3 +156,4 @@ graph LR
 - [Flask](https://flask.palletsprojects.com/) für das Backend-Framework
 - [Tailwind CSS](https://tailwindcss.com/) für das Styling
 - [Framer Motion](https://www.framer.com/motion/) für Animationen
+

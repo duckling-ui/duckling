@@ -68,6 +68,7 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
 
 </div>
 
+
 ## Démarrage rapide
 
 Consultez **Getting Started** pour installer et exécuter Duckling avec Docker ou en développement local.

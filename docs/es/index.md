@@ -170,3 +170,4 @@ graph LR
 - [Flask](https://flask.palletsprojects.com/) por el framework backend
 - [Tailwind CSS](https://tailwindcss.com/) por el estilo
 - [Framer Motion](https://www.framer.com/motion/) por las animaciones
+

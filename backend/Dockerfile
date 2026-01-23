@@ -72,5 +72,5 @@ EXPOSE 5001
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:5001/api/health || exit 1
-  # Run with Gunicorn for production
+# Run with Gunicorn for production
 CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "4", "--threads", "2", "--timeout", "300", "duckling:app"]
