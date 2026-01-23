@@ -1,0 +1,5 @@
+# Configuración
+
+Traducción en progreso.
+
+

@@ -114,6 +114,8 @@ Before deploying to production, ensure:
    - No user-generated content is rendered
    - Content is converted server-side with trusted markdown library
 
+2. **Multilingual documentation paths**: The documentation site is served under locale-prefixed paths (e.g. `/api/docs/site/en/`, `/api/docs/site/es/`). This does not change the trust model: docs are still served from local build output only.
+
 2. **Local File Access**: The application reads and writes files to configured directories. Ensure proper filesystem permissions.
 
 3. **No Authentication**: This application is designed for local/personal use and does not include user authentication. For multi-user deployments, add authentication via a reverse proxy or middleware.

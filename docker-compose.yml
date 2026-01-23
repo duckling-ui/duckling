@@ -19,7 +19,7 @@ services:
       - ./outputs:/app/outputs
       - ./backend/data:/app/data
       - ./docs:/app/docs:ro
-      - ./site:/app/site:ro
+      - ./site:/app/site
       - ./mkdocs.yml:/app/mkdocs.yml:ro
     environment:
       - FLASK_ENV=development

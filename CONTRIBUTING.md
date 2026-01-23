@@ -78,6 +78,26 @@ npm test
 npm run test:coverage
 ```
 
+## Translations / i18n
+
+Duckling supports UI and documentation translations.
+
+### UI translations (React)
+
+- Translations live in `frontend/src/locales/<lang>/common.json` (example: `frontend/src/locales/es/common.json`).
+- The i18n setup is in `frontend/src/i18n.ts`.
+- When adding new keys, prefer stable, descriptive keys (e.g. `docsPanel.title`) and keep English as the source-of-truth.
+
+### Documentation translations (MkDocs)
+
+- Spanish/French/German docs live under `docs/es/`, `docs/fr/`, `docs/de/` and mirror the English docs structure.
+- The MkDocs i18n setup is in `mkdocs.yml` under the `i18n` plugin.
+- Run a strict build before submitting changes (uses the repo docs venv in `./venv/` or creates it):
+
+```bash
+./scripts/docs-build.sh
+```
+
 ## Code Style
 
 ### Python (Backend)

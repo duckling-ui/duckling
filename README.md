@@ -105,6 +105,22 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 
 ### Using Docker
 
+## Documentation (MkDocs)
+
+Duckling uses MkDocs + `mkdocs-static-i18n` for multilingual docs.
+
+- Build (strict):
+
+```bash
+./scripts/docs-build.sh
+```
+
+- Serve locally:
+
+```bash
+./scripts/docs-serve.sh
+```
+
 **Quick Start (Build Locally):**
 ```bash
 docker-compose up --build
@@ -300,6 +316,15 @@ Comprehensive documentation is available using MkDocs:
 ### In-App Documentation
 
 The documentation is available directly in the Duckling UI. Click the **Documentation** button in the header to open the docs panel.
+
+### UI + Docs Languages
+
+- **UI**: English (`en`), Spanish (`es`), French (`fr`), German (`de`)
+- **Docs**: Built and served with language prefixes at `/api/docs/site/en/`, `/api/docs/site/es/`, `/api/docs/site/fr/`, `/api/docs/site/de/`
+
+To add a new language:
+- **UI**: add `frontend/src/locales/<lang>/common.json` and wire it into `frontend/src/i18n.ts`
+- **Docs**: add `docs/<lang>/...` (mirroring the English structure), then add a language entry under the `i18n` plugin in `mkdocs.yml`
 
 **Note**: The documentation must be built before it can be viewed in the UI. You can either:
 

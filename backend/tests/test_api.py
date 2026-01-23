@@ -138,6 +138,52 @@ class TestSettingsEndpoint:
         data = json.loads(response.data)
         assert "settings" in data
 
+
+class TestDocsEndpoints:
+    """Tests for documentation endpoints."""
+
+    @pytest.mark.parametrize("lang", ["en", "es", "fr", "de"])
+    def test_list_docs_accepts_language(self, client, lang):
+        """Test /api/docs accepts supported languages and returns metadata."""
+        response = client.get(f"/api/docs?lang={lang}")
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        assert data["language"] in ["en", "es", "fr", "de"]
+        assert "available_languages" in data
+        assert set(["en", "es", "fr", "de"]).issubset(set(data["available_languages"]))
+
+    def test_list_docs_invalid_language_falls_back_to_en(self, client):
+        """Test /api/docs falls back to en for unsupported languages."""
+        response = client.get("/api/docs?lang=xx")
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        assert data["language"] == "en"
+
+    def test_list_docs_en_does_not_include_locale_roots(self, client):
+        """Default locale listing should not treat /site/<locale>/ as docs pages."""
+        response = client.get("/api/docs?lang=en")
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        docs = data.get("docs", [])
+
+        # Ensure we don't accidentally include locale root pages like "es/index.html"
+        paths = {d.get("path", "") for d in docs}
+        assert "es" not in paths
+        assert "fr" not in paths
+        assert "de" not in paths
+
+    def test_list_docs_de_uses_localized_titles_when_available(self, client):
+        """German docs listing should use localized page titles from built HTML when present."""
+        response = client.get("/api/docs?lang=de")
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        docs = data.get("docs", [])
+
+        # "deployment/security" is translated to "Sicherheit" in the German docs we ship.
+        security = next((d for d in docs if d.get("path") == "deployment/security"), None)
+        assert security is not None
+        assert "Sicherheit" in (security.get("name") or "")
+
     def test_get_ocr_settings(self, client):
         """Test getting OCR settings."""
         response = client.get("/api/settings/ocr")

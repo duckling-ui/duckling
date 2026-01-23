@@ -1,8 +1,16 @@
-import { useState, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { marked } from 'marked';
-import { getExtractedImages, getExtractedTables, getDocumentChunks, downloadExtractedImage, downloadTableCsv, getExportContent } from '../services/api';
-import type { ExtractedImage, ExtractedTable, DocumentChunk } from '../types';
+import { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { marked } from "marked";
+import { useTranslation } from "react-i18next";
+import {
+  getExtractedImages,
+  getExtractedTables,
+  getDocumentChunks,
+  downloadExtractedImage,
+  downloadTableCsv,
+  getExportContent,
+} from "../services/api";
+import type { ExtractedImage, ExtractedTable, DocumentChunk } from "../types";
 
 // Configure marked for GFM (GitHub Flavored Markdown) with tables
 marked.setOptions({
@@ -22,47 +30,50 @@ interface ExportOptionsProps {
   chunksCount?: number;
 }
 
-type PreviewMode = 'rendered' | 'raw';
+type PreviewMode = "rendered" | "raw";
 
-const FORMAT_INFO: Record<string, { name: string; icon: string; description: string }> = {
+const FORMAT_INFO: Record<
+  string,
+  { name: string; icon: string; description: string }
+> = {
   markdown: {
-    name: 'Markdown',
-    icon: 'M',
-    description: 'Formatted text with headers, lists, and links',
+    name: "Markdown",
+    icon: "M",
+    description: "Formatted text with headers, lists, and links",
   },
   html: {
-    name: 'HTML',
-    icon: '</>',
-    description: 'Web-ready format with full styling',
+    name: "HTML",
+    icon: "</>",
+    description: "Web-ready format with full styling",
   },
   json: {
-    name: 'JSON',
-    icon: '{}',
-    description: 'Structured data with document hierarchy',
+    name: "JSON",
+    icon: "{}",
+    description: "Structured data with document hierarchy",
   },
   doctags: {
-    name: 'DocTags',
-    icon: '#',
-    description: 'Tagged document tokens for AI processing',
+    name: "DocTags",
+    icon: "#",
+    description: "Tagged document tokens for AI processing",
   },
   text: {
-    name: 'Plain Text',
-    icon: 'Aa',
-    description: 'Simple text without formatting',
+    name: "Plain Text",
+    icon: "Aa",
+    description: "Simple text without formatting",
   },
   document_tokens: {
-    name: 'Document Tokens',
-    icon: '[]',
-    description: 'Token-level document representation',
+    name: "Document Tokens",
+    icon: "[]",
+    description: "Token-level document representation",
   },
   chunks: {
-    name: 'RAG Chunks',
-    icon: '◫',
-    description: 'Document chunks for RAG applications',
+    name: "RAG Chunks",
+    icon: "◫",
+    description: "Document chunks for RAG applications",
   },
 };
 
-type TabType = 'formats' | 'images' | 'tables' | 'chunks';
+type TabType = "formats" | "images" | "tables" | "chunks";
 
 export default function ExportOptions({
   jobId,
@@ -75,10 +86,11 @@ export default function ExportOptions({
   tablesCount = 0,
   chunksCount = 0,
 }: ExportOptionsProps) {
-  const [selectedFormat, setSelectedFormat] = useState<string>('markdown');
+  const { t } = useTranslation();
+  const [selectedFormat, setSelectedFormat] = useState<string>("markdown");
   const [showPreview, setShowPreview] = useState(true);
-  const [activeTab, setActiveTab] = useState<TabType>('formats');
-  const [previewMode, setPreviewMode] = useState<PreviewMode>('rendered');
+  const [activeTab, setActiveTab] = useState<TabType>("formats");
+  const [previewMode, setPreviewMode] = useState<PreviewMode>("rendered");
 
   // Extracted content state
   const [images, setImages] = useState<ExtractedImage[]>([]);
@@ -87,19 +99,23 @@ export default function ExportOptions({
   const [loadingContent, setLoadingContent] = useState(false);
 
   // Format-specific content cache
-  const [formatContent, setFormatContent] = useState<Record<string, string>>({});
+  const [formatContent, setFormatContent] = useState<Record<string, string>>(
+    {}
+  );
   const [loadingFormat, setLoadingFormat] = useState(false);
 
   // Image preview state
   const [imageUrls, setImageUrls] = useState<Record<number, string>>({});
-  const [selectedImage, setSelectedImage] = useState<ExtractedImage | null>(null);
+  const [selectedImage, setSelectedImage] = useState<ExtractedImage | null>(
+    null
+  );
 
   // Load extracted content when tab changes
   useEffect(() => {
     const loadContent = async () => {
       setLoadingContent(true);
       try {
-        if (activeTab === 'images' && images.length === 0 && imagesCount > 0) {
+        if (activeTab === "images" && images.length === 0 && imagesCount > 0) {
           const response = await getExtractedImages(jobId);
           setImages(response.images);
 
@@ -114,26 +130,43 @@ export default function ExportOptions({
             }
           }
           setImageUrls(urls);
-        } else if (activeTab === 'tables' && tables.length === 0 && tablesCount > 0) {
+        } else if (
+          activeTab === "tables" &&
+          tables.length === 0 &&
+          tablesCount > 0
+        ) {
           const response = await getExtractedTables(jobId);
           setTables(response.tables);
-        } else if (activeTab === 'chunks' && chunks.length === 0 && chunksCount > 0) {
+        } else if (
+          activeTab === "chunks" &&
+          chunks.length === 0 &&
+          chunksCount > 0
+        ) {
           const response = await getDocumentChunks(jobId);
           setChunks(response.chunks);
         }
       } catch (error) {
-        console.error('Error loading content:', error);
+        console.error("Error loading content:", error);
       } finally {
         setLoadingContent(false);
       }
     };
     loadContent();
-  }, [activeTab, jobId, images.length, tables.length, chunks.length, imagesCount, tablesCount, chunksCount]);
+  }, [
+    activeTab,
+    jobId,
+    images.length,
+    tables.length,
+    chunks.length,
+    imagesCount,
+    tablesCount,
+    chunksCount,
+  ]);
 
   // Cleanup image URLs on unmount
   useEffect(() => {
     return () => {
-      Object.values(imageUrls).forEach(url => URL.revokeObjectURL(url));
+      Object.values(imageUrls).forEach((url) => URL.revokeObjectURL(url));
     };
   }, [imageUrls]);
 
@@ -144,15 +177,18 @@ export default function ExportOptions({
       if (formatContent[selectedFormat]) return;
 
       // Use the initial preview for markdown if available
-      if (selectedFormat === 'markdown' && preview) {
-        setFormatContent(prev => ({ ...prev, markdown: preview }));
+      if (selectedFormat === "markdown" && preview) {
+        setFormatContent((prev) => ({ ...prev, markdown: preview }));
         return;
       }
 
       setLoadingFormat(true);
       try {
         const response = await getExportContent(jobId, selectedFormat);
-        setFormatContent(prev => ({ ...prev, [selectedFormat]: response.content }));
+        setFormatContent((prev) => ({
+          ...prev,
+          [selectedFormat]: response.content,
+        }));
       } catch (error) {
         console.error(`Error loading ${selectedFormat} content:`, error);
       } finally {
@@ -160,19 +196,19 @@ export default function ExportOptions({
       }
     };
 
-    if (activeTab === 'formats') {
+    if (activeTab === "formats") {
       loadFormatContent();
     }
   }, [selectedFormat, jobId, activeTab, formatContent, preview]);
 
   // Check if current format supports rendered view
   const supportsRenderedView = useMemo(() => {
-    return ['markdown', 'html'].includes(selectedFormat);
+    return ["markdown", "html"].includes(selectedFormat);
   }, [selectedFormat]);
 
   // Get the current preview content
   const currentPreviewContent = useMemo(() => {
-    return formatContent[selectedFormat] || preview || '';
+    return formatContent[selectedFormat] || preview || "";
   }, [formatContent, selectedFormat, preview]);
 
   // Render markdown to HTML using marked library
@@ -180,7 +216,7 @@ export default function ExportOptions({
     try {
       return marked.parse(md) as string;
     } catch (error) {
-      console.error('Error parsing markdown:', error);
+      console.error("Error parsing markdown:", error);
       return `<pre>${md}</pre>`;
     }
   };
@@ -189,13 +225,13 @@ export default function ExportOptions({
     try {
       const blob = await downloadExtractedImage(jobId, imageId);
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = filename;
       a.click();
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error downloading image:', error);
+      console.error("Error downloading image:", error);
     }
   };
 
@@ -203,21 +239,21 @@ export default function ExportOptions({
     try {
       const blob = await downloadTableCsv(jobId, tableId);
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
       a.download = `table_${tableId}.csv`;
       a.click();
       URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error downloading CSV:', error);
+      console.error("Error downloading CSV:", error);
     }
   };
 
   const tabs: { id: TabType; label: string; count?: number }[] = [
-    { id: 'formats', label: 'Export Formats' },
-    { id: 'images', label: 'Images', count: imagesCount },
-    { id: 'tables', label: 'Tables', count: tablesCount },
-    { id: 'chunks', label: 'RAG Chunks', count: chunksCount },
+    { id: "formats", label: t("export.tabExportFormats") },
+    { id: "images", label: t("export.tabImages"), count: imagesCount },
+    { id: "tables", label: t("export.tabTables"), count: tablesCount },
+    { id: "chunks", label: t("export.tabChunks"), count: chunksCount },
   ];
 
   return (
@@ -231,7 +267,7 @@ export default function ExportOptions({
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+          transition={{ type: "spring", stiffness: 200, damping: 15 }}
           className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary-500/20 flex items-center justify-center"
         >
           <svg
@@ -241,29 +277,47 @@ export default function ExportOptions({
             stroke="currentColor"
             strokeWidth="2"
           >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5 13l4 4L19 7"
+            />
           </svg>
         </motion.div>
-        <h2 className="text-2xl font-bold text-dark-100 mb-2">Conversion Complete!</h2>
+        <h2 className="text-2xl font-bold text-dark-100 mb-2">
+          {t("export.completeTitle")}
+        </h2>
         <div className="flex items-center justify-center gap-4 text-dark-400">
           {confidence != null && confidence > 0 && (
             <span>
-              Confidence: <span className="text-primary-400 font-medium">{(confidence * 100).toFixed(1)}%</span>
+              {t("export.confidence")}{" "}
+              <span className="text-primary-400 font-medium">
+                {(confidence * 100).toFixed(1)}%
+              </span>
             </span>
           )}
           {imagesCount > 0 && (
             <span>
-              <span className="text-primary-400 font-medium">{imagesCount}</span> images
+              <span className="text-primary-400 font-medium">
+                {imagesCount}
+              </span>{" "}
+              {t("export.images")}
             </span>
           )}
           {tablesCount > 0 && (
             <span>
-              <span className="text-primary-400 font-medium">{tablesCount}</span> tables
+              <span className="text-primary-400 font-medium">
+                {tablesCount}
+              </span>{" "}
+              {t("export.tables")}
             </span>
           )}
           {chunksCount > 0 && (
             <span>
-              <span className="text-primary-400 font-medium">{chunksCount}</span> chunks
+              <span className="text-primary-400 font-medium">
+                {chunksCount}
+              </span>{" "}
+              {t("export.chunks")}
             </span>
           )}
         </div>
@@ -277,17 +331,20 @@ export default function ExportOptions({
             onClick={() => setActiveTab(tab.id)}
             className={`
               px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors
-              ${activeTab === tab.id
-                ? 'bg-primary-500 text-dark-950'
-                : 'bg-dark-800 text-dark-300 hover:bg-dark-700'
+              ${
+                activeTab === tab.id
+                  ? "bg-primary-500 text-dark-950"
+                  : "bg-dark-800 text-dark-300 hover:bg-dark-700"
               }
             `}
           >
             {tab.label}
             {tab.count !== undefined && tab.count > 0 && (
-              <span className={`ml-2 px-1.5 py-0.5 rounded text-xs ${
-                activeTab === tab.id ? 'bg-dark-950/30' : 'bg-dark-700'
-              }`}>
+              <span
+                className={`ml-2 px-1.5 py-0.5 rounded text-xs ${
+                  activeTab === tab.id ? "bg-dark-950/30" : "bg-dark-700"
+                }`}
+              >
                 {tab.count}
               </span>
             )}
@@ -298,9 +355,11 @@ export default function ExportOptions({
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Left panel - content based on tab */}
         <div className="glass rounded-2xl p-6">
-          {activeTab === 'formats' && (
+          {activeTab === "formats" && (
             <>
-              <h3 className="text-lg font-semibold text-dark-100 mb-4">Export Format</h3>
+              <h3 className="text-lg font-semibold text-dark-100 mb-4">
+                {t("export.exportFormatTitle")}
+              </h3>
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {formatsAvailable.map((format) => {
                   const info = FORMAT_INFO[format];
@@ -314,8 +373,8 @@ export default function ExportOptions({
                         w-full p-4 rounded-xl text-left transition-all duration-200
                         ${
                           selectedFormat === format
-                            ? 'bg-primary-500/20 border-2 border-primary-500/50'
-                            : 'bg-dark-800/50 border-2 border-transparent hover:bg-dark-700/50'
+                            ? "bg-primary-500/20 border-2 border-primary-500/50"
+                            : "bg-dark-800/50 border-2 border-transparent hover:bg-dark-700/50"
                         }
                       `}
                       whileHover={{ scale: 1.01 }}
@@ -325,17 +384,29 @@ export default function ExportOptions({
                         <div
                           className={`
                             w-10 h-10 rounded-lg flex items-center justify-center font-mono font-bold text-sm
-                            ${selectedFormat === format ? 'bg-primary-500 text-dark-950' : 'bg-dark-700 text-dark-300'}
+                            ${
+                              selectedFormat === format
+                                ? "bg-primary-500 text-dark-950"
+                                : "bg-dark-700 text-dark-300"
+                            }
                           `}
                         >
                           {info.icon}
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium text-dark-100">{info.name}</p>
-                          <p className="text-sm text-dark-400">{info.description}</p>
+                          <p className="font-medium text-dark-100">
+                            {info.name}
+                          </p>
+                          <p className="text-sm text-dark-400">
+                            {info.description}
+                          </p>
                         </div>
                         {selectedFormat === format && (
-                          <svg className="w-5 h-5 text-primary-400" viewBox="0 0 20 20" fill="currentColor">
+                          <svg
+                            className="w-5 h-5 text-primary-400"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
                             <path
                               fillRule="evenodd"
                               d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -356,28 +427,35 @@ export default function ExportOptions({
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+                <svg
+                  className="w-5 h-5"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
                   <path
                     fillRule="evenodd"
                     d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
                     clipRule="evenodd"
                   />
                 </svg>
-                Download {FORMAT_INFO[selectedFormat]?.name || selectedFormat}
+                {t("export.download")}{" "}
+                {FORMAT_INFO[selectedFormat]?.name || selectedFormat}
               </motion.button>
             </>
           )}
 
-          {activeTab === 'images' && (
+          {activeTab === "images" && (
             <>
-              <h3 className="text-lg font-semibold text-dark-100 mb-4">Extracted Images</h3>
+              <h3 className="text-lg font-semibold text-dark-100 mb-4">
+                {t("export.extractedImagesTitle")}
+              </h3>
               {loadingContent ? (
                 <div className="flex items-center justify-center py-8">
                   <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : images.length === 0 ? (
                 <div className="text-center py-8 text-dark-400">
-                  No images extracted from this document
+                  {t("export.noImages")}
                 </div>
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[500px] overflow-y-auto">
@@ -398,8 +476,18 @@ export default function ExportOptions({
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
-                            <svg className="w-8 h-8 text-dark-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                            <svg
+                              className="w-8 h-8 text-dark-600"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+                              />
                             </svg>
                           </div>
                         )}
@@ -411,10 +499,20 @@ export default function ExportOptions({
                               setSelectedImage(image);
                             }}
                             className="p-2 bg-dark-800/80 hover:bg-dark-700 rounded-lg transition-colors"
-                            title="View full size"
+                            title={t("export.viewFullSize")}
                           >
-                            <svg className="w-5 h-5 text-dark-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
+                            <svg
+                              className="w-5 h-5 text-dark-200"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"
+                              />
                             </svg>
                           </button>
                           <button
@@ -423,19 +521,31 @@ export default function ExportOptions({
                               handleDownloadImage(image.id, image.filename);
                             }}
                             className="p-2 bg-dark-800/80 hover:bg-dark-700 rounded-lg transition-colors"
-                            title="Download"
+                            title={t("export.download")}
                           >
-                            <svg className="w-5 h-5 text-dark-200" viewBox="0 0 20 20" fill="currentColor">
-                              <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                            <svg
+                              className="w-5 h-5 text-dark-200"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
                             </svg>
                           </button>
                         </div>
                       </div>
                       {/* Image info */}
                       <div className="p-2">
-                        <p className="text-xs text-dark-300 truncate font-medium">{image.filename}</p>
+                        <p className="text-xs text-dark-300 truncate font-medium">
+                          {image.filename}
+                        </p>
                         {image.caption && (
-                          <p className="text-xs text-dark-500 truncate">{image.caption}</p>
+                          <p className="text-xs text-dark-500 truncate">
+                            {image.caption}
+                          </p>
                         )}
                       </div>
                     </motion.div>
@@ -445,16 +555,18 @@ export default function ExportOptions({
             </>
           )}
 
-          {activeTab === 'tables' && (
+          {activeTab === "tables" && (
             <>
-              <h3 className="text-lg font-semibold text-dark-100 mb-4">Extracted Tables</h3>
+              <h3 className="text-lg font-semibold text-dark-100 mb-4">
+                {t("export.extractedTablesTitle")}
+              </h3>
               {loadingContent ? (
                 <div className="flex items-center justify-center py-8">
                   <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : tables.length === 0 ? (
                 <div className="text-center py-8 text-dark-400">
-                  No tables extracted from this document
+                  {t("export.noTables")}
                 </div>
               ) : (
                 <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -465,23 +577,47 @@ export default function ExportOptions({
                     >
                       <div className="flex items-center gap-4 mb-3">
                         <div className="w-10 h-10 bg-dark-700 rounded-lg flex items-center justify-center">
-                          <svg className="w-5 h-5 text-dark-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125" />
+                          <svg
+                            className="w-5 h-5 text-dark-400"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0112 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125"
+                            />
                           </svg>
                         </div>
                         <div className="flex-1">
-                          <p className="font-medium text-dark-200">Table {table.id}</p>
+                          <p className="font-medium text-dark-200">
+                            Table {table.id}
+                          </p>
                           {table.caption && (
-                            <p className="text-sm text-dark-400 truncate">{table.caption}</p>
+                            <p className="text-sm text-dark-400 truncate">
+                              {table.caption}
+                            </p>
                           )}
-                          <p className="text-xs text-dark-500">{table.rows.length} rows</p>
+                          <p className="text-xs text-dark-500">
+                            {t("export.rows", { count: table.rows.length })}
+                          </p>
                         </div>
                         <button
                           onClick={() => handleDownloadTableCsv(table.id)}
                           className="px-3 py-1.5 bg-dark-700 hover:bg-dark-600 rounded-lg transition-colors text-sm text-dark-300 flex items-center gap-1"
                         >
-                          <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                            <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                          <svg
+                            className="w-4 h-4"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                              clipRule="evenodd"
+                            />
                           </svg>
                           CSV
                         </button>
@@ -492,20 +628,31 @@ export default function ExportOptions({
                           <table className="w-full text-xs">
                             <tbody>
                               {table.rows.slice(0, 3).map((row, i) => (
-                                <tr key={i} className={i === 0 ? 'bg-dark-700/50' : ''}>
+                                <tr
+                                  key={i}
+                                  className={i === 0 ? "bg-dark-700/50" : ""}
+                                >
                                   {row.slice(0, 4).map((cell, j) => (
-                                    <td key={j} className="px-2 py-1 border border-dark-600 text-dark-300 truncate max-w-[100px]">
+                                    <td
+                                      key={j}
+                                      className="px-2 py-1 border border-dark-600 text-dark-300 truncate max-w-[100px]"
+                                    >
                                       {cell}
                                     </td>
                                   ))}
                                   {row.length > 4 && (
-                                    <td className="px-2 py-1 border border-dark-600 text-dark-500">...</td>
+                                    <td className="px-2 py-1 border border-dark-600 text-dark-500">
+                                      ...
+                                    </td>
                                   )}
                                 </tr>
                               ))}
                               {table.rows.length > 3 && (
                                 <tr>
-                                  <td colSpan={5} className="px-2 py-1 text-center text-dark-500">
+                                  <td
+                                    colSpan={5}
+                                    className="px-2 py-1 text-center text-dark-500"
+                                  >
                                     ... {table.rows.length - 3} more rows
                                   </td>
                                 </tr>
@@ -521,17 +668,21 @@ export default function ExportOptions({
             </>
           )}
 
-          {activeTab === 'chunks' && (
+          {activeTab === "chunks" && (
             <>
-              <h3 className="text-lg font-semibold text-dark-100 mb-4">RAG Chunks</h3>
+              <h3 className="text-lg font-semibold text-dark-100 mb-4">
+                {t("export.ragChunksTitle")}
+              </h3>
               {loadingContent ? (
                 <div className="flex items-center justify-center py-8">
                   <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : chunks.length === 0 ? (
                 <div className="text-center py-8 text-dark-400">
-                  <p>No chunks generated</p>
-                  <p className="text-sm mt-2">Enable chunking in Settings to generate RAG chunks</p>
+                  <p>{t("export.noChunks")}</p>
+                  <p className="text-sm mt-2">
+                    {t("export.enableChunkingHint")}
+                  </p>
                 </div>
               ) : (
                 <div className="space-y-3 max-h-96 overflow-y-auto">
@@ -550,22 +701,32 @@ export default function ExportOptions({
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-dark-300 line-clamp-3">{chunk.text}</p>
+                      <p className="text-sm text-dark-300 line-clamp-3">
+                        {chunk.text}
+                      </p>
                     </div>
                   ))}
                 </div>
               )}
               {chunks.length > 0 && (
                 <motion.button
-                  onClick={() => onDownload('chunks')}
+                  onClick={() => onDownload("chunks")}
                   className="w-full mt-4 py-2 px-4 bg-dark-700 hover:bg-dark-600 text-dark-200 font-medium rounded-xl transition-colors flex items-center justify-center gap-2"
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                 >
-                  <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                  <svg
+                    className="w-4 h-4"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
                   </svg>
-                  Download All Chunks (JSON)
+                  {t("export.downloadAllChunks")}
                 </motion.button>
               )}
             </>
@@ -576,7 +737,7 @@ export default function ExportOptions({
             onClick={onNewConversion}
             className="w-full mt-4 py-3 px-6 bg-dark-800 hover:bg-dark-700 text-dark-200 font-medium rounded-xl transition-colors duration-200"
           >
-            Convert Another Document
+            {t("export.convertAnother")}
           </button>
         </div>
 
@@ -584,7 +745,9 @@ export default function ExportOptions({
         <div className="glass rounded-2xl p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <h3 className="text-lg font-semibold text-dark-100">Preview</h3>
+              <h3 className="text-lg font-semibold text-dark-100">
+                {t("export.previewTitle")}
+              </h3>
               <span className="text-xs text-dark-500 bg-dark-800 px-2 py-1 rounded">
                 {FORMAT_INFO[selectedFormat]?.name || selectedFormat}
               </span>
@@ -594,24 +757,24 @@ export default function ExportOptions({
               {supportsRenderedView && (
                 <div className="flex items-center bg-dark-800 rounded-lg p-0.5">
                   <button
-                    onClick={() => setPreviewMode('rendered')}
+                    onClick={() => setPreviewMode("rendered")}
                     className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
-                      previewMode === 'rendered'
-                        ? 'bg-primary-500 text-dark-950'
-                        : 'text-dark-400 hover:text-dark-200'
+                      previewMode === "rendered"
+                        ? "bg-primary-500 text-dark-950"
+                        : "text-dark-400 hover:text-dark-200"
                     }`}
                   >
-                    Rendered
+                    {t("export.rendered")}
                   </button>
                   <button
-                    onClick={() => setPreviewMode('raw')}
+                    onClick={() => setPreviewMode("raw")}
                     className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
-                      previewMode === 'raw'
-                        ? 'bg-primary-500 text-dark-950'
-                        : 'text-dark-400 hover:text-dark-200'
+                      previewMode === "raw"
+                        ? "bg-primary-500 text-dark-950"
+                        : "text-dark-400 hover:text-dark-200"
                     }`}
                   >
-                    Raw
+                    {t("export.raw")}
                   </button>
                 </div>
               )}
@@ -619,7 +782,7 @@ export default function ExportOptions({
                 onClick={() => setShowPreview(!showPreview)}
                 className="text-sm text-dark-400 hover:text-dark-200 transition-colors"
               >
-                {showPreview ? 'Hide' : 'Show'}
+                {showPreview ? t("export.hide") : t("export.show")}
               </button>
             </div>
           </div>
@@ -628,7 +791,7 @@ export default function ExportOptions({
               <motion.div
                 key={`${selectedFormat}-${previewMode}`}
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
+                animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 className="overflow-hidden"
               >
@@ -639,7 +802,7 @@ export default function ExportOptions({
                 ) : currentPreviewContent ? (
                   <div className="bg-dark-950 rounded-xl p-4 max-h-[500px] overflow-y-auto">
                     {/* Rendered HTML view - use iframe to isolate styles */}
-                    {selectedFormat === 'html' && previewMode === 'rendered' ? (
+                    {selectedFormat === "html" && previewMode === "rendered" ? (
                       <iframe
                         srcDoc={currentPreviewContent}
                         className="w-full min-h-[400px] rounded-lg border border-dark-700 bg-white"
@@ -647,28 +810,35 @@ export default function ExportOptions({
                         title="HTML Preview"
                       />
                     ) : /* Rendered Markdown view */
-                    selectedFormat === 'markdown' && previewMode === 'rendered' ? (
+                    selectedFormat === "markdown" &&
+                      previewMode === "rendered" ? (
                       <div
                         className="prose prose-invert prose-sm max-w-none
                           prose-headings:text-dark-100 prose-p:text-dark-300
                           prose-a:text-primary-400 prose-strong:text-dark-200
                           prose-code:text-primary-300 prose-code:bg-dark-800 prose-code:px-1 prose-code:rounded
                           prose-pre:bg-dark-900 prose-pre:border prose-pre:border-dark-700"
-                        dangerouslySetInnerHTML={{ __html: renderMarkdown(currentPreviewContent) }}
+                        dangerouslySetInnerHTML={{
+                          __html: renderMarkdown(currentPreviewContent),
+                        }}
                       />
                     ) : /* JSON formatted view */
-                    selectedFormat === 'json' ? (
+                    selectedFormat === "json" ? (
                       <pre className="text-sm text-dark-300 font-mono whitespace-pre-wrap break-words">
                         {(() => {
                           try {
-                            return JSON.stringify(JSON.parse(currentPreviewContent), null, 2);
+                            return JSON.stringify(
+                              JSON.parse(currentPreviewContent),
+                              null,
+                              2
+                            );
                           } catch {
                             return currentPreviewContent;
                           }
                         })()}
                       </pre>
-                    ) : /* Raw view for all other formats */
-                    (
+                    ) : (
+                      /* Raw view for all other formats */
                       <pre className="text-sm text-dark-300 font-mono whitespace-pre-wrap break-words">
                         {currentPreviewContent}
                       </pre>
@@ -676,7 +846,7 @@ export default function ExportOptions({
                   </div>
                 ) : (
                   <div className="bg-dark-950 rounded-xl p-8 text-center">
-                    <p className="text-dark-500">No preview available for this format</p>
+                    <p className="text-dark-500">{t("export.noPreview")}</p>
                   </div>
                 )}
               </motion.div>
@@ -684,7 +854,7 @@ export default function ExportOptions({
           </AnimatePresence>
           {!showPreview && (
             <div className="bg-dark-950 rounded-xl p-4 text-center">
-              <p className="text-dark-500 text-sm">Click "Show" to view preview</p>
+              <p className="text-dark-500 text-sm">{t("export.clickShow")}</p>
             </div>
           )}
         </div>
@@ -712,8 +882,18 @@ export default function ExportOptions({
                 onClick={() => setSelectedImage(null)}
                 className="absolute -top-12 right-0 p-2 text-dark-400 hover:text-dark-200 transition-colors"
               >
-                <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                <svg
+                  className="w-6 h-6"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
 
@@ -728,17 +908,34 @@ export default function ExportOptions({
                 {/* Image info bar */}
                 <div className="p-4 bg-dark-800 flex items-center justify-between">
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-dark-200">{selectedImage.filename}</p>
+                    <p className="font-medium text-dark-200">
+                      {selectedImage.filename}
+                    </p>
                     {selectedImage.caption && (
-                      <p className="text-sm text-dark-400 truncate">{selectedImage.caption}</p>
+                      <p className="text-sm text-dark-400 truncate">
+                        {selectedImage.caption}
+                      </p>
                     )}
                   </div>
                   <button
-                    onClick={() => handleDownloadImage(selectedImage.id, selectedImage.filename)}
+                    onClick={() =>
+                      handleDownloadImage(
+                        selectedImage.id,
+                        selectedImage.filename
+                      )
+                    }
                     className="ml-4 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-dark-950 font-medium rounded-lg transition-colors flex items-center gap-2"
                   >
-                    <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                    <svg
+                      className="w-4 h-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                     Download
                   </button>
@@ -751,27 +948,53 @@ export default function ExportOptions({
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      const currentIndex = images.findIndex(img => img.id === selectedImage.id);
-                      const prevIndex = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
+                      const currentIndex = images.findIndex(
+                        (img) => img.id === selectedImage.id
+                      );
+                      const prevIndex =
+                        currentIndex > 0 ? currentIndex - 1 : images.length - 1;
                       setSelectedImage(images[prevIndex]);
                     }}
                     className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 p-2 bg-dark-800/80 hover:bg-dark-700 rounded-full transition-colors"
                   >
-                    <svg className="w-6 h-6 text-dark-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    <svg
+                      className="w-6 h-6 text-dark-200"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 19l-7-7 7-7"
+                      />
                     </svg>
                   </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      const currentIndex = images.findIndex(img => img.id === selectedImage.id);
-                      const nextIndex = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
+                      const currentIndex = images.findIndex(
+                        (img) => img.id === selectedImage.id
+                      );
+                      const nextIndex =
+                        currentIndex < images.length - 1 ? currentIndex + 1 : 0;
                       setSelectedImage(images[nextIndex]);
                     }}
                     className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 p-2 bg-dark-800/80 hover:bg-dark-700 rounded-full transition-colors"
                   >
-                    <svg className="w-6 h-6 text-dark-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    <svg
+                      className="w-6 h-6 text-dark-200"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 5l7 7-7 7"
+                      />
                     </svg>
                   </button>
                 </>
@@ -783,4 +1006,3 @@ export default function ExportOptions({
     </motion.div>
   );
 }
-

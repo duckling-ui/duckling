@@ -1,0 +1,5 @@
+# Componentes
+
+Traducción en progreso.
+
+

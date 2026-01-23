@@ -1,0 +1,5 @@
+# Escalado
+
+Traducción en progreso.
+
+

@@ -1,0 +1,5 @@
+# Funciones
+
+Traducción en progreso.
+
+

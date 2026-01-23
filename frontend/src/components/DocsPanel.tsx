@@ -1,5 +1,6 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import "./DocsPanel.css";
 
 interface DocFile {
@@ -7,7 +8,6 @@ interface DocFile {
   name: string;
   path: string;
 }
-
 
 interface DocsPanelProps {
   isOpen: boolean;
@@ -17,7 +17,9 @@ interface DocsPanelProps {
 // Chevron icon component
 const ChevronIcon = ({ isExpanded }: { isExpanded: boolean }) => (
   <svg
-    className={`w-4 h-4 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
+    className={`w-4 h-4 transition-transform duration-200 ${
+      isExpanded ? "rotate-90" : ""
+    }`}
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -28,6 +30,7 @@ const ChevronIcon = ({ isExpanded }: { isExpanded: boolean }) => (
 );
 
 export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
+  const { t, i18n } = useTranslation();
   const [docs, setDocs] = useState<DocFile[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<string | null>(null);
   const [selectedPath, setSelectedPath] = useState<string>("");
@@ -36,7 +39,17 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
   const [siteBuilt, setSiteBuilt] = useState(true);
   const [building, setBuilding] = useState(false);
   const [buildError, setBuildError] = useState<string | null>(null);
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["Home"]));
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(
+    new Set(["Home"])
+  );
+
+  const docsLocale = i18n.language?.toLowerCase().startsWith("es")
+    ? "es"
+    : i18n.language?.toLowerCase().startsWith("fr")
+    ? "fr"
+    : i18n.language?.toLowerCase().startsWith("de")
+    ? "de"
+    : "en";
 
   // Group docs by category
   const groupedDocs = useMemo(() => {
@@ -81,10 +94,10 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
     }));
   }, [docs, expandedSections]);
 
-  const fetchDocs = () => {
+  const fetchDocs = useCallback(() => {
     setLoading(true);
     setError(null);
-    fetch("/api/docs")
+    fetch(`/api/docs?lang=${docsLocale}`)
       .then((res) => res.json())
       .then((data) => {
         setDocs(data.docs || []);
@@ -102,13 +115,13 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
         setError("Failed to load documentation");
         setLoading(false);
       });
-  };
+  }, [docsLocale]);
 
   useEffect(() => {
     if (isOpen) {
       fetchDocs();
     }
-  }, [isOpen]);
+  }, [isOpen, fetchDocs]);
 
   const handleDocSelect = (doc: DocFile) => {
     setSelectedDoc(doc.id);
@@ -140,7 +153,9 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
         setBuildError(data.message || "Failed to build documentation");
       }
     } catch {
-      setBuildError("Failed to build documentation. Check if MkDocs is installed.");
+      setBuildError(
+        "Failed to build documentation. Check if MkDocs is installed."
+      );
     } finally {
       setBuilding(false);
     }
@@ -149,9 +164,9 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
   // Build the iframe URL for the selected doc
   const getDocUrl = () => {
     if (!selectedPath && selectedDoc === "index") {
-      return "/api/docs/site/";
+      return `/api/docs/site/${docsLocale}/`;
     }
-    return `/api/docs/site/${selectedPath}/`;
+    return `/api/docs/site/${docsLocale}/${selectedPath}/`;
   };
 
   // Expand all sections
@@ -203,18 +218,20 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                 </div>
                 <div>
                   <h2 className="text-lg font-bold text-dark-100">
-                    Documentation
+                    {t("docsPanel.title")}
                   </h2>
-                  <p className="text-sm text-dark-400">Duckling Reference</p>
+                  <p className="text-sm text-dark-400">
+                    {t("docsPanel.subtitle")}
+                  </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <a
-                  href="/api/docs/site/"
+                  href={`/api/docs/site/${docsLocale}/`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-2 hover:bg-dark-800 rounded-lg transition-colors text-dark-400 hover:text-dark-100"
-                  title="Open in new tab"
+                  title={t("docsPanel.openNewTab")}
                 >
                   <svg
                     className="w-5 h-5"
@@ -258,7 +275,7 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                 {/* Sidebar header with expand/collapse */}
                 <div className="p-3 border-b border-dark-700 flex items-center justify-between">
                   <h3 className="text-xs font-semibold text-dark-500 uppercase tracking-wider">
-                    Navigation
+                    {t("docsPanel.navigation")}
                   </h3>
                   <div className="flex items-center gap-1">
                     <button
@@ -266,8 +283,18 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                       className="p-1 hover:bg-dark-800 rounded text-dark-500 hover:text-dark-300 transition-colors"
                       title="Expand all"
                     >
-                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                      <svg
+                        className="w-3.5 h-3.5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
+                        />
                       </svg>
                     </button>
                     <button
@@ -275,8 +302,18 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                       className="p-1 hover:bg-dark-800 rounded text-dark-500 hover:text-dark-300 transition-colors"
                       title="Collapse all"
                     >
-                      <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25" />
+                      <svg
+                        className="w-3.5 h-3.5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 9V4.5M9 9H4.5M9 9L3.75 3.75M9 15v4.5M9 15H4.5M9 15l-5.25 5.25M15 9h4.5M15 9V4.5M15 9l5.25-5.25M15 15h4.5M15 15v4.5m0-4.5l5.25 5.25"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -331,12 +368,12 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
 
                   {docs.length === 0 && !error && loading && (
                     <p className="text-sm text-dark-500 text-center py-4">
-                      Loading...
+                      {t("docsPanel.loading")}
                     </p>
                   )}
                   {docs.length === 0 && !loading && !siteBuilt && (
                     <p className="text-sm text-dark-500 text-center py-4">
-                      Documentation not built yet.
+                      {t("docsPanel.notBuiltYet")}
                     </p>
                   )}
                 </nav>
@@ -355,7 +392,9 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                     <div className="text-center py-12">
                       <p className="text-dark-400">{error}</p>
                       <p className="text-sm text-dark-500 mt-2">
-                        Make sure to run <code className="text-primary-400">mkdocs build</code> first.
+                        Make sure to run{" "}
+                        <code className="text-primary-400">mkdocs build</code>{" "}
+                        first.
                       </p>
                     </div>
                   </div>
@@ -380,10 +419,10 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                         </svg>
                       </div>
                       <h3 className="text-lg font-semibold text-dark-200 mb-2">
-                        Documentation Not Built
+                        {t("docsPanel.notBuiltTitle")}
                       </h3>
                       <p className="text-dark-400 mb-4">
-                        The documentation site needs to be built before it can be viewed.
+                        {t("docsPanel.notBuiltBody")}
                       </p>
                       <button
                         onClick={handleBuildDocs}
@@ -393,7 +432,7 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                         {building ? (
                           <>
                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                            Building...
+                            {t("docsPanel.building")}
                           </>
                         ) : (
                           <>
@@ -410,15 +449,20 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                                 d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"
                               />
                             </svg>
-                            Build Documentation
+                            {t("docsPanel.build")}
                           </>
                         )}
                       </button>
                       {buildError && (
-                        <p className="text-red-400 text-sm mt-3">{buildError}</p>
+                        <p className="text-red-400 text-sm mt-3">
+                          {buildError}
+                        </p>
                       )}
                       <p className="text-sm text-dark-500 mt-4">
-                        Or run manually: <code className="text-primary-400 bg-dark-800 px-1.5 py-0.5 rounded">mkdocs build</code>
+                        Or run manually:{" "}
+                        <code className="text-primary-400 bg-dark-800 px-1.5 py-0.5 rounded">
+                          mkdocs build
+                        </code>
                       </p>
                     </div>
                   </div>
@@ -437,14 +481,14 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
             {/* Footer */}
             <div className="border-t border-dark-700 p-4 flex items-center justify-between">
               <p className="text-sm text-dark-500">
-                Full documentation at{" "}
+                {t("docsPanel.fullAt")}{" "}
                 <a
-                  href="/api/docs/site/"
+                  href={`/api/docs/site/${docsLocale}/`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary-400 hover:text-primary-300"
                 >
-                  /api/docs/site/
+                  /api/docs/site/{docsLocale}/
                 </a>
               </p>
               {siteBuilt && (
@@ -452,7 +496,7 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                   onClick={handleBuildDocs}
                   disabled={building}
                   className="text-sm text-dark-400 hover:text-dark-200 flex items-center gap-1 disabled:opacity-50"
-                  title="Rebuild documentation"
+                  title={t("docsPanel.rebuild")}
                 >
                   {building ? (
                     <div className="w-3 h-3 border border-dark-400 border-t-transparent rounded-full animate-spin" />
@@ -471,7 +515,7 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                       />
                     </svg>
                   )}
-                  Rebuild
+                  {t("docsPanel.rebuild")}
                 </button>
               )}
             </div>

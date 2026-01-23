@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 interface ConversionProgressProps {
   progress: number;
@@ -6,7 +7,13 @@ interface ConversionProgressProps {
   filename?: string;
 }
 
-export default function ConversionProgress({ progress, message, filename }: ConversionProgressProps) {
+export default function ConversionProgress({
+  progress,
+  message,
+  filename,
+}: ConversionProgressProps) {
+  const { t } = useTranslation();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -44,9 +51,13 @@ export default function ConversionProgress({ progress, message, filename }: Conv
             />
           </div>
           <div className="flex-1">
-            <h3 className="text-lg font-semibold text-dark-100">Converting Document</h3>
+            <h3 className="text-lg font-semibold text-dark-100">
+              {t("progress.title")}
+            </h3>
             {filename && (
-              <p className="text-sm text-dark-400 truncate max-w-xs">{filename}</p>
+              <p className="text-sm text-dark-400 truncate max-w-xs">
+                {filename}
+              </p>
             )}
           </div>
         </div>
@@ -55,14 +66,16 @@ export default function ConversionProgress({ progress, message, filename }: Conv
         <div className="mb-4">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-dark-300">{message}</span>
-            <span className="text-sm font-mono text-primary-400">{progress}%</span>
+            <span className="text-sm font-mono text-primary-400">
+              {progress}%
+            </span>
           </div>
           <div className="h-2 bg-dark-800 rounded-full overflow-hidden">
             <motion.div
               className="h-full progress-bar rounded-full"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             />
           </div>
         </div>
@@ -70,27 +83,27 @@ export default function ConversionProgress({ progress, message, filename }: Conv
         {/* Status steps */}
         <div className="space-y-2">
           <StatusStep
-            label="Upload complete"
+            label={t("progress.uploadComplete")}
             isComplete={progress >= 10}
             isActive={progress < 10}
           />
           <StatusStep
-            label="Analyzing document structure"
+            label={t("progress.analyzing")}
             isComplete={progress >= 30}
             isActive={progress >= 10 && progress < 30}
           />
           <StatusStep
-            label="Extracting content"
+            label={t("progress.extracting")}
             isComplete={progress >= 70}
             isActive={progress >= 30 && progress < 70}
           />
           <StatusStep
-            label="Generating output formats"
+            label={t("progress.generating")}
             isComplete={progress >= 90}
             isActive={progress >= 70 && progress < 90}
           />
           <StatusStep
-            label="Finalizing"
+            label={t("progress.finalizing")}
             isComplete={progress >= 100}
             isActive={progress >= 90 && progress < 100}
           />
@@ -112,11 +125,21 @@ function StatusStep({ label, isComplete, isActive }: StatusStepProps) {
       <div
         className={`
           w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300
-          ${isComplete ? 'bg-primary-500' : isActive ? 'bg-primary-500/30 ring-2 ring-primary-500/50' : 'bg-dark-700'}
+          ${
+            isComplete
+              ? "bg-primary-500"
+              : isActive
+              ? "bg-primary-500/30 ring-2 ring-primary-500/50"
+              : "bg-dark-700"
+          }
         `}
       >
         {isComplete ? (
-          <svg className="w-3 h-3 text-dark-950" viewBox="0 0 12 12" fill="none">
+          <svg
+            className="w-3 h-3 text-dark-950"
+            viewBox="0 0 12 12"
+            fill="none"
+          >
             <path
               d="M2 6l3 3 5-6"
               stroke="currentColor"
@@ -136,7 +159,13 @@ function StatusStep({ label, isComplete, isActive }: StatusStepProps) {
       <span
         className={`
           text-sm transition-colors duration-300
-          ${isComplete ? 'text-dark-200' : isActive ? 'text-primary-400' : 'text-dark-500'}
+          ${
+            isComplete
+              ? "text-dark-200"
+              : isActive
+              ? "text-primary-400"
+              : "text-dark-500"
+          }
         `}
       >
         {label}
@@ -144,4 +173,3 @@ function StatusStep({ label, isComplete, isActive }: StatusStepProps) {
     </div>
   );
 }
-

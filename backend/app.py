@@ -3,8 +3,11 @@
 import os
 import subprocess
 import logging
+import shutil
+import re
+import html as html_lib
 from pathlib import Path
-from flask import Flask, jsonify, send_from_directory, abort
+from flask import Flask, jsonify, send_from_directory, abort, request
 from flask_cors import CORS
 
 from config import get_config
@@ -44,8 +47,15 @@ def build_docs():
 
     try:
         logger.info("Building documentation with MkDocs...")
+        mkdocs_exe = shutil.which("mkdocs")
+        if not mkdocs_exe:
+            # Prefer the repo-local docs venv if present (created/used by docs tooling)
+            candidate = PROJECT_ROOT / "venv" / "bin" / "mkdocs"
+            if candidate.exists():
+                mkdocs_exe = str(candidate)
+
         result = subprocess.run(
-            ["mkdocs", "build", "--strict"],
+            [mkdocs_exe or "mkdocs", "build", "--strict"],
             cwd=PROJECT_ROOT,
             capture_output=True,
             text=True,
@@ -58,7 +68,9 @@ def build_docs():
             logger.error(f"MkDocs build failed: {result.stderr}")
             return False
     except FileNotFoundError:
-        logger.warning("MkDocs not installed. Install with: pip install mkdocs mkdocs-material")
+        logger.warning(
+            "MkDocs tooling not installed. Install with: pip install -r requirements-docs.txt"
+        )
         return False
     except subprocess.TimeoutExpired:
         logger.error("MkDocs build timed out")
@@ -139,6 +151,70 @@ def create_app(config_class=None):
         """List available documentation pages from the MkDocs site."""
         docs = []
         site_exists = SITE_DIR.exists() and (SITE_DIR / "index.html").exists()
+        supported_languages = ("en", "es", "fr", "de")
+        requested_lang = (request.args.get("lang") or "en").lower()
+        if requested_lang not in supported_languages:
+            requested_lang = "en"
+
+        section_label_by_lang = {
+            "en": {
+                "api": "API",
+                "architecture": "Architecture",
+                "contributing": "Contributing",
+                "deployment": "Deployment",
+                "getting-started": "Getting Started",
+                "user-guide": "User Guide",
+            },
+            "es": {
+                "api": "API",
+                "architecture": "Arquitectura",
+                "contributing": "Contribuir",
+                "deployment": "Despliegue",
+                "getting-started": "Primeros pasos",
+                "user-guide": "Guía del usuario",
+            },
+            "fr": {
+                "api": "API",
+                "architecture": "Architecture",
+                "contributing": "Contribuer",
+                "deployment": "Déploiement",
+                "getting-started": "Bien démarrer",
+                "user-guide": "Guide d’utilisation",
+            },
+            "de": {
+                "api": "API",
+                "architecture": "Architektur",
+                "contributing": "Mitwirken",
+                "deployment": "Bereitstellung",
+                "getting-started": "Erste Schritte",
+                "user-guide": "Benutzerhandbuch",
+            },
+        }
+
+        section_slugs = set(section_label_by_lang["en"].keys())
+
+        def _derive_slug_title(slug: str) -> str:
+            return slug.replace("-", " ").replace("_", " ").title()
+
+        def _translate_section(slug: str) -> str:
+            return section_label_by_lang.get(requested_lang, {}).get(slug, _derive_slug_title(slug))
+
+        _h1_re = re.compile(r"<h1[^>]*>(.*?)</h1>", re.IGNORECASE | re.DOTALL)
+
+        def _extract_page_title(html_path: Path) -> str | None:
+            try:
+                # Read a bounded amount; MkDocs pages can be large but the H1 is near the top.
+                raw = html_path.read_text(encoding="utf-8", errors="ignore")
+            except Exception:
+                return None
+            m = _h1_re.search(raw)
+            if not m:
+                return None
+            title_html = m.group(1)
+            # Strip tags inside the H1 and unescape entities.
+            title = re.sub(r"<[^>]+>", "", title_html)
+            title = html_lib.unescape(title).strip()
+            return title or None
 
         # Auto-build docs if site doesn't exist
         if not site_exists:
@@ -147,9 +223,15 @@ def create_app(config_class=None):
                 site_exists = True
 
         if site_exists:
+            # Determine which directory to scan for docs pages
+            # mkdocs-static-i18n builds default locale at SITE_DIR and non-default at SITE_DIR/<locale>
+            base_dir = SITE_DIR if requested_lang == "en" else (SITE_DIR / requested_lang)
+            if not base_dir.exists():
+                base_dir = SITE_DIR
+
             # Find all index.html files in subdirectories (each represents a page)
-            for html_file in SITE_DIR.rglob("index.html"):
-                rel_path = html_file.parent.relative_to(SITE_DIR)
+            for html_file in base_dir.rglob("index.html"):
+                rel_path = html_file.parent.relative_to(base_dir)
 
                 # Skip root index and assets
                 if str(rel_path) == ".":
@@ -160,20 +242,38 @@ def create_app(config_class=None):
                     })
                     continue
 
-                if "assets" in str(rel_path) or "search" in str(rel_path):
+                # Skip MkDocs build artifacts and non-page directories
+                rel_str = str(rel_path)
+                if "assets" in rel_str or "search" in rel_str or "includes" in rel_str:
+                    continue
+
+                # IMPORTANT: When scanning the default locale (site/), mkdocs-static-i18n
+                # outputs other locales under site/<locale>/ (e.g., site/es/). Those are
+                # *not* documentation pages for the default locale and must be excluded,
+                # otherwise the UI navigation gets polluted with "De/Es/Fr" sections.
+                parts = rel_path.parts
+                if requested_lang == "en" and parts and parts[0] in supported_languages and parts[0] != "en":
                     continue
 
                 # Create doc entry
-                parts = rel_path.parts
                 doc_id = "_".join(parts)
 
-                # Create readable name
-                if len(parts) > 1:
-                    category = parts[0].replace("-", " ").replace("_", " ").title()
-                    name = parts[-1].replace("-", " ").replace("_", " ").title()
-                    display_name = f"{category}: {name}"
+                # Create readable, localized name:
+                # - Use translated section labels for known sections (deployment/getting-started/etc.)
+                # - Extract the page title from the HTML (localized if the page content is localized)
+                page_title = _extract_page_title(html_file)
+                if len(parts) == 1 and parts[0] in section_slugs:
+                    category_label = _translate_section(parts[0])
+                    item_label = page_title or category_label
+                    display_name = f"{category_label}: {item_label}"
+                elif len(parts) > 1:
+                    category_label = _translate_section(parts[0])
+                    # If no H1 found, fall back to the slug-based title.
+                    item_label = page_title or _derive_slug_title(parts[-1])
+                    display_name = f"{category_label}: {item_label}"
                 else:
-                    display_name = parts[0].replace("-", " ").replace("_", " ").title()
+                    # Top-level single pages like "changelog" stay under "Home" grouping in the UI.
+                    display_name = page_title or _translate_section(parts[0])
 
                 docs.append({
                     "id": doc_id,
@@ -183,8 +283,10 @@ def create_app(config_class=None):
 
         return jsonify({
             "docs": sorted(docs, key=lambda x: x["name"]),
-            "base_url": "/api/docs/site",
-            "site_built": site_exists
+            "base_url": f"/api/docs/site/{requested_lang}",
+            "site_built": site_exists,
+            "language": requested_lang,
+            "available_languages": ["en", "es", "fr", "de"]
         })
 
     @app.route("/api/docs/build", methods=["POST"])
@@ -216,26 +318,45 @@ def create_app(config_class=None):
         if not site_exists:
             abort(404, "Documentation site not built. Run 'mkdocs build' or POST to /api/docs/build")
 
+        # Interpret optional locale prefix in the path.
+        # We support /api/docs/site/en|es|fr|de/... regardless of on-disk layout.
+        requested_lang = None
+        trimmed = path.lstrip("/")
+        if trimmed == "en" or trimmed.startswith("en/"):
+            requested_lang = "en"
+            trimmed = trimmed[2:].lstrip("/")  # strip leading 'en'
+        elif trimmed == "es" or trimmed.startswith("es/"):
+            requested_lang = "es"
+            trimmed = trimmed[2:].lstrip("/")  # strip leading 'es'
+        elif trimmed == "fr" or trimmed.startswith("fr/"):
+            requested_lang = "fr"
+            trimmed = trimmed[2:].lstrip("/")  # strip leading 'fr'
+        elif trimmed == "de" or trimmed.startswith("de/"):
+            requested_lang = "de"
+            trimmed = trimmed[2:].lstrip("/")  # strip leading 'de'
+
+        base_dir = SITE_DIR if requested_lang in (None, "en") else (SITE_DIR / requested_lang)
+
         # Default to index.html
-        if not path or path.endswith("/"):
-            path = path + "index.html" if path else "index.html"
+        if not trimmed or trimmed.endswith("/"):
+            trimmed = trimmed + "index.html" if trimmed else "index.html"
 
         # Security: ensure path is within SITE_DIR
-        full_path = SITE_DIR / path
+        full_path = base_dir / trimmed
         try:
-            full_path.resolve().relative_to(SITE_DIR.resolve())
+            full_path.resolve().relative_to(base_dir.resolve())
         except ValueError:
             abort(403)
 
         if not full_path.exists():
             # Try adding index.html for directory paths
-            if (SITE_DIR / path / "index.html").exists():
-                path = path + "/index.html"
+            if (base_dir / trimmed / "index.html").exists():
+                trimmed = trimmed + "/index.html"
             else:
                 abort(404)
 
         # Determine mimetype
-        ext = Path(path).suffix.lower()
+        ext = Path(trimmed).suffix.lower()
         mimetypes = {
             '.html': 'text/html',
             '.css': 'text/css',
@@ -254,7 +375,7 @@ def create_app(config_class=None):
         }
         mimetype = mimetypes.get(ext, 'application/octet-stream')
 
-        return send_from_directory(SITE_DIR, path, mimetype=mimetype)
+        return send_from_directory(base_dir, trimmed, mimetype=mimetype)
 
     # Error handlers
     @app.errorhandler(400)

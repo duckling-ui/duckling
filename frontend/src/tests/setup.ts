@@ -1,6 +1,15 @@
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
+// Initialize i18n for components that use useTranslation()
+import '../i18n';
+
+// JSDOM doesn't implement scrollTo, but framer-motion may call it.
+Object.defineProperty(window, 'scrollTo', {
+  writable: true,
+  value: vi.fn(),
+});
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

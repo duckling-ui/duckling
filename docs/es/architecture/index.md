@@ -1,0 +1,5 @@
+# Arquitectura
+
+Traducción en progreso.
+
+

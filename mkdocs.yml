@@ -77,6 +77,24 @@ plugins:
       separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
   - minify:
       minify_html: true
+  - i18n:
+      docs_structure: folder
+      fallback_to_default: true
+      reconfigure_material: false
+      languages:
+        - locale: en
+          default: true
+          name: English
+          link: /en/
+        - locale: es
+          name: Español
+          link: /es/
+        - locale: fr
+          name: Français
+          link: /fr/
+        - locale: de
+          name: Deutsch
+          link: /de/
 
 # Extensions
 markdown_extensions:
@@ -181,6 +199,19 @@ extra:
   analytics:
     provider: google
     property: G-XXXXXXXXXX
+  alternate:
+    - name: English
+      link: /en/
+      lang: en
+    - name: Español
+      link: /es/
+      lang: es
+    - name: Français
+      link: /fr/
+      lang: fr
+    - name: Deutsch
+      link: /de/
+      lang: de
 
 extra_css:
   - stylesheets/extra.css

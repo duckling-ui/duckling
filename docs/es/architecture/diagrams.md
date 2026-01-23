@@ -1,0 +1,5 @@
+# Diagramas
+
+Traducción en progreso.
+
+

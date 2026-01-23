@@ -1,0 +1,240 @@
+{
+  "language": {
+    "label": "Sprache",
+    "en": "Englisch",
+    "es": "Spanisch",
+    "fr": "Französisch",
+    "de": "Deutsch"
+  },
+  "app": {
+    "name": "Duckling",
+    "tagline": "Dokumentkonvertierung",
+    "poweredBy": "Powered by"
+  },
+  "actions": {
+    "batch": "Stapel",
+    "documentation": "Dokumentation",
+    "history": "Verlauf",
+    "settings": "Einstellungen",
+    "close": "Schließen"
+  },
+  "home": {
+    "headline": "Beliebige Dokumente konvertieren",
+    "subheadline": "Wandle PDFs, Word-Dokumente, Präsentationen, Bilder und mehr in strukturierte Formate um – bereit für KI-Workflows."
+  },
+  "batch": {
+    "toggleTitle": "Stapelmodus für mehrere Datei-Uploads umschalten"
+  },
+  "conversion": {
+    "uploadingSingle": "Datei wird hochgeladen…",
+    "uploadingMultiple": "Dateien werden hochgeladen…",
+    "failedTitle": "Konvertierung fehlgeschlagen",
+    "failedCta": "Erneut versuchen",
+    "processingFilesTitle": "Dateien werden verarbeitet",
+    "overallProgress": "Gesamtfortschritt",
+    "filesCount": "{{completed}}/{{total}} Dateien"
+  },
+  "features": {
+    "ocr": "OCR",
+    "ocrDesc": "Text aus Bildern extrahieren",
+    "tables": "Tabellen",
+    "tablesDesc": "Als CSV exportieren",
+    "images": "Bilder",
+    "imagesDesc": "Abbildungen extrahieren",
+    "rag": "RAG",
+    "ragDesc": "Dokument-Segmente"
+  },
+  "docsPanel": {
+    "title": "Dokumentation",
+    "subtitle": "Duckling Referenz",
+    "navigation": "Navigation",
+    "loading": "Laden…",
+    "notBuiltTitle": "Dokumentation nicht erstellt",
+    "notBuiltBody": "Die Dokumentationsseite muss erstellt werden, bevor sie angezeigt werden kann.",
+    "build": "Dokumentation erstellen",
+    "building": "Wird erstellt…",
+    "rebuild": "Neu erstellen",
+    "openNewTab": "In neuem Tab öffnen",
+    "notBuiltYet": "Dokumentation ist noch nicht erstellt.",
+    "fullAt": "Vollständige Dokumentation unter"
+  },
+  "settingsPanel": {
+    "title": "Einstellungen"
+  },
+  "settings": {
+    "sections": {
+      "ocr": "OCR (Optische Zeichenerkennung)",
+      "tables": "Tabellenextraktion",
+      "images": "Bildverarbeitung",
+      "performance": "Leistung",
+      "chunking": "RAG / Chunking",
+      "enrichment": "Dokument-Anreicherung",
+      "output": "Ausgabepräferenzen"
+    },
+    "actions": {
+      "installing": "Wird installiert…",
+      "install": "{{name}} installieren",
+      "dismiss": "Schließen",
+      "download": "Download",
+      "resetDefaults": "Auf Standard zurücksetzen"
+    },
+    "ocr": {
+      "enable": {
+        "label": "OCR aktivieren",
+        "description": "Text aus gescannten Dokumenten und Bildern extrahieren"
+      },
+      "backend": {
+        "label": "OCR-Backend",
+        "description": "Engine für die Texterkennung"
+      },
+      "backendStatus": {
+        "availableSuffix": " ✓",
+        "needsSystemInstallSuffix": " ⚠ (Systeminstallation nötig)",
+        "notConfiguredSuffix": " (nicht konfiguriert)",
+        "notInstalledSuffix": " (nicht installiert)"
+      },
+      "status": {
+        "installedReady": "{{name}} ist installiert und bereit",
+        "requiresManual": "Manuelle Systeminstallation erforderlich",
+        "cannotInstallInUi": "{{name}} kann nicht über diese UI installiert werden. Bitte manuell installieren:",
+        "downloadFromGithub": "Von GitHub herunterladen",
+        "notInstalled": "{{name}} ist nicht installiert"
+      },
+      "language": {
+        "label": "OCR-Sprache",
+        "description": "Primäre Sprache für die Texterkennung"
+      },
+      "forceFullPage": {
+        "label": "OCR für ganze Seite erzwingen",
+        "description": "OCR auf die gesamte Seite anwenden statt nur auf erkannte Textbereiche"
+      },
+      "useGpu": {
+        "label": "GPU verwenden",
+        "description": "GPU-Beschleunigung aktivieren (nur EasyOCR)"
+      },
+      "confidence": {
+        "label": "Konfidenz-Schwelle",
+        "description": "Minimale Konfidenz für OCR-Ergebnisse"
+      }
+    },
+    "tables": {
+      "enable": {
+        "label": "Tabellenextraktion aktivieren",
+        "description": "Tabellen in Dokumenten erkennen und extrahieren"
+      },
+      "mode": {
+        "label": "Erkennungsmodus",
+        "description": "Balance zwischen Geschwindigkeit und Genauigkeit"
+      },
+      "structure": {
+        "label": "Strukturextraktion",
+        "description": "Tabellenstruktur und Zellbeziehungen beibehalten"
+      },
+      "cellMatching": {
+        "label": "Zellzuordnung",
+        "description": "Zellinhalt der Tabellenstruktur zuordnen"
+      }
+    },
+    "images": {
+      "extract": {
+        "label": "Bilder extrahieren",
+        "description": "Eingebettete Bilder aus Dokumenten extrahieren"
+      },
+      "classify": {
+        "label": "Bilder klassifizieren",
+        "description": "Bilder automatisch klassifizieren und taggen"
+      },
+      "generatePage": {
+        "label": "Seitenbilder erzeugen",
+        "description": "Bilder jeder Seite erstellen"
+      },
+      "generatePictures": {
+        "label": "Abbildungen als Dateien erzeugen",
+        "description": "Eingebettete Abbildungen als separate Dateien extrahieren"
+      },
+      "generateTables": {
+        "label": "Tabellenbilder erzeugen",
+        "description": "Tabellen als Bilder extrahieren"
+      },
+      "scale": {
+        "label": "Bildskalierung",
+        "description": "Skalierungsfaktor (1,0 = Original)"
+      }
+    },
+    "performance": {
+      "device": {
+        "label": "Verarbeitungsgerät",
+        "description": "Hardware für die Dokumentverarbeitung"
+      },
+      "threads": {
+        "label": "CPU-Threads",
+        "description": "Anzahl Threads für die Verarbeitung"
+      },
+      "timeout": {
+        "label": "Dokument-Timeout (Sekunden)",
+        "description": "Maximale Verarbeitungszeit (0 = unbegrenzt)"
+      }
+    },
+    "chunking": {
+      "enable": {
+        "label": "Chunking aktivieren",
+        "description": "Dokumente für RAG in Chunks aufteilen"
+      },
+      "maxTokens": {
+        "label": "Max. Tokens pro Chunk",
+        "description": "Maximale Token-Anzahl pro Chunk"
+      },
+      "mergePeers": {
+        "label": "Peers zusammenführen",
+        "description": "Kleine Chunks mit ähnlichen Metadaten zusammenführen"
+      }
+    },
+    "enrichment": {
+      "code": {
+        "label": "Code-Anreicherung",
+        "description": "Codeblöcke mit Spracherkennung anreichern"
+      },
+      "formula": {
+        "label": "Formel-Anreicherung",
+        "description": "LaTeX aus mathematischen Formeln extrahieren"
+      },
+      "pictureClassification": {
+        "label": "Bildklassifizierung",
+        "description": "Bilder nach Typ klassifizieren (Abbildung, Diagramm, Foto, etc.)"
+      },
+      "pictureDescription": {
+        "label": "Bildbeschreibung",
+        "description": "KI-Bildunterschriften erzeugen (langsamer)"
+      },
+      "warning": "⚠️ Anreicherungsfunktionen können zusätzliche Modelldownloads erfordern und die Verarbeitungszeit deutlich erhöhen.",
+      "preDownload": {
+        "title": "Modelle vorab herunterladen",
+        "description": "Lade Modelle vorab herunter, um Verzögerungen bei der Verarbeitung zu vermeiden."
+      },
+      "model": {
+        "ready": "✓ Bereit",
+        "unavailable": "⚠ Nicht verfügbar"
+      },
+      "upgradeTip": "💡 Tipp: Docling aktualisieren, um Anreicherung zu aktivieren:"
+    },
+    "output": {
+      "defaultFormat": {
+        "label": "Standardformat",
+        "description": "Bevorzugtes Ausgabeformat für Downloads"
+      }
+    }
+  },
+  "historyPanel": {
+    "title": "Verlauf",
+    "searchPlaceholder": "Verlauf durchsuchen…",
+    "total": "Gesamt",
+    "success": "Erfolgreich",
+    "failed": "Fehlgeschlagen",
+    "noResults": "Keine Ergebnisse gefunden",
+    "noHistory": "Noch kein Konvertierungsverlauf",
+    "clearAll": "Verlauf löschen",
+    "clearConfirm": "Möchtest du wirklich den gesamten Verlauf löschen?"
+  }
+}
+
+

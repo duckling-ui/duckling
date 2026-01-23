@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { useDropzone, FileRejection } from "react-dropzone";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 interface DropZoneProps {
   onFileAccepted: (file: File) => void;
@@ -79,6 +80,7 @@ export default function DropZone({
   disabled,
   multiple = false,
 }: DropZoneProps) {
+  const { t } = useTranslation();
   const [error, setError] = useState<string | null>(null);
   const [inputMode, setInputMode] = useState<"file" | "url">("file");
   const [urlInput, setUrlInput] = useState("");
@@ -111,12 +113,12 @@ export default function DropZone({
     const url = urlInput.trim();
 
     if (!url) {
-      setError("Please enter a URL");
+      setError(t("dropzone.errorEnterUrl"));
       return;
     }
 
     if (!URL_REGEX.test(url)) {
-      setError("Please enter a valid HTTP or HTTPS URL");
+      setError(t("dropzone.errorInvalidUrl"));
       return;
     }
 
@@ -124,7 +126,7 @@ export default function DropZone({
       onUrlSubmitted(url);
       setUrlInput("");
     }
-  }, [urlInput, onUrlSubmitted]);
+  }, [urlInput, onUrlSubmitted, t]);
 
   const handleUrlsSubmit = useCallback(() => {
     setError(null);
@@ -135,16 +137,17 @@ export default function DropZone({
       .filter(Boolean);
 
     if (lines.length === 0) {
-      setError("Please enter at least one URL");
+      setError(t("dropzone.errorEnterAtLeastOneUrl"));
       return;
     }
 
     const invalidUrls = lines.filter((url) => !URL_REGEX.test(url));
     if (invalidUrls.length > 0) {
+      const shown = invalidUrls.slice(0, 3).join(", ");
       setError(
-        `Invalid URLs: ${invalidUrls.slice(0, 3).join(", ")}${
-          invalidUrls.length > 3 ? "..." : ""
-        }`
+        t("dropzone.errorInvalidUrls", {
+          urls: `${shown}${invalidUrls.length > 3 ? "..." : ""}`,
+        })
       );
       return;
     }
@@ -153,7 +156,7 @@ export default function DropZone({
       onUrlsSubmitted(lines);
       setUrlsInput("");
     }
-  }, [urlsInput, onUrlsSubmitted]);
+  }, [urlsInput, onUrlsSubmitted, t]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -207,7 +210,7 @@ export default function DropZone({
                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              Local File{multiple ? "s" : ""}
+              {multiple ? t("dropzone.localFiles") : t("dropzone.localFile")}
             </span>
           </button>
           <button
@@ -233,7 +236,7 @@ export default function DropZone({
                   d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
                 />
               </svg>
-              URL{multiple ? "s" : ""}
+              {multiple ? t("dropzone.urls") : t("dropzone.url")}
             </span>
           </button>
         </div>
@@ -296,7 +299,7 @@ export default function DropZone({
                       </svg>
                     </div>
                     <p className="text-lg font-medium text-dark-200">
-                      Uploading...
+                      {t("dropzone.uploading")}
                     </p>
                   </motion.div>
                 ) : isDragActive ? (
@@ -323,8 +326,10 @@ export default function DropZone({
                     </div>
                     <p className="text-lg font-medium text-primary-400">
                       {isDragReject
-                        ? "File type not supported"
-                        : `Drop your file${multiple ? "s" : ""} here`}
+                        ? t("dropzone.fileTypeNotSupported")
+                        : multiple
+                        ? t("dropzone.dropHereMultiple")
+                        : t("dropzone.dropHereSingle")}
                     </p>
                   </motion.div>
                 ) : (
@@ -350,10 +355,12 @@ export default function DropZone({
                       </svg>
                     </div>
                     <p className="text-lg font-medium text-dark-200 mb-2">
-                      Drag and drop your document{multiple ? "s" : ""} here
+                      {multiple
+                        ? t("dropzone.dragAndDropMultiple")
+                        : t("dropzone.dragAndDropSingle")}
                     </p>
                     <p className="text-sm text-dark-400 mb-4">
-                      or click to browse
+                      {t("dropzone.orClickToBrowse")}
                     </p>
 
                     {/* Format categories */}
@@ -382,8 +389,7 @@ export default function DropZone({
 
                     {multiple && (
                       <p className="mt-4 text-xs text-primary-400">
-                        ✨ Multiple file upload enabled - select or drop
-                        multiple files
+                        {t("dropzone.multipleEnabled")}
                       </p>
                     )}
                   </motion.div>
@@ -430,12 +436,14 @@ export default function DropZone({
             </div>
 
             <h3 className="text-lg font-medium text-dark-200 mb-2">
-              {multiple ? "Enter Document URLs" : "Enter Document URL"}
+              {multiple
+                ? t("dropzone.enterUrlTitleMultiple")
+                : t("dropzone.enterUrlTitleSingle")}
             </h3>
             <p className="text-sm text-dark-400 mb-6">
               {multiple
-                ? "Paste one URL per line to convert multiple documents"
-                : "Paste a direct link to a document (PDF, DOCX, etc.)"}
+                ? t("dropzone.enterUrlBodyMultiple")
+                : t("dropzone.enterUrlBodySingle")}
             </p>
 
             {multiple ? (
@@ -444,14 +452,16 @@ export default function DropZone({
                 <textarea
                   value={urlsInput}
                   onChange={(e) => setUrlsInput(e.target.value)}
-                  placeholder="https://example.com/document1.pdf&#10;https://example.com/document2.docx&#10;https://example.com/document3.html"
+                  placeholder={t("dropzone.multipleUrlsPlaceholder")}
                   className="w-full h-40 px-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-dark-100 placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 resize-none font-mono text-sm"
                   disabled={isUploading}
                 />
                 <div className="flex items-center justify-between mt-3">
                   <span className="text-xs text-dark-500">
-                    {urlsInput.trim().split("\n").filter(Boolean).length} URL(s)
-                    entered
+                    {t("dropzone.urlsEntered", {
+                      count: urlsInput.trim().split("\n").filter(Boolean)
+                        .length,
+                    })}
                   </span>
                   <button
                     onClick={handleUrlsSubmit}
@@ -479,7 +489,7 @@ export default function DropZone({
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                           />
                         </svg>
-                        Processing...
+                        {t("dropzone.processing")}
                       </>
                     ) : (
                       <>
@@ -496,7 +506,7 @@ export default function DropZone({
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
                           />
                         </svg>
-                        Convert All
+                        {t("dropzone.convertAll")}
                       </>
                     )}
                   </button>
@@ -511,7 +521,7 @@ export default function DropZone({
                     value={urlInput}
                     onChange={(e) => setUrlInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="https://example.com/document.pdf"
+                    placeholder={t("dropzone.singleUrlPlaceholder")}
                     className="flex-1 px-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-dark-100 placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
                     disabled={isUploading}
                   />
@@ -541,7 +551,7 @@ export default function DropZone({
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                           />
                         </svg>
-                        Loading...
+                        {t("dropzone.loading")}
                       </>
                     ) : (
                       <>
@@ -558,23 +568,20 @@ export default function DropZone({
                             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
                           />
                         </svg>
-                        Convert
+                        {t("dropzone.convert")}
                       </>
                     )}
                   </button>
                 </div>
                 <p className="mt-2 text-xs text-dark-500">
-                  Press Enter to submit or click Convert
+                  {t("dropzone.pressEnter")}
                 </p>
               </div>
             )}
 
             {/* Supported formats hint */}
             <div className="mt-6 text-xs text-dark-500">
-              <span>
-                Supported: PDF, DOCX, PPTX, XLSX, HTML, Markdown, Images, and
-                more
-              </span>
+              <span>{t("dropzone.supportedHint")}</span>
             </div>
           </div>
         </motion.div>
@@ -597,8 +604,8 @@ export default function DropZone({
       {/* File size info */}
       <p className="mt-3 text-xs text-dark-500 text-center">
         {inputMode === "file"
-          ? "Maximum file size: 100MB per file"
-          : "Maximum download size: 100MB per URL"}
+          ? t("dropzone.maxFileSize")
+          : t("dropzone.maxDownloadSize")}
       </p>
     </div>
   );

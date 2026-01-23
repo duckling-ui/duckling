@@ -1,7 +1,7 @@
 {
   "ocr": {
     "enabled": true,
-    "language": "en",
+    "language": "de",
     "force_full_page_ocr": false,
     "backend": "rapidocr",
     "use_gpu": true,
@@ -22,6 +22,12 @@
     "generate_table_images": true,
     "images_scale": 1.0
   },
+  "enrichment": {
+    "code_enrichment": false,
+    "formula_enrichment": false,
+    "picture_classification": false,
+    "picture_description": true
+  },
   "output": {
     "default_format": "markdown"
   },
@@ -34,10 +40,5 @@
     "enabled": true,
     "max_tokens": 512,
     "merge_peers": true
-  },
-  "enrichment": {
-    "picture_classification": false,
-    "picture_description": true,
-    "code_enrichment": false
   }
 }

@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useAllSettings } from "../hooks/useSettings";
+import { useTranslation } from "react-i18next";
 
 interface SettingsPanelProps {
   isOpen: boolean;
@@ -7,6 +8,7 @@ interface SettingsPanelProps {
 }
 
 export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
+  const { t } = useTranslation();
   const {
     ocr,
     tables,
@@ -42,7 +44,9 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
           >
             {/* Header */}
             <div className="sticky top-0 bg-dark-900/95 backdrop-blur-sm border-b border-dark-700 p-6 flex items-center justify-between">
-              <h2 className="text-xl font-bold text-dark-100">Settings</h2>
+              <h2 className="text-xl font-bold text-dark-100">
+                {t("settingsPanel.title")}
+              </h2>
               <button
                 onClick={onClose}
                 className="p-2 hover:bg-dark-800 rounded-lg transition-colors"
@@ -68,21 +72,18 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
             ) : (
               <div className="p-6 space-y-6">
                 {/* OCR Settings */}
-                <SettingsSection
-                  title="OCR (Optical Character Recognition)"
-                  icon="eye"
-                >
+                <SettingsSection title={t("settings.sections.ocr")} icon="eye">
                   <ToggleSetting
-                    label="Enable OCR"
-                    description="Extract text from scanned documents and images"
+                    label={t("settings.ocr.enable.label")}
+                    description={t("settings.ocr.enable.description")}
                     checked={ocr.ocr?.enabled ?? true}
                     onChange={(enabled) => ocr.updateOcr({ enabled })}
                     disabled={ocr.isUpdating}
                   />
                   <div className="space-y-2">
                     <SelectSetting
-                      label="OCR Backend"
-                      description="Engine used for text recognition"
+                      label={t("settings.ocr.backend.label")}
+                      description={t("settings.ocr.backend.description")}
                       value={ocr.ocr?.backend ?? "easyocr"}
                       options={ocr.availableBackends.map((b) => {
                         const status = ocr.backendsStatus.find(
@@ -90,13 +91,21 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                         );
                         let statusLabel = "";
                         if (status?.available) {
-                          statusLabel = " ✓";
+                          statusLabel = t(
+                            "settings.ocr.backendStatus.availableSuffix"
+                          );
                         } else if (status?.requires_system_install) {
-                          statusLabel = " ⚠ (needs system install)";
+                          statusLabel = t(
+                            "settings.ocr.backendStatus.needsSystemInstallSuffix"
+                          );
                         } else if (status?.installed) {
-                          statusLabel = " (not configured)";
+                          statusLabel = t(
+                            "settings.ocr.backendStatus.notConfiguredSuffix"
+                          );
                         } else {
-                          statusLabel = " (not installed)";
+                          statusLabel = t(
+                            "settings.ocr.backendStatus.notInstalledSuffix"
+                          );
                         }
                         return {
                           value: b.id,
@@ -131,7 +140,9 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                                   clipRule="evenodd"
                                 />
                               </svg>
-                              {status.name} is installed and ready
+                              {t("settings.ocr.status.installedReady", {
+                                name: status.name,
+                              })}
                             </div>
                           );
                         }
@@ -152,13 +163,13 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                                     clipRule="evenodd"
                                   />
                                 </svg>
-                                Requires manual system installation
+                                {t("settings.ocr.status.requiresManual")}
                               </div>
                               <div className="p-3 bg-dark-800/50 rounded-lg border border-dark-700 space-y-2">
                                 <p className="text-xs text-dark-300">
-                                  <strong>{status.name}</strong> cannot be
-                                  installed from this UI. Please install it
-                                  manually:
+                                  {t("settings.ocr.status.cannotInstallInUi", {
+                                    name: status.name,
+                                  })}
                                 </p>
                                 {status.id === "tesseract" && (
                                   <div className="space-y-1 text-xs text-dark-400 font-mono">
@@ -178,7 +189,9 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                                       <span className="text-dark-500">
                                         # Windows:
                                       </span>{" "}
-                                      Download from GitHub
+                                      {t(
+                                        "settings.ocr.status.downloadFromGithub"
+                                      )}
                                     </p>
                                   </div>
                                 )}
@@ -208,7 +221,9 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                                     clipRule="evenodd"
                                   />
                                 </svg>
-                                {status.name} is not installed
+                                {t("settings.ocr.status.notInstalled", {
+                                  name: status.name,
+                                })}
                               </div>
                               <button
                                 onClick={() => ocr.installBackend(status.id)}
@@ -218,7 +233,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                                 {ocr.isInstalling ? (
                                   <>
                                     <div className="w-3 h-3 border-2 border-dark-950 border-t-transparent rounded-full animate-spin" />
-                                    Installing...
+                                    {t("settings.actions.installing")}
                                   </>
                                 ) : (
                                   <>
@@ -233,7 +248,9 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                                         clipRule="evenodd"
                                       />
                                     </svg>
-                                    Install {status.name}
+                                    {t("settings.actions.install", {
+                                      name: status.name,
+                                    })}
                                   </>
                                 )}
                               </button>
@@ -265,14 +282,14 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                           onClick={() => ocr.clearInstallError()}
                           className="ml-2 underline hover:no-underline"
                         >
-                          Dismiss
+                          {t("settings.actions.dismiss")}
                         </button>
                       </div>
                     )}
                   </div>
                   <SelectSetting
-                    label="OCR Language"
-                    description="Primary language for text recognition"
+                    label={t("settings.ocr.language.label")}
+                    description={t("settings.ocr.language.description")}
                     value={ocr.ocr?.language ?? "en"}
                     options={ocr.availableLanguages.map((lang) => ({
                       value: lang.code,
@@ -282,8 +299,8 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     disabled={ocr.isUpdating || !ocr.ocr?.enabled}
                   />
                   <ToggleSetting
-                    label="Force Full Page OCR"
-                    description="OCR the entire page instead of just detected text regions"
+                    label={t("settings.ocr.forceFullPage.label")}
+                    description={t("settings.ocr.forceFullPage.description")}
                     checked={ocr.ocr?.force_full_page_ocr ?? false}
                     onChange={(force_full_page_ocr) =>
                       ocr.updateOcr({ force_full_page_ocr })
@@ -291,8 +308,8 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     disabled={ocr.isUpdating || !ocr.ocr?.enabled}
                   />
                   <ToggleSetting
-                    label="Use GPU"
-                    description="Enable GPU acceleration (EasyOCR only)"
+                    label={t("settings.ocr.useGpu.label")}
+                    description={t("settings.ocr.useGpu.description")}
                     checked={ocr.ocr?.use_gpu ?? false}
                     onChange={(use_gpu) => ocr.updateOcr({ use_gpu })}
                     disabled={
@@ -302,8 +319,8 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     }
                   />
                   <SliderSetting
-                    label="Confidence Threshold"
-                    description="Minimum confidence for OCR results"
+                    label={t("settings.ocr.confidence.label")}
+                    description={t("settings.ocr.confidence.description")}
                     value={ocr.ocr?.confidence_threshold ?? 0.5}
                     min={0}
                     max={1}
@@ -316,17 +333,20 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 </SettingsSection>
 
                 {/* Table Settings */}
-                <SettingsSection title="Table Extraction" icon="table">
+                <SettingsSection
+                  title={t("settings.sections.tables")}
+                  icon="table"
+                >
                   <ToggleSetting
-                    label="Enable Table Extraction"
-                    description="Detect and extract tables from documents"
+                    label={t("settings.tables.enable.label")}
+                    description={t("settings.tables.enable.description")}
                     checked={tables.tables?.enabled ?? true}
                     onChange={(enabled) => tables.updateTables({ enabled })}
                     disabled={tables.isUpdating}
                   />
                   <SelectSetting
-                    label="Detection Mode"
-                    description="Balance between speed and accuracy"
+                    label={t("settings.tables.mode.label")}
+                    description={t("settings.tables.mode.description")}
                     value={tables.tables?.mode ?? "accurate"}
                     options={tables.availableModes.map((m) => ({
                       value: m.id,
@@ -336,8 +356,8 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     disabled={tables.isUpdating || !tables.tables?.enabled}
                   />
                   <ToggleSetting
-                    label="Structure Extraction"
-                    description="Preserve table structure and cell relationships"
+                    label={t("settings.tables.structure.label")}
+                    description={t("settings.tables.structure.description")}
                     checked={tables.tables?.structure_extraction ?? true}
                     onChange={(structure_extraction) =>
                       tables.updateTables({ structure_extraction })
@@ -345,8 +365,8 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     disabled={tables.isUpdating || !tables.tables?.enabled}
                   />
                   <ToggleSetting
-                    label="Cell Matching"
-                    description="Match cell content to table structure"
+                    label={t("settings.tables.cellMatching.label")}
+                    description={t("settings.tables.cellMatching.description")}
                     checked={tables.tables?.do_cell_matching ?? true}
                     onChange={(do_cell_matching) =>
                       tables.updateTables({ do_cell_matching })
@@ -356,24 +376,27 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 </SettingsSection>
 
                 {/* Image Settings */}
-                <SettingsSection title="Image Handling" icon="image">
+                <SettingsSection
+                  title={t("settings.sections.images")}
+                  icon="image"
+                >
                   <ToggleSetting
-                    label="Extract Images"
-                    description="Extract embedded images from documents"
+                    label={t("settings.images.extract.label")}
+                    description={t("settings.images.extract.description")}
                     checked={images.images?.extract ?? true}
                     onChange={(extract) => images.updateImages({ extract })}
                     disabled={images.isUpdating}
                   />
                   <ToggleSetting
-                    label="Classify Images"
-                    description="Automatically classify and tag images"
+                    label={t("settings.images.classify.label")}
+                    description={t("settings.images.classify.description")}
                     checked={images.images?.classify ?? true}
                     onChange={(classify) => images.updateImages({ classify })}
                     disabled={images.isUpdating || !images.images?.extract}
                   />
                   <ToggleSetting
-                    label="Generate Page Images"
-                    description="Create images of each page"
+                    label={t("settings.images.generatePage.label")}
+                    description={t("settings.images.generatePage.description")}
                     checked={images.images?.generate_page_images ?? false}
                     onChange={(generate_page_images) =>
                       images.updateImages({ generate_page_images })
@@ -381,8 +404,10 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     disabled={images.isUpdating}
                   />
                   <ToggleSetting
-                    label="Generate Picture Images"
-                    description="Extract embedded pictures as separate files"
+                    label={t("settings.images.generatePictures.label")}
+                    description={t(
+                      "settings.images.generatePictures.description"
+                    )}
                     checked={images.images?.generate_picture_images ?? true}
                     onChange={(generate_picture_images) =>
                       images.updateImages({ generate_picture_images })
@@ -390,8 +415,10 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     disabled={images.isUpdating}
                   />
                   <ToggleSetting
-                    label="Generate Table Images"
-                    description="Extract tables as images"
+                    label={t("settings.images.generateTables.label")}
+                    description={t(
+                      "settings.images.generateTables.description"
+                    )}
                     checked={images.images?.generate_table_images ?? true}
                     onChange={(generate_table_images) =>
                       images.updateImages({ generate_table_images })
@@ -399,8 +426,8 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     disabled={images.isUpdating}
                   />
                   <SliderSetting
-                    label="Image Scale"
-                    description="Scale factor for extracted images (1.0 = original)"
+                    label={t("settings.images.scale.label")}
+                    description={t("settings.images.scale.description")}
                     value={images.images?.images_scale ?? 1.0}
                     min={0.1}
                     max={4.0}
@@ -413,10 +440,13 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 </SettingsSection>
 
                 {/* Performance Settings */}
-                <SettingsSection title="Performance" icon="bolt">
+                <SettingsSection
+                  title={t("settings.sections.performance")}
+                  icon="bolt"
+                >
                   <SelectSetting
-                    label="Processing Device"
-                    description="Hardware for document processing"
+                    label={t("settings.performance.device.label")}
+                    description={t("settings.performance.device.description")}
                     value={performance.performance?.device ?? "auto"}
                     options={performance.availableDevices.map((d) => ({
                       value: d.id,
@@ -428,8 +458,8 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     disabled={performance.isUpdating}
                   />
                   <NumberSetting
-                    label="CPU Threads"
-                    description="Number of threads for processing"
+                    label={t("settings.performance.threads.label")}
+                    description={t("settings.performance.threads.description")}
                     value={performance.performance?.num_threads ?? 4}
                     min={1}
                     max={32}
@@ -439,8 +469,8 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     disabled={performance.isUpdating}
                   />
                   <NumberSetting
-                    label="Document Timeout (seconds)"
-                    description="Maximum processing time (0 = no limit)"
+                    label={t("settings.performance.timeout.label")}
+                    description={t("settings.performance.timeout.description")}
                     value={performance.performance?.document_timeout ?? 0}
                     min={0}
                     max={3600}
@@ -454,17 +484,20 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 </SettingsSection>
 
                 {/* RAG/Chunking Settings */}
-                <SettingsSection title="RAG / Chunking" icon="puzzle">
+                <SettingsSection
+                  title={t("settings.sections.chunking")}
+                  icon="puzzle"
+                >
                   <ToggleSetting
-                    label="Enable Chunking"
-                    description="Split documents into chunks for RAG applications"
+                    label={t("settings.chunking.enable.label")}
+                    description={t("settings.chunking.enable.description")}
                     checked={chunking.chunking?.enabled ?? false}
                     onChange={(enabled) => chunking.updateChunking({ enabled })}
                     disabled={chunking.isUpdating}
                   />
                   <NumberSetting
-                    label="Max Tokens per Chunk"
-                    description="Maximum tokens in each chunk"
+                    label={t("settings.chunking.maxTokens.label")}
+                    description={t("settings.chunking.maxTokens.description")}
                     value={chunking.chunking?.max_tokens ?? 512}
                     min={64}
                     max={8192}
@@ -476,8 +509,8 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     }
                   />
                   <ToggleSetting
-                    label="Merge Peers"
-                    description="Combine undersized chunks with similar metadata"
+                    label={t("settings.chunking.mergePeers.label")}
+                    description={t("settings.chunking.mergePeers.description")}
                     checked={chunking.chunking?.merge_peers ?? true}
                     onChange={(merge_peers) =>
                       chunking.updateChunking({ merge_peers })
@@ -489,10 +522,13 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 </SettingsSection>
 
                 {/* Enrichment Settings */}
-                <SettingsSection title="Document Enrichment" icon="sparkles">
+                <SettingsSection
+                  title={t("settings.sections.enrichment")}
+                  icon="sparkles"
+                >
                   <ToggleSetting
-                    label="Code Enrichment"
-                    description="Enhance code blocks with language detection"
+                    label={t("settings.enrichment.code.label")}
+                    description={t("settings.enrichment.code.description")}
                     checked={enrichment.enrichment?.code_enrichment ?? false}
                     onChange={(code_enrichment) =>
                       enrichment.updateEnrichment({ code_enrichment })
@@ -500,8 +536,8 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     disabled={enrichment.isUpdating}
                   />
                   <ToggleSetting
-                    label="Formula Enrichment"
-                    description="Extract LaTeX from mathematical formulas"
+                    label={t("settings.enrichment.formula.label")}
+                    description={t("settings.enrichment.formula.description")}
                     checked={enrichment.enrichment?.formula_enrichment ?? false}
                     onChange={(formula_enrichment) =>
                       enrichment.updateEnrichment({ formula_enrichment })
@@ -509,8 +545,10 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     disabled={enrichment.isUpdating}
                   />
                   <ToggleSetting
-                    label="Picture Classification"
-                    description="Classify images by type (figure, chart, photo, etc.)"
+                    label={t("settings.enrichment.pictureClassification.label")}
+                    description={t(
+                      "settings.enrichment.pictureClassification.description"
+                    )}
                     checked={
                       enrichment.enrichment?.picture_classification ?? false
                     }
@@ -520,8 +558,10 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     disabled={enrichment.isUpdating}
                   />
                   <ToggleSetting
-                    label="Picture Description"
-                    description="Generate AI captions for images (slower)"
+                    label={t("settings.enrichment.pictureDescription.label")}
+                    description={t(
+                      "settings.enrichment.pictureDescription.description"
+                    )}
                     checked={
                       enrichment.enrichment?.picture_description ?? false
                     }
@@ -534,8 +574,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     enrichment.enrichment?.formula_enrichment) && (
                     <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
                       <p className="text-xs text-yellow-400">
-                        ⚠️ Enrichment features may require additional model
-                        downloads and significantly increase processing time.
+                        {t("settings.enrichment.warning")}
                       </p>
                     </div>
                   )}
@@ -544,11 +583,10 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                   {enrichment.models && enrichment.models.length > 0 && (
                     <div className="mt-4 pt-4 border-t border-dark-700">
                       <h4 className="text-sm font-medium text-dark-200 mb-3">
-                        Pre-Download Models
+                        {t("settings.enrichment.preDownload.title")}
                       </h4>
                       <p className="text-xs text-dark-400 mb-3">
-                        Download models ahead of time to avoid delays during
-                        document processing.
+                        {t("settings.enrichment.preDownload.description")}
                       </p>
                       <div className="space-y-2">
                         {enrichment.models.map((model) => (
@@ -566,11 +604,13 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                                   </span>
                                   {model.downloaded ? (
                                     <span className="text-xs text-green-400">
-                                      ✓ Ready
+                                      {t("settings.enrichment.model.ready")}
                                     </span>
                                   ) : model.error ? (
                                     <span className="text-xs text-yellow-400">
-                                      ⚠ Unavailable
+                                      {t(
+                                        "settings.enrichment.model.unavailable"
+                                      )}
                                     </span>
                                   ) : (
                                     <span className="text-xs text-dark-500">
@@ -594,7 +634,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                                     className="ml-3 px-3 py-1.5 text-xs bg-primary-500/20 text-primary-400
                                            hover:bg-primary-500/30 rounded-lg transition-colors"
                                   >
-                                    Download
+                                    {t("settings.actions.download")}
                                   </button>
                                 )}
 
@@ -679,8 +719,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                       {enrichment.models.some((m) => m.requires_upgrade) && (
                         <div className="mt-3 p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg">
                           <p className="text-xs text-blue-400">
-                            💡 <strong>Tip:</strong> Upgrade Docling to enable
-                            enrichment features:
+                            {t("settings.enrichment.upgradeTip")}
                           </p>
                           <code className="mt-1 block text-xs text-blue-300 bg-blue-500/10 p-2 rounded font-mono">
                             pip install --upgrade docling
@@ -692,10 +731,13 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 </SettingsSection>
 
                 {/* Output Settings */}
-                <SettingsSection title="Output Preferences" icon="document">
+                <SettingsSection
+                  title={t("settings.sections.output")}
+                  icon="document"
+                >
                   <SelectSetting
-                    label="Default Format"
-                    description="Preferred output format for downloads"
+                    label={t("settings.output.defaultFormat.label")}
+                    description={t("settings.output.defaultFormat.description")}
                     value={output.output?.default_format ?? "markdown"}
                     options={output.availableFormats.map((fmt) => ({
                       value: fmt.id,
@@ -730,7 +772,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                         />
                       </svg>
                     )}
-                    Reset to Defaults
+                    {t("settings.actions.resetDefaults")}
                   </button>
                 </div>
               </div>

@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { useConversion } from "./hooks/useConversion";
 import DropZone from "./components/DropZone";
@@ -14,6 +15,7 @@ import type { HistoryEntry, ConversionResult } from "./types";
 const APP_VERSION = "0.0.5";
 
 export default function App() {
+  const { t, i18n } = useTranslation();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [docsOpen, setDocsOpen] = useState(false);
@@ -130,17 +132,44 @@ export default function App() {
               />
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-lg font-bold text-dark-100">Duckling</h1>
+                  <h1 className="text-lg font-bold text-dark-100">
+                    {t("app.name")}
+                  </h1>
                   <span className="px-1.5 py-0.5 text-[10px] font-medium bg-primary-500/20 text-primary-400 rounded">
                     v{APP_VERSION}
                   </span>
                 </div>
-                <p className="text-xs text-dark-500">Document Conversion</p>
+                <p className="text-xs text-dark-500">{t("app.tagline")}</p>
               </div>
             </div>
 
             {/* Actions */}
             <div className="flex items-center gap-2">
+              {/* Language switcher */}
+              <label className="sr-only" htmlFor="language-select">
+                {t("language.label")}
+              </label>
+              <select
+                id="language-select"
+                value={
+                  i18n.language?.toLowerCase().startsWith("es")
+                    ? "es"
+                    : i18n.language?.toLowerCase().startsWith("fr")
+                    ? "fr"
+                    : i18n.language?.toLowerCase().startsWith("de")
+                    ? "de"
+                    : "en"
+                }
+                onChange={(e) => void i18n.changeLanguage(e.target.value)}
+                className="bg-dark-800 text-dark-200 text-sm rounded-lg px-2 py-1.5 border border-dark-700 hover:border-dark-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                aria-label={t("language.label")}
+              >
+                <option value="en">{t("language.en")}</option>
+                <option value="es">{t("language.es")}</option>
+                <option value="fr">{t("language.fr")}</option>
+                <option value="de">{t("language.de")}</option>
+              </select>
+
               {/* Batch mode toggle */}
               <button
                 onClick={() => setBatchModeEnabled(!batchModeEnabled)}
@@ -149,7 +178,7 @@ export default function App() {
                     ? "bg-primary-500 text-dark-950"
                     : "bg-dark-800 text-dark-400 hover:text-dark-200"
                 }`}
-                title="Toggle batch mode for multiple file uploads"
+                title={t("batch.toggleTitle")}
               >
                 <span className="flex items-center gap-1.5">
                   <svg
@@ -165,13 +194,13 @@ export default function App() {
                       d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
                     />
                   </svg>
-                  Batch
+                  {t("actions.batch")}
                 </span>
               </button>
               <button
                 onClick={() => setDocsOpen(true)}
                 className="p-2.5 hover:bg-dark-800 rounded-lg transition-colors group"
-                title="Documentation"
+                title={t("actions.documentation")}
               >
                 <svg
                   className="w-5 h-5 text-dark-400 group-hover:text-dark-200"
@@ -190,7 +219,7 @@ export default function App() {
               <button
                 onClick={() => setHistoryOpen(true)}
                 className="p-2.5 hover:bg-dark-800 rounded-lg transition-colors group"
-                title="History"
+                title={t("actions.history")}
               >
                 <svg
                   className="w-5 h-5 text-dark-400 group-hover:text-dark-200"
@@ -209,7 +238,7 @@ export default function App() {
               <button
                 onClick={() => setSettingsOpen(true)}
                 className="p-2.5 hover:bg-dark-800 rounded-lg transition-colors group"
-                title="Settings"
+                title={t("actions.settings")}
               >
                 <svg
                   className="w-5 h-5 text-dark-400 group-hover:text-dark-200"
@@ -255,7 +284,7 @@ export default function App() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
                   >
-                    Convert Any Document
+                    {t("home.headline")}
                   </motion.h2>
                   <motion.p
                     className="text-dark-400 text-lg max-w-xl mx-auto"
@@ -263,8 +292,7 @@ export default function App() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
                   >
-                    Transform PDFs, Word documents, presentations, images, and
-                    more into structured formats ready for AI processing.
+                    {t("home.subheadline")}
                   </motion.p>
                 </div>
                 <motion.div
@@ -292,12 +320,24 @@ export default function App() {
                   {[
                     {
                       icon: "👁️",
-                      label: "OCR",
-                      desc: "Extract text from images",
+                      label: t("features.ocr"),
+                      desc: t("features.ocrDesc"),
                     },
-                    { icon: "📊", label: "Tables", desc: "Export to CSV" },
-                    { icon: "🖼️", label: "Images", desc: "Extract figures" },
-                    { icon: "🧩", label: "RAG", desc: "Document chunks" },
+                    {
+                      icon: "📊",
+                      label: t("features.tables"),
+                      desc: t("features.tablesDesc"),
+                    },
+                    {
+                      icon: "🖼️",
+                      label: t("features.images"),
+                      desc: t("features.imagesDesc"),
+                    },
+                    {
+                      icon: "🧩",
+                      label: t("features.rag"),
+                      desc: t("features.ragDesc"),
+                    },
                   ].map((feature) => (
                     <div
                       key={feature.label}
@@ -326,8 +366,8 @@ export default function App() {
                   progress={5}
                   message={
                     batchModeEnabled
-                      ? `Uploading files...`
-                      : "Uploading file..."
+                      ? t("conversion.uploadingMultiple")
+                      : t("conversion.uploadingSingle")
                   }
                   filename={currentJob?.filename}
                 />
@@ -426,7 +466,7 @@ export default function App() {
                     </svg>
                   </div>
                   <h3 className="text-xl font-bold text-dark-100 mb-2">
-                    Conversion Failed
+                    {t("conversion.failedTitle")}
                   </h3>
                   <p className="text-dark-400 mb-6">
                     {error || "An unexpected error occurred"}
@@ -435,7 +475,7 @@ export default function App() {
                     onClick={reset}
                     className="px-6 py-3 bg-primary-500 hover:bg-primary-600 text-dark-950 font-semibold rounded-xl transition-colors duration-200"
                   >
-                    Try Again
+                    {t("conversion.failedCta")}
                   </button>
                 </div>
               </motion.div>
@@ -447,7 +487,7 @@ export default function App() {
       {/* Footer */}
       <footer className="py-4 text-center text-dark-500 text-sm">
         <p>
-          Powered by{" "}
+          {t("app.poweredBy")}{" "}
           <a
             href="https://github.com/docling-project/docling"
             target="_blank"

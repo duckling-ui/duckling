@@ -1,0 +1,312 @@
+{
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "es": "Español",
+    "fr": "Français",
+    "de": "Deutsch"
+  },
+  "app": {
+    "name": "Duckling",
+    "tagline": "Document Conversion",
+    "poweredBy": "Powered by"
+  },
+  "actions": {
+    "batch": "Batch",
+    "documentation": "Documentation",
+    "history": "History",
+    "settings": "Settings",
+    "close": "Close"
+  },
+  "home": {
+    "headline": "Convert Any Document",
+    "subheadline": "Transform PDFs, Word documents, presentations, images, and more into structured formats ready for AI processing."
+  },
+  "batch": {
+    "toggleTitle": "Toggle batch mode for multiple file uploads"
+  },
+  "conversion": {
+    "uploadingSingle": "Uploading file...",
+    "uploadingMultiple": "Uploading files...",
+    "failedTitle": "Conversion Failed",
+    "failedCta": "Try Again",
+    "processingFilesTitle": "Processing Files",
+    "overallProgress": "Overall Progress",
+    "filesCount": "{{completed}}/{{total}} files"
+  },
+  "features": {
+    "ocr": "OCR",
+    "ocrDesc": "Extract text from images",
+    "tables": "Tables",
+    "tablesDesc": "Export to CSV",
+    "images": "Images",
+    "imagesDesc": "Extract figures",
+    "rag": "RAG",
+    "ragDesc": "Document chunks"
+  },
+  "docsPanel": {
+    "title": "Documentation",
+    "subtitle": "Duckling Reference",
+    "navigation": "Navigation",
+    "loading": "Loading...",
+    "notBuiltTitle": "Documentation Not Built",
+    "notBuiltBody": "The documentation site needs to be built before it can be viewed.",
+    "build": "Build Documentation",
+    "building": "Building...",
+    "rebuild": "Rebuild",
+    "openNewTab": "Open in new tab",
+    "notBuiltYet": "Documentation not built yet.",
+    "fullAt": "Full documentation at"
+  },
+  "settingsPanel": {
+    "title": "Settings"
+  },
+  "settings": {
+    "sections": {
+      "ocr": "OCR (Optical Character Recognition)",
+      "tables": "Table Extraction",
+      "images": "Image Handling",
+      "performance": "Performance",
+      "chunking": "RAG / Chunking",
+      "enrichment": "Document Enrichment",
+      "output": "Output Preferences"
+    },
+    "actions": {
+      "installing": "Installing...",
+      "install": "Install {{name}}",
+      "dismiss": "Dismiss",
+      "download": "Download",
+      "resetDefaults": "Reset to Defaults"
+    },
+    "ocr": {
+      "enable": {
+        "label": "Enable OCR",
+        "description": "Extract text from scanned documents and images"
+      },
+      "backend": {
+        "label": "OCR Backend",
+        "description": "Engine used for text recognition"
+      },
+      "backendStatus": {
+        "availableSuffix": " ✓",
+        "needsSystemInstallSuffix": " ⚠ (needs system install)",
+        "notConfiguredSuffix": " (not configured)",
+        "notInstalledSuffix": " (not installed)"
+      },
+      "status": {
+        "installedReady": "{{name}} is installed and ready",
+        "requiresManual": "Requires manual system installation",
+        "cannotInstallInUi": "{{name}} cannot be installed from this UI. Please install it manually:",
+        "downloadFromGithub": "Download from GitHub",
+        "notInstalled": "{{name}} is not installed"
+      },
+      "language": {
+        "label": "OCR Language",
+        "description": "Primary language for text recognition"
+      },
+      "forceFullPage": {
+        "label": "Force Full Page OCR",
+        "description": "OCR the entire page instead of just detected text regions"
+      },
+      "useGpu": {
+        "label": "Use GPU",
+        "description": "Enable GPU acceleration (EasyOCR only)"
+      },
+      "confidence": {
+        "label": "Confidence Threshold",
+        "description": "Minimum confidence for OCR results"
+      }
+    },
+    "tables": {
+      "enable": {
+        "label": "Enable Table Extraction",
+        "description": "Detect and extract tables from documents"
+      },
+      "mode": {
+        "label": "Detection Mode",
+        "description": "Balance between speed and accuracy"
+      },
+      "structure": {
+        "label": "Structure Extraction",
+        "description": "Preserve table structure and cell relationships"
+      },
+      "cellMatching": {
+        "label": "Cell Matching",
+        "description": "Match cell content to table structure"
+      }
+    },
+    "images": {
+      "extract": {
+        "label": "Extract Images",
+        "description": "Extract embedded images from documents"
+      },
+      "classify": {
+        "label": "Classify Images",
+        "description": "Automatically classify and tag images"
+      },
+      "generatePage": {
+        "label": "Generate Page Images",
+        "description": "Create images of each page"
+      },
+      "generatePictures": {
+        "label": "Generate Picture Images",
+        "description": "Extract embedded pictures as separate files"
+      },
+      "generateTables": {
+        "label": "Generate Table Images",
+        "description": "Extract tables as images"
+      },
+      "scale": {
+        "label": "Image Scale",
+        "description": "Scale factor for extracted images (1.0 = original)"
+      }
+    },
+    "performance": {
+      "device": {
+        "label": "Processing Device",
+        "description": "Hardware for document processing"
+      },
+      "threads": {
+        "label": "CPU Threads",
+        "description": "Number of threads for processing"
+      },
+      "timeout": {
+        "label": "Document Timeout (seconds)",
+        "description": "Maximum processing time (0 = no limit)"
+      }
+    },
+    "chunking": {
+      "enable": {
+        "label": "Enable Chunking",
+        "description": "Split documents into chunks for RAG applications"
+      },
+      "maxTokens": {
+        "label": "Max Tokens per Chunk",
+        "description": "Maximum tokens in each chunk"
+      },
+      "mergePeers": {
+        "label": "Merge Peers",
+        "description": "Combine undersized chunks with similar metadata"
+      }
+    },
+    "enrichment": {
+      "code": {
+        "label": "Code Enrichment",
+        "description": "Enhance code blocks with language detection"
+      },
+      "formula": {
+        "label": "Formula Enrichment",
+        "description": "Extract LaTeX from mathematical formulas"
+      },
+      "pictureClassification": {
+        "label": "Picture Classification",
+        "description": "Classify images by type (figure, chart, photo, etc.)"
+      },
+      "pictureDescription": {
+        "label": "Picture Description",
+        "description": "Generate AI captions for images (slower)"
+      },
+      "warning": "⚠️ Enrichment features may require additional model downloads and significantly increase processing time.",
+      "preDownload": {
+        "title": "Pre-Download Models",
+        "description": "Download models ahead of time to avoid delays during document processing."
+      },
+      "model": {
+        "ready": "✓ Ready",
+        "unavailable": "⚠ Unavailable"
+      },
+      "upgradeTip": "💡 Tip: Upgrade Docling to enable enrichment features:"
+    },
+    "output": {
+      "defaultFormat": {
+        "label": "Default Format",
+        "description": "Preferred output format for downloads"
+      }
+    }
+  },
+  "historyPanel": {
+    "title": "History",
+    "searchPlaceholder": "Search history...",
+    "total": "Total",
+    "success": "Success",
+    "failed": "Failed",
+    "noResults": "No results found",
+    "noHistory": "No conversion history yet",
+    "clearAll": "Clear All History",
+    "clearConfirm": "Are you sure you want to clear all history?"
+  },
+  "dropzone": {
+    "localFile": "Local File",
+    "localFiles": "Local Files",
+    "url": "URL",
+    "urls": "URLs",
+    "uploading": "Uploading...",
+    "fileTypeNotSupported": "File type not supported",
+    "dropHereSingle": "Drop your file here",
+    "dropHereMultiple": "Drop your files here",
+    "dragAndDropSingle": "Drag and drop your document here",
+    "dragAndDropMultiple": "Drag and drop your documents here",
+    "orClickToBrowse": "or click to browse",
+    "multipleEnabled": "✨ Multiple file upload enabled - select or drop multiple files",
+    "enterUrlTitleSingle": "Enter Document URL",
+    "enterUrlTitleMultiple": "Enter Document URLs",
+    "enterUrlBodySingle": "Paste a direct link to a document (PDF, DOCX, etc.)",
+    "enterUrlBodyMultiple": "Paste one URL per line to convert multiple documents",
+    "singleUrlPlaceholder": "https://example.com/document.pdf",
+    "multipleUrlsPlaceholder": "https://example.com/document1.pdf\nhttps://example.com/document2.docx\nhttps://example.com/document3.html",
+    "urlsEntered": "{{count}} URL(s) entered",
+    "processing": "Processing...",
+    "convert": "Convert",
+    "convertAll": "Convert All",
+    "loading": "Loading...",
+    "pressEnter": "Press Enter to submit or click Convert",
+    "supportedHint": "Supported: PDF, DOCX, PPTX, XLSX, HTML, Markdown, Images, and more",
+    "maxFileSize": "Maximum file size: 100MB per file",
+    "maxDownloadSize": "Maximum download size: 100MB per URL",
+    "errorEnterUrl": "Please enter a URL",
+    "errorInvalidUrl": "Please enter a valid HTTP or HTTPS URL",
+    "errorEnterAtLeastOneUrl": "Please enter at least one URL",
+    "errorInvalidUrls": "Invalid URLs: {{urls}}"
+  },
+  "export": {
+    "completeTitle": "Conversion Complete!",
+    "confidence": "Confidence:",
+    "images": "images",
+    "tables": "tables",
+    "chunks": "chunks",
+    "tabExportFormats": "Export Formats",
+    "tabImages": "Images",
+    "tabTables": "Tables",
+    "tabChunks": "RAG Chunks",
+    "exportFormatTitle": "Export Format",
+    "download": "Download",
+    "convertAnother": "Convert Another Document",
+    "previewTitle": "Preview",
+    "rendered": "Rendered",
+    "raw": "Raw",
+    "hide": "Hide",
+    "show": "Show",
+    "noPreview": "No preview available for this format",
+    "clickShow": "Click \"Show\" to view preview",
+    "extractedImagesTitle": "Extracted Images",
+    "noImages": "No images extracted from this document",
+    "extractedTablesTitle": "Extracted Tables",
+    "noTables": "No tables extracted from this document",
+    "rows": "{{count}} rows",
+    "ragChunksTitle": "RAG Chunks",
+    "noChunks": "No chunks generated",
+    "enableChunkingHint": "Enable chunking in Settings to generate RAG chunks",
+    "downloadAllChunks": "Download All Chunks (JSON)",
+    "viewFullSize": "View full size"
+  },
+  "progress": {
+    "title": "Converting Document",
+    "uploadComplete": "Upload complete",
+    "analyzing": "Analyzing document structure",
+    "extracting": "Extracting content",
+    "generating": "Generating output formats",
+    "finalizing": "Finalizing"
+  }
+}
+
+
