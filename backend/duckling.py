@@ -365,25 +365,32 @@ def create_app(config_class=None):
         if site_exists:
             # Determine which directory to scan for docs pages
             # mkdocs-static-i18n builds default locale at SITE_DIR and non-default at SITE_DIR/<locale>
-            # Security: Validate requested_lang is in whitelist before constructing path
-            if requested_lang not in supported_languages:
-                requested_lang = "en"
+            # Security: Use explicit mapping instead of string concatenation to avoid CodeQL warnings
+            site_dir_resolved = SITE_DIR.resolve()
             
-            base_dir = SITE_DIR if requested_lang == "en" else (SITE_DIR / requested_lang)
+            # Map validated language codes to safe directory paths
+            lang_to_dir = {
+                "en": SITE_DIR,
+                "es": SITE_DIR / "es",
+                "fr": SITE_DIR / "fr",
+                "de": SITE_DIR / "de",
+            }
+            
+            # Get base_dir from validated mapping (defaults to "en" if invalid)
+            base_dir = lang_to_dir.get(requested_lang, SITE_DIR)
             
             # Security: Ensure base_dir is within SITE_DIR to prevent path traversal
             base_dir_resolved = base_dir.resolve()
-            site_dir_resolved = SITE_DIR.resolve()
             try:
                 base_dir_resolved.relative_to(site_dir_resolved)
             except ValueError:
                 # If path traversal detected, fall back to default
                 base_dir = SITE_DIR
-                base_dir_resolved = SITE_DIR.resolve()
+                base_dir_resolved = site_dir_resolved
             
             if not base_dir.exists():
                 base_dir = SITE_DIR
-                base_dir_resolved = SITE_DIR.resolve()
+                base_dir_resolved = site_dir_resolved
 
             # Find all index.html files in subdirectories (each represents a page)
             # Security: Validate each file path is within base_dir before processing
