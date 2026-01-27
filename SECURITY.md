@@ -4,23 +4,46 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
-| 2.x.x   | :white_check_mark: |
-| 1.x.x   | :x:                |
+| 0.0.6   | :white_check_mark:                |
+| 0.0.5   | :x:                |
+| 0.0.3   | :x:                |
+| 0.0.2   | :x:                |
+| 0.0.1   | :x:                |
 
 ## Security Audit Summary
 
-Last audit: December 2024
+Last audit: January 26, 2026
 
 ### Vulnerability Status
 
 | Category | Status | Notes |
 |----------|--------|-------|
-| Dependency vulnerabilities | ✅ Fixed | Updated flask-cors, gunicorn, werkzeug |
+| Backend dependency vulnerabilities | ✅ No known issues | All Python dependencies appear secure (run `pip-audit` to verify) |
+| Frontend dependency vulnerabilities | ✅ Fixed | Updated vite to 7.3.1 and vitest to 4.0.18 (fixed esbuild vulnerability) |
 | Flask debug mode | ✅ Fixed | Now uses environment variables |
 | Path traversal | ✅ Fixed | Added path validation |
 | SQL injection | ✅ Protected | Using SQLAlchemy ORM with parameterized queries |
 | XSS (Cross-Site Scripting) | ⚠️ Mitigated | Uses dangerouslySetInnerHTML for trusted docs only |
 | CORS | ✅ Configured | Restricted to localhost origins in development |
+
+### Frontend Security Updates (January 2026)
+
+**Fixed esbuild vulnerability (GHSA-67mh-4wv8-2f99)**
+- **Severity**: Moderate (was)
+- **Status**: ✅ **FIXED** - Updated vite to 7.3.1 and vitest to 4.0.18
+- **Impact**: Was development server only - now resolved
+- **Packages updated**:
+  - `vite`: 5.4.21 → 7.3.1
+  - `vitest`: 1.6.1 → 4.0.18
+  - `@vitest/coverage-v8`: 1.6.1 → 4.0.18
+  - `@vitejs/plugin-react`: 4.7.0 → 5.1.2
+- **Additional updates**:
+  - `@tanstack/react-query`: 5.90.12 → 5.90.20 (patch)
+  - `axios`: 1.13.2 → 1.13.3 (patch)
+  - `autoprefixer`: 10.4.22 → 10.4.23 (patch)
+  - `eslint-plugin-react-refresh`: 0.4.24 → 0.4.26 (patch)
+  - `tailwindcss`: 3.4.18 → 3.4.19 (patch)
+  - `@testing-library/react`: 14.3.1 → 16.3.2 (minor)
 
 ## Security Measures
 
@@ -116,7 +139,8 @@ We will respond within 48 hours and work with you to:
 Security updates are released as patch versions. We recommend:
 - Enabling automatic dependency updates (Dependabot, Renovate)
 - Subscribing to release notifications
-- Regularly running `pip-audit` and `npm audit`
+- Regularly running `pip-audit` (or `pip3-audit`) and `npm audit`
+- Reviewing and addressing vulnerabilities in both production and development dependencies
 
 ## Dependencies
 
@@ -125,8 +149,15 @@ Security updates are released as patch versions. We recommend:
 Run security audit:
 ```bash
 cd backend
-source venv/bin/activate
+source venv/bin/activate  # or create venv: python3 -m venv venv
+pip3 install pip-audit
 pip-audit
+```
+
+Alternatively, use pipx:
+```bash
+cd backend
+pipx run pip-audit
 ```
 
 ### Frontend (Node.js)

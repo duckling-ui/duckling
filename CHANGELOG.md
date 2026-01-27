@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.1] - 2026-01-26
+
+### Security
+
+- **Fixed frontend security vulnerabilities**: Updated dependencies to fix esbuild vulnerability (GHSA-67mh-4wv8-2f99)
+  - Updated `vite`: 5.4.21 → 7.3.1 (major update, fixes esbuild vulnerability)
+  - Updated `vitest`: 1.6.1 → 4.0.18 (major update, fixes esbuild vulnerability)
+  - Updated `@vitest/coverage-v8`: 1.6.1 → 4.0.18
+  - Updated `@vitejs/plugin-react`: 4.7.0 → 5.1.2
+
+### Changed
+
+- **Updated frontend dependencies** (non-breaking updates):
+  - `@tanstack/react-query`: 5.90.12 → 5.90.20 (patch)
+  - `axios`: 1.13.2 → 1.13.3 (patch)
+  - `autoprefixer`: 10.4.22 → 10.4.23 (patch)
+  - `eslint-plugin-react-refresh`: 0.4.24 → 0.4.26 (patch)
+  - `tailwindcss`: 3.4.18 → 3.4.19 (patch)
+  - `@testing-library/react`: 14.3.1 → 16.3.2 (minor)
+
+### Fixed
+
+- Updated `vitest.config.ts` for Vitest 4 compatibility (added `coverage.include` configuration)
+- Updated CI/CD Node.js version requirement to 22 (required for Vite 7)
+
 ## [2.4.0] - 2026-01-08
 
 ### Added

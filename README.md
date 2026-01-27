@@ -3,7 +3,7 @@
 [![Tests](https://github.com/davidgs/duckling/actions/workflows/test.yml/badge.svg)](https://github.com/davidgs/duckling/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Node.js 18+](https://img.shields.io/badge/node.js-18+-green.svg)](https://nodejs.org/)
+[![Node.js 22+](https://img.shields.io/badge/node.js-22+-green.svg)](https://nodejs.org/)
 [![React](https://img.shields.io/badge/React-18-61dafb.svg)](https://react.dev/)
 [![Flask](https://img.shields.io/badge/Flask-3.0-black.svg)](https://flask.palletsprojects.com/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -61,7 +61,7 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 ### Prerequisites
 
 - Python 3.10+ (3.13 recommended)
-- Node.js 18+
+- Node.js 20.19+ or 22+ (22 recommended for Vite 7)
 - npm or yarn
 
 ### Installation
