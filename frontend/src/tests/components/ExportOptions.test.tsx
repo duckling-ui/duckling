@@ -1,6 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ExportOptions from '../../components/ExportOptions';
+import * as api from '../../services/api';
+
+// Mock the API module
+vi.mock('../../services/api', () => ({
+  getExportContent: vi.fn(),
+  getExtractedImages: vi.fn(),
+  getExtractedTables: vi.fn(),
+  getDocumentChunks: vi.fn(),
+  downloadExtractedImage: vi.fn(),
+  downloadTableCsv: vi.fn(),
+}));
 
 describe('ExportOptions', () => {
   const mockOnDownload = vi.fn();
@@ -18,27 +29,54 @@ describe('ExportOptions', () => {
   beforeEach(() => {
     mockOnDownload.mockClear();
     mockOnNewConversion.mockClear();
+    // Mock API responses
+    vi.mocked(api.getExportContent).mockResolvedValue({
+      job_id: 'test-job-123',
+      format: 'html',
+      content: '<html>Test content</html>',
+    });
+    vi.mocked(api.getExtractedImages).mockResolvedValue({
+      job_id: 'test-job-123',
+      images: [],
+      count: 0,
+    });
+    vi.mocked(api.getExtractedTables).mockResolvedValue({
+      job_id: 'test-job-123',
+      tables: [],
+      count: 0,
+    });
+    vi.mocked(api.getDocumentChunks).mockResolvedValue({
+      job_id: 'test-job-123',
+      chunks: [],
+      count: 0,
+    });
   });
 
-  it('renders success message', () => {
+  it('renders success message', async () => {
     render(<ExportOptions {...defaultProps} />);
 
-    expect(screen.getByText('Conversion Complete!')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Conversion Complete!')).toBeInTheDocument();
+    });
   });
 
-  it('shows confidence score', () => {
+  it('shows confidence score', async () => {
     render(<ExportOptions {...defaultProps} />);
 
-    expect(screen.getByText('95.0%')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('95.0%')).toBeInTheDocument();
+    });
   });
 
-  it('renders available formats', () => {
+  it('renders available formats', async () => {
     render(<ExportOptions {...defaultProps} />);
 
-    // Use getAllByText since format names may appear multiple times (in cards and preview badge)
-    expect(screen.getAllByText('Markdown').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('HTML').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('JSON').length).toBeGreaterThanOrEqual(1);
+    await waitFor(() => {
+      // Use getAllByText since format names may appear multiple times (in cards and preview badge)
+      expect(screen.getAllByText('Markdown').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText('HTML').length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText('JSON').length).toBeGreaterThanOrEqual(1);
+    });
   });
 
   it('calls onDownload when download button is clicked', () => {
@@ -59,11 +97,13 @@ describe('ExportOptions', () => {
     expect(mockOnNewConversion).toHaveBeenCalled();
   });
 
-  it('has preview panel visible by default', () => {
+  it('has preview panel visible by default', async () => {
     render(<ExportOptions {...defaultProps} />);
 
-    // Preview is shown by default - check for Hide button
-    expect(screen.getByRole('button', { name: /hide/i })).toBeInTheDocument();
+    await waitFor(() => {
+      // Preview is shown by default - check for Hide button
+      expect(screen.getByRole('button', { name: /hide/i })).toBeInTheDocument();
+    });
   });
 
   it('allows selecting different formats', () => {
