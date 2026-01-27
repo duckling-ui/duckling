@@ -2,9 +2,9 @@
   "language": {
     "label": "Language",
     "en": "English",
-    "es": "Español",
-    "fr": "Français",
-    "de": "Deutsch"
+    "es": "Spanish",
+    "fr": "French",
+    "de": "German"
   },
   "app": {
     "name": "Duckling",
