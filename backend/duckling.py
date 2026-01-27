@@ -463,10 +463,21 @@ def create_app(config_class=None):
         if not site_exists:
             abort(404, "Documentation site not built. Run 'mkdocs build' or POST to /api/docs/build")
 
+        # Security: Sanitize and validate the path parameter
+        # Remove any path traversal attempts and normalize the path
+        sanitized_path = path.lstrip("/")
+        
+        # Remove any attempts at path traversal (../, ..\, etc.)
+        if ".." in sanitized_path or "\\" in sanitized_path:
+            abort(403, "Invalid path")
+        
         # Interpret optional locale prefix in the path.
         # We support /api/docs/site/en|es|fr|de/... regardless of on-disk layout.
         requested_lang = None
-        trimmed = path.lstrip("/")
+        trimmed = sanitized_path
+        
+        # Validate locale prefix
+        supported_languages = ("en", "es", "fr", "de")
         if trimmed == "en" or trimmed.startswith("en/"):
             requested_lang = "en"
             trimmed = trimmed[2:].lstrip("/")  # strip leading 'en'
@@ -480,28 +491,57 @@ def create_app(config_class=None):
             requested_lang = "de"
             trimmed = trimmed[2:].lstrip("/")  # strip leading 'de'
 
+        # Additional security: Check for path traversal after locale removal
+        if ".." in trimmed or "\\" in trimmed or trimmed.startswith("/"):
+            abort(403, "Invalid path")
+
         base_dir = SITE_DIR if requested_lang in (None, "en") else (SITE_DIR / requested_lang)
+        
+        # Ensure base_dir is within SITE_DIR
+        try:
+            base_dir.resolve().relative_to(SITE_DIR.resolve())
+        except ValueError:
+            abort(403, "Invalid locale")
 
         # Default to index.html
         if not trimmed or trimmed.endswith("/"):
             trimmed = trimmed + "index.html" if trimmed else "index.html"
 
-        # Security: ensure path is within SITE_DIR
-        full_path = base_dir / trimmed
+        # Security: Construct path safely and validate it's within base_dir
+        # Use Path.joinpath which is safer than string concatenation
+        base_dir_resolved = base_dir.resolve()
         try:
-            full_path.resolve().relative_to(base_dir.resolve())
-        except ValueError:
-            abort(403)
+            # Normalize the path by joining parts
+            path_parts = [p for p in trimmed.split("/") if p and p != "."]
+            safe_path = Path(*path_parts)
+            
+            # Resolve to absolute path and ensure it's within base_dir
+            full_path = (base_dir / safe_path).resolve()
+            
+            # Verify the resolved path is within base_dir (prevents path traversal)
+            try:
+                full_path.relative_to(base_dir_resolved)
+            except ValueError:
+                abort(403, "Path traversal detected")
+            
+        except (ValueError, OSError):
+            abort(403, "Invalid path")
 
         if not full_path.exists():
             # Try adding index.html for directory paths
-            if (base_dir / trimmed / "index.html").exists():
-                trimmed = trimmed + "/index.html"
+            index_path = full_path / "index.html"
+            if index_path.exists():
+                # Re-validate the index.html path
+                try:
+                    index_path.resolve().relative_to(base_dir_resolved)
+                except ValueError:
+                    abort(403, "Path traversal detected")
+                full_path = index_path
             else:
                 abort(404)
 
-        # Determine mimetype
-        ext = Path(trimmed).suffix.lower()
+        # Determine mimetype from the file path
+        ext = full_path.suffix.lower()
         mimetypes = {
             '.html': 'text/html',
             '.css': 'text/css',
@@ -520,7 +560,9 @@ def create_app(config_class=None):
         }
         mimetype = mimetypes.get(ext, 'application/octet-stream')
 
-        return send_from_directory(base_dir, trimmed, mimetype=mimetype)
+        # Use the relative path from base_dir for send_from_directory
+        relative_path = str(full_path.relative_to(base_dir_resolved))
+        return send_from_directory(str(base_dir_resolved), relative_path, mimetype=mimetype)
 
     # Error handlers
     @app.errorhandler(400)

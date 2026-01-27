@@ -1110,11 +1110,19 @@ def download_extracted_image(job_id: str, image_id: int):
         if not image_path or not os.path.exists(image_path):
             raise NotFound("Image file not found")
 
+        # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
+        image_path_obj = Path(image_path).resolve()
+        output_folder_resolved = OUTPUT_FOLDER.resolve()
+        try:
+            image_path_obj.relative_to(output_folder_resolved)
+        except ValueError:
+            raise NotFound("Image file not found")
+
         filename = image.get("filename", f"image_{image_id}.png")
         mimetype = get_mimetype_for_image(filename)
         
         return send_file(
-            image_path,
+            str(image_path_obj),
             mimetype=mimetype,
             as_attachment=True,
             download_name=filename
@@ -1134,9 +1142,17 @@ def download_extracted_image(job_id: str, image_id: int):
         
         if 0 < image_id <= len(image_files):
             image_path = image_files[image_id - 1]
+            # Security: Validate path is within OUTPUT_FOLDER (already validated by glob, but double-check)
+            image_path_resolved = image_path.resolve()
+            output_folder_resolved = OUTPUT_FOLDER.resolve()
+            try:
+                image_path_resolved.relative_to(output_folder_resolved)
+            except ValueError:
+                raise NotFound("Image file not found")
+            
             mimetype = get_mimetype_for_image(image_path.name)
             return send_file(
-                str(image_path),
+                str(image_path_resolved),
                 mimetype=mimetype,
                 as_attachment=True,
                 download_name=image_path.name
@@ -1249,8 +1265,16 @@ def download_table_csv(job_id: str, table_id: int):
     if not csv_path or not os.path.exists(csv_path):
         raise NotFound("CSV file not found")
 
+    # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
+    csv_path_obj = Path(csv_path).resolve()
+    output_folder_resolved = OUTPUT_FOLDER.resolve()
+    try:
+        csv_path_obj.relative_to(output_folder_resolved)
+    except ValueError:
+        raise NotFound("CSV file not found")
+
     return send_file(
-        csv_path,
+        str(csv_path_obj),
         mimetype="text/csv",
         as_attachment=True,
         download_name=f"table_{table_id}.csv"
@@ -1286,8 +1310,16 @@ def download_table_image(job_id: str, table_id: int):
     if not image_path or not os.path.exists(image_path):
         raise NotFound("Table image not found")
 
+    # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
+    image_path_obj = Path(image_path).resolve()
+    output_folder_resolved = OUTPUT_FOLDER.resolve()
+    try:
+        image_path_obj.relative_to(output_folder_resolved)
+    except ValueError:
+        raise NotFound("Table image not found")
+
     return send_file(
-        image_path,
+        str(image_path_obj),
         mimetype="image/png",
         as_attachment=True,
         download_name=f"table_{table_id}.png"
@@ -1356,6 +1388,14 @@ def export_document(job_id: str, format_type: str):
     if not output_path:
         raise NotFound(f"Output format '{format_type}' not available for this job")
 
+    # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
+    output_path_obj = Path(output_path).resolve()
+    output_folder_resolved = OUTPUT_FOLDER.resolve()
+    try:
+        output_path_obj.relative_to(output_folder_resolved)
+    except ValueError:
+        raise NotFound(f"Output format '{format_type}' not available for this job")
+
     # Determine MIME type
     mime_types = {
         "markdown": "text/markdown",
@@ -1368,10 +1408,10 @@ def export_document(job_id: str, format_type: str):
     }
 
     return send_file(
-        output_path,
+        str(output_path_obj),
         mimetype=mime_types.get(format_type, "text/plain"),
         as_attachment=True,
-        download_name=output_path.name
+        download_name=output_path_obj.name
     )
 
 
