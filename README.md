@@ -92,7 +92,7 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
    ```bash
    cd backend
    source venv/bin/activate
-   python app.py
+   python duckling.py
    ```
    The API will be available at `http://localhost:5001`
 
@@ -278,7 +278,7 @@ npm test
 ```
 duckling/
 ├── backend/
-│   ├── app.py              # Flask application
+│   ├── duckling.py         # Flask application
 │   ├── config.py           # Configuration & defaults
 │   ├── models/             # Database models
 │   ├── routes/             # API endpoints

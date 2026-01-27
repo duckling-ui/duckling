@@ -15,7 +15,7 @@ pip install gunicorn
 ### Basic Usage
 
 ```bash
-gunicorn -w 4 -b 0.0.0.0:5001 app:app
+gunicorn -w 4 -b 0.0.0.0:5001 duckling:app
 ```
 
 ### Recommended Configuration

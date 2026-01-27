@@ -90,7 +90,7 @@ Before deploying to production, ensure:
 - [ ] Set `FLASK_DEBUG=false` environment variable
 - [ ] Set a strong `SECRET_KEY` environment variable
 - [ ] Configure `FLASK_HOST` appropriately (not 0.0.0.0 unless behind reverse proxy)
-- [ ] Update CORS origins in `backend/app.py` to match your domain
+- [ ] Update CORS origins in `backend/duckling.py` to match your domain
 - [ ] Use HTTPS in production (configure via reverse proxy)
 - [ ] Set appropriate `MAX_CONTENT_LENGTH` for your use case
 - [ ] Review and restrict file upload extensions if needed

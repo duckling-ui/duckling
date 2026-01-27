@@ -59,13 +59,13 @@ const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
 const FORMAT_CATEGORIES = [
   {
-    name: "Documents",
+    nameKey: "documents",
     formats: ["PDF", "DOCX", "PPTX", "XLSX"],
     color: "primary",
   },
-  { name: "Web", formats: ["HTML", "Markdown"], color: "blue" },
-  { name: "Images", formats: ["PNG", "JPG", "TIFF", "WebP"], color: "purple" },
-  { name: "Data", formats: ["XML", "AsciiDoc"], color: "green" },
+  { nameKey: "web", formats: ["HTML", "Markdown"], color: "blue" },
+  { nameKey: "images", formats: ["PNG", "JPG", "TIFF", "WebP"], color: "purple" },
+  { nameKey: "data", formats: ["XML", "AsciiDoc"], color: "green" },
 ];
 
 // URL validation regex
@@ -367,11 +367,11 @@ export default function DropZone({
                     <div className="flex flex-wrap justify-center gap-3 max-w-lg">
                       {FORMAT_CATEGORIES.map((category) => (
                         <div
-                          key={category.name}
+                          key={category.nameKey}
                           className="flex items-center gap-1.5"
                         >
                           <span className="text-xs text-dark-500">
-                            {category.name}:
+                            {t(`dropzone.categories.${category.nameKey}`)}:
                           </span>
                           <div className="flex gap-1">
                             {category.formats.map((format) => (

@@ -98,7 +98,7 @@ Manages application settings:
 
 | Path | Description |
 |------|-------------|
-| `backend/app.py` | Flask application factory |
+| `backend/duckling.py` | Flask application factory |
 | `backend/config.py` | Configuration and defaults |
 | `backend/models/database.py` | SQLAlchemy models |
 | `backend/routes/convert.py` | Conversion endpoints |

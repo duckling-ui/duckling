@@ -48,6 +48,7 @@
     "title": "Documentación",
     "subtitle": "Referencia de Duckling",
     "navigation": "Navegación",
+    "homeCategory": "Inicio",
     "loading": "Cargando...",
     "notBuiltTitle": "Documentación no generada",
     "notBuiltBody": "El sitio de documentación debe generarse antes de poder verse.",
@@ -248,6 +249,12 @@
     "dragAndDropMultiple": "Arrastra y suelta tus documentos aquí",
     "orClickToBrowse": "o haz clic para buscar",
     "multipleEnabled": "✨ Subida múltiple habilitada: selecciona o suelta varios archivos",
+    "categories": {
+      "documents": "Documentos",
+      "web": "Web",
+      "images": "Imágenes",
+      "data": "Datos"
+    },
     "enterUrlTitleSingle": "Introduce la URL del documento",
     "enterUrlTitleMultiple": "Introduce las URLs de los documentos",
     "enterUrlBodySingle": "Pega un enlace directo a un documento (PDF, DOCX, etc.)",

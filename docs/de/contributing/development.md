@@ -31,7 +31,7 @@ npm install
 ```bash
 cd backend
 source venv/bin/activate
-python app.py
+python duckling.py
 ```
 
 Backend runs at: `http://localhost:5001`
@@ -50,7 +50,7 @@ Frontend runs at: `http://localhost:3000`
 ```
 duckling/
 ├── backend/
-│   ├── app.py              # Flask application entry
+│   ├── duckling.py         # Flask application entry
 │   ├── config.py           # Configuration
 │   ├── models/             # Database models
 │   ├── routes/             # API endpoints
@@ -134,7 +134,7 @@ Both servers support hot reloading:
       "request": "launch",
       "module": "flask",
       "env": {
-        "FLASK_APP": "app.py",
+        "FLASK_APP": "duckling.py",
         "FLASK_DEBUG": "1"
       },
       "args": ["run", "--port", "5001"],

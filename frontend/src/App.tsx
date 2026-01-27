@@ -12,7 +12,7 @@ import { convertFromUrl, convertFromUrlsBatch } from "./services/api";
 import type { HistoryEntry, ConversionResult } from "./types";
 
 // App version from package.json
-const APP_VERSION = "0.0.5";
+const APP_VERSION = "0.0.7";
 
 export default function App() {
   const { t, i18n } = useTranslation();

@@ -39,7 +39,7 @@ Choose your preferred method:
     ```bash
     cd backend
     source venv/bin/activate  # Windows: venv\Scripts\activate
-    python app.py
+    python duckling.py
     ```
 
     The API will be available at `http://localhost:5001`

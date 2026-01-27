@@ -48,6 +48,7 @@
     "title": "Documentation",
     "subtitle": "Duckling Reference",
     "navigation": "Navigation",
+    "homeCategory": "Home",
     "loading": "Loading...",
     "notBuiltTitle": "Documentation Not Built",
     "notBuiltBody": "The documentation site needs to be built before it can be viewed.",
@@ -248,6 +249,12 @@
     "dragAndDropMultiple": "Drag and drop your documents here",
     "orClickToBrowse": "or click to browse",
     "multipleEnabled": "✨ Multiple file upload enabled - select or drop multiple files",
+    "categories": {
+      "documents": "Documents",
+      "web": "Web",
+      "images": "Images",
+      "data": "Data"
+    },
     "enterUrlTitleSingle": "Enter Document URL",
     "enterUrlTitleMultiple": "Enter Document URLs",
     "enterUrlBodySingle": "Paste a direct link to a document (PDF, DOCX, etc.)",

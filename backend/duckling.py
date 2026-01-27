@@ -83,7 +83,7 @@ def build_docs():
 def create_app(config_class=None):
     """Application factory for creating Flask app."""
 
-    app = Flask(__name__)
+    app = Flask("duckling")
 
     # Load configuration
     if config_class is None:
@@ -179,7 +179,7 @@ def create_app(config_class=None):
                 "contributing": "Contribuer",
                 "deployment": "Déploiement",
                 "getting-started": "Bien démarrer",
-                "user-guide": "Guide d’utilisation",
+                "user-guide": "Guide d'utilisation",
             },
             "de": {
                 "api": "API",
@@ -191,6 +191,130 @@ def create_app(config_class=None):
             },
         }
 
+        # Translations for common page names (by slug)
+        page_label_by_lang = {
+            "en": {
+                "home": "Home",
+                "changelog": "Changelog",
+                "conversion": "Conversion API",
+                "history": "History API",
+                "settings": "Settings API",
+                "index": "API Reference",
+                "components": "Components",
+                "diagrams": "Architecture Diagrams",
+                "overview": "System Overview",
+                "architecture": "Architecture",
+                "code-of-conduct": "Code of Conduct",
+                "code-style": "Code Style",
+                "contributing": "Contributing",
+                "development": "Development Setup",
+                "testing": "Testing",
+                "deployment": "Deployment",
+                "production": "Production Deployment",
+                "scaling": "Scaling",
+                "security": "Security",
+                "configuration": "Configuration Guide",
+                "features": "Features",
+                "formats": "Supported Formats",
+                "screenshots": "Screenshots Gallery",
+                "user-guide": "User Guide",
+                "docker": "Docker Deployment",
+                "getting-started": "Getting Started",
+                "installation": "Installation",
+                "quickstart": "Quick Start",
+            },
+            "es": {
+                "home": "Inicio",
+                "changelog": "Registro de cambios",
+                "conversion": "Conversión",
+                "history": "Historial (API)",
+                "settings": "Configuración (API)",
+                "index": "Referencia de la API",
+                "components": "Componentes",
+                "diagrams": "Diagramas",
+                "overview": "Resumen del sistema",
+                "architecture": "Arquitectura",
+                "code-of-conduct": "Código de conducta",
+                "code-style": "Estilo de código",
+                "contributing": "Contribuir",
+                "development": "Configuración de desarrollo",
+                "testing": "Pruebas",
+                "deployment": "Despliegue",
+                "production": "Producción",
+                "scaling": "Escalado",
+                "security": "Seguridad",
+                "configuration": "Configuración",
+                "features": "Funciones",
+                "formats": "Formatos compatibles",
+                "screenshots": "Capturas de pantalla",
+                "user-guide": "Guía de usuario",
+                "docker": "Docker",
+                "getting-started": "Primeros pasos",
+                "installation": "Instalación",
+                "quickstart": "Quick Start",
+            },
+            "fr": {
+                "home": "Accueil",
+                "changelog": "Journal des modifications",
+                "conversion": "Conversion",
+                "history": "Historique (API)",
+                "settings": "Paramètres (API)",
+                "index": "Référence API",
+                "components": "Composants",
+                "diagrams": "Diagrammes",
+                "overview": "Vue d'ensemble du système",
+                "architecture": "Architecture",
+                "code-of-conduct": "Code de conduite",
+                "code-style": "Style de code",
+                "contributing": "Contribuer",
+                "development": "Configuration de développement",
+                "testing": "Tests",
+                "deployment": "Déploiement",
+                "production": "Déploiement en production",
+                "scaling": "Mise à l'échelle",
+                "security": "Sécurité",
+                "configuration": "Guide de configuration",
+                "features": "Fonctionnalités",
+                "formats": "Formats pris en charge",
+                "screenshots": "Galerie de captures d'écran",
+                "user-guide": "Guide d'utilisation",
+                "docker": "Déploiement Docker",
+                "getting-started": "Bien démarrer",
+                "installation": "Installation",
+                "quickstart": "Démarrage rapide",
+            },
+            "de": {
+                "home": "Startseite",
+                "changelog": "Änderungsprotokoll",
+                "conversion": "Konvertierung",
+                "history": "Verlauf (API)",
+                "settings": "Einstellungen (API)",
+                "index": "API-Referenz",
+                "components": "Komponenten",
+                "diagrams": "Architekturdiagramme",
+                "overview": "Systemübersicht",
+                "architecture": "Architektur",
+                "code-of-conduct": "Verhaltenskodex",
+                "code-style": "Code-Stil",
+                "contributing": "Mitwirken",
+                "development": "Entwicklungsumgebung",
+                "testing": "Tests",
+                "deployment": "Bereitstellung",
+                "production": "Produktionsbereitstellung",
+                "scaling": "Skalierung",
+                "security": "Sicherheit",
+                "configuration": "Konfigurationsanleitung",
+                "features": "Funktionen",
+                "formats": "Unterstützte Formate",
+                "screenshots": "Screenshot-Galerie",
+                "user-guide": "Benutzerhandbuch",
+                "docker": "Docker-Bereitstellung",
+                "getting-started": "Erste Schritte",
+                "installation": "Installation",
+                "quickstart": "Schnellstart",
+            },
+        }
+
         section_slugs = set(section_label_by_lang["en"].keys())
 
         def _derive_slug_title(slug: str) -> str:
@@ -199,21 +323,37 @@ def create_app(config_class=None):
         def _translate_section(slug: str) -> str:
             return section_label_by_lang.get(requested_lang, {}).get(slug, _derive_slug_title(slug))
 
+        def _translate_page(slug: str) -> str | None:
+            """Translate common page names like 'home', 'changelog'."""
+            return page_label_by_lang.get(requested_lang, {}).get(slug.lower())
+
         _h1_re = re.compile(r"<h1[^>]*>(.*?)</h1>", re.IGNORECASE | re.DOTALL)
+        # Also try to match h1 with class attributes and more flexible patterns
+        _h1_alt_re = re.compile(r"<h1[^>]*class=[^>]*>(.*?)</h1>", re.IGNORECASE | re.DOTALL)
 
         def _extract_page_title(html_path: Path) -> str | None:
             try:
                 # Read a bounded amount; MkDocs pages can be large but the H1 is near the top.
-                raw = html_path.read_text(encoding="utf-8", errors="ignore")
+                # Read first 50KB which should be enough for the header section
+                raw = html_path.read_text(encoding="utf-8", errors="ignore")[:50000]
             except Exception:
                 return None
+            
+            # Try primary regex first
             m = _h1_re.search(raw)
             if not m:
+                # Try alternative pattern
+                m = _h1_alt_re.search(raw)
+            
+            if not m:
                 return None
+            
             title_html = m.group(1)
             # Strip tags inside the H1 and unescape entities.
             title = re.sub(r"<[^>]+>", "", title_html)
             title = html_lib.unescape(title).strip()
+            # Remove extra whitespace and newlines
+            title = re.sub(r"\s+", " ", title)
             return title or None
 
         # Auto-build docs if site doesn't exist
@@ -237,7 +377,7 @@ def create_app(config_class=None):
                 if str(rel_path) == ".":
                     docs.append({
                         "id": "index",
-                        "name": "Home",
+                        "name": _translate_page("home"),
                         "path": ""
                     })
                     continue
@@ -264,16 +404,21 @@ def create_app(config_class=None):
                 page_title = _extract_page_title(html_file)
                 if len(parts) == 1 and parts[0] in section_slugs:
                     category_label = _translate_section(parts[0])
-                    item_label = page_title or category_label
+                    # Try translating the slug first, then use page title or category label
+                    page_slug = parts[0]
+                    item_label = page_title or _translate_page(page_slug) or category_label
                     display_name = f"{category_label}: {item_label}"
                 elif len(parts) > 1:
                     category_label = _translate_section(parts[0])
-                    # If no H1 found, fall back to the slug-based title.
-                    item_label = page_title or _derive_slug_title(parts[-1])
+                    # If no H1 found, try translating the page slug, then fall back to slug-based title.
+                    page_slug = parts[-1]
+                    item_label = page_title or _translate_page(page_slug) or _derive_slug_title(page_slug)
                     display_name = f"{category_label}: {item_label}"
                 else:
                     # Top-level single pages like "changelog" stay under "Home" grouping in the UI.
-                    display_name = page_title or _translate_section(parts[0])
+                    # Try to translate common page names first, then fall back to section translation or slug
+                    slug = parts[0]
+                    display_name = page_title or _translate_page(slug) or _translate_section(slug) or _derive_slug_title(slug)
 
                 docs.append({
                     "id": doc_id,

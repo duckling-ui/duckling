@@ -26,7 +26,7 @@ Avant de déployer en production, assurez-vous de :
 - [ ] Définir la variable d'environnement `FLASK_DEBUG=false`
 - [ ] Définir une variable d'environnement `SECRET_KEY` forte
 - [ ] Configurer `FLASK_HOST` correctement (pas 0.0.0.0 sauf si derrière un proxy inverse)
-- [ ] Mettre à jour les origines CORS dans `backend/app.py` pour qu'elles correspondent à votre domaine
+- [ ] Mettre à jour les origines CORS dans `backend/duckling.py` pour qu'elles correspondent à votre domaine
 - [ ] Utiliser HTTPS en production (à configurer via un proxy inverse)
 - [ ] Définir une valeur `MAX_CONTENT_LENGTH` appropriée à votre cas d'utilisation
 - [ ] Examiner et restreindre les extensions de fichiers autorisées pour le téléchargement si nécessaire

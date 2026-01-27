@@ -412,6 +412,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Internationalization (UI)**: Added French (`fr`) and German (`de`) UI translations (in addition to English/Spanish).
 - **Internationalization (Docs)**: Added MkDocs multilingual documentation with `/en/`, `/es/`, `/fr/`, `/de/` locale paths served by the backend docs viewer.
+- **Dropzone I18N**: Added internationalization strings for dropzone panel category labels (Documents, Web, Images, Data) in all supported languages.
+
+### Fixed
+
+- **Documentation Localization**: Fixed incomplete localization in documentation navigation
+  - Added comprehensive translation mappings for all common page names (conversion, history, settings, components, diagrams, etc.)
+  - Improved H1 title extraction from HTML with better regex patterns and error handling
+  - Fixed fallback logic to use translated page names instead of English slug-based titles
+  - Navigation now displays fully localized page names in Spanish, French, and German
+- **Dropzone Category Labels**: Fixed missing I18N strings for file format category labels in the dropzone panel
+  - Category labels (Documents, Web, Images, Data) now properly translate based on selected language
+  - Added translations for all supported languages (en, es, fr, de)
+
+### Changed
+
+- **Backend Entry Point**: Renamed `app.py` to `duckling.py` throughout the codebase
+  - Flask application now uses `Flask("duckling")` instead of `Flask(__name__)`
+  - Updated all references in Dockerfiles, documentation, tests, and configuration files
+  - Gunicorn now uses `duckling:app` instead of `app:app`
+  - Flask CLI now shows "Serving Flask app 'duckling'" instead of "Serving Flask app 'app'"
 
 ### Planned
 

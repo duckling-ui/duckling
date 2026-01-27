@@ -178,7 +178,7 @@ docs(readme): update installation instructions
 ```
 duckling/
 ├── backend/
-│   ├── app.py              # Flask application entry
+│   ├── duckling.py         # Flask application entry
 │   ├── config.py           # Configuration
 │   ├── models/             # Database models
 │   ├── routes/             # API endpoints

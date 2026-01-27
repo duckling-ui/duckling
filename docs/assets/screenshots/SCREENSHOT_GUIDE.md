@@ -85,7 +85,7 @@ This guide lists all screenshots needed for the Duckling documentation. All scre
 # Terminal 1 - Backend
 cd backend
 source venv/bin/activate
-python app.py
+python duckling.py
 
 # Terminal 2 - Frontend
 cd frontend

@@ -9,7 +9,7 @@ from pathlib import Path
 # Add backend to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app import create_app
+from duckling import create_app
 from config import TestingConfig
 from models.database import init_db, Base, engine
 

@@ -55,7 +55,7 @@ docker-compose up -d --build
 ```bash
 # Backend with Gunicorn
 cd backend
-gunicorn -w 4 -b 0.0.0.0:5001 app:app
+gunicorn -w 4 -b 0.0.0.0:5001 duckling:app
 
 # Frontend build
 cd frontend

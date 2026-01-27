@@ -26,7 +26,7 @@ Stellen Sie vor der Bereitstellung in der Produktion sicher:
 - [ ] Umgebungsvariable `FLASK_DEBUG=false` setzen
 - [ ] Eine sichere Umgebungsvariable `SECRET_KEY` festlegen
 - [ ] `FLASK_HOST` entsprechend konfigurieren (nicht 0.0.0.0, es sei denn, es wird ein Reverse-Proxy verwendet)
-- [ ] CORS-Ursprünge in `backend/app.py` an Ihre Domain anpassen
+- [ ] CORS-Ursprünge in `backend/duckling.py` an Ihre Domain anpassen
 - [ ] HTTPS in der Produktion verwenden (Konfiguration über Reverse-Proxy)
 - [ ] Geeignete `MAX_CONTENT_LENGTH` für Ihren Anwendungsfall festlegen
 - [ ] Dateiupload-Erweiterungen überprüfen und ggf. einschränken

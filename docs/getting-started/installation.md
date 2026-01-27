@@ -73,7 +73,7 @@ MAX_CONTENT_LENGTH=104857600  # 100MB
 ```bash
 cd backend
 source venv/bin/activate
-python app.py
+python duckling.py
 ```
 
 You should see:

@@ -39,8 +39,9 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
   const [siteBuilt, setSiteBuilt] = useState(true);
   const [building, setBuilding] = useState(false);
   const [buildError, setBuildError] = useState<string | null>(null);
+  const homeCategoryName = t("docsPanel.homeCategory", "Home");
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
-    new Set(["Home"])
+    new Set([homeCategoryName])
   );
 
   const docsLocale = i18n.language?.toLowerCase().startsWith("es")
@@ -65,7 +66,8 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
         category = doc.name.substring(0, colonIndex).trim();
         itemName = doc.name.substring(colonIndex + 1).trim();
       } else {
-        category = "Home";
+        // Use translated "Home" category name for top-level pages
+        category = t("docsPanel.homeCategory", "Home");
         itemName = doc.name;
       }
 
@@ -80,10 +82,11 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
     });
 
     // Sort categories and items
+    const homeCategory = t("docsPanel.homeCategory", "Home");
     const sortedCategories = Object.keys(groups).sort((a, b) => {
       // Home always first
-      if (a === "Home") return -1;
-      if (b === "Home") return 1;
+      if (a === homeCategory) return -1;
+      if (b === homeCategory) return 1;
       return a.localeCompare(b);
     });
 
@@ -103,11 +106,14 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
         setDocs(data.docs || []);
         setSiteBuilt(data.site_built !== false);
         if (data.docs?.length > 0) {
-          // Find and select "Home" or first doc
+          // Find and select home page or first doc
           const homeDoc = data.docs.find((d: DocFile) => d.id === "index");
           const firstDoc = homeDoc || data.docs[0];
           setSelectedDoc(firstDoc.id);
           setSelectedPath(firstDoc.path || "");
+          // Ensure home category is expanded
+          const homeCategory = t("docsPanel.homeCategory", "Home");
+          setExpandedSections((prev) => new Set([...prev, homeCategory]));
         }
         setLoading(false);
       })
@@ -176,7 +182,7 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
 
   // Collapse all sections
   const collapseAll = () => {
-    setExpandedSections(new Set(["Home"]));
+    setExpandedSections(new Set([t("docsPanel.homeCategory", "Home")]));
   };
 
   return (

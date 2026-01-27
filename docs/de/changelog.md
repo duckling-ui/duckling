@@ -9,8 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- UI language support (English `en`, Spanish `es`) with a language switcher.
-- Multilingual MkDocs documentation (English + Spanish) served under `/api/docs/site/en/` and `/api/docs/site/es/`.
+- Unterstützung für UI-Sprachen (Englisch `en`, Spanisch `es`, Französisch `fr`, Deutsch `de`) mit Sprachumschalter.
+- Mehrsprachige MkDocs-Dokumentation (Englisch, Spanisch, Französisch, Deutsch) unter `/api/docs/site/<locale>/`.
+- Kategoriebeschriftungen im Dropzone-Panel (Dokumente, Web, Bilder, Daten) jetzt vollständig internationalisiert.
+
+### Fixed
+
+- Die Dokumentationsnavigation zeigt jetzt vollständig lokalisierte Seitennamen in allen unterstützten Sprachen an.
+- Kategoriebeschriftungen für Dateiformate im Dropzone-Panel werden jetzt korrekt basierend auf der ausgewählten Sprache übersetzt.
+- Verbesserte Extraktion von Dokumentationsseitentiteln mit besserem Fallback auf übersetzte Namen.
+
+### Changed
+
+- Backend-Einstiegspunkt von `app.py` zu `duckling.py` umbenannt für bessere Klarheit.
+- Flask-Anwendungsname zu "duckling" geändert (zeigt "Serving Flask app 'duckling'").
 
 ## [2.3.0] - 2026-01-07
 
