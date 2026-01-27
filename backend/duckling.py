@@ -647,6 +647,12 @@ def create_app(config_class=None):
             abort(403, "Invalid path")
 
         base_dir = SITE_DIR if requested_lang in (None, "en") else (SITE_DIR / requested_lang)
+        
+        # Ensure base_dir is within SITE_DIR
+        try:
+            base_dir.resolve().relative_to(SITE_DIR.resolve())
+        except ValueError:
+            abort(403, "Invalid locale")
 
         # Ensure base_dir is within SITE_DIR
         try:
