@@ -1,7 +1,7 @@
 # Duckling Backend Dependencies
 flask==3.0.0
 flask-cors==6.0.0
-docling==2.14.0
+docling>=2.50.0  # 2.50.0+ required for enrichment models (picture classification, description, formula recognition, code detection)
 sqlalchemy==2.0.36
 python-dotenv==1.0.0
 pytest==7.4.3

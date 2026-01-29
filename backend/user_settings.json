@@ -25,7 +25,7 @@
   "enrichment": {
     "code_enrichment": false,
     "formula_enrichment": false,
-    "picture_classification": false,
+    "picture_classification": true,
     "picture_description": true
   },
   "output": {
