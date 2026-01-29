@@ -47,7 +47,11 @@ Choisissez la méthode d'installation qui vous convient le mieux :
 
     Configurez un environnement de développement local pour la personnalisation et la contribution
 
-    [:octicons-arrow-right-24: Guide d'installation](installation.md)</div>## Prochaines étapesAprès l'installation, explorez :1. **[Fonctionnalités](../user-guide/features.md)** - Découvrez toutes les capacités
+    [:octicons-arrow-right-24: Guide d'installation](installation.md)
+
+</div>
+
+## Prochaines étapesAprès l'installation, explorez :1. **[Fonctionnalités](../user-guide/features.md)** - Découvrez toutes les capacités
 2. **[Configuration](../user-guide/configuration.md)** - Personnalisez les paramètres selon vos besoins
 3. **[Référence API](../api/index.md)** - Intégrez avec vos applications
 
