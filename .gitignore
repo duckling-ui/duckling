@@ -32,6 +32,7 @@ env/
 *.swp
 *.swo
 *~
+.cursor/
 
 .cursor
 .cursorrules
