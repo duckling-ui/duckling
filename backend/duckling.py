@@ -68,6 +68,24 @@ def build_docs():
         return False
 
     try:
+        # Update version in mkdocs.yml before building
+        version_script = PROJECT_ROOT / "scripts" / "get_version.py"
+        if version_script.exists():
+            python_exe = shutil.which("python3") or shutil.which("python")
+            if python_exe:
+                try:
+                    logger.info("Updating version in mkdocs.yml...")
+                    subprocess.run(
+                        [python_exe, str(version_script)],
+                        cwd=PROJECT_ROOT,
+                        capture_output=True,
+                        text=True,
+                        timeout=30,
+                        check=False  # Don't fail if version update fails
+                    )
+                except Exception as e:
+                    logger.warning(f"Could not update version: {e}")
+
         logger.info("Building documentation with MkDocs...")
         mkdocs_exe = shutil.which("mkdocs")
         if not mkdocs_exe:
@@ -85,6 +103,32 @@ def build_docs():
         )
         if result.returncode == 0:
             logger.info("Documentation built successfully")
+            # Copy versions.json to site directory if it exists
+            docs_versions_json = PROJECT_ROOT / "docs" / "versions.json"
+            site_dir = PROJECT_ROOT / "site"
+            site_versions_json = site_dir / "versions.json"
+            if docs_versions_json.exists() and site_dir.exists():
+                try:
+                    import shutil
+                    shutil.copy2(docs_versions_json, site_versions_json)
+                    logger.info("Copied versions.json to site directory")
+                except Exception as e:
+                    logger.warning(f"Could not copy versions.json: {e}")
+
+            # Copy sitemap.xml to each language directory for SEO crawlers
+            sitemap_xml = site_dir / "sitemap.xml"
+            if sitemap_xml.exists():
+                try:
+                    import shutil
+                    for lang in ["en", "es", "fr", "de"]:
+                        lang_dir = site_dir / lang
+                        if lang_dir.exists():
+                            lang_sitemap = lang_dir / "sitemap.xml"
+                            shutil.copy2(sitemap_xml, lang_sitemap)
+                            logger.info(f"Copied sitemap.xml to {lang}/ directory")
+                except Exception as e:
+                    logger.warning(f"Could not copy sitemap.xml to language directories: {e}")
+
             return True
         else:
             logger.error(f"MkDocs build failed: {result.stderr}")
@@ -124,6 +168,9 @@ def create_app(config_class=None):
     # Initialize database
     with app.app_context():
         init_db()
+        # Migrate legacy settings if they exist
+        from routes.settings import migrate_legacy_settings
+        migrate_legacy_settings()
 
     # Register blueprints
     app.register_blueprint(convert_bp, url_prefix="/api")
@@ -360,16 +407,16 @@ def create_app(config_class=None):
                 raw = html_path.read_text(encoding="utf-8", errors="ignore")[:50000]
             except Exception:
                 return None
-            
+
             # Try primary regex first
             m = _h1_re.search(raw)
             if not m:
                 # Try alternative pattern
                 m = _h1_alt_re.search(raw)
-            
+
             if not m:
                 return None
-            
+
             title_html = m.group(1)
             # Strip tags inside the H1 and unescape entities.
             title = re.sub(r"<[^>]+>", "", title_html)
@@ -389,7 +436,7 @@ def create_app(config_class=None):
             # mkdocs-static-i18n builds default locale at SITE_DIR and non-default at SITE_DIR/<locale>
             # Security: Use explicit mapping instead of string concatenation to avoid CodeQL warnings
             site_dir_resolved = SITE_DIR.resolve()
-            
+
             # Map validated language codes to safe directory paths
             lang_to_dir = {
                 "en": SITE_DIR,
@@ -397,10 +444,10 @@ def create_app(config_class=None):
                 "fr": SITE_DIR / "fr",
                 "de": SITE_DIR / "de",
             }
-            
+
             # Get base_dir from validated mapping (defaults to "en" if invalid)
             base_dir = lang_to_dir.get(requested_lang, SITE_DIR)
-            
+
             # Security: Ensure base_dir is within SITE_DIR to prevent path traversal
             base_dir_resolved = base_dir.resolve()
             try:
@@ -409,7 +456,7 @@ def create_app(config_class=None):
                 # If path traversal detected, fall back to default
                 base_dir = SITE_DIR
                 base_dir_resolved = site_dir_resolved
-            
+
             if not base_dir.exists():
                 base_dir = SITE_DIR
                 base_dir_resolved = site_dir_resolved
@@ -424,7 +471,7 @@ def create_app(config_class=None):
                 except ValueError:
                     # Skip files outside base_dir (shouldn't happen with rglob, but be safe)
                     continue
-                
+
                 rel_path = html_file.parent.relative_to(base_dir)
 
                 # Skip root index and assets
@@ -520,16 +567,16 @@ def create_app(config_class=None):
         # Security: Sanitize and validate the path parameter
         # Remove any path traversal attempts and normalize the path
         sanitized_path = path.lstrip("/")
-        
+
         # Remove any attempts at path traversal (../, ..\, etc.)
         if ".." in sanitized_path or "\\" in sanitized_path:
             abort(403, "Invalid path")
-        
+
         # Interpret optional locale prefix in the path.
         # We support /api/docs/site/en|es|fr|de/... regardless of on-disk layout.
         requested_lang = None
         trimmed = sanitized_path
-        
+
         # Validate locale prefix
         supported_languages = ("en", "es", "fr", "de")
         if trimmed == "en" or trimmed.startswith("en/"):
@@ -550,7 +597,7 @@ def create_app(config_class=None):
             abort(403, "Invalid path")
 
         base_dir = SITE_DIR if requested_lang in (None, "en") else (SITE_DIR / requested_lang)
-        
+
         # Ensure base_dir is within SITE_DIR
         try:
             base_dir.resolve().relative_to(SITE_DIR.resolve())
@@ -568,16 +615,16 @@ def create_app(config_class=None):
             # Normalize the path by joining parts
             path_parts = [p for p in trimmed.split("/") if p and p != "."]
             safe_path = Path(*path_parts)
-            
+
             # Resolve to absolute path and ensure it's within base_dir
             full_path = (base_dir / safe_path).resolve()
-            
+
             # Verify the resolved path is within base_dir (prevents path traversal)
             try:
                 full_path.relative_to(base_dir_resolved)
             except ValueError:
                 abort(403, "Path traversal detected")
-            
+
         except (ValueError, OSError):
             abort(403, "Invalid path")
 

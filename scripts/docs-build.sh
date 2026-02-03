@@ -41,6 +41,29 @@ else
   "$PYTHON_BIN" -m pip install -r requirements-docs.txt
 fi
 
-exec "$MKDOCS_BIN" build --strict
+# Update version in mkdocs.yml from package.json or GitHub
+echo "Updating version in mkdocs.yml..."
+"$PYTHON_BIN" "$ROOT_DIR/scripts/get_version.py" || {
+  echo "Warning: Could not update version, continuing with existing version"
+}
+
+# Build docs
+"$MKDOCS_BIN" build --strict
+
+# Copy versions.json to site directory if it exists in docs
+if [ -f "$ROOT_DIR/docs/versions.json" ] && [ -d "$ROOT_DIR/site" ]; then
+  cp "$ROOT_DIR/docs/versions.json" "$ROOT_DIR/site/versions.json"
+  echo "Copied versions.json to site directory"
+fi
+
+# Copy sitemap.xml to each language directory for SEO crawlers
+if [ -f "$ROOT_DIR/site/sitemap.xml" ]; then
+  for lang_dir in "$ROOT_DIR/site"/{en,es,fr,de}; do
+    if [ -d "$lang_dir" ]; then
+      cp "$ROOT_DIR/site/sitemap.xml" "$lang_dir/sitemap.xml"
+      echo "Copied sitemap.xml to $lang_dir"
+    fi
+  done
+fi
 
 

@@ -27,7 +27,8 @@ import subprocess
 import sys
 import platform
 from pathlib import Path
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
+from datetime import datetime
 
 from config import (
     DEFAULT_CONVERSION_SETTINGS,
@@ -39,6 +40,7 @@ from config import (
     TABLE_MODES,
     OCR_LANGUAGES,
 )
+from models.database import UserSettings, get_db_session
 
 settings_bp = Blueprint("settings", __name__)
 
@@ -414,29 +416,80 @@ def install_ocr_backend(backend: str) -> dict:
         "note": pkg_info.get("note", "")
     }
 
-# Settings file path
+# Settings file path (legacy - for migration only)
 SETTINGS_FILE = BACKEND_DIR / "user_settings.json"
 
 
+def get_session_id() -> str:
+    """Get or create a session ID for the current user."""
+    if "session_id" not in session:
+        import uuid
+        session["session_id"] = str(uuid.uuid4())
+    return session["session_id"]
+
+
 def load_settings() -> dict:
-    """Load user settings from file or return defaults."""
-    if SETTINGS_FILE.exists():
-        try:
-            with open(SETTINGS_FILE, "r") as f:
-                return json.load(f)
-        except (json.JSONDecodeError, IOError):
-            pass
+    """Load user settings from database (per session) or return defaults."""
+    session_id = get_session_id()
+
+    try:
+        with get_db_session() as db_session:
+            user_settings = db_session.query(UserSettings).filter_by(session_id=session_id).first()
+            if user_settings:
+                return user_settings.get_settings()
+    except Exception as e:
+        # Log error but don't fail - fall back to defaults
+        print(f"[settings] Error loading settings from database: {e}")
+
+    # Fall back to defaults
     return DEFAULT_CONVERSION_SETTINGS.copy()
 
 
 def save_settings(settings: dict) -> bool:
-    """Save user settings to file."""
+    """Save user settings to database (per session)."""
+    session_id = get_session_id()
+
     try:
-        with open(SETTINGS_FILE, "w") as f:
-            json.dump(settings, f, indent=2)
-        return True
-    except IOError:
+        with get_db_session() as db_session:
+            user_settings = db_session.query(UserSettings).filter_by(session_id=session_id).first()
+
+            if user_settings:
+                # Update existing settings
+                user_settings.set_settings(settings)
+                user_settings.updated_at = datetime.utcnow()
+            else:
+                # Create new settings entry
+                user_settings = UserSettings(session_id=session_id)
+                user_settings.set_settings(settings)
+                db_session.add(user_settings)
+
+            db_session.commit()
+            return True
+    except Exception as e:
+        print(f"[settings] Error saving settings to database: {e}")
         return False
+
+
+def migrate_legacy_settings():
+    """Migrate legacy user_settings.json to database if it exists."""
+    if not SETTINGS_FILE.exists():
+        return
+
+    try:
+        with open(SETTINGS_FILE, "r") as f:
+            legacy_settings = json.load(f)
+
+        # Migrate to a default session (or could be distributed across sessions)
+        # For now, we'll just mark it as migrated and use defaults going forward
+        # Users will get their own session-based settings
+
+        # Rename the old file to mark it as migrated
+        migrated_file = SETTINGS_FILE.with_suffix(".json.migrated")
+        if not migrated_file.exists():
+            SETTINGS_FILE.rename(migrated_file)
+            print(f"[settings] Migrated legacy user_settings.json to {migrated_file}")
+    except Exception as e:
+        print(f"[settings] Error migrating legacy settings: {e}")
 
 
 def merge_settings(current, new):

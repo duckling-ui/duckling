@@ -2,7 +2,7 @@
 # MkDocs configuration file
 # https://www.mkdocs.org/
 
-site_name: Duckling
+site_name: Duckling UI
 site_description: A modern, user-friendly graphical interface for Docling - the powerful document conversion library by IBM
 site_author: Duckling Contributors
 site_url: https://davidgs.github.io/duckling/
@@ -13,7 +13,7 @@ repo_url: https://github.com/davidgs/duckling
 edit_uri: edit/main/docs/
 
 # Copyright
-copyright: Copyright &copy; 2024-2026 Duckling Contributors
+copyright: Copyright &copy; 2026 Duckling Contributors
 
 # Validation - exclude snippet files from nav warnings
 validation:
@@ -77,6 +77,8 @@ plugins:
       separator: '[\s\-,:!=\[\]()"/]+|(?!\b)(?=[A-Z][a-z])|\.(?!\d)|&[lg]t;'
   - minify:
       minify_html: true
+      htmlmin_opts:
+        remove_comments: true
   - i18n:
       docs_structure: folder
       fallback_to_default: true
@@ -156,41 +158,44 @@ markdown_extensions:
 nav:
   - Home: index.md
   - Getting Started:
-    - getting-started/index.md
-    - Installation: getting-started/installation.md
-    - Quick Start: getting-started/quickstart.md
-    - Docker: getting-started/docker.md
+      - getting-started/index.md
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quickstart.md
+      - Docker: getting-started/docker.md
   - User Guide:
-    - user-guide/index.md
-    - Features: user-guide/features.md
-    - Screenshots: user-guide/screenshots.md
-    - Supported Formats: user-guide/formats.md
-    - Configuration: user-guide/configuration.md
+      - user-guide/index.md
+      - Features: user-guide/features.md
+      - Screenshots: user-guide/screenshots.md
+      - Supported Formats: user-guide/formats.md
+      - Configuration: user-guide/configuration.md
   - API Reference:
-    - api/index.md
-    - Conversion: api/conversion.md
-    - Settings: api/settings.md
-    - History: api/history.md
+      - api/index.md
+      - Conversion: api/conversion.md
+      - Settings: api/settings.md
+      - History: api/history.md
   - Architecture:
-    - architecture/index.md
-    - System Overview: architecture/overview.md
-    - Components: architecture/components.md
-    - Diagrams: architecture/diagrams.md
+      - architecture/index.md
+      - System Overview: architecture/overview.md
+      - Components: architecture/components.md
+      - Diagrams: architecture/diagrams.md
   - Deployment:
-    - deployment/index.md
-    - Production: deployment/production.md
-    - Scaling: deployment/scaling.md
-    - Security: deployment/security.md
+      - deployment/index.md
+      - Production: deployment/production.md
+      - Scaling: deployment/scaling.md
+      - Security: deployment/security.md
   - Contributing:
-    - contributing/index.md
-    - Development Setup: contributing/development.md
-    - Code Style: contributing/code-style.md
-    - Testing: contributing/testing.md
-    - Code of Conduct: contributing/code-of-conduct.md
+      - contributing/index.md
+      - Development Setup: contributing/development.md
+      - Code Style: contributing/code-style.md
+      - Testing: contributing/testing.md
+      - Code of Conduct: contributing/code-of-conduct.md
   - Changelog: changelog.md
 
 # Extra
 extra:
+  version:
+    provider: mike
+    default: 0.0.8
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/davidgs/duckling
@@ -219,4 +224,3 @@ extra_css:
 extra_javascript:
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
-

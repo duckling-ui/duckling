@@ -32,6 +32,7 @@ env/
 *.swp
 *.swo
 *~
+.cursor/
 
 .cursor
 .cursorrules
@@ -55,6 +56,8 @@ frontend/build/
 
 # MkDocs
 site/
+docs/overrides/
+docs/overrides/main.html
 
 # Environment
 .env

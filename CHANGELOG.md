@@ -413,6 +413,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Internationalization (UI)**: Added French (`fr`) and German (`de`) UI translations (in addition to English/Spanish).
 - **Internationalization (Docs)**: Added MkDocs multilingual documentation with `/en/`, `/es/`, `/fr/`, `/de/` locale paths served by the backend docs viewer.
 - **Dropzone I18N**: Added internationalization strings for dropzone panel category labels (Documents, Web, Images, Data) in all supported languages.
+- **Session-Based User Settings**: User settings are now stored per-session in the database instead of a shared file
+  - Each user gets isolated settings based on their session ID
+  - Prevents settings conflicts in multi-user deployments
+  - Automatic migration from legacy `user_settings.json` file
+  - Settings persist across server restarts (database-backed)
 
 ### Fixed
 

@@ -38,32 +38,15 @@ from services.converter import converter_service, ConversionStatus
 from services.file_manager import file_manager
 from services.history import history_service
 from config import DEFAULT_CONVERSION_SETTINGS, OUTPUT_FOLDER, BACKEND_DIR
+from routes.settings import load_settings
 
 convert_bp = Blueprint("convert", __name__)
 
-# Settings file path (same as in settings.py)
-SETTINGS_FILE = BACKEND_DIR / "user_settings.json"
-
 
 def load_user_settings() -> dict:
-    """Load user settings from file or return defaults."""
-    if SETTINGS_FILE.exists():
-        try:
-            with open(SETTINGS_FILE, "r") as f:
-                saved = json.load(f)
-                # Deep merge with defaults to ensure all keys exist
-                settings = DEFAULT_CONVERSION_SETTINGS.copy()
-                def deep_merge(base, updates):
-                    for key, value in updates.items():
-                        if key in base and isinstance(base[key], dict) and isinstance(value, dict):
-                            deep_merge(base[key], value)
-                        else:
-                            base[key] = value
-                deep_merge(settings, saved)
-                return settings
-        except (json.JSONDecodeError, IOError):
-            pass
-    return DEFAULT_CONVERSION_SETTINGS.copy()
+    """Load user settings from database (per session) or return defaults."""
+    # Use the same session-based settings loader from settings.py
+    return load_settings()
 
 
 # Allowed extensions for URL downloads (same as file uploads)
@@ -1142,7 +1125,7 @@ def download_extracted_image(job_id: str, image_id: int):
 
         filename = image.get("filename", f"image_{image_id}.png")
         mimetype = get_mimetype_for_image(filename)
-        
+
         return send_file(
             str(image_path_obj),
             mimetype=mimetype,
@@ -1158,10 +1141,10 @@ def download_extracted_image(job_id: str, image_id: int):
         all_image_files = []
         for ext in image_extensions:
             all_image_files.extend(images_dir.glob(ext))
-        
+
         # Sort by filename to maintain consistent order
         image_files = sorted(all_image_files, key=lambda p: p.name)
-        
+
         if 0 < image_id <= len(image_files):
             image_path = image_files[image_id - 1]
             # Security: Validate path is within OUTPUT_FOLDER (already validated by glob, but double-check)
@@ -1171,7 +1154,7 @@ def download_extracted_image(job_id: str, image_id: int):
                 image_path_resolved.relative_to(output_folder_resolved)
             except ValueError:
                 raise NotFound("Image file not found")
-            
+
             mimetype = get_mimetype_for_image(image_path.name)
             return send_file(
                 str(image_path_resolved),

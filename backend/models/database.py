@@ -91,6 +91,35 @@ class Conversion(Base):
         return f"<Conversion {self.id}: {self.filename} ({self.status})>"
 
 
+class UserSettings(Base):
+    """Model for storing user-specific settings per session."""
+
+    __tablename__ = "user_settings"
+
+    session_id = Column(String(255), primary_key=True)
+    settings = Column(Text, nullable=False)  # JSON string
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def to_dict(self):
+        """Convert model to dictionary."""
+        return {
+            "session_id": self.session_id,
+            "settings": json.loads(self.settings) if self.settings else {},
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None
+        }
+
+    def set_settings(self, settings_dict):
+        """Set settings from dictionary."""
+        self.settings = json.dumps(settings_dict)
+
+    def get_settings(self):
+        """Get settings as dictionary."""
+        return json.loads(self.settings) if self.settings else {}
+
+    def __repr__(self):
+        return f"<UserSettings {self.session_id}>"
+
+
 def init_db():
     """Initialize the database, creating tables if they don't exist."""
     global _initialized

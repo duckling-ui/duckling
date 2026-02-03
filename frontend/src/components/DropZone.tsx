@@ -88,7 +88,11 @@ const FORMAT_CATEGORIES = [
     color: "primary",
   },
   { nameKey: "web", formats: ["HTML", "Markdown"], color: "blue" },
-  { nameKey: "images", formats: ["PNG", "JPG", "TIFF", "WebP"], color: "purple" },
+  {
+    nameKey: "images",
+    formats: ["PNG", "JPG", "TIFF", "WebP"],
+    color: "purple",
+  },
   { nameKey: "data", formats: ["XML", "AsciiDoc"], color: "green" },
 ];
 
@@ -129,7 +133,7 @@ export default function DropZone({
         }
       }
     },
-    [onFileAccepted, onFilesAccepted, multiple]
+    [onFileAccepted, onFilesAccepted, multiple],
   );
 
   const handleUrlSubmit = useCallback(() => {
@@ -171,7 +175,7 @@ export default function DropZone({
       setError(
         t("dropzone.errorInvalidUrls", {
           urls: `${shown}${invalidUrls.length > 3 ? "..." : ""}`,
-        })
+        }),
       );
       return;
     }
@@ -189,7 +193,7 @@ export default function DropZone({
         handleUrlSubmit();
       }
     },
-    [handleUrlSubmit, multiple]
+    [handleUrlSubmit, multiple],
   );
 
   const {
@@ -209,7 +213,7 @@ export default function DropZone({
   return (
     <div className="w-full">
       {/* Mode Toggle */}
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-3">
         <div className="inline-flex rounded-lg bg-dark-800 p-1">
           <button
             onClick={() => setInputMode("file")}
@@ -271,7 +275,7 @@ export default function DropZone({
         <div {...getRootProps()}>
           <motion.div
             className={`
-              relative overflow-hidden rounded-2xl border-2 border-dashed p-12
+              relative overflow-hidden rounded-2xl border-2 border-dashed p-8
               transition-all duration-300 cursor-pointer
               ${
                 isDragActive
@@ -352,8 +356,8 @@ export default function DropZone({
                       {isDragReject
                         ? t("dropzone.fileTypeNotSupported")
                         : multiple
-                        ? t("dropzone.dropHereMultiple")
-                        : t("dropzone.dropHereSingle")}
+                          ? t("dropzone.dropHereMultiple")
+                          : t("dropzone.dropHereSingle")}
                     </p>
                   </motion.div>
                 ) : (
@@ -378,17 +382,17 @@ export default function DropZone({
                         />
                       </svg>
                     </div>
-                    <p className="text-lg font-medium text-dark-200 mb-2">
+                    <p className="text-lg font-medium text-dark-200 mb-1.5">
                       {multiple
                         ? t("dropzone.dragAndDropMultiple")
                         : t("dropzone.dragAndDropSingle")}
                     </p>
-                    <p className="text-sm text-dark-400 mb-4">
+                    <p className="text-sm text-dark-400 mb-3">
                       {t("dropzone.orClickToBrowse")}
                     </p>
 
                     {/* Format categories */}
-                    <div className="flex flex-wrap justify-center gap-3 max-w-lg">
+                    <div className="flex flex-wrap justify-center gap-2 max-w-lg">
                       {FORMAT_CATEGORIES.map((category) => (
                         <div
                           key={category.nameKey}
@@ -441,7 +445,7 @@ export default function DropZone({
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-2xl border-2 border-dashed border-dark-600 p-8 bg-dark-900/50"
+          className="rounded-2xl border-2 border-dashed border-dark-600 p-6 bg-dark-900/50"
         >
           <div className="flex flex-col items-center text-center">
             <div className="w-12 h-12 mb-4 text-primary-400">
@@ -459,12 +463,12 @@ export default function DropZone({
               </svg>
             </div>
 
-            <h3 className="text-lg font-medium text-dark-200 mb-2">
+            <h3 className="text-lg font-medium text-dark-200 mb-1.5">
               {multiple
                 ? t("dropzone.enterUrlTitleMultiple")
                 : t("dropzone.enterUrlTitleSingle")}
             </h3>
-            <p className="text-sm text-dark-400 mb-6">
+            <p className="text-sm text-dark-400 mb-4">
               {multiple
                 ? t("dropzone.enterUrlBodyMultiple")
                 : t("dropzone.enterUrlBodySingle")}

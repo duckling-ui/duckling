@@ -78,13 +78,15 @@ A thread-based job queue prevents memory exhaustion:
 
 ### Settings Persistence
 
-Settings are stored in JSON and applied per-conversion:
+Einstellungen werden pro Benutzersitzung gespeichert und pro Konvertierung angewendet:
 
-- Global defaults in `config.py`
-- User settings in `user_settings.json`
-- Per-request overrides via API
+- Globale Standardwerte in `config.py`
+- Benutzereinstellungen in der Datenbank (pro Sitzungs-ID)
+- Pro-Anfrage-Überschreibungen über API
 
-## Technology Stack
+Einstellungen sind pro Benutzersitzung isoliert, sodass Multi-User-Bereitstellungen sich nicht gegenseitig beeinträchtigen.
+
+## Technologie-Stack
 
 ### Frontend
 

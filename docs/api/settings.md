@@ -2,6 +2,9 @@
 
 Endpoints for managing conversion settings.
 
+!!! note "Session-Based Storage"
+    Settings are stored per-user session in the database. Each user's settings are isolated and don't affect other users, making Duckling safe for multi-user deployments.
+
 ## Get All Settings
 
 ```http

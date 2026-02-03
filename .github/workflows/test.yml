@@ -121,6 +121,28 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements-docs.txt
 
+      - name: Update version in mkdocs.yml
+        run: |
+          python scripts/get_version.py || echo "Warning: Could not update version, continuing with existing version"
+
       - name: Build docs (strict)
         run: |
           mkdocs build --strict
+
+      - name: Copy versions.json to site directory
+        run: |
+          if [ -f "docs/versions.json" ] && [ -d "site" ]; then
+            cp docs/versions.json site/versions.json
+            echo "Copied versions.json to site directory"
+          fi
+
+      - name: Copy sitemap.xml to language directories
+        run: |
+          if [ -f "site/sitemap.xml" ]; then
+            for lang_dir in site/{en,es,fr,de}; do
+              if [ -d "$lang_dir" ]; then
+                cp site/sitemap.xml "$lang_dir/sitemap.xml"
+                echo "Copied sitemap.xml to $lang_dir"
+              fi
+            done
+          fi

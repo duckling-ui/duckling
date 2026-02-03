@@ -2,7 +2,10 @@
 
 Endpoints for managing conversion settings.
 
-## Get All Settings
+!!! note "Stockage basé sur les sessions"
+    Les paramètres sont stockés par session utilisateur dans la base de données. Les paramètres de chaque utilisateur sont isolés et n'affectent pas les autres utilisateurs, ce qui rend Duckling sûr pour les déploiements multi-utilisateurs.
+
+## Obtenir tous les paramètres
 
 ```http
 GET /api/settings

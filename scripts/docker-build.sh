@@ -89,7 +89,16 @@ cd "$(dirname "$0")/.."
 # Build documentation first (unless skipped)
 if [ "$SKIP_DOCS" = false ]; then
     echo -e "${YELLOW}Building documentation...${NC}"
-    
+
+    # Update version in mkdocs.yml from package.json or GitHub
+    if [ -f "scripts/get_version.py" ]; then
+        if command -v python3 &> /dev/null; then
+            python3 scripts/get_version.py >/dev/null 2>&1 || echo -e "${YELLOW}⚠ Could not update version, continuing with existing version${NC}"
+        elif command -v python &> /dev/null; then
+            python scripts/get_version.py >/dev/null 2>&1 || echo -e "${YELLOW}⚠ Could not update version, continuing with existing version${NC}"
+        fi
+    fi
+
     # Check if mkdocs is available
     if command -v mkdocs &> /dev/null; then
         # Build docs (ignore warnings about missing screenshots)
@@ -101,19 +110,31 @@ if [ "$SKIP_DOCS" = false ]; then
                 echo -e "${GREEN}✓ Documentation built (with warnings)${NC}"
             fi
         fi
+        # Copy versions.json to site directory if it exists
+        if [ -f "docs/versions.json" ] && [ -d "site" ]; then
+            cp docs/versions.json site/versions.json
+        fi
+        # Copy sitemap.xml to each language directory for SEO crawlers
+        if [ -f "site/sitemap.xml" ]; then
+            for lang_dir in site/{en,es,fr,de}; do
+                if [ -d "$lang_dir" ]; then
+                    cp site/sitemap.xml "$lang_dir/sitemap.xml"
+                fi
+            done
+        fi
     elif [ -f "requirements-docs.txt" ]; then
         # Try to install mkdocs and build
         echo "MkDocs not found, attempting to install..."
         pip install -q -r requirements-docs.txt 2>/dev/null || {
             echo -e "${YELLOW}⚠ Could not install MkDocs. Checking for existing site...${NC}"
         }
-        
+
         if command -v mkdocs &> /dev/null; then
             mkdocs build 2>&1 | grep -v "WARNING" || true
             echo -e "${GREEN}✓ Documentation built${NC}"
         fi
     fi
-    
+
     # Verify site directory exists
     if [ -d "site" ] && [ -f "site/index.html" ]; then
         echo -e "${GREEN}✓ Documentation site ready${NC}"

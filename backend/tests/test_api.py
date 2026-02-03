@@ -160,6 +160,46 @@ class TestSettingsEndpoint:
         data = json.loads(response.data)
         assert "settings" in data
 
+    def test_settings_are_session_isolated(self, app):
+        """Test that settings are isolated per session."""
+        # Create two separate test clients (simulating two different users)
+        client1 = app.test_client()
+        client2 = app.test_client()
+
+        # User 1 sets OCR to disabled
+        response1 = client1.put(
+            "/api/settings",
+            data=json.dumps({"ocr": {"enabled": False}}),
+            content_type="application/json"
+        )
+        assert response1.status_code == 200
+        data1 = json.loads(response1.data)
+        assert data1["settings"]["ocr"]["enabled"] is False
+
+        # User 2 sets OCR to enabled
+        response2 = client2.put(
+            "/api/settings",
+            data=json.dumps({"ocr": {"enabled": True}}),
+            content_type="application/json"
+        )
+        assert response2.status_code == 200
+        data2 = json.loads(response2.data)
+        assert data2["settings"]["ocr"]["enabled"] is True
+
+        # Verify each user still has their own settings
+        get_response1 = client1.get("/api/settings")
+        get_response2 = client2.get("/api/settings")
+
+        assert get_response1.status_code == 200
+        assert get_response2.status_code == 200
+
+        settings1 = json.loads(get_response1.data)["settings"]
+        settings2 = json.loads(get_response2.data)["settings"]
+
+        # Settings should be different (isolated)
+        assert settings1["ocr"]["enabled"] is False
+        assert settings2["ocr"]["enabled"] is True
+
 
 class TestDocsEndpoints:
     """Tests for documentation endpoints."""

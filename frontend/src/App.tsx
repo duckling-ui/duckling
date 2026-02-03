@@ -36,7 +36,7 @@ import { convertFromUrl, convertFromUrlsBatch } from "./services/api";
 import type { HistoryEntry, ConversionResult } from "./types";
 
 // App version from package.json
-const APP_VERSION = "0.0.7";
+const APP_VERSION = "0.0.8";
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -74,14 +74,14 @@ export default function App() {
     (file: File) => {
       uploadFile(file);
     },
-    [uploadFile]
+    [uploadFile],
   );
 
   const handleFilesAccepted = useCallback(
     (files: File[]) => {
       uploadFiles(files);
     },
-    [uploadFiles]
+    [uploadFiles],
   );
 
   const handleUrlSubmitted = useCallback(
@@ -94,7 +94,7 @@ export default function App() {
           // Manually trigger the conversion flow with existing job_id
           uploadFile(
             new File([], response.filename || "url-document"),
-            response.job_id
+            response.job_id,
           );
         }
       } catch (error) {
@@ -103,7 +103,7 @@ export default function App() {
         reset();
       }
     },
-    [uploadFile, reset]
+    [uploadFile, reset],
   );
 
   const handleUrlsSubmitted = useCallback(
@@ -114,14 +114,14 @@ export default function App() {
         if (response.jobs && response.jobs.length > 0) {
           // Get valid jobs that are processing
           const validJobs = response.jobs.filter(
-            (j) => j.status === "processing" && j.job_id
+            (j) => j.status === "processing" && j.job_id,
           );
           if (validJobs.length > 0) {
             // Use the first job to trigger the conversion flow
             const firstJob = validJobs[0];
             uploadFile(
               new File([], firstJob.filename || "url-document"),
-              firstJob.job_id
+              firstJob.job_id,
             );
           } else {
             // All jobs failed
@@ -133,7 +133,7 @@ export default function App() {
         reset();
       }
     },
-    [uploadFile, reset]
+    [uploadFile, reset],
   );
 
   const handleHistorySelect = useCallback((entry: HistoryEntry) => {
@@ -179,10 +179,10 @@ export default function App() {
                   i18n.language?.toLowerCase().startsWith("es")
                     ? "es"
                     : i18n.language?.toLowerCase().startsWith("fr")
-                    ? "fr"
-                    : i18n.language?.toLowerCase().startsWith("de")
-                    ? "de"
-                    : "en"
+                      ? "fr"
+                      : i18n.language?.toLowerCase().startsWith("de")
+                        ? "de"
+                        : "en"
                 }
                 onChange={(e) => void i18n.changeLanguage(e.target.value)}
                 className="bg-dark-800 text-dark-200 text-sm rounded-lg px-2 py-1.5 border border-dark-700 hover:border-dark-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
@@ -289,7 +289,7 @@ export default function App() {
       </header>
 
       {/* Main content */}
-      <main className="flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <main className="flex-1 flex items-start justify-center pt-4 pb-4 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-5xl">
           <AnimatePresence mode="wait">
             {/* Idle state - show dropzone */}
@@ -299,11 +299,11 @@ export default function App() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="space-y-8"
+                className="space-y-4"
               >
                 <div className="text-center">
                   <motion.h2
-                    className="text-3xl sm:text-4xl font-bold text-dark-100 mb-3"
+                    className="text-3xl sm:text-4xl font-bold text-dark-100 mb-2"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
@@ -311,7 +311,7 @@ export default function App() {
                     {t("home.headline")}
                   </motion.h2>
                   <motion.p
-                    className="text-dark-400 text-lg max-w-xl mx-auto"
+                    className="text-dark-400 text-base max-w-xl mx-auto"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
@@ -339,7 +339,7 @@ export default function App() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8"
+                  className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6"
                 >
                   {[
                     {
@@ -365,13 +365,15 @@ export default function App() {
                   ].map((feature) => (
                     <div
                       key={feature.label}
-                      className="glass rounded-xl p-4 text-center"
+                      className="glass rounded-xl p-3 text-center"
                     >
-                      <span className="text-2xl">{feature.icon}</span>
-                      <p className="font-medium text-dark-200 mt-2">
+                      <span className="text-xl">{feature.icon}</span>
+                      <p className="font-medium text-dark-200 mt-1.5 text-sm">
                         {feature.label}
                       </p>
-                      <p className="text-xs text-dark-500">{feature.desc}</p>
+                      <p className="text-xs text-dark-500 mt-0.5">
+                        {feature.desc}
+                      </p>
                     </div>
                   ))}
                 </motion.div>
@@ -593,8 +595,8 @@ function BatchProgress({
               job.status === "completed"
                 ? "bg-green-500/10"
                 : job.status === "failed" || job.status === "rejected"
-                ? "bg-red-500/10"
-                : "bg-dark-800/50"
+                  ? "bg-red-500/10"
+                  : "bg-dark-800/50"
             }`}
           >
             <div className="flex items-center gap-3">
@@ -603,8 +605,8 @@ function BatchProgress({
                   job.status === "completed"
                     ? "bg-green-500"
                     : job.status === "failed" || job.status === "rejected"
-                    ? "bg-red-500"
-                    : "bg-dark-600"
+                      ? "bg-red-500"
+                      : "bg-dark-600"
                 }`}
               >
                 {job.status === "completed" ? (
@@ -691,7 +693,7 @@ function BatchResults({
 
   const successfulJobs = jobs.filter((j) => j.status === "completed");
   const failedJobs = jobs.filter(
-    (j) => j.status === "failed" || j.status === "rejected"
+    (j) => j.status === "failed" || j.status === "rejected",
   );
 
   return (

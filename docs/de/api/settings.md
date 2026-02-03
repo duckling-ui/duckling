@@ -2,7 +2,10 @@
 
 Endpoints for managing conversion settings.
 
-## Get All Settings
+!!! note "Sitzungsbasierte Speicherung"
+    Einstellungen werden pro Benutzersitzung in der Datenbank gespeichert. Die Einstellungen jedes Benutzers sind isoliert und beeinträchtigen andere Benutzer nicht, was Duckling für Multi-User-Bereitstellungen sicher macht.
+
+## Alle Einstellungen abrufen
 
 ```http
 GET /api/settings
