@@ -61,6 +61,7 @@ class Conversion(Base):
     error_message = Column(Text, nullable=True)
     output_path = Column(String(500), nullable=True)
     file_size = Column(Float, nullable=True)  # Size in bytes
+    document_json_path = Column(String(500), nullable=True)  # Path to stored DoclingDocument JSON
 
     def to_dict(self):
         """Convert model to dictionary."""
@@ -76,7 +77,8 @@ class Conversion(Base):
             "settings": json.loads(self.settings) if self.settings else None,
             "error_message": self.error_message,
             "output_path": self.output_path,
-            "file_size": self.file_size
+            "file_size": self.file_size,
+            "document_json_path": self.document_json_path
         }
 
     def set_settings(self, settings_dict):

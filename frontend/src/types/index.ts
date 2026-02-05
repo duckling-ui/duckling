@@ -189,6 +189,7 @@ export interface HistoryEntry {
   error_message?: string;
   output_path?: string;
   file_size?: number;
+  document_json_path?: string;
 }
 
 export interface HistoryResponse {

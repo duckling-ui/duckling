@@ -57,6 +57,7 @@ export default function App() {
     uploadFiles,
     downloadFormat,
     reset,
+    loadResult,
     batchMode,
     batchJobs,
     batchProgress,
@@ -136,10 +137,18 @@ export default function App() {
     [uploadFile, reset],
   );
 
-  const handleHistorySelect = useCallback((entry: HistoryEntry) => {
+  const handleHistorySelect = useCallback(async (entry: HistoryEntry) => {
     setHistoryOpen(false);
-    console.log("Selected history entry:", entry);
-  }, []);
+    
+    // Only load if the conversion was completed
+    if (entry.status === "completed" && entry.id) {
+      try {
+        await loadResult(entry.id);
+      } catch (error) {
+        console.error("Failed to load document from history:", error);
+      }
+    }
+  }, [loadResult]);
 
   return (
     <div className="min-h-screen flex flex-col">

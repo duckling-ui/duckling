@@ -488,6 +488,11 @@ export const getHistoryEntry = async (jobId: string): Promise<HistoryEntry> => {
   return response.data;
 };
 
+export const loadHistoryDocument = async (jobId: string): Promise<ConversionResult> => {
+  const response = await api.get(`/history/${jobId}/load`);
+  return response.data;
+};
+
 export const deleteHistoryEntry = async (jobId: string): Promise<void> => {
   await api.delete(`/history/${jobId}`);
 };

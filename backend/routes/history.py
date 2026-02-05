@@ -22,6 +22,7 @@
 
 """History API endpoints."""
 
+import json
 from flask import Blueprint, request, jsonify
 from werkzeug.exceptions import NotFound
 
@@ -251,5 +252,188 @@ def export_history():
         "total_entries": len(entries),
         "statistics": stats,
         "entries": entries
+    })
+
+
+@history_bp.route("/history/<job_id>/load", methods=["GET"])
+def load_history_document(job_id: str):
+    """
+    Load a converted document from history and return it as a ConversionResult.
+
+    This endpoint loads the DoclingDocument from the stored JSON file and
+    returns it in the same format as a fresh conversion result.
+
+    Args:
+        job_id: The job identifier
+
+    Returns:
+        JSON with conversion result matching ConversionResult format
+    """
+    from pathlib import Path
+    from config import OUTPUT_FOLDER
+    from services.converter import converter_service
+
+    # Get history entry
+    entry = history_service.get_entry(job_id)
+    if not entry:
+        raise NotFound(f"History entry {job_id} not found")
+
+    if entry.get("status") != "completed":
+        return jsonify({
+            "job_id": job_id,
+            "status": entry.get("status"),
+            "message": "Conversion not completed"
+        }), 400
+
+    # Load the document from stored JSON
+    doc = history_service.load_document(job_id)
+    if not doc:
+        # Fallback: try to reconstruct from output files
+        output_dir = OUTPUT_FOLDER / job_id
+        if not output_dir.exists():
+            raise NotFound(f"Document files for {job_id} not found")
+
+        # Determine available formats from files on disk
+        formats_available = []
+        format_extensions = {
+            "markdown": ".md",
+            "html": ".html",
+            "json": ".json",
+            "text": ".txt",
+            "doctags": ".doctags",
+            "document_tokens": ".tokens.json",
+            "chunks": ".chunks.json"
+        }
+        for fmt, ext in format_extensions.items():
+            if list(output_dir.glob(f"*{ext}")):
+                formats_available.append(fmt)
+
+        # Count images and tables
+        images_dir = output_dir / "images"
+        tables_dir = output_dir / "tables"
+        images_count = 0
+        if images_dir.exists():
+            image_extensions = ['*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.svg', '*.bmp']
+            for ext in image_extensions:
+                images_count += len(list(images_dir.glob(ext)))
+
+        tables_count = len(list(tables_dir.glob("*.csv"))) if tables_dir.exists() else 0
+
+        # Try to read markdown preview
+        md_preview = ""
+        md_files = list(output_dir.glob("*.md"))
+        if md_files:
+            try:
+                with open(md_files[0], 'r', encoding='utf-8') as f:
+                    content = f.read()
+                    md_preview = content[:5000] if len(content) > 5000 else content
+            except Exception:
+                pass
+
+        # Count chunks if available
+        chunks_count = 0
+        chunks_files = list(output_dir.glob("*.chunks.json"))
+        if chunks_files:
+            try:
+                with open(chunks_files[0], 'r', encoding='utf-8') as f:
+                    chunks_data = json.load(f)
+                    chunks_count = len(chunks_data) if isinstance(chunks_data, list) else 0
+            except Exception:
+                pass
+
+        return jsonify({
+            "job_id": job_id,
+            "status": "completed",
+            "confidence": entry.get("confidence"),
+            "formats_available": formats_available,
+            "result": {
+                "markdown_preview": md_preview,
+                "formats_available": formats_available,
+                "page_count": 0,  # Not available without document
+                "images_count": images_count,
+                "tables_count": tables_count,
+                "chunks_count": chunks_count,
+                "warnings": []
+            },
+            "images_count": images_count,
+            "tables_count": tables_count,
+            "chunks_count": chunks_count,
+            "completed_at": entry.get("completed_at")
+        })
+
+    # Document loaded successfully - extract information from it
+    output_dir = OUTPUT_FOLDER / job_id
+
+    # Export to markdown for preview
+    try:
+        md_content = doc.export_to_markdown()
+        md_preview = md_content[:5000] if len(md_content) > 5000 else md_content
+    except Exception as e:
+        print(f"[load_document] Failed to export markdown: {e}")
+        md_preview = ""
+
+    # Determine available formats from files on disk
+    formats_available = []
+    format_extensions = {
+        "markdown": ".md",
+        "html": ".html",
+        "json": ".json",
+        "text": ".txt",
+        "doctags": ".doctags",
+        "document_tokens": ".tokens.json",
+        "chunks": ".chunks.json"
+    }
+    for fmt, ext in format_extensions.items():
+        if list(output_dir.glob(f"*{ext}")):
+            formats_available.append(fmt)
+
+    # Count images and tables
+    images_dir = output_dir / "images"
+    tables_dir = output_dir / "tables"
+    images_count = 0
+    if images_dir.exists():
+        image_extensions = ['*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.svg', '*.bmp']
+        for ext in image_extensions:
+            images_count += len(list(images_dir.glob(ext)))
+
+    tables_count = len(list(tables_dir.glob("*.csv"))) if tables_dir.exists() else 0
+
+    # Count chunks if available
+    chunks_count = 0
+    chunks_files = list(output_dir.glob("*.chunks.json"))
+    if chunks_files:
+        try:
+            with open(chunks_files[0], 'r', encoding='utf-8') as f:
+                chunks_data = json.load(f)
+                chunks_count = len(chunks_data) if isinstance(chunks_data, list) else 0
+        except Exception:
+            pass
+
+    # Get page count from document if available
+    page_count = 0
+    if hasattr(doc, 'pages') and doc.pages:
+        page_count = len(doc.pages)
+    elif hasattr(doc, 'metadata') and doc.metadata:
+        if hasattr(doc.metadata, 'page_count'):
+            page_count = doc.metadata.page_count
+
+    return jsonify({
+        "job_id": job_id,
+        "status": "completed",
+        "confidence": entry.get("confidence"),
+        "formats_available": formats_available,
+        "result": {
+            "markdown_preview": md_preview,
+            "formats_available": formats_available,
+            "page_count": page_count,
+            "images_count": images_count,
+            "tables_count": tables_count,
+            "chunks_count": chunks_count,
+            "warnings": []
+        },
+        "images_count": images_count,
+        "tables_count": tables_count,
+        "chunks_count": chunks_count,
+        "completed_at": entry.get("completed_at")
     })
 
