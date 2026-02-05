@@ -124,8 +124,21 @@ class FileManager:
 
     def get_output_path(self, job_id: str, format_type: str, original_filename: str) -> Optional[Path]:
         """Get the output file path for a conversion job."""
+        # Security: Validate job_id doesn't contain path traversal characters
+        if ".." in job_id or "/" in job_id or "\\" in job_id:
+            return None
+        
         output_dir = self.output_folder / job_id
-        if not output_dir.exists():
+        # Security: Validate path is within output_folder to prevent path traversal
+        try:
+            output_dir_resolved = output_dir.resolve()
+            output_folder_resolved = self.output_folder.resolve()
+            output_dir_resolved.relative_to(output_folder_resolved)
+        except ValueError:
+            # Path traversal detected - path is outside output_folder
+            return None
+        
+        if not output_dir_resolved.exists():
             return None
 
         # Determine extension based on format
@@ -138,11 +151,21 @@ class FileManager:
         }
 
         ext = ext_map.get(format_type, ".md")
-        stem = Path(original_filename).stem
-        output_path = output_dir / f"{stem}{ext}"
+        # Security: Use secure_filename to sanitize original_filename
+        safe_stem = Path(secure_filename(original_filename)).stem
+        if not safe_stem:
+            safe_stem = "document"
+        output_path = output_dir_resolved / f"{safe_stem}{ext}"
 
-        if output_path.exists():
-            return output_path
+        # Security: Final validation that output_path is within output_dir
+        try:
+            output_path_resolved = output_path.resolve()
+            output_path_resolved.relative_to(output_dir_resolved)
+        except ValueError:
+            return None
+
+        if output_path_resolved.exists():
+            return output_path_resolved
         return None
 
     def delete_upload(self, filepath: str) -> bool:
@@ -159,9 +182,22 @@ class FileManager:
     def delete_output_folder(self, job_id: str) -> bool:
         """Delete the output folder for a job."""
         try:
+            # Security: Validate job_id doesn't contain path traversal characters
+            if ".." in job_id or "/" in job_id or "\\" in job_id:
+                return False
+            
             output_dir = self.output_folder / job_id
-            if output_dir.exists():
-                shutil.rmtree(output_dir)
+            # Security: Validate path is within output_folder to prevent path traversal
+            try:
+                output_dir_resolved = output_dir.resolve()
+                output_folder_resolved = self.output_folder.resolve()
+                output_dir_resolved.relative_to(output_folder_resolved)
+            except ValueError:
+                # Path traversal detected - path is outside output_folder
+                return False
+            
+            if output_dir_resolved.exists():
+                shutil.rmtree(output_dir_resolved)
                 return True
         except Exception:
             pass

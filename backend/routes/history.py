@@ -285,11 +285,30 @@ def load_history_document(job_id: str):
             "message": "Conversion not completed"
         }), 400
 
+    # Security helper function to validate job_id and get safe output directory
+    def get_validated_output_dir(job_id: str) -> Path:
+        """Validate job_id and return a safe output directory path."""
+        # Security: Validate job_id doesn't contain path traversal characters
+        if ".." in job_id or "/" in job_id or "\\" in job_id:
+            raise NotFound(f"Document files for {job_id} not found")
+        
+        output_dir = OUTPUT_FOLDER / job_id
+        # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
+        try:
+            output_dir_resolved = output_dir.resolve()
+            output_folder_resolved = OUTPUT_FOLDER.resolve()
+            output_dir_resolved.relative_to(output_folder_resolved)
+        except ValueError:
+            # Path traversal detected - path is outside OUTPUT_FOLDER
+            raise NotFound(f"Document files for {job_id} not found")
+        
+        return output_dir_resolved
+
     # Load the document from stored JSON
     doc = history_service.load_document(job_id)
     if not doc:
         # Fallback: try to reconstruct from output files
-        output_dir = OUTPUT_FOLDER / job_id
+        output_dir = get_validated_output_dir(job_id)
         if not output_dir.exists():
             raise NotFound(f"Document files for {job_id} not found")
 
@@ -362,7 +381,7 @@ def load_history_document(job_id: str):
         })
 
     # Document loaded successfully - extract information from it
-    output_dir = OUTPUT_FOLDER / job_id
+    output_dir = get_validated_output_dir(job_id)
 
     # Export to markdown for preview
     try:

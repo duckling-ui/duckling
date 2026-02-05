@@ -308,6 +308,7 @@ class HistoryService:
             DoclingDocument instance or None if not found/available
         """
         from pathlib import Path
+        from config import OUTPUT_FOLDER
         try:
             from docling_core.types.doc.document import DoclingDocument
         except ImportError:
@@ -326,8 +327,18 @@ class HistoryService:
         if not doc_path.exists():
             return None
 
+        # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
         try:
-            return DoclingDocument.load_from_json(str(doc_path))
+            doc_path_resolved = doc_path.resolve()
+            output_folder_resolved = OUTPUT_FOLDER.resolve()
+            doc_path_resolved.relative_to(output_folder_resolved)
+        except ValueError:
+            # Path traversal detected - path is outside OUTPUT_FOLDER
+            print(f"[history] Security: Invalid document path outside OUTPUT_FOLDER: {doc_path}")
+            return None
+
+        try:
+            return DoclingDocument.load_from_json(str(doc_path_resolved))
         except Exception as e:
             print(f"[history] Error loading document: {e}")
             return None
