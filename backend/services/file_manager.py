@@ -188,7 +188,6 @@ class FileManager:
             # Security: Validate job_id doesn't contain path traversal characters
             if ".." in job_id or "/" in job_id or "\\" in job_id:
                 return False
-
             output_dir = Path(self.output_folder) / job_id
             # Security: Validate path is within output_folder to prevent path traversal
             try:
@@ -198,7 +197,6 @@ class FileManager:
             except ValueError:
                 # Path traversal detected - path is outside output_folder
                 return False
-
             if output_dir_resolved.exists():
                 # rmtree on a symlink removes the symlink, not the target
                 shutil.rmtree(output_dir_resolved)
