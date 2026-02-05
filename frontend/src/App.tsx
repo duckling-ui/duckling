@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { useConversion } from "./hooks/useConversion";
