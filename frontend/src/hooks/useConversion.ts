@@ -409,6 +409,24 @@ export function useConversion(options: UseConversionOptions = {}) {
     }
   }, [batchJobs]);
 
+  // Load a result from history
+  const loadResult = useCallback(async (jobId: string) => {
+    try {
+      const result = await getConversionResult(jobId);
+      setResult(result);
+      setState('complete');
+      setError(null);
+      setProgress(100);
+      setStatusMessage('Document loaded from history');
+      onComplete?.(result);
+    } catch (err: any) {
+      const errorMsg = err?.response?.data?.message || err?.message || 'Failed to load document';
+      setError(errorMsg);
+      setState('error');
+      onError?.(errorMsg);
+    }
+  }, [onComplete, onError]);
+
   return {
     state,
     currentJob,
@@ -422,6 +440,7 @@ export function useConversion(options: UseConversionOptions = {}) {
     downloadFormat,
     getContent,
     reset,
+    loadResult,
     // Batch-specific
     batchMode,
     batchJobs,

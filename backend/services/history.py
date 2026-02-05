@@ -277,6 +277,61 @@ class HistoryService:
             session.commit()
             return count
 
+    def update_document_path(self, job_id: str, document_path: str) -> Optional[Dict[str, Any]]:
+        """
+        Update conversion entry with document JSON path.
+
+        Args:
+            job_id: Job identifier
+            document_path: Path to the stored DoclingDocument JSON file
+
+        Returns:
+            Dictionary representation of updated entry or None if not found
+        """
+        with get_db_session() as session:
+            entry = session.query(Conversion).filter_by(id=job_id).first()
+            if not entry:
+                return None
+            entry.document_json_path = document_path
+            session.commit()
+            session.refresh(entry)
+            return entry.to_dict()
+
+    def load_document(self, job_id: str):
+        """
+        Load DoclingDocument from stored JSON file.
+
+        Args:
+            job_id: Job identifier
+
+        Returns:
+            DoclingDocument instance or None if not found/available
+        """
+        from pathlib import Path
+        try:
+            from docling_core.types.doc.document import DoclingDocument
+        except ImportError:
+            try:
+                # Fallback for different import paths
+                from docling.datamodel.document import DoclingDocument
+            except ImportError:
+                print("[history] DoclingDocument not available")
+                return None
+
+        entry = self.get_entry(job_id)
+        if not entry or not entry.get("document_json_path"):
+            return None
+
+        doc_path = Path(entry["document_json_path"])
+        if not doc_path.exists():
+            return None
+
+        try:
+            return DoclingDocument.load_from_json(str(doc_path))
+        except Exception as e:
+            print(f"[history] Error loading document: {e}")
+            return None
+
 
 # Singleton instance
 history_service = HistoryService()

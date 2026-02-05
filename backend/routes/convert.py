@@ -537,6 +537,10 @@ def upload_and_convert():
             error_message=completed_job.error,
             output_path=str(completed_job.output_paths.get("markdown", ""))
         )
+        # Save document path if available
+        document_path = getattr(completed_job, 'document_json_path', None)
+        if document_path:
+            history_service.update_document_path(completed_job.id, document_path)
 
     # Start async conversion
     converter_service.start_conversion(job, on_complete=on_complete)
@@ -626,6 +630,10 @@ def convert_from_url():
             error_message=completed_job.error,
             output_path=str(completed_job.output_paths.get("markdown", ""))
         )
+        # Save document path if available
+        document_path = getattr(completed_job, 'document_json_path', None)
+        if document_path:
+            history_service.update_document_path(completed_job.id, document_path)
 
     # Start async conversion
     converter_service.start_conversion(job, on_complete=on_complete)
@@ -726,6 +734,10 @@ def convert_from_urls_batch():
                     error_message=completed_job.error,
                     output_path=str(completed_job.output_paths.get("markdown", ""))
                 )
+                # Save document path if available
+                document_path = getattr(completed_job, 'document_json_path', None)
+                if document_path:
+                    history_service.update_document_path(completed_job.id, document_path)
 
             # Start async conversion
             converter_service.start_conversion(job, on_complete=on_complete)
@@ -841,6 +853,10 @@ def upload_and_convert_batch():
                 error_message=completed_job.error,
                 output_path=str(completed_job.output_paths.get("markdown", ""))
             )
+            # Save document path if available
+            document_path = getattr(completed_job, 'document_json_path', None)
+            if document_path:
+                history_service.update_document_path(completed_job.id, document_path)
 
         # Start async conversion
         converter_service.start_conversion(job, on_complete=on_complete)
