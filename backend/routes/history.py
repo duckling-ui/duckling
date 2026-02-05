@@ -23,6 +23,7 @@
 """History API endpoints."""
 
 import json
+import re
 from flask import Blueprint, request, jsonify
 from werkzeug.exceptions import NotFound
 
@@ -310,26 +311,6 @@ def load_history_document(job_id: str):
     # Now that job_id is validated, construct and validate the output directory
     output_dir = get_validated_output_dir(job_id, Path(OUTPUT_FOLDER))
 
-    # Security: Validate job_id inline before any path operations
-    # This must be done inline so CodeQL can track the validation
-    if ".." in job_id or "/" in job_id or "\\" in job_id:
-        raise NotFound(f"Document files for {job_id} not found")
-    
-    # Now job_id is validated - construct path and validate it's within OUTPUT_FOLDER
-    # CodeQL: job_id is validated above to not contain path traversal characters
-    output_dir_initial = OUTPUT_FOLDER / job_id  # $path-traversal-safe
-    try:
-        output_dir_resolved_initial = output_dir_initial.resolve()
-        output_folder_resolved = OUTPUT_FOLDER.resolve()
-        output_dir_resolved_initial.relative_to(output_folder_resolved)
-    except ValueError:
-        # Path traversal detected - path is outside OUTPUT_FOLDER
-        raise NotFound(f"Document files for {job_id} not found")
-    
-    # validated_output_dir is now safe to use - it's validated to be within OUTPUT_FOLDER
-    # All subsequent path operations use validated_output_dir, not job_id directly
-    validated_output_dir = output_dir_resolved_initial
-    
     # Get history entry
     entry = history_service.get_entry(job_id)
     if not entry:
