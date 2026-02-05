@@ -406,6 +406,7 @@ Access previously converted documents:
 
 - **Recherche**: Trouver des documents par nom de fichier
 - **Filtre**: Filtrer par statut (terminé, échoué)
+- **Statistiques**: Voir les taux de réussite et la répartition des formats
 - **Export**: Télécharger l'historique en JSON
 - **Recharger les documents**: Cliquez sur les entrées d'historique terminées pour recharger le document converti sans re-conversion
   - Les documents sont automatiquement stockés sur disque après conversion

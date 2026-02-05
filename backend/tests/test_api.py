@@ -264,7 +264,6 @@ class TestDocsEndpoints:
         # If still not found, try any doc with "Sicherheit" in the name
         if security is None:
             security = next((d for d in docs if "Sicherheit" in (d.get("name") or "")), None)
-
         assert security is not None, (
             f"Page 'deployment/security' not found in docs. "
             f"Available paths: {[d.get('path') for d in docs]}. "

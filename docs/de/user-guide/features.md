@@ -406,6 +406,7 @@ Access previously converted documents:
 
 - **Suche**: Dokumente nach Dateiname finden
 - **Filter**: Nach Status filtern (abgeschlossen, fehlgeschlagen)
+- **Statistiken**: Erfolgsraten und Formataufschlüsselung anzeigen
 - **Export**: Verlauf als JSON herunterladen
 - **Dokumente neu laden**: Klicken Sie auf abgeschlossene Verlaufseinträge, um das konvertierte Dokument ohne Neu-Konvertierung zu laden
   - Dokumente werden automatisch nach der Konvertierung auf der Festplatte gespeichert
