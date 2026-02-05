@@ -30,7 +30,7 @@ import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from services.history import HistoryService
-from models.database import init_db, db, Conversion, Base, engine
+from models.database import init_db, db, Conversion, Base, engine, get_db_session
 
 
 @pytest.fixture(autouse=True)
@@ -274,6 +274,86 @@ class TestHistoryService:
         results = service.search("nonexistentquery12345")
         assert len(results) == 0
 
+    def test_update_document_path(self):
+        """Test updating document path."""
+        service = HistoryService()
+        service.create_entry(
+            job_id="test-doc-path",
+            filename="test.pdf",
+            original_filename="test.pdf"
+        )
+
+        doc_path = "/path/to/document.json"
+        updated = service.update_document_path("test-doc-path", doc_path)
+
+        assert updated is not None
+        assert updated["document_json_path"] == doc_path
+
+        # Verify it's persisted
+        entry = service.get_entry("test-doc-path")
+        assert entry["document_json_path"] == doc_path
+
+    def test_update_document_path_nonexistent(self):
+        """Test updating document path for non-existent entry."""
+        service = HistoryService()
+        result = service.update_document_path("nonexistent", "/path/to/doc.json")
+        assert result is None
+
+    def test_load_document_nonexistent_entry(self):
+        """Test loading document for non-existent entry."""
+        service = HistoryService()
+        doc = service.load_document("nonexistent-id")
+        assert doc is None
+
+    def test_load_document_no_path(self):
+        """Test loading document when path is not set."""
+        service = HistoryService()
+        service.create_entry(
+            job_id="test-no-path",
+            filename="test.pdf",
+            original_filename="test.pdf"
+        )
+        doc = service.load_document("test-no-path")
+        assert doc is None
+
+    def test_load_document_file_not_found(self):
+        """Test loading document when file doesn't exist."""
+        service = HistoryService()
+        service.create_entry(
+            job_id="test-missing-file",
+            filename="test.pdf",
+            original_filename="test.pdf"
+        )
+        service.update_document_path("test-missing-file", "/nonexistent/path/document.json")
+        doc = service.load_document("test-missing-file")
+        assert doc is None
+
+    def test_cleanup_old_entries(self):
+        """Test cleaning up old entries."""
+        service = HistoryService()
+        from datetime import timedelta
+
+        # Create an old entry
+        old_entry = service.create_entry(
+            job_id="test-old",
+            filename="old.pdf",
+            original_filename="old.pdf"
+        )
+
+        # Manually set created_at to be old (bypassing ORM)
+        from models.database import get_db_session
+        with get_db_session() as session:
+            entry = session.query(Conversion).filter_by(id="test-old").first()
+            if entry:
+                entry.created_at = datetime.utcnow() - timedelta(days=35)
+                session.commit()
+
+        count = service.cleanup_old_entries(days=30)
+        assert count >= 1
+
+        entry = service.get_entry("test-old")
+        assert entry is None
+
 
 class TestConversionModel:
     """Tests for Conversion model."""
@@ -295,6 +375,20 @@ class TestConversionModel:
         assert d["original_filename"] == "Test Document.pdf"
         assert d["input_format"] == "pdf"
         assert d["status"] == "pending"
+        assert "document_json_path" in d
+        assert d["document_json_path"] is None
+
+    def test_to_dict_with_document_path(self):
+        """Test converting model to dictionary with document path."""
+        conversion = Conversion(
+            id="test-dict-path",
+            filename="test.pdf",
+            original_filename="test.pdf",
+            document_json_path="/path/to/document.json"
+        )
+
+        d = conversion.to_dict()
+        assert d["document_json_path"] == "/path/to/document.json"
 
     def test_set_and_get_settings(self):
         """Test setting and getting settings."""

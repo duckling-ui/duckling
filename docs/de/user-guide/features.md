@@ -402,10 +402,13 @@ Access previously converted documents:
 - Search history by filename
 - View conversion statistics
 
-### History Features
+### Verlaufsfunktionen
 
-- **Search**: Find documents by filename
-- **Filter**: Filter by status (completed, failed)
-- **Statistics**: View success rates and format breakdown
-- **Export**: Download history as JSON
+- **Suche**: Dokumente nach Dateiname finden
+- **Filter**: Nach Status filtern (abgeschlossen, fehlgeschlagen)
+- **Statistiken**: Erfolgsraten und Formataufschlüsselung anzeigen
+- **Export**: Verlauf als JSON herunterladen
+- **Dokumente neu laden**: Klicken Sie auf abgeschlossene Verlaufseinträge, um das konvertierte Dokument ohne Neu-Konvertierung zu laden
+  - Dokumente werden automatisch nach der Konvertierung auf der Festplatte gespeichert
+  - Die vollständige Dokumentstruktur wird erhalten und kann sofort neu geladen werden
 

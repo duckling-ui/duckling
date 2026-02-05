@@ -408,4 +408,7 @@ Access previously converted documents:
 - **Filter**: Filter by status (completed, failed)
 - **Statistics**: View success rates and format breakdown
 - **Export**: Download history as JSON
+- **Reload Documents**: Click on completed history entries to reload the converted document without re-conversion
+  - Documents are automatically stored on disk after conversion
+  - Full document structure is preserved and can be reloaded instantly
 

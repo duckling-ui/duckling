@@ -73,6 +73,7 @@ GET /api/history/{job_id}
   "confidence": 0.92,
   "error_message": null,
   "output_path": "/outputs/550e8400.../document.md",
+  "document_json_path": "/outputs/550e8400.../document.json",
   "settings": {
     "ocr": {"enabled": true}
   },
@@ -81,6 +82,67 @@ GET /api/history/{job_id}
   "completed_at": "2024-01-15T10:00:30Z"
 }
 ```
+
+---
+
+## Dokument aus dem Verlauf laden
+
+```http
+GET /api/history/{job_id}/load
+```
+
+Lädt ein zuvor konvertiertes Dokument aus dem Verlauf und gibt es als Konvertierungsergebnis zurück. Dieser Endpunkt lädt das `DoclingDocument` aus der gespeicherten JSON-Datei und gibt es im gleichen Format wie ein frisches Konvertierungsergebnis zurück.
+
+### Pfadparameter
+
+| Name | Typ | Erforderlich | Beschreibung |
+|------|-----|--------------|--------------|
+| `job_id` | string | Ja | Die Job-Kennung |
+
+### Antwort
+
+Gibt ein `ConversionResult`-Objekt zurück, das dem Format einer frischen Konvertierung entspricht:
+
+```json
+{
+  "job_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "completed",
+  "document": {
+    "title": "Mein Dokument",
+    "content": "...",
+    "metadata": {...}
+  },
+  "formats_available": ["markdown", "html", "json"],
+  "images_count": 5,
+  "tables_count": 2,
+  "preview": "# Dokumentinhalt-Vorschau..."
+}
+```
+
+### Fehlerantworten
+
+**404 Not Found**: Verlaufseintrag existiert nicht
+```json
+{
+  "error": "History entry {job_id} not found"
+}
+```
+
+**400 Bad Request**: Konvertierung nicht abgeschlossen
+```json
+{
+  "job_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "pending",
+  "message": "Conversion not completed"
+}
+```
+
+### Hinweise
+
+- Funktioniert nur für abgeschlossene Konvertierungen
+- Wenn die gespeicherte Dokument-JSON-Datei nicht verfügbar ist, versucht der Endpunkt, das Ergebnis aus den Ausgabedateien zu rekonstruieren
+- Dokumente werden automatisch nach jeder erfolgreichen Konvertierung gespeichert
+- Das Feld `document_json_path` in Verlaufseinträgen gibt an, wo das Dokument-JSON gespeichert ist
 
 ---
 
