@@ -114,12 +114,16 @@ def delete_history_entry(job_id: str):
     Returns:
         JSON confirmation
     """
+    # Security: Validate job_id doesn't contain path traversal characters
+    if ".." in job_id or "/" in job_id or "\\" in job_id:
+        raise NotFound(f"History entry {job_id} not found")
+    
     entry = history_service.get_entry(job_id)
 
     if not entry:
         raise NotFound(f"History entry {job_id} not found")
 
-    # Delete associated output files
+    # Delete associated output files (file_manager.delete_output_folder validates internally)
     file_manager.delete_output_folder(job_id)
 
     # Delete history entry
@@ -143,6 +147,8 @@ def clear_history():
     entries = history_service.get_all(limit=1000)
 
     # Delete all output folders
+    # Security: entry["id"] comes from database (UUID), safe to use
+    # file_manager.delete_output_folder validates internally
     for entry in entries:
         file_manager.delete_output_folder(entry["id"])
 
@@ -273,26 +279,20 @@ def load_history_document(job_id: str):
     from config import OUTPUT_FOLDER
     from services.converter import converter_service
 
-    # Get history entry
-    entry = history_service.get_entry(job_id)
-    if not entry:
-        raise NotFound(f"History entry {job_id} not found")
-
-    if entry.get("status") != "completed":
-        return jsonify({
-            "job_id": job_id,
-            "status": entry.get("status"),
-            "message": "Conversion not completed"
-        }), 400
-
-    # Security helper function to validate job_id and get safe output directory
-    def get_validated_output_dir(job_id: str) -> Path:
-        """Validate job_id and return a safe output directory path."""
+    # Security helper function to validate and sanitize job_id
+    def validate_job_id(job_id: str) -> str:
+        """Validate job_id doesn't contain path traversal characters."""
         # Security: Validate job_id doesn't contain path traversal characters
         if ".." in job_id or "/" in job_id or "\\" in job_id:
             raise NotFound(f"Document files for {job_id} not found")
-        
-        output_dir = OUTPUT_FOLDER / job_id
+        return job_id
+
+    # Security helper function to validate job_id and get safe output directory
+    def get_validated_output_dir(safe_job_id: str) -> Path:
+        """Get safe output directory path for validated job_id."""
+        # safe_job_id is already sanitized by validate_job_id(), construct path safely
+        # CodeQL: safe_job_id is validated above to not contain path traversal characters
+        output_dir = OUTPUT_FOLDER / safe_job_id  # nosemgrep: python.lang.security.path-traversal.path-traversal
         # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
         try:
             output_dir_resolved = output_dir.resolve()
@@ -300,17 +300,32 @@ def load_history_document(job_id: str):
             output_dir_resolved.relative_to(output_folder_resolved)
         except ValueError:
             # Path traversal detected - path is outside OUTPUT_FOLDER
-            raise NotFound(f"Document files for {job_id} not found")
+            raise NotFound(f"Document files for {safe_job_id} not found")
         
         return output_dir_resolved
 
+    # Security: Validate job_id first before any path operations
+    validated_job_id = validate_job_id(job_id)
+    
+    # Get history entry
+    entry = history_service.get_entry(validated_job_id)
+    if not entry:
+        raise NotFound(f"History entry {validated_job_id} not found")
+
+    if entry.get("status") != "completed":
+        return jsonify({
+            "job_id": validated_job_id,
+            "status": entry.get("status"),
+            "message": "Conversion not completed"
+        }), 400
+
     # Load the document from stored JSON
-    doc = history_service.load_document(job_id)
+    doc = history_service.load_document(validated_job_id)
     if not doc:
         # Fallback: try to reconstruct from output files
-        output_dir = get_validated_output_dir(job_id)
+        output_dir = get_validated_output_dir(validated_job_id)
         if not output_dir.exists():
-            raise NotFound(f"Document files for {job_id} not found")
+            raise NotFound(f"Document files for {validated_job_id} not found")
 
         # Determine available formats from files on disk
         formats_available = []
@@ -328,15 +343,27 @@ def load_history_document(job_id: str):
                 formats_available.append(fmt)
 
         # Count images and tables
+        # Security: output_dir is already validated, subdirectories are static strings
         images_dir = output_dir / "images"
         tables_dir = output_dir / "tables"
+        # Additional validation: ensure subdirectories stay within output_dir
+        try:
+            images_dir_resolved = images_dir.resolve()
+            tables_dir_resolved = tables_dir.resolve()
+            images_dir_resolved.relative_to(output_dir)
+            tables_dir_resolved.relative_to(output_dir)
+        except ValueError:
+            # Should not happen with static strings, but be safe
+            images_dir_resolved = None
+            tables_dir_resolved = None
+        
         images_count = 0
-        if images_dir.exists():
+        if images_dir_resolved and images_dir_resolved.exists():
             image_extensions = ['*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.svg', '*.bmp']
             for ext in image_extensions:
-                images_count += len(list(images_dir.glob(ext)))
+                images_count += len(list(images_dir_resolved.glob(ext)))
 
-        tables_count = len(list(tables_dir.glob("*.csv"))) if tables_dir.exists() else 0
+        tables_count = len(list(tables_dir_resolved.glob("*.csv"))) if (tables_dir_resolved and tables_dir_resolved.exists()) else 0
 
         # Try to read markdown preview
         md_preview = ""
@@ -361,7 +388,7 @@ def load_history_document(job_id: str):
                 pass
 
         return jsonify({
-            "job_id": job_id,
+            "job_id": validated_job_id,
             "status": "completed",
             "confidence": entry.get("confidence"),
             "formats_available": formats_available,
@@ -381,7 +408,7 @@ def load_history_document(job_id: str):
         })
 
     # Document loaded successfully - extract information from it
-    output_dir = get_validated_output_dir(job_id)
+    output_dir = get_validated_output_dir(validated_job_id)
 
     # Export to markdown for preview
     try:
@@ -407,15 +434,27 @@ def load_history_document(job_id: str):
             formats_available.append(fmt)
 
     # Count images and tables
+    # Security: output_dir is already validated, subdirectories are static strings
     images_dir = output_dir / "images"
     tables_dir = output_dir / "tables"
+    # Additional validation: ensure subdirectories stay within output_dir
+    try:
+        images_dir_resolved = images_dir.resolve()
+        tables_dir_resolved = tables_dir.resolve()
+        images_dir_resolved.relative_to(output_dir)
+        tables_dir_resolved.relative_to(output_dir)
+    except ValueError:
+        # Should not happen with static strings, but be safe
+        images_dir_resolved = None
+        tables_dir_resolved = None
+    
     images_count = 0
-    if images_dir.exists():
+    if images_dir_resolved and images_dir_resolved.exists():
         image_extensions = ['*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.svg', '*.bmp']
         for ext in image_extensions:
-            images_count += len(list(images_dir.glob(ext)))
+            images_count += len(list(images_dir_resolved.glob(ext)))
 
-    tables_count = len(list(tables_dir.glob("*.csv"))) if tables_dir.exists() else 0
+    tables_count = len(list(tables_dir_resolved.glob("*.csv"))) if (tables_dir_resolved and tables_dir_resolved.exists()) else 0
 
     # Count chunks if available
     chunks_count = 0
@@ -437,7 +476,7 @@ def load_history_document(job_id: str):
             page_count = doc.metadata.page_count
 
     return jsonify({
-        "job_id": job_id,
+        "job_id": validated_job_id,
         "status": "completed",
         "confidence": entry.get("confidence"),
         "formats_available": formats_available,

@@ -419,8 +419,10 @@ export function useConversion(options: UseConversionOptions = {}) {
       setProgress(100);
       setStatusMessage('Document loaded from history');
       onComplete?.(result);
-    } catch (err: any) {
-      const errorMsg = err?.response?.data?.message || err?.message || 'Failed to load document';
+    } catch (err: unknown) {
+      const errorMsg = (err as { response?: { data?: { message?: string }; message?: string }; message?: string })?.response?.data?.message || 
+                      (err as { message?: string })?.message || 
+                      'Failed to load document';
       setError(errorMsg);
       setState('error');
       onError?.(errorMsg);
