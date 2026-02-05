@@ -23,6 +23,7 @@
 """History API endpoints."""
 
 import json
+import re
 from flask import Blueprint, request, jsonify
 from werkzeug.exceptions import NotFound
 
@@ -281,10 +282,19 @@ def load_history_document(job_id: str):
 
     # Security helper function to validate and sanitize job_id
     def validate_job_id(job_id: str) -> str:
-        """Validate job_id doesn't contain path traversal characters."""
-        # Security: Validate job_id doesn't contain path traversal characters
-        if ".." in job_id or "/" in job_id or "\\" in job_id:
+        """
+        Validate job_id so it cannot be used for path traversal.
+
+        Only allow a conservative set of characters (alphanumerics, dash,
+        underscore) and reject anything else, including path separators.
+        """
+        if not isinstance(job_id, str):
+            raise NotFound("Invalid job identifier")
+
+        # Allow only safe characters; this implicitly disallows '/', '\\', and '..'
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", job_id):
             raise NotFound(f"Document files for {job_id} not found")
+
         return job_id
 
     # Security helper function to validate job_id and get safe output directory
