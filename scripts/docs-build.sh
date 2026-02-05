@@ -57,13 +57,25 @@ if [ -f "$ROOT_DIR/docs/versions.json" ] && [ -d "$ROOT_DIR/site" ]; then
 fi
 
 # Copy sitemap.xml to each language directory for SEO crawlers
+# Note: English (default locale) is at site root, not site/en/
 if [ -f "$ROOT_DIR/site/sitemap.xml" ]; then
-  for lang_dir in "$ROOT_DIR/site"/{en,es,fr,de}; do
+  # Copy to non-default language directories (es, fr, de)
+  for lang in es fr de; do
+    lang_dir="$ROOT_DIR/site/$lang"
     if [ -d "$lang_dir" ]; then
       cp "$ROOT_DIR/site/sitemap.xml" "$lang_dir/sitemap.xml"
       echo "Copied sitemap.xml to $lang_dir"
     fi
   done
+  # For English, ensure sitemap.xml is accessible at /en/sitemap.xml
+  # Create site/en/ directory if it doesn't exist (for compatibility)
+  en_dir="$ROOT_DIR/site/en"
+  if [ ! -d "$en_dir" ]; then
+    mkdir -p "$en_dir"
+    echo "Created site/en directory for compatibility"
+  fi
+  cp "$ROOT_DIR/site/sitemap.xml" "$en_dir/sitemap.xml"
+  echo "Copied sitemap.xml to site/en (for /en/sitemap.xml requests)"
 fi
 
 

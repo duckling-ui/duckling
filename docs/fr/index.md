@@ -2,7 +2,7 @@
 
 Une interface Web moderne et conviviale pour [Docling](https://github.com/docling-project/docling) (IBM), la puissante bibliothèque de conversion de documents.
 
-![Capture d’écran Duckling](../screenshot.png)
+![Capture d'écran Duckling](fr/main-french.png)
 
 ## Aperçu
 

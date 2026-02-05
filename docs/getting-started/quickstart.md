@@ -60,7 +60,7 @@ Choose your preferred method:
 Navigate to `http://localhost:3000` in your browser.
 
 <figure markdown="span">
-  ![Duckling Interface](../assets/screenshots/ui/dropzone-empty.png){ loading=lazy }
+  ![Duckling Interface](../assets/screenshots/ui/main-english.png){ loading=lazy }
   <figcaption>The main Duckling interface</figcaption>
 </figure>
 
