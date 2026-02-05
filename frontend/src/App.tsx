@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { useConversion } from "./hooks/useConversion";
@@ -173,26 +173,28 @@ export default function App() {
               <label className="sr-only" htmlFor="language-select">
                 {t("language.label")}
               </label>
-              <select
-                id="language-select"
-                value={
-                  i18n.language?.toLowerCase().startsWith("es")
-                    ? "es"
-                    : i18n.language?.toLowerCase().startsWith("fr")
-                      ? "fr"
-                      : i18n.language?.toLowerCase().startsWith("de")
-                        ? "de"
-                        : "en"
-                }
-                onChange={(e) => void i18n.changeLanguage(e.target.value)}
-                className="bg-dark-800 text-dark-200 text-sm rounded-lg px-2 py-1.5 border border-dark-700 hover:border-dark-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                aria-label={t("language.label")}
-              >
-                <option value="en">{t("language.en")}</option>
-                <option value="es">{t("language.es")}</option>
-                <option value="fr">{t("language.fr")}</option>
-                <option value="de">{t("language.de")}</option>
-              </select>
+              <div className="relative">
+                <select
+                  id="language-select"
+                  value={
+                    i18n.language?.toLowerCase().startsWith("es")
+                      ? "es"
+                      : i18n.language?.toLowerCase().startsWith("fr")
+                        ? "fr"
+                        : i18n.language?.toLowerCase().startsWith("de")
+                          ? "de"
+                          : "en"
+                  }
+                  onChange={(e) => void i18n.changeLanguage(e.target.value)}
+                  className="bg-dark-800 text-dark-200 text-sm rounded-lg px-2 py-1.5 pr-8 border border-dark-700 hover:border-dark-600 focus:outline-none focus:ring-2 focus:ring-primary-500 appearance-none cursor-pointer"
+                  aria-label={t("language.label")}
+                >
+                  <option value="en">🇺🇸 {t("language.en")}</option>
+                  <option value="es">🇪🇸 {t("language.es")}</option>
+                  <option value="fr">🇫🇷 {t("language.fr")}</option>
+                  <option value="de">🇩🇪 {t("language.de")}</option>
+                </select>
+              </div>
 
               {/* Batch mode toggle */}
               <button

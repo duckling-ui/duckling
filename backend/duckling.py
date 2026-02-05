@@ -116,16 +116,25 @@ def build_docs():
                     logger.warning(f"Could not copy versions.json: {e}")
 
             # Copy sitemap.xml to each language directory for SEO crawlers
+            # Note: English (default locale) is at site root, not site/en/
             sitemap_xml = site_dir / "sitemap.xml"
             if sitemap_xml.exists():
                 try:
                     import shutil
-                    for lang in ["en", "es", "fr", "de"]:
+                    # Copy to non-default language directories (es, fr, de)
+                    for lang in ["es", "fr", "de"]:
                         lang_dir = site_dir / lang
                         if lang_dir.exists():
                             lang_sitemap = lang_dir / "sitemap.xml"
                             shutil.copy2(sitemap_xml, lang_sitemap)
                             logger.info(f"Copied sitemap.xml to {lang}/ directory")
+                    # For English, ensure sitemap.xml is accessible at /en/sitemap.xml
+                    # Create site/en/ directory if it doesn't exist (for compatibility)
+                    en_dir = site_dir / "en"
+                    en_dir.mkdir(exist_ok=True)
+                    en_sitemap = en_dir / "sitemap.xml"
+                    shutil.copy2(sitemap_xml, en_sitemap)
+                    logger.info("Copied sitemap.xml to en/ directory (for /en/sitemap.xml requests)")
                 except Exception as e:
                     logger.warning(f"Could not copy sitemap.xml to language directories: {e}")
 

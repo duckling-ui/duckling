@@ -115,12 +115,21 @@ if [ "$SKIP_DOCS" = false ]; then
             cp docs/versions.json site/versions.json
         fi
         # Copy sitemap.xml to each language directory for SEO crawlers
+        # Note: English (default locale) is at site root, not site/en/
         if [ -f "site/sitemap.xml" ]; then
-            for lang_dir in site/{en,es,fr,de}; do
+            # Copy to non-default language directories (es, fr, de)
+            for lang in es fr de; do
+                lang_dir="site/$lang"
                 if [ -d "$lang_dir" ]; then
                     cp site/sitemap.xml "$lang_dir/sitemap.xml"
                 fi
             done
+            # For English, ensure sitemap.xml is accessible at /en/sitemap.xml
+            # Create site/en/ directory if it doesn't exist (for compatibility)
+            if [ ! -d "site/en" ]; then
+                mkdir -p site/en
+            fi
+            cp site/sitemap.xml site/en/sitemap.xml
         fi
     elif [ -f "requirements-docs.txt" ]; then
         # Try to install mkdocs and build

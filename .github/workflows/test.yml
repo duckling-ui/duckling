@@ -139,10 +139,20 @@ jobs:
       - name: Copy sitemap.xml to language directories
         run: |
           if [ -f "site/sitemap.xml" ]; then
-            for lang_dir in site/{en,es,fr,de}; do
+            # Copy to non-default language directories (es, fr, de)
+            for lang in es fr de; do
+              lang_dir="site/$lang"
               if [ -d "$lang_dir" ]; then
                 cp site/sitemap.xml "$lang_dir/sitemap.xml"
                 echo "Copied sitemap.xml to $lang_dir"
               fi
             done
+            # For English, ensure sitemap.xml is accessible at /en/sitemap.xml
+            # Create site/en/ directory if it doesn't exist (for compatibility)
+            if [ ! -d "site/en" ]; then
+              mkdir -p site/en
+              echo "Created site/en directory for compatibility"
+            fi
+            cp site/sitemap.xml site/en/sitemap.xml
+            echo "Copied sitemap.xml to site/en (for /en/sitemap.xml requests)"
           fi
