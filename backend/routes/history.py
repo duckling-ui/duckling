@@ -472,6 +472,29 @@ def load_history_document(job_id: str):
     # $path-traversal-safe: tables_dir_resolved validated above
     tables_count = len(list(tables_dir_resolved.glob("*.csv"))) if (tables_dir_resolved and tables_dir_resolved.exists()) else 0
 
+    # Count images and tables
+    # Security: output_dir (validated_output_dir) is already validated above
+    # Subdirectories use static strings "images" and "tables", safe from path traversal
+    images_dir = output_dir / "images"  # $path-traversal-safe: static string
+    tables_dir = output_dir / "tables"  # $path-traversal-safe: static string
+    # Additional validation: ensure subdirectories stay within output_dir
+    try:
+        images_dir_resolved = images_dir.resolve()
+        tables_dir_resolved = tables_dir.resolve()
+        images_dir_resolved.relative_to(output_dir)
+        tables_dir_resolved.relative_to(output_dir)
+    except ValueError:
+        images_dir_resolved = None
+        tables_dir_resolved = None
+
+    images_count = 0
+    if images_dir_resolved and images_dir_resolved.exists():
+        image_extensions = ['*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.svg', '*.bmp']
+        for ext in image_extensions:
+            images_count += len(list(images_dir_resolved.glob(ext)))
+
+    tables_count = len(list(tables_dir_resolved.glob("*.csv"))) if (tables_dir_resolved and tables_dir_resolved.exists()) else 0
+
     # Count chunks if available
     chunks_count = 0
     # $path-traversal-safe: output_dir (validated_output_dir) validated above
@@ -512,7 +535,6 @@ def load_history_document(job_id: str):
         "chunks_count": chunks_count,
         "completed_at": entry.get("completed_at")
     })
-
 
 @history_bp.route("/history/<job_id>/generate-chunks", methods=["POST"])
 def generate_chunks(job_id: str):
@@ -566,4 +588,3 @@ def generate_chunks(job_id: str):
         "chunks": chunks,
         "count": len(chunks)
     })
-

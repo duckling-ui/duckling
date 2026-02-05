@@ -794,7 +794,6 @@ class HistoryService:
 
         return added_count, added
 
-
 # Singleton instance
 history_service = HistoryService()
 
