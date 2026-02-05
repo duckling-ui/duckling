@@ -310,26 +310,20 @@ def load_history_document(job_id: str):
     # Now that job_id is validated, construct and validate the output directory
     output_dir = get_validated_output_dir(job_id, Path(OUTPUT_FOLDER))
 
-    # Get history entry
-    entry = history_service.get_entry(job_id)
-    if not entry:
-        raise NotFound(f"History entry {job_id} not found")
-
-    if entry.get("status") != "completed":
-        return jsonify({
-            "job_id": job_id,
-            "status": entry.get("status"),
-            "message": "Conversion not completed"
-        }), 400
-
-    # Security helper function to validate job_id and get safe output directory
-    def get_validated_output_dir(job_id: str) -> Path:
-        """Validate job_id and return a safe output directory path."""
+    # Security helper function to validate and sanitize job_id
+    def validate_job_id(job_id: str) -> str:
+        """Validate job_id doesn't contain path traversal characters."""
         # Security: Validate job_id doesn't contain path traversal characters
         if ".." in job_id or "/" in job_id or "\\" in job_id:
             raise NotFound(f"Document files for {job_id} not found")
-        
-        output_dir = OUTPUT_FOLDER / job_id
+        return job_id
+
+    # Security helper function to validate job_id and get safe output directory
+    def get_validated_output_dir(safe_job_id: str) -> Path:
+        """Get safe output directory path for validated job_id."""
+        # safe_job_id is already sanitized by validate_job_id(), construct path safely
+        # CodeQL: safe_job_id is validated above to not contain path traversal characters
+        output_dir = OUTPUT_FOLDER / safe_job_id  # nosemgrep: python.lang.security.path-traversal.path-traversal
         # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
         try:
             output_dir_resolved = output_dir.resolve()
@@ -337,17 +331,32 @@ def load_history_document(job_id: str):
             output_dir_resolved.relative_to(output_folder_resolved)
         except ValueError:
             # Path traversal detected - path is outside OUTPUT_FOLDER
-            raise NotFound(f"Document files for {job_id} not found")
+            raise NotFound(f"Document files for {safe_job_id} not found")
         
         return output_dir_resolved
 
+    # Security: Validate job_id first before any path operations
+    validated_job_id = validate_job_id(job_id)
+    
+    # Get history entry
+    entry = history_service.get_entry(validated_job_id)
+    if not entry:
+        raise NotFound(f"History entry {validated_job_id} not found")
+
+    if entry.get("status") != "completed":
+        return jsonify({
+            "job_id": validated_job_id,
+            "status": entry.get("status"),
+            "message": "Conversion not completed"
+        }), 400
+
     # Load the document from stored JSON
-    doc = history_service.load_document(job_id)
+    doc = history_service.load_document(validated_job_id)
     if not doc:
         # Fallback: try to reconstruct from output files
         # output_dir is already validated and normalized above
         if not output_dir.exists():
-            raise NotFound(f"Document files for {job_id} not found")
+            raise NotFound(f"Document files for {validated_job_id} not found")
 
         # Determine available formats from files on disk
         formats_available = []
@@ -419,7 +428,7 @@ def load_history_document(job_id: str):
                 pass
 
         return jsonify({
-            "job_id": job_id,
+            "job_id": validated_job_id,
             "status": "completed",
             "confidence": entry.get("confidence"),
             "formats_available": formats_available,
@@ -488,30 +497,6 @@ def load_history_document(job_id: str):
             # $path-traversal-safe: images_dir_resolved validated above
             images_count += len(list(images_dir_resolved.glob(ext)))
 
-    # $path-traversal-safe: tables_dir_resolved validated above
-    tables_count = len(list(tables_dir_resolved.glob("*.csv"))) if (tables_dir_resolved and tables_dir_resolved.exists()) else 0
-
-    # Count images and tables
-    # Security: output_dir (validated_output_dir) is already validated above
-    # Subdirectories use static strings "images" and "tables", safe from path traversal
-    images_dir = output_dir / "images"  # $path-traversal-safe: static string
-    tables_dir = output_dir / "tables"  # $path-traversal-safe: static string
-    # Additional validation: ensure subdirectories stay within output_dir
-    try:
-        images_dir_resolved = images_dir.resolve()
-        tables_dir_resolved = tables_dir.resolve()
-        images_dir_resolved.relative_to(output_dir)
-        tables_dir_resolved.relative_to(output_dir)
-    except ValueError:
-        images_dir_resolved = None
-        tables_dir_resolved = None
-
-    images_count = 0
-    if images_dir_resolved and images_dir_resolved.exists():
-        image_extensions = ['*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.svg', '*.bmp']
-        for ext in image_extensions:
-            images_count += len(list(images_dir_resolved.glob(ext)))
-
     tables_count = len(list(tables_dir_resolved.glob("*.csv"))) if (tables_dir_resolved and tables_dir_resolved.exists()) else 0
 
     # Count chunks if available
@@ -536,7 +521,7 @@ def load_history_document(job_id: str):
             page_count = doc.metadata.page_count
 
     return jsonify({
-        "job_id": job_id,
+        "job_id": validated_job_id,
         "status": "completed",
         "confidence": entry.get("confidence"),
         "formats_available": formats_available,
