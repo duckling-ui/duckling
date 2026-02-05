@@ -23,6 +23,7 @@
 """History API endpoints."""
 
 import json
+import re
 from flask import Blueprint, request, jsonify
 from werkzeug.exceptions import NotFound
 
@@ -279,10 +280,42 @@ def load_history_document(job_id: str):
     from config import OUTPUT_FOLDER
     from services.converter import converter_service
 
-    # Security: Validate job_id inline before any path operations
-    # This must be done inline so CodeQL can track the validation
-    if ".." in job_id or "/" in job_id or "\\" in job_id:
-        raise NotFound(f"Document files for {job_id} not found")
+    # Security helper function to validate and sanitize job_id
+    def validate_job_id(job_id: str) -> str:
+        """
+        Validate job_id so it cannot be used for path traversal.
+
+        Only allow a conservative set of characters (alphanumerics, dash,
+        underscore) and reject anything else, including path separators.
+        """
+        if not isinstance(job_id, str):
+            raise NotFound("Invalid job identifier")
+
+        # Allow only safe characters; this implicitly disallows '/', '\\', and '..'
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", job_id):
+            raise NotFound(f"Document files for {job_id} not found")
+
+        return job_id
+
+    # Security helper function to validate job_id and get safe output directory
+    def get_validated_output_dir(safe_job_id: str) -> Path:
+        """Get safe output directory path for validated job_id."""
+        # safe_job_id is already sanitized by validate_job_id(), construct path safely
+        # CodeQL: safe_job_id is validated above to not contain path traversal characters
+        output_dir = OUTPUT_FOLDER / safe_job_id  # nosemgrep: python.lang.security.path-traversal.path-traversal
+        # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
+        try:
+            output_dir_resolved = output_dir.resolve()
+            output_folder_resolved = OUTPUT_FOLDER.resolve()
+            output_dir_resolved.relative_to(output_folder_resolved)
+        except ValueError:
+            # Path traversal detected - path is outside OUTPUT_FOLDER
+            raise NotFound(f"Document files for {safe_job_id} not found")
+        
+        return output_dir_resolved
+
+    # Security: Validate job_id first before any path operations
+    validated_job_id = validate_job_id(job_id)
     
     # Now job_id is validated - construct path and validate it's within OUTPUT_FOLDER
     # CodeQL: job_id is validated above to not contain path traversal characters
