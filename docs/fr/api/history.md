@@ -97,7 +97,7 @@ Charge un document précédemment converti depuis l'historique et le retourne co
 
 | Nom | Type | Requis | Description |
 |------|------|--------|-------------|
-| `job_id` | string | Oui | L'identifiant du job |
+| `job_id` | string | Oui | L'identifiant du job (doit correspondre à `[A-Za-z0-9_-]+`) |
 
 ### Réponse
 

@@ -97,7 +97,7 @@ Carga un documento previamente convertido desde el historial y lo devuelve como 
 
 | Nombre | Tipo | Requerido | Descripción |
 |--------|------|-----------|-------------|
-| `job_id` | string | Sí | El identificador del trabajo |
+| `job_id` | string | Sí | El identificador del trabajo (debe coincidir con `[A-Za-z0-9_-]+`) |
 
 ### Respuesta
 

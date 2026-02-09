@@ -97,7 +97,7 @@ Load a previously converted document from history and return it as a conversion 
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `job_id` | string | Yes | The job identifier |
+| `job_id` | string | Yes | The job identifier (must match `[A-Za-z0-9_-]+`) |
 
 ### Response
 

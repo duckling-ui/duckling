@@ -6,6 +6,7 @@ This repository contains multiple test suites:
   - `tests/test_docs.py`: Verifies MkDocs documentation structure (and can optionally run `mkdocs build`)
   - `tests/test_github_templates.py`: Ensures `.github/` issue and PR templates exist and include required policy pointers
 - **Backend (pytest)**: API and service tests in `backend/tests/`
+  - Includes regression tests for history reload endpoint validation and error handling in `backend/tests/test_api.py`
 - **Frontend (Vitest)**: UI and hook tests in `frontend/src/tests/`
 
 ## Running tests

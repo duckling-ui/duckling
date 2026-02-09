@@ -31,9 +31,13 @@ from pathlib import Path
 # Add backend to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from duckling import create_app
+# Ensure tests never connect to the developer's real history DB.
+# This must run before importing modules that initialize the SQLAlchemy engine.
+os.environ["DUCKLING_DATABASE_URL"] = "sqlite:///:memory:"
+
 from config import TestingConfig
-from models.database import init_db, Base, engine
+from duckling import create_app
+from models.database import init_db
 
 
 @pytest.fixture(scope="session")
@@ -47,8 +51,7 @@ def app():
     yield app
 
     # Cleanup
-    if TestingConfig.DATABASE_PATH.exists():
-        TestingConfig.DATABASE_PATH.unlink()
+    # No file cleanup needed for in-memory DB.
 
 
 @pytest.fixture

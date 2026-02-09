@@ -78,6 +78,10 @@ npm test
 npm run test:coverage
 ```
 
+When adding or modifying API endpoints, include regression tests for:
+- parameter validation (e.g., disallowing path traversal patterns in route params)
+- error-handling paths (to avoid 500s on missing files/data)
+
 ## Translations / i18n
 
 Duckling supports UI and documentation translations.

@@ -97,7 +97,7 @@ Lädt ein zuvor konvertiertes Dokument aus dem Verlauf und gibt es als Konvertie
 
 | Name | Typ | Erforderlich | Beschreibung |
 |------|-----|--------------|--------------|
-| `job_id` | string | Ja | Die Job-Kennung |
+| `job_id` | string | Ja | Die Job-Kennung (muss `[A-Za-z0-9_-]+` entsprechen) |
 
 ### Antwort
 

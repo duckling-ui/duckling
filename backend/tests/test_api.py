@@ -248,23 +248,23 @@ class TestDocsEndpoints:
         # "deployment/security" is translated to "Sicherheit" in the German docs we ship.
         # Try to find the security page by path first (most specific)
         security = next((d for d in docs if d.get("path") == "deployment/security"), None)
-        
+
         # If not found by exact path, try to find by ID (deployment_security)
         if security is None:
             security = next((d for d in docs if d.get("id") == "deployment_security"), None)
-        
+
         # If still not found, try to find by name containing "Sicherheit" in deployment section
         if security is None:
             security = next(
-                (d for d in docs 
+                (d for d in docs
                  if "deployment" in d.get("path", "") and "Sicherheit" in (d.get("name") or "")),
                 None
             )
-        
+
         # If still not found, try any doc with "Sicherheit" in the name
         if security is None:
             security = next((d for d in docs if "Sicherheit" in (d.get("name") or "")), None)
-        
+
         assert security is not None, (
             f"Page 'deployment/security' not found in docs. "
             f"Available paths: {[d.get('path') for d in docs]}. "
@@ -394,6 +394,34 @@ class TestHistoryEndpoint:
         assert response.status_code == 400
         data = json.loads(response.data)
         assert data["status"] == "pending"
+
+    def test_load_history_document_rejects_invalid_job_id(self, client):
+        """job_id should be validated to prevent path traversal / unsafe characters."""
+        # Dots are not allowed by validation (only [A-Za-z0-9_-]+)
+        response = client.get("/api/history/.. /load".replace(" ", ""))
+        # Route exists; should return NotFound (404) via validation.
+        assert response.status_code == 404
+
+        response = client.get("/api/history/a.b/load")
+        assert response.status_code == 404
+
+        response = client.get("/api/history/a%2Eb/load")  # URL-encoded '.'
+        assert response.status_code == 404
+
+    def test_load_history_document_completed_missing_output_dir_404(self, client):
+        """Regression: fallback path should not crash when document JSON is missing and output dir doesn't exist."""
+        from services.history import history_service
+
+        entry = history_service.create_entry(
+            job_id="test-completed-missing-output",
+            filename="test.pdf",
+            original_filename="test.pdf"
+        )
+        history_service.update_status(job_id=entry["id"], status="completed")
+
+        # No output directory or document JSON should exist in test environment.
+        response = client.get(f"/api/history/{entry['id']}/load")
+        assert response.status_code == 404
 
 
 class TestErrorHandling:
