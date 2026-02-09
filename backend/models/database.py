@@ -23,17 +23,29 @@
 """SQLite database models for conversion history."""
 
 import json
+import os
 import threading
 from datetime import datetime
 from sqlalchemy import create_engine, Column, String, Float, DateTime, Text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.pool import StaticPool
 from contextlib import contextmanager
 
-from config import DATABASE_URL
+from config import DATABASE_URL as _DEFAULT_DATABASE_URL
+
+# Allow overriding the database URL (primarily for tests) so we don't accidentally
+# connect to a developer's real `history.db` while running pytest.
+DATABASE_URL = os.getenv("DUCKLING_DATABASE_URL", _DEFAULT_DATABASE_URL)
 
 # Create engine and session
-engine = create_engine(DATABASE_URL, echo=False)
+_engine_kwargs = {}
+# When using an in-memory SQLite DB for tests, ensure all sessions share the same connection.
+if DATABASE_URL.startswith("sqlite") and ":memory:" in DATABASE_URL:
+    _engine_kwargs["connect_args"] = {"check_same_thread": False}
+    _engine_kwargs["poolclass"] = StaticPool
+
+engine = create_engine(DATABASE_URL, echo=False, **_engine_kwargs)
 session_factory = sessionmaker(bind=engine)
 db = scoped_session(session_factory)
 
@@ -61,6 +73,7 @@ class Conversion(Base):
     error_message = Column(Text, nullable=True)
     output_path = Column(String(500), nullable=True)
     file_size = Column(Float, nullable=True)  # Size in bytes
+    document_json_path = Column(String(500), nullable=True)  # Path to stored DoclingDocument JSON
 
     def to_dict(self):
         """Convert model to dictionary."""
@@ -76,7 +89,8 @@ class Conversion(Base):
             "settings": json.loads(self.settings) if self.settings else None,
             "error_message": self.error_message,
             "output_path": self.output_path,
-            "file_size": self.file_size
+            "file_size": self.file_size,
+            "document_json_path": self.document_json_path
         }
 
     def set_settings(self, settings_dict):

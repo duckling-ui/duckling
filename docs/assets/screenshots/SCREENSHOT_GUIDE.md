@@ -2,6 +2,17 @@
 
 This guide lists all screenshots needed for the Duckling documentation. All screenshots should be captured in **dark mode** for consistency with the application's default theme.
 
+## Directory Structure
+
+Screenshots are organized by locale. Each locale has its own `images` directory:
+
+- **English (default)**: `docs/images/`
+- **Spanish**: `docs/es/images/`
+- **French**: `docs/fr/images/`
+- **German**: `docs/de/images/`
+
+When capturing screenshots for a specific locale, ensure the UI language is set to that locale before capturing, and save the screenshots in the corresponding locale's `images` directory.
+
 ## Capture Settings
 
 - **Resolution**: 1920x1080 or 2x retina (3840x2160)
@@ -20,60 +31,67 @@ This guide lists all screenshots needed for the Duckling documentation. All scre
 
 ## Required Screenshots
 
-### 1. Main UI (`ui/` folder)
+All screenshots listed below should be captured for each locale and stored in the respective locale's `images` directory. For example:
+- English: `docs/images/dropzone-empty.png`
+- Spanish: `docs/es/images/dropzone-empty.png`
+- French: `docs/fr/images/dropzone-empty.png`
+- German: `docs/de/images/dropzone-empty.png`
+
+### 1. Main UI (`ui/` subdirectory)
 
 | Filename | Description | State/Notes |
 |----------|-------------|-------------|
-| `dropzone-empty.png` | Empty dropzone ready for upload | Initial state, no file selected |
-| `dropzone-hover.png` | Dropzone with file hovering | Show drag-over highlight effect |
-| `dropzone-uploading.png` | File upload in progress | Show progress indicator |
-| `dropzone-batch.png` | Batch mode enabled | Multiple files selected |
-| `header.png` | Application header | Show logo, batch toggle, settings button |
-| `history-panel.png` | Conversion history panel | Show list of previous conversions |
-| `history-search.png` | History with search active | Show search results |
+| `ui/dropzone-empty.png` | Empty dropzone ready for upload | Initial state, no file selected |
+| `ui/dropzone-hover.png` | Dropzone with file hovering | Show drag-over highlight effect |
+| `ui/dropzone-uploading.png` | File upload in progress | Show progress indicator |
+| `ui/dropzone-batch.png` | Batch mode enabled | Multiple files selected |
+| `ui/header.png` | Application header | Show logo, batch toggle, settings button, language selector |
+| `ui/history-panel.png` | Conversion history panel | Show list of previous conversions |
+| `ui/history-search.png` | History with search active | Show search results |
+| `ui/main.png` | Main interface overview | Full application view with default language |
 
-### 2. Settings Panel (`settings/` folder)
-
-| Filename | Description | State/Notes |
-|----------|-------------|-------------|
-| `settings-ocr.png` | OCR settings section | Show backend dropdown, language, options |
-| `settings-ocr-install.png` | OCR backend installation | Show "Install" button for uninstalled backend |
-| `settings-ocr-tesseract.png` | Tesseract system install notice | Show the manual installation instructions |
-| `settings-tables.png` | Table extraction settings | Show mode selection, options |
-| `settings-images.png` | Image extraction settings | Show all image options |
-| `settings-enrichment.png` | Document enrichment settings | Show all 4 enrichment toggles |
-| `settings-enrichment-warning.png` | Enrichment warning message | Show warning when slow features enabled |
-| `settings-performance.png` | Performance settings | Show device, threads, timeout |
-| `settings-chunking.png` | RAG chunking settings | Show max tokens, merge peers |
-| `settings-output.png` | Output settings | Show default format selection |
-| `settings-reset.png` | Reset settings confirmation | Show reset button and confirmation |
-
-### 3. Export Options (`export/` folder)
+### 2. Settings Panel (`settings/` subdirectory)
 
 | Filename | Description | State/Notes |
 |----------|-------------|-------------|
-| `export-formats.png` | Export format selection | Show all available formats |
-| `export-format-selected.png` | Format selected with checkmark | Highlight selected format (e.g., HTML) |
-| `preview-markdown-rendered.png` | Markdown preview (rendered) | Show formatted markdown content |
-| `preview-markdown-raw.png` | Markdown preview (raw) | Show raw markdown source |
-| `preview-html-rendered.png` | HTML preview (rendered) | Show rendered HTML with styling |
-| `preview-html-raw.png` | HTML preview (raw) | Show raw HTML source code |
-| `preview-json.png` | JSON preview | Show pretty-printed JSON |
-| `preview-toggle.png` | Rendered/Raw toggle | Close-up of the toggle buttons |
+| `settings/settings-ocr.png` | OCR settings section | Show backend dropdown, language, options |
+| `settings/settings-ocr-install.png` | OCR backend installation | Show "Install" button for uninstalled backend |
+| `settings/settings-ocr-tesseract.png` | Tesseract system install notice | Show the manual installation instructions |
+| `settings/settings-tables.png` | Table extraction settings | Show mode selection, options |
+| `settings/settings-images.png` | Image extraction settings | Show all image options |
+| `settings/settings-enrichment.png` | Document enrichment settings | Show all 4 enrichment toggles |
+| `settings/settings-enrichment-warning.png` | Enrichment warning message | Show warning when slow features enabled |
+| `settings/settings-performance.png` | Performance settings | Show device, threads, timeout |
+| `settings/settings-chunking.png` | RAG chunking settings | Show max tokens, merge peers |
+| `settings/settings-output.png` | Output settings | Show default format selection |
+| `settings/settings-reset.png` | Reset settings confirmation | Show reset button and confirmation |
 
-### 4. Features (`features/` folder)
+### 3. Export Options (`export/` subdirectory)
 
 | Filename | Description | State/Notes |
 |----------|-------------|-------------|
-| `images-gallery.png` | Extracted images gallery | Show thumbnail grid |
-| `images-lightbox.png` | Image lightbox modal | Show full-size image with navigation |
-| `images-hover.png` | Image hover actions | Show view/download buttons on hover |
-| `tables-list.png` | Extracted tables list | Show table cards with preview |
-| `tables-download.png` | Table download options | Show CSV/image download buttons |
-| `chunks-list.png` | RAG chunks display | Show chunk cards with metadata |
-| `conversion-complete.png` | Conversion success message | Show success header with stats |
-| `conversion-progress.png` | Conversion in progress | Show processing indicator |
-| `confidence-display.png` | OCR confidence score | Show confidence percentage |
+| `export/export-formats.png` | Export format selection | Show all available formats |
+| `export/export-format-selected.png` | Format selected with checkmark | Highlight selected format (e.g., HTML) |
+| `export/preview-markdown-rendered.png` | Markdown preview (rendered) | Show formatted markdown content |
+| `export/preview-markdown-raw.png` | Markdown preview (raw) | Show raw markdown source |
+| `export/preview-html-rendered.png` | HTML preview (rendered) | Show rendered HTML with styling |
+| `export/preview-html-raw.png` | HTML preview (raw) | Show raw HTML source code |
+| `export/preview-json.png` | JSON preview | Show pretty-printed JSON |
+| `export/preview-toggle.png` | Rendered/Raw toggle | Close-up of the toggle buttons |
+
+### 4. Features (`features/` subdirectory)
+
+| Filename | Description | State/Notes |
+|----------|-------------|-------------|
+| `features/images-gallery.png` | Extracted images gallery | Show thumbnail grid |
+| `features/images-lightbox.png` | Image lightbox modal | Show full-size image with navigation |
+| `features/images-hover.png` | Image hover actions | Show view/download buttons on hover |
+| `features/tables-list.png` | Extracted tables list | Show table cards with preview |
+| `features/tables-download.png` | Table download options | Show CSV/image download buttons |
+| `features/chunks-list.png` | RAG chunks display | Show chunk cards with metadata |
+| `features/conversion-complete.png` | Conversion success message | Show success header with stats |
+| `features/conversion-progress.png` | Conversion in progress | Show processing indicator |
+| `features/confidence-display.png` | OCR confidence score | Show confidence percentage |
 
 ---
 
@@ -102,12 +120,14 @@ Have these ready for capturing different states:
 
 ### Step 3: Capture Sequence
 
-1. **Start fresh** - Clear history, reset settings
-2. **Capture empty states first** - Dropzone, empty history
-3. **Upload a document** - Capture upload states
-4. **Capture conversion results** - All export tabs
-5. **Open settings** - Capture each section
-6. **Toggle preview modes** - Rendered vs raw for MD/HTML
+1. **Set language** - Switch UI to target locale before capturing
+2. **Start fresh** - Clear history, reset settings
+3. **Capture empty states first** - Dropzone, empty history
+4. **Upload a document** - Capture upload states
+5. **Capture conversion results** - All export tabs
+6. **Open settings** - Capture each section (ensure UI is in target language)
+7. **Toggle preview modes** - Rendered vs raw for MD/HTML
+8. **Save to correct directory** - Save screenshots to `<locale>/images/` directory
 
 ### Step 4: Post-Processing
 
@@ -128,7 +148,11 @@ Have these ready for capturing different states:
 
 ## Placeholder Status
 
-After capturing, update this checklist:
+After capturing, update this checklist for each locale. Screenshots should be stored in:
+- English: `docs/images/`
+- Spanish: `docs/es/images/`
+- French: `docs/fr/images/`
+- German: `docs/de/images/`
 
 ### UI Screenshots
 - [ ] `ui/dropzone-empty.png`
@@ -138,6 +162,7 @@ After capturing, update this checklist:
 - [ ] `ui/header.png`
 - [ ] `ui/history-panel.png`
 - [ ] `ui/history-search.png`
+- [ ] `ui/main.png`
 
 ### Settings Screenshots
 - [ ] `settings/settings-ocr.png`
@@ -172,4 +197,14 @@ After capturing, update this checklist:
 - [ ] `features/conversion-complete.png`
 - [ ] `features/conversion-progress.png`
 - [ ] `features/confidence-display.png`
+
+## Locale-Specific Notes
+
+When capturing screenshots for each locale:
+- **English**: Save to `docs/images/`
+- **Spanish**: Save to `docs/es/images/` - Ensure UI language is set to Español
+- **French**: Save to `docs/fr/images/` - Ensure UI language is set to Français
+- **German**: Save to `docs/de/images/` - Ensure UI language is set to Deutsch
+
+All screenshots should maintain the same structure (subdirectories: `ui/`, `settings/`, `export/`, `features/`) within each locale's `images` directory.
 

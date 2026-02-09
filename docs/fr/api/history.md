@@ -73,6 +73,7 @@ GET /api/history/{job_id}
   "confidence": 0.92,
   "error_message": null,
   "output_path": "/outputs/550e8400.../document.md",
+  "document_json_path": "/outputs/550e8400.../document.json",
   "settings": {
     "ocr": {"enabled": true}
   },
@@ -81,6 +82,67 @@ GET /api/history/{job_id}
   "completed_at": "2024-01-15T10:00:30Z"
 }
 ```
+
+---
+
+## Charger un document depuis l'historique
+
+```http
+GET /api/history/{job_id}/load
+```
+
+Charge un document précédemment converti depuis l'historique et le retourne comme un résultat de conversion. Cet endpoint charge le `DoclingDocument` depuis le fichier JSON stocké et le retourne dans le même format qu'un résultat de conversion frais.
+
+### Paramètres de chemin
+
+| Nom | Type | Requis | Description |
+|------|------|--------|-------------|
+| `job_id` | string | Oui | L'identifiant du job (doit correspondre à `[A-Za-z0-9_-]+`) |
+
+### Réponse
+
+Retourne un objet `ConversionResult` correspondant au format d'une conversion fraîche :
+
+```json
+{
+  "job_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "completed",
+  "document": {
+    "title": "Mon Document",
+    "content": "...",
+    "metadata": {...}
+  },
+  "formats_available": ["markdown", "html", "json"],
+  "images_count": 5,
+  "tables_count": 2,
+  "preview": "# Aperçu du contenu du document..."
+}
+```
+
+### Réponses d'erreur
+
+**404 Not Found**: L'entrée d'historique n'existe pas
+```json
+{
+  "error": "History entry {job_id} not found"
+}
+```
+
+**400 Bad Request**: Conversion non terminée
+```json
+{
+  "job_id": "550e8400-e29b-41d4-a716-446655440000",
+  "status": "pending",
+  "message": "Conversion not completed"
+}
+```
+
+### Notes
+
+- Ne fonctionne que pour les conversions terminées
+- Si le fichier JSON du document stocké n'est pas disponible, l'endpoint tentera de reconstruire le résultat à partir des fichiers de sortie
+- Les documents sont automatiquement stockés après chaque conversion réussie
+- Le champ `document_json_path` dans les entrées d'historique indique où le JSON du document est stocké
 
 ---
 

@@ -89,6 +89,61 @@
   vertical-align: middle;
 }
 
+/* Language selector flag styling */
+.md-header__select {
+  font-size: 0.9rem;
+}
+
+.md-header__select option {
+  font-size: 0.9rem;
+}
+
+/* Ensure flags display properly in language selector */
+.md-header__select,
+.md-header__option {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Language selector button styling */
+.md-header__button.md-header__button--lang {
+  font-size: 0.9rem;
+}
+
+/* Language selector flag display */
+.md-header__lang-flag,
+.md-header__lang-flag-display {
+  font-size: 1.5rem !important;
+  line-height: 1 !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  text-align: center !important;
+}
+
+/* Hide default icon when flag is shown */
+.md-header__button--lang .md-icon,
+.md-header__button--lang svg,
+.md-header__button--lang [data-md-icon] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Ensure flag is visible in button */
+.md-header__button--lang .md-header__lang-flag {
+  display: inline-block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Style the language selector to show flag prominently */
+.md-header__select-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 /* Responsive adjustments */
 @media screen and (max-width: 76.1875em) {
   .grid.cards > ul {

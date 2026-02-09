@@ -57,6 +57,7 @@ export default function App() {
     uploadFiles,
     downloadFormat,
     reset,
+    loadResult,
     batchMode,
     batchJobs,
     batchProgress,
@@ -136,10 +137,18 @@ export default function App() {
     [uploadFile, reset],
   );
 
-  const handleHistorySelect = useCallback((entry: HistoryEntry) => {
+  const handleHistorySelect = useCallback(async (entry: HistoryEntry) => {
     setHistoryOpen(false);
-    console.log("Selected history entry:", entry);
-  }, []);
+    
+    // Only load if the conversion was completed
+    if (entry.status === "completed" && entry.id) {
+      try {
+        await loadResult(entry.id);
+      } catch (error) {
+        console.error("Failed to load document from history:", error);
+      }
+    }
+  }, [loadResult]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -173,26 +182,28 @@ export default function App() {
               <label className="sr-only" htmlFor="language-select">
                 {t("language.label")}
               </label>
-              <select
-                id="language-select"
-                value={
-                  i18n.language?.toLowerCase().startsWith("es")
-                    ? "es"
-                    : i18n.language?.toLowerCase().startsWith("fr")
-                      ? "fr"
-                      : i18n.language?.toLowerCase().startsWith("de")
-                        ? "de"
-                        : "en"
-                }
-                onChange={(e) => void i18n.changeLanguage(e.target.value)}
-                className="bg-dark-800 text-dark-200 text-sm rounded-lg px-2 py-1.5 border border-dark-700 hover:border-dark-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                aria-label={t("language.label")}
-              >
-                <option value="en">{t("language.en")}</option>
-                <option value="es">{t("language.es")}</option>
-                <option value="fr">{t("language.fr")}</option>
-                <option value="de">{t("language.de")}</option>
-              </select>
+              <div className="relative">
+                <select
+                  id="language-select"
+                  value={
+                    i18n.language?.toLowerCase().startsWith("es")
+                      ? "es"
+                      : i18n.language?.toLowerCase().startsWith("fr")
+                        ? "fr"
+                        : i18n.language?.toLowerCase().startsWith("de")
+                          ? "de"
+                          : "en"
+                  }
+                  onChange={(e) => void i18n.changeLanguage(e.target.value)}
+                  className="bg-dark-800 text-dark-200 text-sm rounded-lg px-2 py-1.5 pr-8 border border-dark-700 hover:border-dark-600 focus:outline-none focus:ring-2 focus:ring-primary-500 appearance-none cursor-pointer"
+                  aria-label={t("language.label")}
+                >
+                  <option value="en">🇺🇸 {t("language.en")}</option>
+                  <option value="es">🇪🇸 {t("language.es")}</option>
+                  <option value="fr">🇫🇷 {t("language.fr")}</option>
+                  <option value="de">🇩🇪 {t("language.de")}</option>
+                </select>
+              </div>
 
               {/* Batch mode toggle */}
               <button

@@ -22,6 +22,8 @@
 
 """History API endpoints."""
 
+import json
+import re
 from flask import Blueprint, request, jsonify
 from werkzeug.exceptions import NotFound
 
@@ -113,12 +115,16 @@ def delete_history_entry(job_id: str):
     Returns:
         JSON confirmation
     """
+    # Security: Validate job_id doesn't contain path traversal characters
+    if ".." in job_id or "/" in job_id or "\\" in job_id:
+        raise NotFound(f"History entry {job_id} not found")
+
     entry = history_service.get_entry(job_id)
 
     if not entry:
         raise NotFound(f"History entry {job_id} not found")
 
-    # Delete associated output files
+    # Delete associated output files (file_manager.delete_output_folder validates internally)
     file_manager.delete_output_folder(job_id)
 
     # Delete history entry
@@ -142,6 +148,8 @@ def clear_history():
     entries = history_service.get_all(limit=1000)
 
     # Delete all output folders
+    # Security: entry["id"] comes from database (UUID), safe to use
+    # file_manager.delete_output_folder validates internally
     for entry in entries:
         file_manager.delete_output_folder(entry["id"])
 
@@ -251,5 +259,274 @@ def export_history():
         "total_entries": len(entries),
         "statistics": stats,
         "entries": entries
+    })
+
+
+@history_bp.route("/history/<job_id>/load", methods=["GET"])
+def load_history_document(job_id: str):
+    """
+    Load a converted document from history and return it as a ConversionResult.
+
+    This endpoint loads the DoclingDocument from the stored JSON file and
+    returns it in the same format as a fresh conversion result.
+
+    Args:
+        job_id: The job identifier
+
+    Returns:
+        JSON with conversion result matching ConversionResult format
+    """
+    from pathlib import Path
+    from config import OUTPUT_FOLDER
+    from services.converter import converter_service
+    from werkzeug.utils import safe_join
+
+    # Security helper function to validate and sanitize job_id
+    def validate_job_id(job_id: str) -> str:
+        """
+        Validate job_id so it cannot be used for path traversal.
+
+        Only allow a conservative set of characters (alphanumerics, dash,
+        underscore) and reject anything else, including dots and path separators.
+        """
+        if not isinstance(job_id, str):
+            raise NotFound("Invalid job identifier")
+
+        # Allow only safe characters; this implicitly disallows '/', '\\', '.', and '..'
+        if not re.fullmatch(r"[A-Za-z0-9_-]+", job_id):
+            raise NotFound(f"Document files for {job_id} not found")
+
+        return job_id
+
+    # Security helper function to validate job_id and get safe output directory
+    def get_validated_output_dir(safe_job_id: str) -> Path:
+        """Get safe, normalized output directory path for validated job_id."""
+        # safe_job_id is already sanitized by validate_job_id(), construct path safely.
+        # Use Werkzeug's safe_join as an additional guard (commonly recognized by security scanners).
+        joined = safe_join(str(OUTPUT_FOLDER), safe_job_id)
+        if not joined:
+            raise NotFound(f"Document files for {safe_job_id} not found")
+
+        candidate_dir = Path(joined)
+
+        # Security: Validate resolved path is within OUTPUT_FOLDER to prevent path traversal / symlink escape.
+        try:
+            output_dir_resolved = candidate_dir.resolve()
+            output_folder_resolved = OUTPUT_FOLDER.resolve()
+            output_dir_resolved.relative_to(output_folder_resolved)
+        except ValueError:
+            # Path traversal detected - path is outside OUTPUT_FOLDER
+            raise NotFound(f"Document files for {safe_job_id} not found")
+
+        return output_dir_resolved
+
+    # Security: Validate job_id first before any path operations
+    job_id = validate_job_id(job_id)
+
+    # Now that job_id is validated, construct and validate the output directory
+    # All subsequent path operations must use validated_output_dir, not job_id directly
+    output_dir = get_validated_output_dir(job_id)
+
+    # Get history entry
+    entry = history_service.get_entry(job_id)
+    if not entry:
+        raise NotFound(f"History entry {job_id} not found")
+
+    if entry.get("status") != "completed":
+        return jsonify({
+            "job_id": job_id,
+            "status": entry.get("status"),
+            "message": "Conversion not completed"
+        }), 400
+
+    # Load the document from stored JSON
+    doc = history_service.load_document(job_id)
+    if not doc:
+        # Fallback: try to reconstruct from output files
+        # output_dir is already validated and normalized above
+        if not output_dir.exists():
+            raise NotFound(f"Document files for {job_id} not found")
+
+        # Determine available formats from files on disk
+        formats_available = []
+        format_extensions = {
+            "markdown": ".md",
+            "html": ".html",
+            "json": ".json",
+            "text": ".txt",
+            "doctags": ".doctags",
+            "document_tokens": ".tokens.json",
+            "chunks": ".chunks.json"
+        }
+        for fmt, ext in format_extensions.items():
+            # $path-traversal-safe: output_dir validated above, ext is from static dict
+            if list(output_dir.glob(f"*{ext}")):
+                formats_available.append(fmt)
+
+        # Count images and tables
+        # Security: output_dir is already validated above
+        # Subdirectories use static strings "images" and "tables", safe from path traversal
+        images_dir = output_dir / "images"  # $path-traversal-safe: static string
+        tables_dir = output_dir / "tables"  # $path-traversal-safe: static string
+        # Additional validation: ensure subdirectories stay within output_dir
+        try:
+            images_dir_resolved = images_dir.resolve()
+            tables_dir_resolved = tables_dir.resolve()
+            images_dir_resolved.relative_to(output_dir)
+            tables_dir_resolved.relative_to(output_dir)
+        except ValueError:
+            # Should not happen with static strings, but be safe
+            images_dir_resolved = None
+            tables_dir_resolved = None
+
+        images_count = 0
+        if images_dir_resolved and images_dir_resolved.exists():
+            image_extensions = ['*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.svg', '*.bmp']
+            for ext in image_extensions:
+                # $path-traversal-safe: images_dir_resolved validated above
+                images_count += len(list(images_dir_resolved.glob(ext)))
+
+        # $path-traversal-safe: tables_dir_resolved validated above
+        tables_count = len(list(tables_dir_resolved.glob("*.csv"))) if (tables_dir_resolved and tables_dir_resolved.exists()) else 0
+
+        # Try to read markdown preview
+        md_preview = ""
+        # Count chunks if available
+        # $path-traversal-safe: output_dir validated above
+        md_files = list(output_dir.glob("*.md"))
+        if md_files:
+            try:
+                # $path-traversal-safe: md_files[0] is from validated output_dir
+                with open(md_files[0], 'r', encoding='utf-8') as f:
+                    content = f.read()
+                    md_preview = content[:5000] if len(content) > 5000 else content
+            except Exception:
+                pass
+
+        # Count chunks if available
+        chunks_count = 0
+        # $path-traversal-safe: output_dir validated above
+        chunks_files = list(output_dir.glob("*.chunks.json"))
+        if chunks_files:
+            try:
+                # $path-traversal-safe: chunks_files[0] is from validated_output_dir
+                with open(chunks_files[0], 'r', encoding='utf-8') as f:
+                    chunks_data = json.load(f)
+                    chunks_count = len(chunks_data) if isinstance(chunks_data, list) else 0
+            except Exception:
+                pass
+
+        return jsonify({
+            "job_id": job_id,
+            "status": "completed",
+            "confidence": entry.get("confidence"),
+            "formats_available": formats_available,
+            "result": {
+                "markdown_preview": md_preview,
+                "formats_available": formats_available,
+                "page_count": 0,  # Not available without document
+                "images_count": images_count,
+                "tables_count": tables_count,
+                "chunks_count": chunks_count,
+                "warnings": []
+            },
+            "images_count": images_count,
+            "tables_count": tables_count,
+            "chunks_count": chunks_count,
+            "completed_at": entry.get("completed_at")
+        })
+
+    # Document loaded successfully - extract information from it
+    # output_dir is already validated above
+
+    # Export to markdown for preview
+    try:
+        md_content = doc.export_to_markdown()
+        md_preview = md_content[:5000] if len(md_content) > 5000 else md_content
+    except Exception as e:
+        print(f"[load_document] Failed to export markdown: {e}")
+        md_preview = ""
+
+    # Determine available formats from files on disk
+    formats_available = []
+    format_extensions = {
+        "markdown": ".md",
+        "html": ".html",
+        "json": ".json",
+        "text": ".txt",
+        "doctags": ".doctags",
+        "document_tokens": ".tokens.json",
+        "chunks": ".chunks.json"
+    }
+    for fmt, ext in format_extensions.items():
+        # $path-traversal-safe: output_dir (validated_output_dir) validated above, ext is from static dict
+        if list(output_dir.glob(f"*{ext}")):
+            formats_available.append(fmt)
+
+    # Count images and tables
+    # Security: output_dir (validated_output_dir) is already validated above
+    # Subdirectories use static strings "images" and "tables", safe from path traversal
+    images_dir = output_dir / "images"  # $path-traversal-safe: static string
+    tables_dir = output_dir / "tables"  # $path-traversal-safe: static string
+    # Additional validation: ensure subdirectories stay within output_dir
+    try:
+        images_dir_resolved = images_dir.resolve()
+        tables_dir_resolved = tables_dir.resolve()
+        images_dir_resolved.relative_to(output_dir)
+        tables_dir_resolved.relative_to(output_dir)
+    except ValueError:
+        # Should not happen with static strings, but be safe
+        images_dir_resolved = None
+        tables_dir_resolved = None
+
+    images_count = 0
+    if images_dir_resolved and images_dir_resolved.exists():
+        image_extensions = ['*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.svg', '*.bmp']
+        for ext in image_extensions:
+            # $path-traversal-safe: images_dir_resolved validated above
+            images_count += len(list(images_dir_resolved.glob(ext)))
+
+    # $path-traversal-safe: tables_dir_resolved validated above
+    tables_count = len(list(tables_dir_resolved.glob("*.csv"))) if (tables_dir_resolved and tables_dir_resolved.exists()) else 0
+
+    # Count chunks if available
+    chunks_count = 0
+    # $path-traversal-safe: output_dir (validated_output_dir) validated above
+    chunks_files = list(output_dir.glob("*.chunks.json"))
+    if chunks_files:
+        try:
+            # $path-traversal-safe: chunks_files[0] is from validated output_dir
+            with open(chunks_files[0], 'r', encoding='utf-8') as f:
+                chunks_data = json.load(f)
+                chunks_count = len(chunks_data) if isinstance(chunks_data, list) else 0
+        except Exception:
+            pass
+
+    # Get page count from document if available
+    page_count = 0
+    if hasattr(doc, 'pages') and doc.pages:
+        page_count = len(doc.pages)
+    elif hasattr(doc, 'metadata') and doc.metadata:
+        if hasattr(doc.metadata, 'page_count'):
+            page_count = doc.metadata.page_count
+
+    return jsonify({
+        "job_id": job_id,
+        "status": "completed",
+        "confidence": entry.get("confidence"),
+        "formats_available": formats_available,
+        "result": {
+            "markdown_preview": md_preview,
+            "formats_available": formats_available,
+            "page_count": page_count,
+            "images_count": images_count,
+            "tables_count": tables_count,
+            "chunks_count": chunks_count,
+            "warnings": []
+        },
+        "images_count": images_count,
+        "tables_count": tables_count,
+        "chunks_count": chunks_count,
+        "completed_at": entry.get("completed_at")
     })
 

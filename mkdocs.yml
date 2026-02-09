@@ -46,6 +46,7 @@ theme:
     code: JetBrains Mono
   icon:
     repo: fontawesome/brands/github
+    alternate: fontawesome/solid/flag
   logo: assets/duckling.png
   favicon: assets/duckling.png
   features:
@@ -86,10 +87,10 @@ plugins:
       languages:
         - locale: en
           default: true
-          name: English
-          link: /en/
+          name: "🇺🇸 English"
+          link: /
         - locale: es
-          name: Español
+          name: "🇪🇸 Español"
           link: /es/
           nav_translations:
             Home: Inicio
@@ -121,7 +122,7 @@ plugins:
             "Code of Conduct": Código de conducta
             Changelog: Registro de cambios
         - locale: fr
-          name: Français
+          name: "🇫🇷 Français"
           link: /fr/
           nav_translations:
             Home: Accueil
@@ -153,7 +154,7 @@ plugins:
             "Code of Conduct": Code de conduite
             Changelog: Journal des modifications
         - locale: de
-          name: Deutsch
+          name: "🇩🇪 Deutsch"
           link: /de/
           nav_translations:
             Home: Startseite
@@ -292,16 +293,16 @@ extra:
     provider: google
     property: G-XXXXXXXXXX
   alternate:
-    - name: English
-      link: https://duckling-ui.org/en/
+    - name: "🇺🇸 English"
+      link: https://duckling-ui.org/
       lang: en
-    - name: Español
+    - name: "🇪🇸 Español"
       link: https://duckling-ui.org/es/
       lang: es
-    - name: Français
+    - name: "🇫🇷 Français"
       link: https://duckling-ui.org/fr/
       lang: fr
-    - name: Deutsch
+    - name: "🇩🇪 Deutsch"
       link: https://duckling-ui.org/de/
       lang: de
 
@@ -310,4 +311,5 @@ extra_css:
 
 extra_javascript:
   - javascripts/mathjax.js
+  - javascripts/language-selector.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js

@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Document Persistence**: Processed documents are now stored on disk and can be reloaded from history
+  - `DoclingDocument` objects are automatically saved as JSON files after conversion
+  - Documents stored in conversion output directories (e.g., `outputs/{job_id}/document.json`)
+  - Database migration script adds `document_json_path` column to track stored documents
+  - New API endpoint `GET /api/history/{job_id}/load` to reload documents from history
+  - Clicking on completed history entries in the UI automatically loads the stored document
+  - Prevents database bloat by storing large document objects on disk instead of in the database
+  - Fallback mechanism reconstructs conversion results from output files if document JSON is unavailable
+
+### Security
+
+- **Hardened history load path handling**: `GET /api/history/{job_id}/load` now strictly validates `job_id` and constructs output paths using a safe-join + resolved-path containment check to prevent path traversal.
+
+### Fixed
+
+- **History load fallback crash**: Fixed an uninitialized `output_dir` reference when reconstructing results from disk (when stored document JSON is missing).
+
 ## [2.4.1] - 2026-01-26
 
 ### Security

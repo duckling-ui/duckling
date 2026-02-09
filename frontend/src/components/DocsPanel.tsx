@@ -119,7 +119,7 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
       items: groups[category].sort((a, b) => a.name.localeCompare(b.name)),
       isExpanded: expandedSections.has(category),
     }));
-  }, [docs, expandedSections]);
+  }, [docs, expandedSections, t]);
 
   const fetchDocs = useCallback(() => {
     setLoading(true);
@@ -145,7 +145,7 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
         setError("Failed to load documentation");
         setLoading(false);
       });
-  }, [docsLocale]);
+  }, [docsLocale, t]);
 
   useEffect(() => {
     if (isOpen) {

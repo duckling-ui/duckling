@@ -746,6 +746,17 @@ class ConverterService:
                         json.dump(job.chunks, f, indent=2)
                     job.output_paths["chunks"] = str(chunks_path)
 
+                # Save DoclingDocument for later reloading
+                try:
+                    doc_json_path = output_base / f"{Path(job.original_filename).stem}.document.json"
+                    doc_dict = doc.export_to_dict()
+                    with open(doc_json_path, 'w', encoding='utf-8') as f:
+                        json.dump(doc_dict, f, indent=2, default=str)
+                    job.document_json_path = str(doc_json_path)
+                    print(f"[converter] Saved DoclingDocument to {doc_json_path}")
+                except Exception as e:
+                    print(f"[converter] Failed to save DoclingDocument: {e}")
+
                 job.progress = 100
                 job.status = ConversionStatus.COMPLETED
 

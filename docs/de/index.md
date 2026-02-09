@@ -2,7 +2,7 @@
 
 Eine moderne, benutzerfreundliche grafische Oberfläche für [Docling](https://github.com/docling-project/docling) – die leistungsstarke Dokumentkonvertierungsbibliothek von IBM.
 
-![Duckling Screenshot](screenshot.png)
+![Duckling Screenshot](main-german.png)
 
 ## Überblick
 

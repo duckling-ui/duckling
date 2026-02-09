@@ -63,6 +63,7 @@ Last audit: January 26, 2026
    - All file serving endpoints validate paths
    - Resolved paths checked against allowed directories
    - Directory traversal sequences blocked
+   - History reload endpoints validate `job_id` with a strict allowlist and use safe join + containment checks when constructing output paths
 
 4. **Database Security**
    - SQLAlchemy ORM prevents SQL injection

@@ -25,7 +25,8 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 - **RAG-Ready Chunking**: Generate document chunks optimized for RAG applications
 - **Advanced OCR**: Multiple OCR backends with GPU acceleration support
 - **Real-Time Progress**: Watch your document conversion progress in real-time
-- **Conversion History**: Access previously converted documents
+- **Conversion History**: Access previously converted documents and reload them without re-conversion
+- **Document Persistence**: Processed documents are stored on disk and can be reloaded from history
 - **Highly Configurable**: Customize OCR, tables, images, performance, and chunking settings
 - **Beautiful Dark Theme**: Easy on the eyes with a modern, professional design
 
@@ -374,6 +375,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 ## Security
 
 See [SECURITY.md](SECURITY.md) for security policies.
+
+- **API hardening**: History document reload (`GET /api/history/{job_id}/load`) validates `job_id` using a strict allowlist and enforces safe output directory resolution to prevent path traversal.
 
 ## License
 
