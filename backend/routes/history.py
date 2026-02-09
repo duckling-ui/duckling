@@ -286,12 +286,12 @@ def load_history_document(job_id: str):
         Validate job_id so it cannot be used for path traversal.
 
         Only allow a conservative set of characters (alphanumerics, dash,
-        underscore) and reject anything else, including path separators.
+        underscore) and reject anything else, including dots and path separators.
         """
         if not isinstance(job_id, str):
             raise NotFound("Invalid job identifier")
 
-        # Allow only safe characters; this implicitly disallows '/', '\\', and '..'
+        # Allow only safe characters; this implicitly disallows '/', '\\', '.', and '..'
         if not re.fullmatch(r"[A-Za-z0-9_-]+", job_id):
             raise NotFound(f"Document files for {job_id} not found")
 
@@ -299,19 +299,18 @@ def load_history_document(job_id: str):
 
     # Security helper function to validate job_id and get safe output directory
     def get_validated_output_dir(safe_job_id: str) -> Path:
-        """Get safe output directory path for validated job_id."""
+        """Get safe, normalized output directory path for validated job_id."""
         # safe_job_id is already sanitized by validate_job_id(), construct path safely
-        # CodeQL: safe_job_id is validated above to not contain path traversal characters
-        output_dir = OUTPUT_FOLDER / safe_job_id  # nosemgrep: python.lang.security.path-traversal.path-traversal
+        candidate_dir = OUTPUT_FOLDER / safe_job_id
         # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
         try:
-            output_dir_resolved = output_dir.resolve()
+            output_dir_resolved = candidate_dir.resolve()
             output_folder_resolved = OUTPUT_FOLDER.resolve()
             output_dir_resolved.relative_to(output_folder_resolved)
         except ValueError:
             # Path traversal detected - path is outside OUTPUT_FOLDER
             raise NotFound(f"Document files for {safe_job_id} not found")
-        
+
         return output_dir_resolved
 
     # Security: Validate job_id first before any path operations
@@ -337,9 +336,8 @@ def load_history_document(job_id: str):
     doc = history_service.load_document(job_id)
     if not doc:
         # Fallback: try to reconstruct from output files
-        # validated_output_dir is already validated above
-        output_dir = validated_output_dir
-        if not output_dir.exists():
+        # validated_output_dir is already validated and normalized above
+        if not validated_output_dir.exists():
             raise NotFound(f"Document files for {job_id} not found")
 
         # Determine available formats from files on disk
@@ -386,6 +384,7 @@ def load_history_document(job_id: str):
 
         # Try to read markdown preview
         md_preview = ""
+        # Count chunks if available
         # $path-traversal-safe: output_dir (validated_output_dir) validated above
         md_files = list(output_dir.glob("*.md"))
         if md_files:
@@ -399,11 +398,11 @@ def load_history_document(job_id: str):
 
         # Count chunks if available
         chunks_count = 0
-        # $path-traversal-safe: output_dir (validated_output_dir) validated above
-        chunks_files = list(output_dir.glob("*.chunks.json"))
+        # $path-traversal-safe: validated_output_dir validated above
+        chunks_files = list(validated_output_dir.glob("*.chunks.json"))
         if chunks_files:
             try:
-                # $path-traversal-safe: chunks_files[0] is from validated output_dir
+                # $path-traversal-safe: chunks_files[0] is from validated_output_dir
                 with open(chunks_files[0], 'r', encoding='utf-8') as f:
                     chunks_data = json.load(f)
                     chunks_count = len(chunks_data) if isinstance(chunks_data, list) else 0
