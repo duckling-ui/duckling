@@ -393,7 +393,7 @@ def load_history_document(job_id: str):
         chunks_files = list(output_dir.glob("*.chunks.json"))
         if chunks_files:
             try:
-                # $path-traversal-safe: chunks_files[0] is from validated output_dir
+                # $path-traversal-safe: chunks_files[0] is from validated_output_dir
                 with open(chunks_files[0], 'r', encoding='utf-8') as f:
                     chunks_data = json.load(f)
                     chunks_count = len(chunks_data) if isinstance(chunks_data, list) else 0
