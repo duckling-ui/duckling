@@ -376,6 +376,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 See [SECURITY.md](SECURITY.md) for security policies.
 
+- **API hardening**: History document reload (`GET /api/history/{job_id}/load`) validates `job_id` using a strict allowlist and enforces safe output directory resolution to prevent path traversal.
+
 ## License
 
 This project is licensed under the MIT License - see [LICENSE](LICENSE) for details.

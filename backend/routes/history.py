@@ -118,7 +118,7 @@ def delete_history_entry(job_id: str):
     # Security: Validate job_id doesn't contain path traversal characters
     if ".." in job_id or "/" in job_id or "\\" in job_id:
         raise NotFound(f"History entry {job_id} not found")
-    
+
     entry = history_service.get_entry(job_id)
 
     if not entry:
@@ -279,6 +279,7 @@ def load_history_document(job_id: str):
     from pathlib import Path
     from config import OUTPUT_FOLDER
     from services.converter import converter_service
+    from werkzeug.utils import safe_join
 
     # Security helper function to validate and sanitize job_id
     def validate_job_id(job_id: str) -> str:
@@ -300,9 +301,15 @@ def load_history_document(job_id: str):
     # Security helper function to validate job_id and get safe output directory
     def get_validated_output_dir(safe_job_id: str) -> Path:
         """Get safe, normalized output directory path for validated job_id."""
-        # safe_job_id is already sanitized by validate_job_id(), construct path safely
-        candidate_dir = OUTPUT_FOLDER / safe_job_id
-        # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
+        # safe_job_id is already sanitized by validate_job_id(), construct path safely.
+        # Use Werkzeug's safe_join as an additional guard (commonly recognized by security scanners).
+        joined = safe_join(str(OUTPUT_FOLDER), safe_job_id)
+        if not joined:
+            raise NotFound(f"Document files for {safe_job_id} not found")
+
+        candidate_dir = Path(joined)
+
+        # Security: Validate resolved path is within OUTPUT_FOLDER to prevent path traversal / symlink escape.
         try:
             output_dir_resolved = candidate_dir.resolve()
             output_folder_resolved = OUTPUT_FOLDER.resolve()
@@ -314,12 +321,12 @@ def load_history_document(job_id: str):
         return output_dir_resolved
 
     # Security: Validate job_id first before any path operations
-    validated_job_id = validate_job_id(job_id)
+    job_id = validate_job_id(job_id)
 
     # Now that job_id is validated, construct and validate the output directory
     # All subsequent path operations must use validated_output_dir, not job_id directly
-    validated_output_dir = get_validated_output_dir(validated_job_id)
-    
+    output_dir = get_validated_output_dir(job_id)
+
     # Get history entry
     entry = history_service.get_entry(job_id)
     if not entry:
@@ -336,8 +343,8 @@ def load_history_document(job_id: str):
     doc = history_service.load_document(job_id)
     if not doc:
         # Fallback: try to reconstruct from output files
-        # validated_output_dir is already validated and normalized above
-        if not validated_output_dir.exists():
+        # output_dir is already validated and normalized above
+        if not output_dir.exists():
             raise NotFound(f"Document files for {job_id} not found")
 
         # Determine available formats from files on disk
@@ -352,12 +359,12 @@ def load_history_document(job_id: str):
             "chunks": ".chunks.json"
         }
         for fmt, ext in format_extensions.items():
-            # $path-traversal-safe: output_dir (validated_output_dir) validated above, ext is from static dict
+            # $path-traversal-safe: output_dir validated above, ext is from static dict
             if list(output_dir.glob(f"*{ext}")):
                 formats_available.append(fmt)
 
         # Count images and tables
-        # Security: output_dir (validated_output_dir) is already validated above
+        # Security: output_dir is already validated above
         # Subdirectories use static strings "images" and "tables", safe from path traversal
         images_dir = output_dir / "images"  # $path-traversal-safe: static string
         tables_dir = output_dir / "tables"  # $path-traversal-safe: static string
@@ -371,7 +378,7 @@ def load_history_document(job_id: str):
             # Should not happen with static strings, but be safe
             images_dir_resolved = None
             tables_dir_resolved = None
-        
+
         images_count = 0
         if images_dir_resolved and images_dir_resolved.exists():
             image_extensions = ['*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.svg', '*.bmp']
@@ -385,7 +392,7 @@ def load_history_document(job_id: str):
         # Try to read markdown preview
         md_preview = ""
         # Count chunks if available
-        # $path-traversal-safe: output_dir (validated_output_dir) validated above
+        # $path-traversal-safe: output_dir validated above
         md_files = list(output_dir.glob("*.md"))
         if md_files:
             try:
@@ -398,8 +405,8 @@ def load_history_document(job_id: str):
 
         # Count chunks if available
         chunks_count = 0
-        # $path-traversal-safe: validated_output_dir validated above
-        chunks_files = list(validated_output_dir.glob("*.chunks.json"))
+        # $path-traversal-safe: output_dir validated above
+        chunks_files = list(output_dir.glob("*.chunks.json"))
         if chunks_files:
             try:
                 # $path-traversal-safe: chunks_files[0] is from validated_output_dir
@@ -430,8 +437,7 @@ def load_history_document(job_id: str):
         })
 
     # Document loaded successfully - extract information from it
-    # validated_output_dir is already validated above
-    output_dir = validated_output_dir
+    # output_dir is already validated above
 
     # Export to markdown for preview
     try:
@@ -472,7 +478,7 @@ def load_history_document(job_id: str):
         # Should not happen with static strings, but be safe
         images_dir_resolved = None
         tables_dir_resolved = None
-    
+
     images_count = 0
     if images_dir_resolved and images_dir_resolved.exists():
         image_extensions = ['*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.svg', '*.bmp']

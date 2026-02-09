@@ -18,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Prevents database bloat by storing large document objects on disk instead of in the database
   - Fallback mechanism reconstructs conversion results from output files if document JSON is unavailable
 
+### Security
+
+- **Hardened history load path handling**: `GET /api/history/{job_id}/load` now strictly validates `job_id` and constructs output paths using a safe-join + resolved-path containment check to prevent path traversal.
+
+### Fixed
+
+- **History load fallback crash**: Fixed an uninitialized `output_dir` reference when reconstructing results from disk (when stored document JSON is missing).
+
 ## [2.4.1] - 2026-01-26
 
 ### Security
