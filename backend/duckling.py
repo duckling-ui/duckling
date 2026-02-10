@@ -71,7 +71,9 @@ def build_docs():
         # Update version in mkdocs.yml before building
         version_script = PROJECT_ROOT / "scripts" / "get_version.py"
         if version_script.exists():
-            python_exe = shutil.which("python3") or shutil.which("python")
+            # Prefer repo-local venv if present, otherwise fall back to PATH.
+            venv_python = PROJECT_ROOT / "venv" / "bin" / "python"
+            python_exe = str(venv_python) if venv_python.exists() else (shutil.which("python3") or shutil.which("python"))
             if python_exe:
                 try:
                     logger.info("Updating version in mkdocs.yml...")
@@ -87,21 +89,52 @@ def build_docs():
                     logger.warning(f"Could not update version: {e}")
 
         logger.info("Building documentation with MkDocs...")
-        mkdocs_exe = shutil.which("mkdocs")
-        if not mkdocs_exe:
-            # Prefer the repo-local docs venv if present (created/used by docs tooling)
-            candidate = PROJECT_ROOT / "venv" / "bin" / "mkdocs"
-            if candidate.exists():
-                mkdocs_exe = str(candidate)
+        # Prefer the repo-local docs venv when available. This avoids mismatches where
+        # a system `mkdocs` exists but is missing required plugins (e.g., mkdocs-static-i18n).
+        venv_python = PROJECT_ROOT / "venv" / "bin" / "python"
+        venv_mkdocs = PROJECT_ROOT / "venv" / "bin" / "mkdocs"
+        path_mkdocs = shutil.which("mkdocs")
 
-        result = subprocess.run(
-            [mkdocs_exe or "mkdocs", "build", "--strict"],
-            cwd=PROJECT_ROOT,
-            capture_output=True,
-            text=True,
-            timeout=120  # 2 minute timeout
-        )
-        if result.returncode == 0:
+        mkdocs_candidates: list[list[str]] = []
+        if venv_python.exists():
+            mkdocs_candidates.append([str(venv_python), "-m", "mkdocs"])
+        if venv_mkdocs.exists():
+            mkdocs_candidates.append([str(venv_mkdocs)])
+        if path_mkdocs:
+            mkdocs_candidates.append([path_mkdocs])
+        mkdocs_candidates.append(["mkdocs"])
+
+        last_result = None
+        for cmd in mkdocs_candidates:
+            try:
+                result = subprocess.run(
+                    [*cmd, "build", "--strict"],
+                    cwd=PROJECT_ROOT,
+                    capture_output=True,
+                    text=True,
+                    timeout=120  # 2 minute timeout
+                )
+                last_result = result
+            except FileNotFoundError:
+                continue
+
+            if result.returncode == 0:
+                break
+
+            # If this environment doesn't have the i18n plugin, try the next candidate.
+            combined = (result.stdout or "") + "\n" + (result.stderr or "")
+            if 'The "i18n" plugin is not installed' in combined:
+                logger.warning(
+                    "MkDocs is missing the i18n plugin in this environment. "
+                    "If you're running locally, install docs deps with: pip install -r requirements-docs.txt "
+                    "(or create ./venv and install there)."
+                )
+                continue
+
+        if last_result is None:
+            raise FileNotFoundError("mkdocs not found")
+
+        if last_result.returncode == 0:
             logger.info("Documentation built successfully")
             # Copy versions.json to site directory if it exists
             docs_versions_json = PROJECT_ROOT / "docs" / "versions.json"
@@ -109,7 +142,6 @@ def build_docs():
             site_versions_json = site_dir / "versions.json"
             if docs_versions_json.exists() and site_dir.exists():
                 try:
-                    import shutil
                     shutil.copy2(docs_versions_json, site_versions_json)
                     logger.info("Copied versions.json to site directory")
                 except Exception as e:
@@ -120,7 +152,6 @@ def build_docs():
             sitemap_xml = site_dir / "sitemap.xml"
             if sitemap_xml.exists():
                 try:
-                    import shutil
                     # Copy to non-default language directories (es, fr, de)
                     for lang in ["es", "fr", "de"]:
                         lang_dir = site_dir / lang
@@ -140,7 +171,7 @@ def build_docs():
 
             return True
         else:
-            logger.error(f"MkDocs build failed: {result.stderr}")
+            logger.error(f"MkDocs build failed: {last_result.stderr}")
             return False
     except FileNotFoundError:
         logger.warning(

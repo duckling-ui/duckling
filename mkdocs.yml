@@ -92,12 +92,111 @@ plugins:
         - locale: es
           name: "🇪🇸 Español"
           link: /es/
+          nav_translations:
+            Home: Inicio
+            Getting Started: Primeros pasos
+            Docling docs: Documentación de Docling
+            Installation: Instalación
+            Quickstart: Inicio rápido
+            "Quick Start": Inicio rápido
+            Docker: Docker
+            "User Guide": Guía del usuario
+            Features: Características
+            "Advanced options": Opciones avanzadas
+            Screenshots: Capturas de pantalla
+            "Supported Formats": Formatos soportados
+            Supported formats: Formatos soportados
+            Configuration: Configuración
+            "API Reference": Referencia de API
+            Conversion: Conversión
+            Settings: Configuración
+            History: Historial
+            Architecture: Arquitectura
+            "System Overview": Resumen del sistema
+            Components: Componentes
+            Diagrams: Diagramas
+            Deployment: Despliegue
+            Production: Producción
+            Scaling: Escalado
+            Security: Seguridad
+            Contributing: Contribuir
+            "Development Setup": Configuración de desarrollo
+            "Code Style": Estilo de código
+            Testing: Pruebas
+            "Code of Conduct": Código de conducta
+            Changelog: Registro de cambios
         - locale: fr
           name: "🇫🇷 Français"
           link: /fr/
+          nav_translations:
+            Home: Accueil
+            "Getting Started": Bien démarrer
+            Docling docs: Documentation Docling
+            Installation: Installation
+            Quickstart: Démarrage rapide
+            "Quick Start": Démarrage rapide
+            Docker: Docker
+            "User Guide": Guide d'utilisation
+            Features: Fonctionnalités
+            "Advanced options": Options avancées
+            Screenshots: Captures d'écran
+            "Supported Formats": Formats pris en charge
+            Supported formats: Formats pris en charge
+            Configuration: Configuration
+            "API Reference": Référence API
+            Conversion: Conversion
+            Settings: Paramètres
+            History: Historique
+            Architecture: Architecture
+            "System Overview": Vue d'ensemble du système
+            Components: Composants
+            Diagrams: Diagrammes
+            Deployment: Déploiement
+            Production: Production
+            Scaling: Mise à l'échelle
+            Security: Sécurité
+            Contributing: Contribuer
+            "Development Setup": Configuration du développement
+            "Code Style": Style de code
+            Testing: Tests
+            "Code of Conduct": Code de conduite
+            Changelog: Journal des modifications
         - locale: de
           name: "🇩🇪 Deutsch"
           link: /de/
+          nav_translations:
+            Home: Startseite
+            "Getting Started": Erste Schritte
+            Docling docs: Docling-Dokumentation
+            Installation: Installation
+            Quickstart: Schnellstart
+            "Quick Start": Schnellstart
+            Docker: Docker
+            "User Guide": Benutzerhandbuch
+            Features: Funktionen
+            "Advanced options": Erweiterte Optionen
+            Screenshots: Screenshots
+            "Supported Formats": Unterstützte Formate
+            Supported formats: Unterstützte Formate
+            Configuration: Konfiguration
+            "API Reference": API-Referenz
+            Conversion: Konvertierung
+            Settings: Einstellungen
+            History: Verlauf
+            Architecture: Architektur
+            "System Overview": Systemübersicht
+            Components: Komponenten
+            Diagrams: Diagramme
+            Deployment: Bereitstellung
+            Production: Produktion
+            Scaling: Skalierung
+            Security: Sicherheit
+            Contributing: Mitwirken
+            "Development Setup": Entwicklungsumgebung
+            "Code Style": Code-Stil
+            Testing: Tests
+            "Code of Conduct": Verhaltenskodex
+            Changelog: Änderungsprotokoll
 
 # Extensions
 markdown_extensions:
@@ -110,7 +209,7 @@ markdown_extensions:
   - md_in_html
   - tables
   - toc:
-      permalink: true
+      permalink: false
       permalink_title: Anchor link to this section
       toc_depth: 3
 
@@ -169,6 +268,14 @@ nav:
       - Screenshots: user-guide/screenshots.md
       - Supported Formats: user-guide/formats.md
       - Configuration: user-guide/configuration.md
+  - Docling docs:
+      - docling/index.md
+      - Installation: docling/installation.md
+      - Quickstart: docling/quickstart.md
+      - Supported formats: docling/supported-formats.md
+      - Advanced options: docling/advanced-options.md
+      - Architecture: docling/architecture.md
+      - DoclingDocument: docling/docling-document.md
   - API Reference:
       - api/index.md
       - Conversion: api/conversion.md
@@ -225,4 +332,5 @@ extra_css:
 extra_javascript:
   - javascripts/mathjax.js
   - javascripts/language-selector.js
+  - javascripts/section-footer-nav.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js

@@ -117,6 +117,8 @@ Before deploying to production, ensure:
 
 2. **Multilingual documentation paths**: The documentation site is served under locale-prefixed paths (e.g. `/api/docs/site/en/`, `/api/docs/site/es/`). This does not change the trust model: docs are still served from local build output only.
 
+3. **Vendored upstream documentation**: The MkDocs site includes a curated, vendored subset of upstream Docling documentation under `docs/docling/`, synced via `scripts/sync_docling_docs.py`. This content is treated as trusted project documentation (not user input) and is built into the local `site/` output.
+
 2. **Local File Access**: The application reads and writes files to configured directories. Ensure proper filesystem permissions.
 
 3. **No Authentication**: This application is designed for local/personal use and does not include user authentication. For multi-user deployments, add authentication via a reverse proxy or middleware.

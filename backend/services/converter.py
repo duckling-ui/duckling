@@ -89,6 +89,109 @@ EASYOCR_LANGUAGE_MAP = {
     "no": "no",
 }
 
+# OcrMac (macOS Vision) language preferences use locale-style tags.
+# Docling surfaces Vision's allowed language set; short codes like "en" will fail.
+OCRMAC_ALLOWED_LANGUAGES = {
+    "en-US",
+    "fr-FR",
+    "it-IT",
+    "de-DE",
+    "es-ES",
+    "pt-BR",
+    "zh-Hans",
+    "zh-Hant",
+    "yue-Hans",
+    "yue-Hant",
+    "ko-KR",
+    "ja-JP",
+    "ru-RU",
+    "uk-UA",
+    "th-TH",
+    "vi-VT",
+    "ar-SA",
+    "ars-SA",
+    "tr-TR",
+    "id-ID",
+    "cs-CZ",
+    "da-DK",
+    "nl-NL",
+    "no-NO",
+    "nn-NO",
+    "nb-NO",
+    "ms-MY",
+    "pl-PL",
+    "ro-RO",
+    "sv-SE",
+}
+
+OCRMAC_LANGUAGE_MAP = {
+    # Common short codes
+    "en": "en-US",
+    "fr": "fr-FR",
+    "it": "it-IT",
+    "de": "de-DE",
+    "es": "es-ES",
+    "pt": "pt-BR",
+    "zh": "zh-Hans",
+    "zh-tw": "zh-Hant",
+    "ko": "ko-KR",
+    "ja": "ja-JP",
+    "ru": "ru-RU",
+    "uk": "uk-UA",
+    "th": "th-TH",
+    "vi": "vi-VT",
+    "ar": "ar-SA",
+    "ars": "ars-SA",
+    "tr": "tr-TR",
+    "id": "id-ID",
+    "cs": "cs-CZ",
+    "da": "da-DK",
+    "nl": "nl-NL",
+    "no": "no-NO",
+    "nn": "nn-NO",
+    "nb": "nb-NO",
+    "ms": "ms-MY",
+    "pl": "pl-PL",
+    "ro": "ro-RO",
+    "sv": "sv-SE",
+}
+
+
+def _normalize_ocr_language(backend: str, language: str) -> List[str]:
+    """
+    Normalize the configured OCR language to what the backend expects.
+
+    - EasyOCR uses EasyOCR language identifiers (mapped elsewhere).
+    - Tesseract typically accepts ISO-639-2/3 or engine-specific codes.
+    - OcrMac uses Vision locale tags (e.g., 'en-US'); passing 'en' will fail.
+    - RapidOCR language support is model-dependent; leave as-is.
+    """
+    if not isinstance(language, str):
+        return []
+
+    lang = language.strip()
+    if not lang:
+        return []
+
+    if backend != "ocrmac":
+        return [lang]
+
+    # Normalize separators (e.g., en_US -> en-US)
+    lang = lang.replace("_", "-")
+
+    # Accept already-valid Vision locale tags
+    if lang in OCRMAC_ALLOWED_LANGUAGES:
+        return [lang]
+
+    mapped = OCRMAC_LANGUAGE_MAP.get(lang.lower())
+    if mapped and mapped in OCRMAC_ALLOWED_LANGUAGES:
+        return [mapped]
+
+    # Unknown/unsupported: pass an empty preference list (valid subset)
+    # so Vision can fall back to its defaults instead of raising.
+    print(f"[OCR] Warning: Unsupported OcrMac language '{language}'. Falling back to default Vision language.")
+    return []
+
 # Device mapping
 DEVICE_MAP = {
     "auto": AcceleratorDevice.AUTO,
@@ -187,9 +290,10 @@ class ConverterService:
                     bitmap_area_threshold=bitmap_area_threshold,
                 )
             elif backend == "ocrmac":
-                print(f"[OCR] Creating OcrMac options with lang={language}")
+                ocrmac_lang = _normalize_ocr_language("ocrmac", language)
+                print(f"[OCR] Creating OcrMac options with lang={ocrmac_lang or '[default]'} (from {language})")
                 return OcrMacOptions(
-                    lang=[language],
+                    lang=ocrmac_lang,
                     force_full_page_ocr=force_full_page_ocr,
                     bitmap_area_threshold=bitmap_area_threshold,
                 )

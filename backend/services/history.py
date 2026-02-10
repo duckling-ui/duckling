@@ -301,6 +301,10 @@ class HistoryService:
         """
         Load DoclingDocument from stored JSON file.
 
+        Tries, in order:
+        1. Path from DB (document_json_path)
+        2. *.document.json in OUTPUT_FOLDER / job_id (for entries missing DB path)
+
         Args:
             job_id: Job identifier
 
@@ -320,28 +324,49 @@ class HistoryService:
                 return None
 
         entry = self.get_entry(job_id)
-        if not entry or not entry.get("document_json_path"):
+        if not entry:
             return None
 
-        doc_path = Path(entry["document_json_path"])
-        if not doc_path.exists():
-            return None
+        output_folder_resolved = OUTPUT_FOLDER.resolve()
 
-        # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
+        def _load_from_path(doc_path: Path):
+            if not doc_path.exists():
+                return None
+            try:
+                doc_path_resolved = doc_path.resolve()
+                doc_path_resolved.relative_to(output_folder_resolved)
+            except ValueError:
+                return None
+            try:
+                return DoclingDocument.load_from_json(str(doc_path_resolved))
+            except Exception as e:
+                print(f"[history] Error loading document: {e}")
+                return None
+
+        # 1. Try path from DB
+        stored_path = entry.get("document_json_path")
+        if stored_path:
+            doc = _load_from_path(Path(stored_path))
+            if doc is not None:
+                return doc
+
+        # 2. Fallback: find *.document.json in output dir (handles missing DB path)
+        output_dir = OUTPUT_FOLDER / job_id
+        if not output_dir.exists():
+            return None
         try:
-            doc_path_resolved = doc_path.resolve()
-            output_folder_resolved = OUTPUT_FOLDER.resolve()
-            doc_path_resolved.relative_to(output_folder_resolved)
+            output_dir_resolved = output_dir.resolve()
+            output_dir_resolved.relative_to(output_folder_resolved)
         except ValueError:
-            # Path traversal detected - path is outside OUTPUT_FOLDER
-            print(f"[history] Security: Invalid document path outside OUTPUT_FOLDER: {doc_path}")
             return None
-
-        try:
-            return DoclingDocument.load_from_json(str(doc_path_resolved))
-        except Exception as e:
-            print(f"[history] Error loading document: {e}")
-            return None
+        matches = list(output_dir.glob("*.document.json"))
+        if matches:
+            doc = _load_from_path(matches[0])
+            if doc is not None:
+                # Backfill DB so future loads use document_json_path
+                self.update_document_path(job_id, str(matches[0].resolve()))
+                return doc
+        return None
 
 
 # Singleton instance

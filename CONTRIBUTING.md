@@ -102,6 +102,15 @@ Duckling supports UI and documentation translations.
 ./scripts/docs-build.sh
 ```
 
+#### Docling docs (vendored)
+
+- The curated Docling documentation lives in `docs/docling/`.
+- To refresh it from upstream (tracks `docling-project/docling` `main`), run:
+
+```bash
+python3 scripts/sync_docling_docs.py
+```
+
 ## Code Style
 
 ### Python (Backend)

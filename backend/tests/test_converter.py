@@ -138,6 +138,34 @@ class TestConverterService:
 
         assert service.get_job(job_id) is None
 
+    def test_ocrmac_language_is_normalized(self):
+        """OcrMac backend should map short language codes to Vision locale tags."""
+        service = ConverterService()
+        opts = service._get_ocr_options({
+            "ocr": {
+                "backend": "ocrmac",
+                "language": "en",
+                "force_full_page_ocr": False,
+                "bitmap_area_threshold": 0.05,
+            }
+        })
+
+        # OcrMacOptions.lang should be locale-style (e.g., en-US), not "en"
+        assert getattr(opts, "lang", None) in (["en-US"], ["en-US"])
+
+    def test_ocrmac_unknown_language_falls_back_to_default(self):
+        """Unsupported OcrMac language should not raise; it should fall back."""
+        service = ConverterService()
+        opts = service._get_ocr_options({
+            "ocr": {
+                "backend": "ocrmac",
+                "language": "xx",
+                "force_full_page_ocr": False,
+                "bitmap_area_threshold": 0.05,
+            }
+        })
+        assert getattr(opts, "lang", None) == []
+
 
 class TestConversionStatus:
     """Tests for ConversionStatus enum."""

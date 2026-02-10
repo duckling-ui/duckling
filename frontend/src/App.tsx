@@ -454,6 +454,7 @@ export default function App() {
                   />
                 ) : (
                   <ExportOptions
+                    key={result.job_id}
                     jobId={result.job_id}
                     formatsAvailable={
                       result.formats_available ||
