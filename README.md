@@ -363,6 +363,7 @@ The built documentation will be in the `site/` directory and served at `/api/doc
 
 - **[Getting Started](docs/getting-started/index.md)** - Installation and quick start
 - **[User Guide](docs/user-guide/index.md)** - Features and configuration
+- **[Docling docs](docs/docling/index.md)** - Curated upstream Docling documentation (vendored subset)
 - **[API Reference](docs/api/index.md)** - Complete API documentation
 - **[Architecture](docs/architecture/index.md)** - System design and components
 - **[Deployment](docs/deployment/index.md)** - Production deployment guide

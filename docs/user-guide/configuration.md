@@ -101,6 +101,7 @@ OCR (Optical Character Recognition) extracts text from images and scanned docume
 
     - **GPU Support**: Uses Apple Neural Engine
     - **Requires**: macOS 10.15+
+    - **Language codes**: Duckling accepts short codes like `en`, `de`, `fr` and will normalize them to Vision locale tags (for example `en-US`) during conversion.
 
 === "RapidOCR"
 

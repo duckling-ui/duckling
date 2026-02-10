@@ -29,6 +29,7 @@ import {
   uploadAndConvertBatch,
   getConversionStatus,
   getConversionResult,
+  loadHistoryDocument,
   downloadExport,
   getExportContent,
 } from '../services/api';
@@ -409,10 +410,10 @@ export function useConversion(options: UseConversionOptions = {}) {
     }
   }, [batchJobs]);
 
-  // Load a result from history
+  // Load a result from history (uses /history/{id}/load - loads from disk, not in-memory)
   const loadResult = useCallback(async (jobId: string) => {
     try {
-      const result = await getConversionResult(jobId);
+      const result = await loadHistoryDocument(jobId);
       setResult(result);
       setState('complete');
       setError(null);

@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Clicking on completed history entries in the UI automatically loads the stored document
   - Prevents database bloat by storing large document objects on disk instead of in the database
   - Fallback mechanism reconstructs conversion results from output files if document JSON is unavailable
+- **Docling docs**: Added a curated Docling documentation section to the MkDocs site (vendored subset + sync script).
 
 ### Security
 
@@ -25,6 +26,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **History load fallback crash**: Fixed an uninitialized `output_dir` reference when reconstructing results from disk (when stored document JSON is missing).
+- **Docs panel navigation sync**: Footer prev/next links now navigate within the in-app docs sidebar category, and navigating inside the embedded docs keeps the sidebar selection in sync.
+- **Docs rebuild error**: Fixed docs rebuild failing with `cannot access local variable 'shutil'` when building the MkDocs site.
+- **Docs rebuild environment mismatch**: Backend docs rebuild now prefers the repo-local `./venv` MkDocs environment to ensure required plugins (like `i18n`) are available.
+- **History panel load**: Fixed clicking a history entry not loading the document; now uses `/history/{id}/load` (disk) instead of `/convert/{id}/result` (in-memory).
+- **History load for all entries**: When `document_json_path` is missing in the DB, history load now finds and loads `*.document.json` from the output directory so all history items load, not just the first.
+- **Document panel not updating**: Fixed document viewing panel not refreshing when loading a different history item; now uses `key={result.job_id}` so the component remounts with fresh state.
 
 ## [2.4.1] - 2026-01-26
 

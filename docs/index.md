@@ -151,6 +151,7 @@ graph LR
 
 - **[Getting Started](getting-started/index.md)** - Installation and quick start guide
 - **[User Guide](user-guide/index.md)** - Features and configuration options
+- **[Docling docs](docling/index.md)** - Curated upstream Docling documentation
 - **[API Reference](api/index.md)** - Complete API documentation
 - **[Architecture](architecture/index.md)** - System design and components
 - **[Deployment](deployment/index.md)** - Production deployment guide

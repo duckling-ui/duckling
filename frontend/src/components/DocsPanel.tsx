@@ -153,6 +153,73 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
     }
   }, [isOpen, fetchDocs]);
 
+  // Keep the left-side selection in sync when navigating *inside* the MkDocs iframe
+  // (e.g., when clicking MkDocs footer prev/next or in-page links).
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const parseDocPathFromIframePathname = (pathname: string): string | null => {
+      // Expected forms:
+      // - /api/docs/site/en/
+      // - /api/docs/site/en/changelog/
+      // - /api/docs/site/en/getting-started/installation/
+      const m = pathname.match(/^\/api\/docs\/site\/(en|es|fr|de)(\/|$)(.*)$/);
+      if (!m) return null;
+
+      let rest = m[3] || "";
+      rest = rest.replace(/^\/+/, "");
+      rest = rest.replace(/index\.html$/, "");
+      rest = rest.replace(/\/+$/, "");
+
+      try {
+        rest = decodeURIComponent(rest);
+      } catch {
+        // ignore decoding errors
+      }
+
+      return rest; // "" for index
+    };
+
+    const deriveCategoryName = (docName: string): string => {
+      const idx = docName.indexOf(":");
+      if (idx > -1) return docName.substring(0, idx).trim();
+      return t("docsPanel.homeCategory", "Home");
+    };
+
+    const onMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+
+      const data = event.data as unknown;
+      if (
+        !data ||
+        typeof data !== "object" ||
+        (data as { type?: unknown }).type !== "duckling-docs:navigate"
+      ) {
+        return;
+      }
+
+      const pathname = (data as { pathname?: unknown }).pathname;
+      if (typeof pathname !== "string") return;
+
+      const path = parseDocPathFromIframePathname(pathname);
+      if (path === null) return;
+
+      // Match docs by their `path` field ("" for index)
+      const match = docs.find((d) => (d.path || "") === path);
+      if (!match) return;
+
+      setSelectedDoc(match.id);
+      setSelectedPath(match.path || "");
+
+      // Ensure the relevant section is expanded
+      const category = deriveCategoryName(match.name);
+      setExpandedSections((prev) => new Set([...prev, category]));
+    };
+
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, [isOpen, docs, t]);
+
   const handleDocSelect = (doc: DocFile) => {
     setSelectedDoc(doc.id);
     setSelectedPath(doc.path || "");
