@@ -295,6 +295,7 @@
     "show": "Anzeigen",
     "noPreview": "Keine Vorschau für dieses Format verfügbar",
     "clickShow": "Auf \"Anzeigen\" klicken, um Vorschau zu sehen",
+    "jsonPreviewTruncated": "Vorschau gekürzt ({{count, number}} Zeichen). Verwenden Sie Herunterladen, um die vollständige Datei zu erhalten.",
     "extractedImagesTitle": "Extrahierte Bilder",
     "noImages": "Keine Bilder aus diesem Dokument extrahiert",
     "extractedTablesTitle": "Extrahierte Tabellen",

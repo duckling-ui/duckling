@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Clicking on completed history entries in the UI automatically loads the stored document
   - Prevents database bloat by storing large document objects on disk instead of in the database
   - Fallback mechanism reconstructs conversion results from output files if document JSON is unavailable
+- **History reconciliation**: Restore history entries from on-disk output when the database was lost or reset
+  - `POST /api/history/reconcile` scans the output directory for conversion outputs that exist on disk but have no database entry
+  - Creates missing history entries so they appear in the UI and can be reloaded
+  - Runs automatically on application startup
 - **Docling docs**: Added a curated Docling documentation section to the MkDocs site (vendored subset + sync script).
 
 ### Security

@@ -295,6 +295,7 @@
     "show": "Mostrar",
     "noPreview": "No hay vista previa disponible para este formato",
     "clickShow": "Haz clic en \"Mostrar\" para ver la vista previa",
+    "jsonPreviewTruncated": "Vista previa truncada ({{count, number}} caracteres). Usa Descargar para obtener el archivo completo.",
     "extractedImagesTitle": "Imágenes extraídas",
     "noImages": "No se extrajeron imágenes de este documento",
     "extractedTablesTitle": "Tablas extraídas",

@@ -243,6 +243,26 @@ def cleanup_old_history():
     })
 
 
+@history_bp.route("/history/reconcile", methods=["POST"])
+def reconcile_history():
+    """
+    Reconcile history database with on-disk output files.
+
+    Scans the output directory for conversion outputs that exist on disk
+    but have no database entry (e.g. after DB loss or restart). Creates
+    missing entries so they appear in history.
+
+    Returns:
+        JSON with count of entries added and list of job_ids
+    """
+    added_count, added_ids = history_service.reconcile_from_disk()
+    return jsonify({
+        "message": f"Reconciled {added_count} entries from disk",
+        "added_count": added_count,
+        "added_ids": added_ids,
+    })
+
+
 @history_bp.route("/history/export", methods=["GET"])
 def export_history():
     """

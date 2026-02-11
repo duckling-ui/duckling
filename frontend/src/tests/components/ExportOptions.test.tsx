@@ -23,7 +23,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import ExportOptions from '../../components/ExportOptions';
 import * as api from '../../services/api';
 
@@ -103,20 +103,24 @@ describe('ExportOptions', () => {
     });
   });
 
-  it('calls onDownload when download button is clicked', () => {
+  it('calls onDownload when download button is clicked', async () => {
     render(<ExportOptions {...defaultProps} />);
 
-    const downloadButton = screen.getByRole('button', { name: /download markdown/i });
-    fireEvent.click(downloadButton);
+    const downloadButton = await screen.findByRole('button', { name: /download markdown/i });
+    await act(async () => {
+      fireEvent.click(downloadButton);
+    });
 
     expect(mockOnDownload).toHaveBeenCalledWith('markdown');
   });
 
-  it('calls onNewConversion when new conversion button is clicked', () => {
+  it('calls onNewConversion when new conversion button is clicked', async () => {
     render(<ExportOptions {...defaultProps} />);
 
-    const newButton = screen.getByRole('button', { name: /convert another document/i });
-    fireEvent.click(newButton);
+    const newButton = await screen.findByRole('button', { name: /convert another document/i });
+    await act(async () => {
+      fireEvent.click(newButton);
+    });
 
     expect(mockOnNewConversion).toHaveBeenCalled();
   });
@@ -130,32 +134,41 @@ describe('ExportOptions', () => {
     });
   });
 
-  it('allows selecting different formats', () => {
+  it('allows selecting different formats', async () => {
     render(<ExportOptions {...defaultProps} />);
 
+    await waitFor(() => {
+      expect(screen.getByText('Conversion Complete!')).toBeInTheDocument();
+    });
+
     // Find the HTML format card button (not the preview badge)
-    // The format cards have a specific structure with font-medium class
     const htmlElements = screen.getAllByText('HTML');
     const htmlButton = htmlElements[0].closest('button');
     if (htmlButton) {
-      fireEvent.click(htmlButton);
+      await act(async () => {
+        fireEvent.click(htmlButton);
+      });
     }
 
-    const downloadButton = screen.getByRole('button', { name: /download html/i });
-    fireEvent.click(downloadButton);
+    const downloadButton = await screen.findByRole('button', { name: /download html/i });
+    await act(async () => {
+      fireEvent.click(downloadButton);
+    });
 
     expect(mockOnDownload).toHaveBeenCalledWith('html');
   });
 
-  it('can toggle preview visibility', () => {
+  it('can toggle preview visibility', async () => {
     render(<ExportOptions {...defaultProps} />);
 
     // Preview is shown by default
-    const hideButton = screen.getByRole('button', { name: /hide/i });
+    const hideButton = await screen.findByRole('button', { name: /hide/i });
     expect(hideButton).toBeInTheDocument();
 
     // Click to hide
-    fireEvent.click(hideButton);
+    await act(async () => {
+      fireEvent.click(hideButton);
+    });
 
     // Now should show "Show" button
     expect(screen.getByRole('button', { name: /show/i })).toBeInTheDocument();
