@@ -303,7 +303,7 @@ nav:
 extra:
   version:
     provider: mike
-    default: 0.0.8
+    default: 0.0.9
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/davidgs/duckling
