@@ -55,6 +55,7 @@ except ImportError:
     CHUNKING_AVAILABLE = False
 
 from config import OUTPUT_FOLDER, DEFAULT_CONVERSION_SETTINGS
+from utils.security import validate_job_id, get_validated_output_dir
 
 
 # Language code mapping for EasyOCR
@@ -971,7 +972,8 @@ class ConverterService:
                     return path.read_text(encoding="utf-8")
 
         # Fallback: Check output directory directly (for multi-worker scenarios)
-        output_dir = OUTPUT_FOLDER / job_id
+        validate_job_id(job_id)
+        output_dir = get_validated_output_dir(job_id, Path(OUTPUT_FOLDER))
         if output_dir.exists():
             format_extensions = {
                 "markdown": ".md",
@@ -1001,7 +1003,8 @@ class ConverterService:
                     return path
 
         # Fallback: Check output directory directly (for multi-worker scenarios)
-        output_dir = OUTPUT_FOLDER / job_id
+        validate_job_id(job_id)
+        output_dir = get_validated_output_dir(job_id, Path(OUTPUT_FOLDER))
         if output_dir.exists():
             format_extensions = {
                 "markdown": ".md",
@@ -1043,10 +1046,11 @@ class ConverterService:
 
     def cleanup_job(self, job_id: str):
         """Remove a job and its output files."""
+        validate_job_id(job_id)
         job = self._jobs.pop(job_id, None)
         if job:
-            # Clean up output files
-            output_base = OUTPUT_FOLDER / job_id
+            # Clean up output files (output_base is validated)
+            output_base = get_validated_output_dir(job_id, Path(OUTPUT_FOLDER))
             if output_base.exists():
                 import shutil
                 shutil.rmtree(output_base, ignore_errors=True)
