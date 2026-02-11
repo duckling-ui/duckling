@@ -39,6 +39,7 @@ from services.file_manager import file_manager
 from services.history import history_service
 from config import DEFAULT_CONVERSION_SETTINGS, OUTPUT_FOLDER, BACKEND_DIR
 from routes.settings import load_settings
+from utils.security import validate_job_id, get_validated_output_dir
 
 convert_bp = Blueprint("convert", __name__)
 
@@ -215,18 +216,21 @@ def extract_and_download_images_from_html(html_content: bytes, base_url: str, jo
     Args:
         html_content: The HTML content as bytes
         base_url: The base URL of the page
-        job_id: The job ID for saving images
+        job_id: The job ID for saving images (must be pre-validated, e.g. UUID)
 
     Returns:
         Tuple of (modified_html_content, list of extracted images info)
     """
+    validate_job_id(job_id)
+    output_dir = get_validated_output_dir(job_id, OUTPUT_FOLDER)
+
     try:
         html_str = html_content.decode('utf-8', errors='replace')
     except:
         html_str = html_content.decode('latin-1', errors='replace')
 
-    # Create output directory for images
-    images_dir = OUTPUT_FOLDER / job_id / "images"
+    # Create output directory for images (output_dir is validated)
+    images_dir = output_dir / "images"
     images_dir.mkdir(parents=True, exist_ok=True)
 
     extracted_images = []
@@ -886,6 +890,7 @@ def get_conversion_status(job_id: str):
     Returns:
         JSON with current status and progress
     """
+    validate_job_id(job_id)
     job = converter_service.get_job(job_id)
 
     if not job:
@@ -936,6 +941,7 @@ def get_conversion_result(job_id: str):
     Returns:
         JSON with conversion result and preview
     """
+    validate_job_id(job_id)
     job = converter_service.get_job(job_id)
 
     if job:
@@ -961,7 +967,7 @@ def get_conversion_result(job_id: str):
     # Fallback: Check history and output directory (for multi-worker scenarios)
     history_entry = history_service.get_entry(job_id)
     if history_entry and history_entry.get("status") == "completed":
-        output_dir = OUTPUT_FOLDER / job_id
+        output_dir = get_validated_output_dir(job_id, OUTPUT_FOLDER)
 
         # Determine available formats from files on disk
         formats_available = []
@@ -1032,6 +1038,7 @@ def get_extracted_images(job_id: str):
     Returns:
         JSON with list of extracted images
     """
+    validate_job_id(job_id)
     job = converter_service.get_job(job_id)
 
     if job:
@@ -1049,7 +1056,8 @@ def get_extracted_images(job_id: str):
         })
 
     # Fallback: Check if images exist on disk (for multi-worker scenarios)
-    images_dir = OUTPUT_FOLDER / job_id / "images"
+    output_dir = get_validated_output_dir(job_id, OUTPUT_FOLDER)
+    images_dir = output_dir / "images"
     if images_dir.exists():
         images = []
         # Look for all common image formats
@@ -1116,6 +1124,7 @@ def download_extracted_image(job_id: str, image_id: int):
     Returns:
         Image file
     """
+    validate_job_id(job_id)
     job = converter_service.get_job(job_id)
 
     if job:
@@ -1150,7 +1159,8 @@ def download_extracted_image(job_id: str, image_id: int):
         )
 
     # Fallback: Look for image on disk (for multi-worker scenarios)
-    images_dir = OUTPUT_FOLDER / job_id / "images"
+    output_dir = get_validated_output_dir(job_id, OUTPUT_FOLDER)
+    images_dir = output_dir / "images"
     if images_dir.exists():
         # Find all image files with common extensions
         image_extensions = ['*.png', '*.jpg', '*.jpeg', '*.gif', '*.webp', '*.svg', '*.bmp']
@@ -1194,6 +1204,7 @@ def get_extracted_tables(job_id: str):
     Returns:
         JSON with list of extracted tables
     """
+    validate_job_id(job_id)
     job = converter_service.get_job(job_id)
 
     if job:
@@ -1211,7 +1222,8 @@ def get_extracted_tables(job_id: str):
         })
 
     # Fallback: Check if tables exist on disk (for multi-worker scenarios)
-    tables_dir = OUTPUT_FOLDER / job_id / "tables"
+    output_dir = get_validated_output_dir(job_id, OUTPUT_FOLDER)
+    tables_dir = output_dir / "tables"
     if tables_dir.exists():
         tables = []
         for i, csv_path in enumerate(sorted(tables_dir.glob("*.csv"))):
@@ -1269,6 +1281,7 @@ def download_table_csv(job_id: str, table_id: int):
     Returns:
         CSV file
     """
+    validate_job_id(job_id)
     job = converter_service.get_job(job_id)
 
     if not job:
@@ -1314,6 +1327,7 @@ def download_table_image(job_id: str, table_id: int):
     Returns:
         Image file
     """
+    validate_job_id(job_id)
     job = converter_service.get_job(job_id)
 
     if not job:
@@ -1358,6 +1372,7 @@ def get_document_chunks(job_id: str):
     Returns:
         JSON with list of document chunks
     """
+    validate_job_id(job_id)
     job = converter_service.get_job(job_id)
 
     if not job:
@@ -1379,6 +1394,7 @@ def get_document_chunks(job_id: str):
 
 @convert_bp.route("/export/<job_id>/<format_type>", methods=["GET"])
 def export_document(job_id: str, format_type: str):
+    validate_job_id(job_id)
     """
     Download the converted document in a specific format.
 
@@ -1438,6 +1454,7 @@ def export_document(job_id: str, format_type: str):
 
 @convert_bp.route("/export/<job_id>/<format_type>/content", methods=["GET"])
 def get_export_content(job_id: str, format_type: str):
+    validate_job_id(job_id)
     """
     Get the converted content as JSON (for preview).
 
@@ -1466,6 +1483,7 @@ def get_export_content(job_id: str, format_type: str):
 
 @convert_bp.route("/convert/<job_id>", methods=["DELETE"])
 def cancel_or_delete_job(job_id: str):
+    validate_job_id(job_id)
     """
     Cancel a running job or delete a completed job.
 

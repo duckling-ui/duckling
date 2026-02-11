@@ -23,7 +23,6 @@
 """History API endpoints."""
 
 import json
-import re
 from flask import Blueprint, request, jsonify
 from werkzeug.exceptions import NotFound
 
@@ -299,53 +298,13 @@ def load_history_document(job_id: str):
     from pathlib import Path
     from config import OUTPUT_FOLDER
     from services.converter import converter_service
-    from werkzeug.utils import safe_join
-
-    # Security helper function to validate and sanitize job_id
-    def validate_job_id(job_id: str) -> str:
-        """
-        Validate job_id so it cannot be used for path traversal.
-
-        Only allow a conservative set of characters (alphanumerics, dash,
-        underscore) and reject anything else, including dots and path separators.
-        """
-        if not isinstance(job_id, str):
-            raise NotFound("Invalid job identifier")
-
-        # Allow only safe characters; this implicitly disallows '/', '\\', '.', and '..'
-        if not re.fullmatch(r"[A-Za-z0-9_-]+", job_id):
-            raise NotFound(f"Document files for {job_id} not found")
-
-        return job_id
-
-    # Security helper function to validate job_id and get safe output directory
-    def get_validated_output_dir(safe_job_id: str) -> Path:
-        """Get safe, normalized output directory path for validated job_id."""
-        # safe_job_id is already sanitized by validate_job_id(), construct path safely.
-        # Use Werkzeug's safe_join as an additional guard (commonly recognized by security scanners).
-        joined = safe_join(str(OUTPUT_FOLDER), safe_job_id)
-        if not joined:
-            raise NotFound(f"Document files for {safe_job_id} not found")
-
-        candidate_dir = Path(joined)
-
-        # Security: Validate resolved path is within OUTPUT_FOLDER to prevent path traversal / symlink escape.
-        try:
-            output_dir_resolved = candidate_dir.resolve()
-            output_folder_resolved = OUTPUT_FOLDER.resolve()
-            output_dir_resolved.relative_to(output_folder_resolved)
-        except ValueError:
-            # Path traversal detected - path is outside OUTPUT_FOLDER
-            raise NotFound(f"Document files for {safe_job_id} not found")
-
-        return output_dir_resolved
+    from utils.security import validate_job_id, get_validated_output_dir
 
     # Security: Validate job_id first before any path operations
     job_id = validate_job_id(job_id)
 
     # Now that job_id is validated, construct and validate the output directory
-    # All subsequent path operations must use validated_output_dir, not job_id directly
-    output_dir = get_validated_output_dir(job_id)
+    output_dir = get_validated_output_dir(job_id, Path(OUTPUT_FOLDER))
 
     # Get history entry
     entry = history_service.get_entry(job_id)
