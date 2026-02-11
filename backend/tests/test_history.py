@@ -22,6 +22,10 @@
 
 """Tests for the history service."""
 
+import tempfile
+import uuid
+from unittest.mock import patch
+
 import pytest
 from pathlib import Path
 from datetime import datetime, timedelta
@@ -327,6 +331,125 @@ class TestHistoryService:
         service.update_document_path("test-missing-file", "/nonexistent/path/document.json")
         doc = service.load_document("test-missing-file")
         assert doc is None
+
+    def test_create_entry_from_disk(self):
+        """Test creating a history entry from disk data."""
+        service = HistoryService()
+        job_id = str(uuid.uuid4())
+        output_path = "/outputs/abc123/document.md"
+        doc_path = "/outputs/abc123/document.document.json"
+        created = datetime(2025, 1, 15, 10, 0, 0)
+
+        entry = service.create_entry_from_disk(
+            job_id=job_id,
+            filename="document.doc",
+            original_filename="document.doc",
+            output_path=output_path,
+            document_json_path=doc_path,
+            input_format="pdf",
+            file_size=1024,
+            created_at=created,
+            completed_at=created,
+        )
+
+        assert entry["id"] == job_id
+        assert entry["filename"] == "document.doc"
+        assert entry["original_filename"] == "document.doc"
+        assert entry["status"] == "completed"
+        assert entry["output_path"] == output_path
+        assert entry["document_json_path"] == doc_path
+        assert entry["input_format"] == "pdf"
+        assert entry["file_size"] == 1024
+
+        retrieved = service.get_entry(job_id)
+        assert retrieved is not None
+        assert retrieved["status"] == "completed"
+
+    def test_reconcile_from_disk_adds_missing_entries(self):
+        """Test reconcile_from_disk creates entries for outputs on disk but not in DB."""
+        service = HistoryService()
+        job_id = str(uuid.uuid4())
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_dir = Path(tmpdir) / job_id
+            output_dir.mkdir()
+            (output_dir / "converted.md").write_text("# Converted")
+            (output_dir / "converted.document.json").write_text("{}")
+
+            with patch("config.OUTPUT_FOLDER", Path(tmpdir)):
+                added_count, added_ids = service.reconcile_from_disk()
+
+        assert added_count == 1
+        assert job_id in added_ids
+
+        entry = service.get_entry(job_id)
+        assert entry is not None
+        assert entry["status"] == "completed"
+        assert entry["original_filename"] == "converted.doc"
+        assert "converted.md" in (entry.get("output_path") or "")
+        assert "converted.document.json" in (entry.get("document_json_path") or "")
+
+    def test_reconcile_from_disk_skips_existing_entries(self):
+        """Test reconcile_from_disk skips directories already in DB."""
+        service = HistoryService()
+        job_id = str(uuid.uuid4())
+
+        service.create_entry(
+            job_id=job_id,
+            filename="existing.pdf",
+            original_filename="existing.pdf",
+        )
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_dir = Path(tmpdir) / job_id
+            output_dir.mkdir()
+            (output_dir / "existing.md").write_text("# Existing")
+
+            with patch("config.OUTPUT_FOLDER", Path(tmpdir)):
+                added_count, added_ids = service.reconcile_from_disk()
+
+        assert added_count == 0
+        assert job_id not in added_ids
+
+    def test_reconcile_from_disk_skips_non_uuid_dirs(self):
+        """Test reconcile_from_disk skips directories that are not valid UUIDs."""
+        service = HistoryService()
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            for name in ("not-a-uuid", "abc", "12345678", "..", "a/b"):
+                d = Path(tmpdir) / name
+                if "/" in name or ".." in name:
+                    continue
+                d.mkdir(exist_ok=True)
+                (d / "file.md").write_text("# test")
+
+            with patch("config.OUTPUT_FOLDER", Path(tmpdir)):
+                added_count, added_ids = service.reconcile_from_disk()
+
+        assert added_count == 0
+        assert added_ids == []
+
+    def test_reconcile_from_disk_empty_output_folder(self):
+        """Test reconcile_from_disk returns 0 when output folder is empty."""
+        service = HistoryService()
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            with patch("config.OUTPUT_FOLDER", Path(tmpdir)):
+                added_count, added_ids = service.reconcile_from_disk()
+
+        assert added_count == 0
+        assert added_ids == []
+
+    def test_reconcile_from_disk_nonexistent_output_folder(self):
+        """Test reconcile_from_disk returns 0 when output folder doesn't exist."""
+        service = HistoryService()
+        nonexistent = Path("/nonexistent/outputs/that/does/not/exist")
+
+        with patch("config.OUTPUT_FOLDER", nonexistent):
+            added_count, added_ids = service.reconcile_from_disk()
+
+        assert added_count == 0
+        assert added_ids == []
 
     def test_cleanup_old_entries(self):
         """Test cleaning up old entries."""

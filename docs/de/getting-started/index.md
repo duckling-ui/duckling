@@ -57,8 +57,6 @@ Wählen Sie die Installationsmethode, die für Sie am besten funktioniert:
 
 </div>
 
-## Was kommt als Nächstes?
-
-Nach der Installation erkunden Sie:1. **[Funktionen](../user-guide/features.md)** - Erfahren Sie mehr über alle Funktionen
+## Was kommt als Nächstes?Nach der Installation erkunden Sie:1. **[Funktionen](../user-guide/features.md)** - Erfahren Sie mehr über alle Funktionen
 2. **[Konfiguration](../user-guide/configuration.md)** - Passen Sie die Einstellungen an Ihre Bedürfnisse an
 3. **[API-Referenz](../api/index.md)** - Integrieren Sie mit Ihren Anwendungen

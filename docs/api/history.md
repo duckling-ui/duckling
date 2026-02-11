@@ -146,6 +146,37 @@ Returns a `ConversionResult` object matching the format of a fresh conversion:
 
 ---
 
+## Reconcile History from Disk
+
+```http
+POST /api/history/reconcile
+```
+
+Scans the output directory for conversion outputs that exist on disk but have no database entry (e.g. after DB loss or restart). Creates missing history entries so they appear in the UI and can be reloaded.
+
+Reconciliation also runs automatically on application startup.
+
+### Response
+
+```json
+{
+  "message": "Reconciled 3 entries from disk",
+  "added_count": 3,
+  "added_ids": [
+    "550e8400-e29b-41d4-a716-446655440000",
+    "660e8400-e29b-41d4-a716-446655440001",
+    "770e8400-e29b-41d4-a716-446655440002"
+  ]
+}
+```
+
+### Notes
+
+- Only output directories with valid UUID names and at least one output file (`.md`, `.html`, `.json`, or `.document.json`) are reconciled
+- Entries already in the database are skipped
+
+---
+
 ## Delete History Entry
 
 ```http

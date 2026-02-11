@@ -36,7 +36,7 @@ import { convertFromUrl, convertFromUrlsBatch } from "./services/api";
 import type { HistoryEntry, ConversionResult } from "./types";
 
 // App version from package.json
-const APP_VERSION = "0.0.8";
+const APP_VERSION = "0.0.9";
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -454,6 +454,7 @@ export default function App() {
                   />
                 ) : (
                   <ExportOptions
+                    key={result.job_id}
                     jobId={result.job_id}
                     formatsAvailable={
                       result.formats_available ||

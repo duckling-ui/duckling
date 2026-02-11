@@ -95,13 +95,17 @@ plugins:
           nav_translations:
             Home: Inicio
             Getting Started: Primeros pasos
+            Docling docs: Documentación de Docling
             Installation: Instalación
+            Quickstart: Inicio rápido
             "Quick Start": Inicio rápido
             Docker: Docker
             "User Guide": Guía del usuario
             Features: Características
+            "Advanced options": Opciones avanzadas
             Screenshots: Capturas de pantalla
             "Supported Formats": Formatos soportados
+            Supported formats: Formatos soportados
             Configuration: Configuración
             "API Reference": Referencia de API
             Conversion: Conversión
@@ -127,13 +131,17 @@ plugins:
           nav_translations:
             Home: Accueil
             "Getting Started": Bien démarrer
+            Docling docs: Documentation Docling
             Installation: Installation
+            Quickstart: Démarrage rapide
             "Quick Start": Démarrage rapide
             Docker: Docker
             "User Guide": Guide d'utilisation
             Features: Fonctionnalités
+            "Advanced options": Options avancées
             Screenshots: Captures d'écran
             "Supported Formats": Formats pris en charge
+            Supported formats: Formats pris en charge
             Configuration: Configuration
             "API Reference": Référence API
             Conversion: Conversion
@@ -159,13 +167,17 @@ plugins:
           nav_translations:
             Home: Startseite
             "Getting Started": Erste Schritte
+            Docling docs: Docling-Dokumentation
             Installation: Installation
+            Quickstart: Schnellstart
             "Quick Start": Schnellstart
             Docker: Docker
             "User Guide": Benutzerhandbuch
             Features: Funktionen
+            "Advanced options": Erweiterte Optionen
             Screenshots: Screenshots
             "Supported Formats": Unterstützte Formate
+            Supported formats: Unterstützte Formate
             Configuration: Konfiguration
             "API Reference": API-Referenz
             Conversion: Konvertierung
@@ -197,7 +209,7 @@ markdown_extensions:
   - md_in_html
   - tables
   - toc:
-      permalink: true
+      permalink: false
       permalink_title: Anchor link to this section
       toc_depth: 3
 
@@ -209,8 +221,8 @@ markdown_extensions:
   - pymdownx.caret
   - pymdownx.details
   - pymdownx.emoji:
-      emoji_index: !!python/name:material.extensions.emoji.twemoji
-      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:pymdownx.emoji.twemoji
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
@@ -256,6 +268,14 @@ nav:
       - Screenshots: user-guide/screenshots.md
       - Supported Formats: user-guide/formats.md
       - Configuration: user-guide/configuration.md
+  - Docling docs:
+      - docling/index.md
+      - Installation: docling/installation.md
+      - Quickstart: docling/quickstart.md
+      - Supported formats: docling/supported-formats.md
+      - Advanced options: docling/advanced-options.md
+      - Architecture: docling/architecture.md
+      - DoclingDocument: docling/docling-document.md
   - API Reference:
       - api/index.md
       - Conversion: api/conversion.md
@@ -283,7 +303,7 @@ nav:
 extra:
   version:
     provider: mike
-    default: 0.0.8
+    default: 0.0.9
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/davidgs/duckling
@@ -312,4 +332,5 @@ extra_css:
 extra_javascript:
   - javascripts/mathjax.js
   - javascripts/language-selector.js
+  - javascripts/section-footer-nav.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js

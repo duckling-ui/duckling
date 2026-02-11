@@ -12,12 +12,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - UI language support (English `en`, Spanish `es`, French `fr`, German `de`) with a language switcher.
 - Multilingual MkDocs documentation (English, Spanish, French, German) served under `/api/docs/site/<locale>/`.
 - Dropzone panel category labels (Documents, Web, Images, Data) now fully internationalized.
+- Docling docs section in MkDocs (curated, vendored subset of upstream Docling documentation + sync script).
 
 ### Fixed
 
 - Documentation navigation now displays fully localized page names in all supported languages.
 - Dropzone file format category labels now properly translate based on selected language.
 - Improved documentation page title extraction with better fallback to translated names.
+- In-app docs panel footer prev/next links now stay within the current sidebar category, and navigating inside the embedded docs keeps the sidebar selection in sync.
+- Fixed in-app docs rebuild failing with `cannot access local variable 'shutil'` when building the MkDocs site.
+- Backend docs rebuild now prefers the repo-local `./venv` MkDocs environment to ensure required plugins (like `i18n`) are available.
+- Fix clicking a history entry not loading the document; now uses the history load endpoint (disk) instead of the in-memory result endpoint.
+- When `document_json_path` is missing in the DB, history load now finds and loads `*.document.json` from the output directory so all history items load, not just the first.
+- Document viewing panel now refreshes when loading a different history item (uses component key to remount with fresh state).
 
 ### Changed
 

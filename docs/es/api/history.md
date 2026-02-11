@@ -146,6 +146,37 @@ Devuelve un objeto `ConversionResult` que coincide con el formato de una convers
 
 ---
 
+## Reconciliar historial desde disco
+
+```http
+POST /api/history/reconcile
+```
+
+Escanea el directorio de salida en busca de conversiones que existen en disco pero no tienen entrada en la base de datos (p. ej. tras pérdida o reinicio de la base). Crea las entradas faltantes para que aparezcan en la interfaz y puedan recargarse.
+
+La reconciliación también se ejecuta automáticamente al iniciar la aplicación.
+
+### Respuesta
+
+```json
+{
+  "message": "Reconciled 3 entries from disk",
+  "added_count": 3,
+  "added_ids": [
+    "550e8400-e29b-41d4-a716-446655440000",
+    "660e8400-e29b-41d4-a716-446655440001",
+    "770e8400-e29b-41d4-a716-446655440002"
+  ]
+}
+```
+
+### Notas
+
+- Solo se reconcilian los directorios de salida con nombres UUID válidos y al menos un archivo de salida (`.md`, `.html`, `.json` o `.document.json`)
+- Las entradas ya presentes en la base de datos se omiten
+
+---
+
 ## Eliminar entrada del historial
 
 ```http

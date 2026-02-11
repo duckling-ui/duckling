@@ -23,8 +23,10 @@
 """Conversion history service with CRUD operations."""
 
 import json
+import re
 from datetime import datetime
-from typing import List, Optional, Dict, Any
+from pathlib import Path
+from typing import List, Optional, Dict, Any, Tuple
 from sqlalchemy import desc
 
 from models.database import db, Conversion, get_db_session
@@ -301,6 +303,10 @@ class HistoryService:
         """
         Load DoclingDocument from stored JSON file.
 
+        Tries, in order:
+        1. Path from DB (document_json_path)
+        2. *.document.json in OUTPUT_FOLDER / job_id (for entries missing DB path)
+
         Args:
             job_id: Job identifier
 
@@ -309,6 +315,9 @@ class HistoryService:
         """
         from pathlib import Path
         from config import OUTPUT_FOLDER
+        from werkzeug.exceptions import NotFound
+        from werkzeug.utils import safe_join
+
         try:
             from docling_core.types.doc.document import DoclingDocument
         except ImportError:
@@ -319,29 +328,230 @@ class HistoryService:
                 print("[history] DoclingDocument not available")
                 return None
 
+        # Validate job_id defensively so this service method does not rely on callers.
+        # Allow only alphanumerics, dash and underscore; disallow path separators and dots.
+        if not isinstance(job_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", job_id):
+            # In a service context, just indicate "not found"/unavailable.
+            return None
+
         entry = self.get_entry(job_id)
-        if not entry or not entry.get("document_json_path"):
+        if not entry:
             return None
 
-        doc_path = Path(entry["document_json_path"])
-        if not doc_path.exists():
+        output_folder_resolved = OUTPUT_FOLDER.resolve()
+
+        def _load_from_path(doc_path: Path):
+            if not doc_path.exists():
+                return None
+            try:
+                doc_path_resolved = doc_path.resolve()
+                doc_path_resolved.relative_to(output_folder_resolved)
+            except ValueError:
+                return None
+            try:
+                return DoclingDocument.load_from_json(str(doc_path_resolved))
+            except Exception as e:
+                print(f"[history] Error loading document: {e}")
+                return None
+
+        # 1. Try path from DB
+        stored_path = entry.get("document_json_path")
+        if stored_path:
+            doc = _load_from_path(Path(stored_path))
+            if doc is not None:
+                return doc
+
+        # 2. Fallback: find *.document.json in output dir (handles missing DB path)
+        # Construct the output directory using a safe, normalized join and
+        # verify it stays under OUTPUT_FOLDER to prevent path traversal.
+        joined = safe_join(str(OUTPUT_FOLDER), job_id)
+        if not joined:
             return None
 
-        # Security: Validate path is within OUTPUT_FOLDER to prevent path traversal
+        output_dir = Path(joined)
         try:
-            doc_path_resolved = doc_path.resolve()
-            output_folder_resolved = OUTPUT_FOLDER.resolve()
-            doc_path_resolved.relative_to(output_folder_resolved)
+            output_dir_resolved = output_dir.resolve()
+            output_dir_resolved.relative_to(output_folder_resolved)
         except ValueError:
-            # Path traversal detected - path is outside OUTPUT_FOLDER
-            print(f"[history] Security: Invalid document path outside OUTPUT_FOLDER: {doc_path}")
             return None
 
-        try:
-            return DoclingDocument.load_from_json(str(doc_path_resolved))
-        except Exception as e:
-            print(f"[history] Error loading document: {e}")
+        if not output_dir_resolved.exists():
             return None
+
+        matches = list(output_dir_resolved.glob("*.document.json"))
+        if matches:
+            # Use the first match; path has already been resolved and validated.
+            match_path_resolved = matches[0].resolve()
+            doc = _load_from_path(match_path_resolved)
+            if doc is not None:
+                # Backfill DB so future loads use document_json_path
+                self.update_document_path(job_id, str(match_path_resolved))
+                return doc
+        return None
+
+    def create_entry_from_disk(
+        self,
+        job_id: str,
+        filename: str,
+        original_filename: str,
+        output_path: str,
+        document_json_path: str = None,
+        input_format: str = None,
+        file_size: float = None,
+        created_at: datetime = None,
+        completed_at: datetime = None,
+        settings: Dict[str, Any] = None,
+    ) -> Dict[str, Any]:
+        """
+        Create a history entry for a conversion that exists on disk but not in DB.
+
+        Used by reconcile_from_disk() to restore entries after DB loss.
+
+        Args:
+            job_id: Unique job identifier (directory name)
+            filename: Stored filename
+            original_filename: Original uploaded filename
+            output_path: Path to primary output file (e.g. .md)
+            document_json_path: Path to DoclingDocument JSON if present
+            input_format: Detected input format (optional)
+            file_size: File size in bytes (optional)
+            created_at: Override for created_at (default: now)
+            completed_at: Override for completed_at (default: now)
+            settings: Conversion settings (optional)
+
+        Returns:
+            Dictionary representation of the created entry
+        """
+        with get_db_session() as session:
+            entry = Conversion(
+                id=job_id,
+                filename=filename,
+                original_filename=original_filename,
+                input_format=input_format,
+                status="completed",
+                confidence=None,
+                created_at=created_at or datetime.utcnow(),
+                completed_at=completed_at or datetime.utcnow(),
+                settings=json.dumps(settings) if settings else None,
+                error_message=None,
+                output_path=output_path,
+                file_size=file_size,
+                document_json_path=document_json_path,
+            )
+            session.add(entry)
+            session.commit()
+            session.refresh(entry)
+            return entry.to_dict()
+
+    def reconcile_from_disk(self) -> Tuple[int, List[str]]:
+        """
+        Scan output directory for conversions that exist on disk but not in DB,
+        and create missing history entries.
+
+        Returns:
+            Tuple of (count of entries added, list of job_ids added)
+        """
+        from config import OUTPUT_FOLDER
+
+        # UUID pattern: 8-4-4-4-12 hex
+        uuid_re = re.compile(
+            r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+            re.IGNORECASE,
+        )
+
+        output_folder = Path(OUTPUT_FOLDER)
+        if not output_folder.exists():
+            return 0, []
+
+        output_folder_resolved = output_folder.resolve()
+        added: List[str] = []
+        added_count = 0
+
+        for dir_path in output_folder.iterdir():
+            if not dir_path.is_dir():
+                continue
+
+            job_id = dir_path.name
+
+            # Security: validate job_id
+            if ".." in job_id or "/" in job_id or "\\" in job_id:
+                continue
+            if not uuid_re.match(job_id):
+                continue
+
+            # Ensure path is within OUTPUT_FOLDER
+            try:
+                dir_resolved = dir_path.resolve()
+                dir_resolved.relative_to(output_folder_resolved)
+            except ValueError:
+                continue
+
+            # Skip if already in DB
+            if self.get_entry(job_id):
+                continue
+
+            # Find output files to infer original_filename and paths
+            md_files = list(dir_path.glob("*.md"))
+            doc_files = list(dir_path.glob("*.document.json"))
+            html_files = list(dir_path.glob("*.html"))
+            json_files = list(dir_path.glob("*.json"))
+
+            # Require at least one substantial output (exclude .document.json for "has output" check)
+            has_output = bool(
+                md_files
+                or html_files
+                or [f for f in json_files if not f.name.endswith(".document.json")]
+            )
+            if not has_output and not doc_files:
+                continue
+
+            # Infer stem from first available output file
+            stem = None
+            output_path_str = None
+            for files in (md_files, html_files, doc_files, json_files):
+                if files:
+                    first = files[0]
+                    stem = first.stem
+                    output_path_str = str(first.resolve())
+                    break
+
+            if stem is None or output_path_str is None:
+                continue
+
+            # original_filename: use stem + generic extension (we don't know original format)
+            original_filename = f"{stem}.doc"
+
+            # document_json_path if present
+            doc_path_str = None
+            if doc_files:
+                doc_path_str = str(doc_files[0].resolve())
+
+            # Use directory mtime for created_at/completed_at
+            try:
+                mtime = dir_path.stat().st_mtime
+                dt = datetime.utcfromtimestamp(mtime)
+            except Exception:
+                dt = datetime.utcnow()
+
+            try:
+                self.create_entry_from_disk(
+                    job_id=job_id,
+                    filename=original_filename,
+                    original_filename=original_filename,
+                    output_path=output_path_str,
+                    document_json_path=doc_path_str,
+                    input_format=None,
+                    file_size=None,
+                    created_at=dt,
+                    completed_at=dt,
+                    settings=None,
+                )
+                added.append(job_id)
+                added_count += 1
+            except Exception as e:
+                print(f"[history] Failed to reconcile {job_id}: {e}")
+
+        return added_count, added
 
 
 # Singleton instance

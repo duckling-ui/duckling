@@ -68,6 +68,13 @@ def test_required_docs_sections_exist():
         "docs/user-guide/features.md",
         "docs/user-guide/formats.md",
         "docs/user-guide/configuration.md",
+        "docs/docling/index.md",
+        "docs/docling/installation.md",
+        "docs/docling/quickstart.md",
+        "docs/docling/supported-formats.md",
+        "docs/docling/advanced-options.md",
+        "docs/docling/architecture.md",
+        "docs/docling/docling-document.md",
         "docs/api/index.md",
         "docs/api/conversion.md",
         "docs/api/settings.md",
@@ -95,6 +102,7 @@ def test_required_docs_sections_exist():
     # Spanish documentation (initial rollout)
     required_es_sections = [
         "docs/es/index.md",
+        "docs/es/docling/index.md",
         "docs/es/getting-started/index.md",
         "docs/es/getting-started/installation.md",
         "docs/es/getting-started/quickstart.md",
@@ -131,6 +139,7 @@ def test_required_docs_sections_exist():
     # French documentation (scaffold)
     required_fr_sections = [
         "docs/fr/index.md",
+        "docs/fr/docling/index.md",
         "docs/fr/getting-started/index.md",
         "docs/fr/getting-started/installation.md",
         "docs/fr/getting-started/quickstart.md",
@@ -167,6 +176,7 @@ def test_required_docs_sections_exist():
     # German documentation (scaffold)
     required_de_sections = [
         "docs/de/index.md",
+        "docs/de/docling/index.md",
         "docs/de/getting-started/index.md",
         "docs/de/getting-started/installation.md",
         "docs/de/getting-started/quickstart.md",
@@ -206,6 +216,7 @@ def test_docs_assets_exist():
     required_assets = [
         "docs/stylesheets/extra.css",
         "docs/javascripts/mathjax.js",
+        "docs/javascripts/section-footer-nav.js",
         "docs/includes/abbreviations.md",
     ]
 

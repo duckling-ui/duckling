@@ -99,6 +99,60 @@ const FORMAT_INFO: Record<
 
 type TabType = "formats" | "images" | "tables" | "chunks";
 
+/** Max chars to display in JSON preview - large DoclingDocument JSON can freeze the browser */
+const JSON_PREVIEW_MAX_CHARS = 50000;
+/** Skip parse/stringify for content larger than this - would block main thread */
+const JSON_PARSE_THRESHOLD = 100000;
+
+function JsonPreviewContent({ content }: { content: string }) {
+  const { t } = useTranslation();
+  const display = useMemo(() => {
+    if (!content) return { text: "", truncated: false, totalChars: 0 };
+    // For very large JSON, skip parse/stringify - it would freeze the browser
+    if (content.length > JSON_PARSE_THRESHOLD) {
+      return {
+        text: content.slice(0, JSON_PREVIEW_MAX_CHARS),
+        truncated: true,
+        totalChars: content.length,
+      };
+    }
+    try {
+      const parsed = JSON.parse(content);
+      const pretty = JSON.stringify(parsed, null, 2);
+      if (pretty.length <= JSON_PREVIEW_MAX_CHARS) {
+        return { text: pretty, truncated: false, totalChars: pretty.length };
+      }
+      return {
+        text: pretty.slice(0, JSON_PREVIEW_MAX_CHARS),
+        truncated: true,
+        totalChars: pretty.length,
+      };
+    } catch {
+      return {
+        text: content.slice(0, JSON_PREVIEW_MAX_CHARS),
+        truncated: content.length > JSON_PREVIEW_MAX_CHARS,
+        totalChars: content.length,
+      };
+    }
+  }, [content]);
+
+  return (
+    <>
+      <pre className="text-sm text-dark-300 font-mono whitespace-pre-wrap break-words">
+        {display.text}
+        {display.truncated && "\n\n..."}
+      </pre>
+      {display.truncated && (
+        <p className="mt-2 text-sm text-dark-500">
+          {t("export.jsonPreviewTruncated", {
+            count: display.totalChars ?? 0,
+          })}
+        </p>
+      )}
+    </>
+  );
+}
+
 export default function ExportOptions({
   jobId,
   formatsAvailable,
@@ -848,19 +902,7 @@ export default function ExportOptions({
                       />
                     ) : /* JSON formatted view */
                     selectedFormat === "json" ? (
-                      <pre className="text-sm text-dark-300 font-mono whitespace-pre-wrap break-words">
-                        {(() => {
-                          try {
-                            return JSON.stringify(
-                              JSON.parse(currentPreviewContent),
-                              null,
-                              2
-                            );
-                          } catch {
-                            return currentPreviewContent;
-                          }
-                        })()}
-                      </pre>
+                      <JsonPreviewContent content={currentPreviewContent} />
                     ) : (
                       /* Raw view for all other formats */
                       <pre className="text-sm text-dark-300 font-mono whitespace-pre-wrap break-words">
