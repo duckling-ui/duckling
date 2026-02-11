@@ -23,6 +23,7 @@
 """Flask application entry point for Duckling."""
 
 import os
+import sys
 import subprocess
 import logging
 import shutil
@@ -89,13 +90,15 @@ def build_docs():
                     logger.warning(f"Could not update version: {e}")
 
         logger.info("Building documentation with MkDocs...")
-        # Prefer the repo-local docs venv when available. This avoids mismatches where
-        # a system `mkdocs` exists but is missing required plugins (e.g., mkdocs-static-i18n).
+        # Try environments in order: backend's Python (has docs deps when running locally),
+        # repo venv, then PATH.
         venv_python = PROJECT_ROOT / "venv" / "bin" / "python"
         venv_mkdocs = PROJECT_ROOT / "venv" / "bin" / "mkdocs"
         path_mkdocs = shutil.which("mkdocs")
 
         mkdocs_candidates: list[list[str]] = []
+        # First: use the same Python as the backend (works when docs deps are in backend venv)
+        mkdocs_candidates.append([sys.executable, "-m", "mkdocs"])
         if venv_python.exists():
             mkdocs_candidates.append([str(venv_python), "-m", "mkdocs"])
         if venv_mkdocs.exists():
@@ -121,13 +124,12 @@ def build_docs():
             if result.returncode == 0:
                 break
 
-            # If this environment doesn't have the i18n plugin, try the next candidate.
+            # If this environment is missing plugins or modules, try the next candidate.
             combined = (result.stdout or "") + "\n" + (result.stderr or "")
-            if 'The "i18n" plugin is not installed' in combined:
+            if 'The "i18n" plugin is not installed' in combined or "cannot find module" in combined:
                 logger.warning(
-                    "MkDocs is missing the i18n plugin in this environment. "
-                    "If you're running locally, install docs deps with: pip install -r requirements-docs.txt "
-                    "(or create ./venv and install there)."
+                    "MkDocs is missing required dependencies in this environment. "
+                    "If you're running locally, install docs deps: pip install -r backend/requirements.txt"
                 )
                 continue
 
@@ -211,6 +213,14 @@ def create_app(config_class=None):
         # Migrate legacy settings if they exist
         from routes.settings import migrate_legacy_settings
         migrate_legacy_settings()
+        # Reconcile history: add any on-disk conversions missing from DB
+        from services.history import history_service
+        try:
+            added_count, _ = history_service.reconcile_from_disk()
+            if added_count > 0:
+                logger.info(f"Reconciled {added_count} history entries from disk")
+        except Exception as e:
+            logger.warning(f"History reconciliation failed: {e}")
 
     # Register blueprints
     app.register_blueprint(convert_bp, url_prefix="/api")

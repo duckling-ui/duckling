@@ -295,6 +295,7 @@
     "show": "Show",
     "noPreview": "No preview available for this format",
     "clickShow": "Click \"Show\" to view preview",
+    "jsonPreviewTruncated": "Preview truncated ({{count, number}} chars). Use Download to get the full file.",
     "extractedImagesTitle": "Extracted Images",
     "noImages": "No images extracted from this document",
     "extractedTablesTitle": "Extracted Tables",

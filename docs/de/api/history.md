@@ -146,6 +146,37 @@ Gibt ein `ConversionResult`-Objekt zurück, das dem Format einer frischen Konver
 
 ---
 
+## Verlauf von Datenträger abgleichen
+
+```http
+POST /api/history/reconcile
+```
+
+Durchsucht das Ausgabeverzeichnis nach Konvertierungen, die auf dem Datenträger existieren, aber keinen Datenbankeintrag haben (z. B. nach DB-Verlust oder -Neustart). Erstellt fehlende Verlaufseinträge, damit sie in der Oberfläche erscheinen und neu geladen werden können.
+
+Die Abgleichung erfolgt außerdem automatisch beim Anwendungsstart.
+
+### Antwort
+
+```json
+{
+  "message": "Reconciled 3 entries from disk",
+  "added_count": 3,
+  "added_ids": [
+    "550e8400-e29b-41d4-a716-446655440000",
+    "660e8400-e29b-41d4-a716-446655440001",
+    "770e8400-e29b-41d4-a716-446655440002"
+  ]
+}
+```
+
+### Hinweise
+
+- Nur Ausgabeverzeichnisse mit gültigen UUID-Namen und mindestens einer Ausgabedatei (`.md`, `.html`, `.json` oder `.document.json`) werden abgeglichen
+- Bereits vorhandene Einträge werden übersprungen
+
+---
+
 ## Verlaufseintrag löschen
 
 ```http

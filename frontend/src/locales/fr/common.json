@@ -295,6 +295,7 @@
     "show": "Afficher",
     "noPreview": "Aucun aperçu disponible pour ce format",
     "clickShow": "Cliquez sur \"Afficher\" pour voir l'aperçu",
+    "jsonPreviewTruncated": "Aperçu tronqué ({{count, number}} caractères). Utilisez Télécharger pour obtenir le fichier complet.",
     "extractedImagesTitle": "Images extraites",
     "noImages": "Aucune image extraite de ce document",
     "extractedTablesTitle": "Tableaux extraits",

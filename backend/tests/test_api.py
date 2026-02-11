@@ -423,6 +423,17 @@ class TestHistoryEndpoint:
         response = client.get(f"/api/history/{entry['id']}/load")
         assert response.status_code == 404
 
+    def test_reconcile_history(self, client):
+        """Test POST /api/history/reconcile returns count and added_ids."""
+        response = client.post("/api/history/reconcile")
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        assert "message" in data
+        assert "added_count" in data
+        assert "added_ids" in data
+        assert isinstance(data["added_count"], int)
+        assert isinstance(data["added_ids"], list)
+
 
 class TestErrorHandling:
     """Tests for error handling."""
