@@ -23,7 +23,6 @@
 """History API endpoints."""
 
 import json
-import re
 from flask import Blueprint, request, jsonify
 from werkzeug.exceptions import NotFound
 
