@@ -315,6 +315,9 @@ class HistoryService:
         """
         from pathlib import Path
         from config import OUTPUT_FOLDER
+        from werkzeug.exceptions import NotFound
+        from werkzeug.utils import safe_join
+
         try:
             from docling_core.types.doc.document import DoclingDocument
         except ImportError:
@@ -324,6 +327,12 @@ class HistoryService:
             except ImportError:
                 print("[history] DoclingDocument not available")
                 return None
+
+        # Validate job_id defensively so this service method does not rely on callers.
+        # Allow only alphanumerics, dash and underscore; disallow path separators and dots.
+        if not isinstance(job_id, str) or not re.fullmatch(r"[A-Za-z0-9_-]+", job_id):
+            # In a service context, just indicate "not found"/unavailable.
+            return None
 
         entry = self.get_entry(job_id)
         if not entry:
@@ -353,20 +362,30 @@ class HistoryService:
                 return doc
 
         # 2. Fallback: find *.document.json in output dir (handles missing DB path)
-        output_dir = OUTPUT_FOLDER / job_id
-        if not output_dir.exists():
+        # Construct the output directory using a safe, normalized join and
+        # verify it stays under OUTPUT_FOLDER to prevent path traversal.
+        joined = safe_join(str(OUTPUT_FOLDER), job_id)
+        if not joined:
             return None
+
+        output_dir = Path(joined)
         try:
             output_dir_resolved = output_dir.resolve()
             output_dir_resolved.relative_to(output_folder_resolved)
         except ValueError:
             return None
-        matches = list(output_dir.glob("*.document.json"))
+
+        if not output_dir_resolved.exists():
+            return None
+
+        matches = list(output_dir_resolved.glob("*.document.json"))
         if matches:
-            doc = _load_from_path(matches[0])
+            # Use the first match; path has already been resolved and validated.
+            match_path_resolved = matches[0].resolve()
+            doc = _load_from_path(match_path_resolved)
             if doc is not None:
                 # Backfill DB so future loads use document_json_path
-                self.update_document_path(job_id, str(matches[0].resolve()))
+                self.update_document_path(job_id, str(match_path_resolved))
                 return doc
         return None
 
