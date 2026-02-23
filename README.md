@@ -27,6 +27,7 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 - **Real-Time Progress**: Watch your document conversion progress in real-time
 - **Conversion History**: Access previously converted documents and reload them without re-conversion
 - **Document Persistence**: Processed documents are stored on disk and can be reloaded from history
+- **Content Deduplication**: Same file with identical settings reuses stored output (instant cache hits)
 - **Highly Configurable**: Customize OCR, tables, images, performance, and chunking settings
 - **Beautiful Dark Theme**: Easy on the eyes with a modern, professional design
 
@@ -150,7 +151,7 @@ Access the application at `http://localhost:3000`
 ./scripts/docker-build.sh --push --registry yourusername
 ```
 
-See [Docker Deployment Guide](docs/getting-started/docker.md) for detailed instructions.
+When PRs are merged to `main`, images are automatically published to Docker Hub and GitHub Container Registry. See [Docker Deployment Guide](docs/getting-started/docker.md) for details and required secrets.
 
 ## Configuration
 
@@ -255,7 +256,7 @@ Settings can be configured through the UI or via the API. All settings are organ
 |----------|--------|-------------|
 | `/api/history` | GET | List conversion history |
 | `/api/history/<job_id>` | GET | Get history entry |
-| `/api/history/stats` | GET | Get conversion statistics |
+| `/api/history/stats` | GET | Get conversion statistics (includes processing time, OCR/format breakdowns, queue depth) |
 | `/api/history/search` | GET | Search history |
 
 ## Development

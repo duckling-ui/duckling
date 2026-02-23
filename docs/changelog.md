@@ -9,6 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Docker image publishing workflow**: GitHub Action runs when PRs are merged to `main`, building multi-platform images and pushing to Docker Hub and GitHub Container Registry (requires `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` secrets).
+- **Generate Chunks Now**: Button in RAG Chunks tab to generate chunks on demand for completed documents (`POST /api/history/{job_id}/generate-chunks`)
+- **Content-addressed deduplication**: Same file + same document-affecting settings reuse stored content instead of re-converting
+  - Cache hit: create symlink, load metadata, complete immediately (no Docling run)
+  - Cache miss: run conversion, move output to content store, create symlink
+  - Database migration `scripts/migrate_add_content_hash.py` adds `content_hash` column
+- **Conversion statistics and metrics**: Extended history stats for Docling and Duckling usage analytics
+  - `GET /api/history/stats` returns `avg_processing_seconds`, `ocr_backend_breakdown`, `output_format_breakdown`, `performance_device_breakdown`, `chunking_enabled_count`, `error_category_breakdown`, `source_type_breakdown`, and `queue_depth`
+  - Database migration `scripts/migrate_add_stats_columns.py` adds stats columns to conversions table
+  - History panel displays average processing time and queue depth when available
+- **Statistics panel**: Dedicated viewer for conversion statistics (header button, "View full statistics" from History)
+- **Extended statistics**: Hardware and performance metrics in the Statistics panel
+  - System section: hardware type (CPU/CUDA/MPS), CPU count, current CPU usage, GPU info
+  - Average pages/sec and pages/sec per CPU
+  - Conversion time distribution (median, 95th, 99th percentile)
+  - Pages/sec over time chart
+  - CPU usage averaged during each conversion (stored in DB)
+  - Database migration `scripts/migrate_add_cpu_usage_column.py` adds `cpu_usage_avg_during_conversion` column
+  - CPU usage is now process-specific (Duckling backend process, runs Docling), not system-wide
+  - Per-conversion config stored: `performance_device_used` (resolved from "auto" at completion), `images_classify_enabled`
+  - Database migration `scripts/migrate_add_config_columns.py` adds these columns
+  - Stats breakdown by hardware, OCR backend, image classifier (pages/sec, conversion time per config)
 - UI language support (English `en`, Spanish `es`, French `fr`, German `de`) with a language switcher.
 - Multilingual MkDocs documentation (English, Spanish, French, German) served under `/api/docs/site/<locale>/`.
 - Dropzone panel category labels (Documents, Web, Images, Data) now fully internationalized.

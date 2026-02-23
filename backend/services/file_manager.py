@@ -30,7 +30,7 @@ from typing import Optional, Tuple, List
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 
-from config import UPLOAD_FOLDER, OUTPUT_FOLDER, Config
+from config import UPLOAD_FOLDER, OUTPUT_FOLDER, CONTENT_STORE, Config
 
 
 class FileManager:
@@ -180,28 +180,74 @@ class FileManager:
         return False
 
     def delete_output_folder(self, job_id: str) -> bool:
-        """Delete the output folder for a job."""
+        """
+        Delete the output folder for a job.
+        If it's a symlink to content store, removes only the symlink (not the content).
+        """
         try:
             # Security: Validate job_id doesn't contain path traversal characters
             if ".." in job_id or "/" in job_id or "\\" in job_id:
                 return False
-            
-            output_dir = self.output_folder / job_id
+
+            output_dir = Path(self.output_folder) / job_id
             # Security: Validate path is within output_folder to prevent path traversal
             try:
                 output_dir_resolved = output_dir.resolve()
-                output_folder_resolved = self.output_folder.resolve()
+                output_folder_resolved = Path(self.output_folder).resolve()
                 output_dir_resolved.relative_to(output_folder_resolved)
             except ValueError:
                 # Path traversal detected - path is outside output_folder
                 return False
-            
+
             if output_dir_resolved.exists():
+                # rmtree on a symlink removes the symlink, not the target
                 shutil.rmtree(output_dir_resolved)
                 return True
         except Exception:
             pass
         return False
+
+    def cleanup_orphaned_content(self) -> int:
+        """
+        Remove content store directories no longer referenced by any job symlink.
+        Returns number of directories removed.
+        """
+        content_store = Path(CONTENT_STORE)
+        if not content_store.exists():
+            return 0
+
+        output_folder = Path(self.output_folder)
+        removed = 0
+
+        for hash_dir in list(content_store.iterdir()):
+            if not hash_dir.is_dir():
+                continue
+            target_resolved = hash_dir.resolve()
+
+            # Check if any job output dir symlinks to this content
+            referenced = False
+            for job_dir in output_folder.iterdir():
+                if job_dir.name == "_content":
+                    continue
+                if not job_dir.exists():
+                    continue
+                try:
+                    if job_dir.is_symlink():
+                        link_target = job_dir.resolve()
+                        if link_target == target_resolved:
+                            referenced = True
+                            break
+                except OSError:
+                    continue
+
+            if not referenced:
+                try:
+                    shutil.rmtree(hash_dir)
+                    removed += 1
+                except Exception:
+                    pass
+
+        return removed
 
     def cleanup_old_files(self, max_age_hours: int = 24) -> Tuple[int, int]:
         """

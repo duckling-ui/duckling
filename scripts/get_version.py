@@ -188,8 +188,8 @@ def main():
 
     # If still no version, use default
     if not version:
-        print("Warning: Could not determine version, using default '0.0.7'", file=sys.stderr)
-        version = "0.0.7"
+        print("Warning: Could not determine version, using default '0.0.10'", file=sys.stderr)
+        version = "0.0.10"
 
     # Update mkdocs.yml
     mkdocs_updated = update_mkdocs_yml(version)

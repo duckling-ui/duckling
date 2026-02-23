@@ -30,6 +30,7 @@ import {
   getExtractedImages,
   getExtractedTables,
   getDocumentChunks,
+  generateChunks,
   downloadExtractedImage,
   downloadTableCsv,
   getExportContent,
@@ -175,6 +176,7 @@ export default function ExportOptions({
   const [tables, setTables] = useState<ExtractedTable[]>([]);
   const [chunks, setChunks] = useState<DocumentChunk[]>([]);
   const [loadingContent, setLoadingContent] = useState(false);
+  const [generatingChunks, setGeneratingChunks] = useState(false);
 
   // Format-specific content cache
   const [formatContent, setFormatContent] = useState<Record<string, string>>(
@@ -761,6 +763,25 @@ export default function ExportOptions({
                   <p className="text-sm mt-2">
                     {t("export.enableChunkingHint")}
                   </p>
+                  <button
+                    onClick={async () => {
+                      setGeneratingChunks(true);
+                      try {
+                        const res = await generateChunks(jobId);
+                        setChunks(res.chunks);
+                      } catch (err) {
+                        console.error("Failed to generate chunks:", err);
+                      } finally {
+                        setGeneratingChunks(false);
+                      }
+                    }}
+                    disabled={generatingChunks}
+                    className="mt-4 py-2 px-4 bg-primary-500 hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed text-dark-900 font-medium rounded-xl transition-colors"
+                  >
+                    {generatingChunks
+                      ? t("export.generatingChunks")
+                      : t("export.generateChunksNow")}
+                  </button>
                 </div>
               ) : (
                 <div className="space-y-3 max-h-96 overflow-y-auto">

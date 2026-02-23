@@ -407,8 +407,21 @@ Access previously converted documents:
 - **Search**: Find documents by filename
 - **Filter**: Filter by status (completed, failed)
 - **Statistics**: View success rates and format breakdown
+- **Statistics Panel**: Dedicated viewer (header button) for full conversion analytics
+  - Overview metrics, storage usage, input/OCR/output format breakdowns
+  - Performance device and source type breakdowns
+  - System section: hardware type (CPU/CUDA/MPS), CPU count, current CPU usage (Duckling backend, runs Docling), GPU info
+  - Average pages/sec and pages/sec per CPU
+  - Conversion time distribution (median, 95th, 99th percentile)
+  - Pages/sec over time chart
+  - Performance by hardware, OCR backend, and image classifier (pages/sec vs conversion time per config)
+  - "View full statistics" link in History panel
 - **Export**: Download history as JSON
 - **Reload Documents**: Click on completed history entries to reload the converted document without re-conversion
   - Documents are automatically stored on disk after conversion
   - Full document structure is preserved and can be reloaded instantly
+- **Content deduplication**: Same file with identical settings reuses stored output
+- **Generate Chunks Now**: When no RAG chunks exist, generate them on demand using current chunking settings (no re-conversion needed)
+  - Conversions with matching file content and document-affecting settings (OCR, tables, images) complete instantly from cache
+  - Outputs are stored once in a content-addressed store and shared via symlinks
 
