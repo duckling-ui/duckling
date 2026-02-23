@@ -414,7 +414,6 @@ Access previously converted documents:
 - **Generate Chunks Now**: When no RAG chunks exist, generate them on demand using current chunking settings (no re-conversion needed)
   - Conversions with matching file content and document-affecting settings (OCR, tables, images) complete instantly from cache
   - Outputs are stored once in a content-addressed store and shared via symlinks
-
 ### Statistics Panel
 
 A dedicated slide-in panel for full conversion analytics. Open via the **Statistics** button in the header or the **View full statistics** link in the History panel.
