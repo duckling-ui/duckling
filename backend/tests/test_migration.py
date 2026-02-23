@@ -161,3 +161,319 @@ class TestMigrationScript:
             assert result == 0  # Should handle gracefully
         finally:
             migrate_module.DATABASE_PATH = original_path
+
+
+class TestStatsColumnsMigration:
+    """Tests for migrate_add_stats_columns script."""
+
+    def test_migration_adds_stats_columns(self):
+        """Test that migration adds stats columns."""
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp_db:
+            db_path = tmp_db.name
+
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE conversions (
+                    id VARCHAR(36) PRIMARY KEY,
+                    filename VARCHAR(255) NOT NULL,
+                    original_filename VARCHAR(255) NOT NULL,
+                    document_json_path VARCHAR(500)
+                )
+            """)
+            conn.commit()
+            conn.close()
+
+            scripts_dir = Path(__file__).parent.parent.parent / "scripts"
+            spec = importlib.util.spec_from_file_location(
+                "migrate_add_stats_columns",
+                scripts_dir / "migrate_add_stats_columns.py",
+            )
+            migrate_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(migrate_module)
+
+            original_path = migrate_module.DATABASE_PATH
+            migrate_module.DATABASE_PATH = Path(db_path)
+
+            try:
+                result = migrate_module.migrate_database()
+                assert result == 0
+            finally:
+                migrate_module.DATABASE_PATH = original_path
+
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            for col in ("processing_duration_seconds", "ocr_backend_used", "page_count", "source_type"):
+                assert check_column_exists(cursor, "conversions", col), f"Column {col} should exist"
+            conn.close()
+
+        finally:
+            if Path(db_path).exists():
+                Path(db_path).unlink()
+
+    def test_stats_migration_idempotent(self):
+        """Test stats migration can be run multiple times safely."""
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp_db:
+            db_path = tmp_db.name
+
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE conversions (
+                    id VARCHAR(36) PRIMARY KEY,
+                    processing_duration_seconds REAL,
+                    ocr_backend_used VARCHAR(50),
+                    page_count INTEGER,
+                    source_type VARCHAR(20)
+                )
+            """)
+            conn.commit()
+            conn.close()
+
+            scripts_dir = Path(__file__).parent.parent.parent / "scripts"
+            spec = importlib.util.spec_from_file_location(
+                "migrate_add_stats_columns",
+                scripts_dir / "migrate_add_stats_columns.py",
+            )
+            migrate_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(migrate_module)
+
+            original_path = migrate_module.DATABASE_PATH
+            migrate_module.DATABASE_PATH = Path(db_path)
+
+            try:
+                result = migrate_module.migrate_database()
+                assert result == 0
+            finally:
+                migrate_module.DATABASE_PATH = original_path
+
+        finally:
+            if Path(db_path).exists():
+                Path(db_path).unlink()
+
+
+class TestCpuUsageColumnMigration:
+    """Tests for migrate_add_cpu_usage_column script."""
+
+    def test_migration_adds_cpu_usage_column(self):
+        """Test that migration adds cpu_usage_avg_during_conversion column."""
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp_db:
+            db_path = tmp_db.name
+
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE conversions (
+                    id VARCHAR(36) PRIMARY KEY,
+                    filename VARCHAR(255) NOT NULL,
+                    original_filename VARCHAR(255) NOT NULL
+                )
+            """)
+            conn.commit()
+            conn.close()
+
+            scripts_dir = Path(__file__).parent.parent.parent / "scripts"
+            spec = importlib.util.spec_from_file_location(
+                "migrate_add_cpu_usage_column",
+                scripts_dir / "migrate_add_cpu_usage_column.py",
+            )
+            migrate_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(migrate_module)
+
+            original_path = migrate_module.DATABASE_PATH
+            migrate_module.DATABASE_PATH = Path(db_path)
+
+            try:
+                result = migrate_module.migrate_database()
+                assert result == 0
+            finally:
+                migrate_module.DATABASE_PATH = original_path
+
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            assert check_column_exists(
+                cursor, "conversions", "cpu_usage_avg_during_conversion"
+            ), "Column cpu_usage_avg_during_conversion should exist"
+            conn.close()
+
+        finally:
+            if Path(db_path).exists():
+                Path(db_path).unlink()
+
+    def test_cpu_usage_migration_idempotent(self):
+        """Test cpu usage migration can be run multiple times safely."""
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp_db:
+            db_path = tmp_db.name
+
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE conversions (
+                    id VARCHAR(36) PRIMARY KEY,
+                    cpu_usage_avg_during_conversion REAL
+                )
+            """)
+            conn.commit()
+            conn.close()
+
+            scripts_dir = Path(__file__).parent.parent.parent / "scripts"
+            spec = importlib.util.spec_from_file_location(
+                "migrate_add_cpu_usage_column",
+                scripts_dir / "migrate_add_cpu_usage_column.py",
+            )
+            migrate_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(migrate_module)
+
+            original_path = migrate_module.DATABASE_PATH
+            migrate_module.DATABASE_PATH = Path(db_path)
+
+            try:
+                result = migrate_module.migrate_database()
+                assert result == 0
+            finally:
+                migrate_module.DATABASE_PATH = original_path
+
+        finally:
+            if Path(db_path).exists():
+                Path(db_path).unlink()
+
+
+class TestConfigColumnsMigration:
+    """Tests for migrate_add_config_columns script."""
+
+    def test_migration_adds_config_columns(self):
+        """Test that migration adds performance_device_used and images_classify_enabled."""
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp_db:
+            db_path = tmp_db.name
+
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE conversions (
+                    id VARCHAR(36) PRIMARY KEY,
+                    filename VARCHAR(255) NOT NULL
+                )
+            """)
+            conn.commit()
+            conn.close()
+
+            scripts_dir = Path(__file__).parent.parent.parent / "scripts"
+            spec = importlib.util.spec_from_file_location(
+                "migrate_add_config_columns",
+                scripts_dir / "migrate_add_config_columns.py",
+            )
+            migrate_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(migrate_module)
+
+            original_path = migrate_module.DATABASE_PATH
+            migrate_module.DATABASE_PATH = Path(db_path)
+
+            try:
+                result = migrate_module.migrate_database()
+                assert result == 0
+            finally:
+                migrate_module.DATABASE_PATH = original_path
+
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            for col in ("performance_device_used", "images_classify_enabled"):
+                assert check_column_exists(
+                    cursor, "conversions", col
+                ), f"Column {col} should exist"
+            conn.close()
+
+        finally:
+            if Path(db_path).exists():
+                Path(db_path).unlink()
+
+
+class TestContentHashColumnMigration:
+    """Tests for migrate_add_content_hash script."""
+
+    def test_migration_adds_content_hash_column(self):
+        """Test that migration adds content_hash column."""
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp_db:
+            db_path = tmp_db.name
+
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE conversions (
+                    id VARCHAR(36) PRIMARY KEY,
+                    filename VARCHAR(255) NOT NULL
+                )
+            """)
+            conn.commit()
+            conn.close()
+
+            scripts_dir = Path(__file__).parent.parent.parent / "scripts"
+            spec = importlib.util.spec_from_file_location(
+                "migrate_add_content_hash",
+                scripts_dir / "migrate_add_content_hash.py",
+            )
+            migrate_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(migrate_module)
+
+            original_path = migrate_module.DATABASE_PATH
+            migrate_module.DATABASE_PATH = Path(db_path)
+
+            try:
+                result = migrate_module.migrate_database()
+                assert result == 0
+            finally:
+                migrate_module.DATABASE_PATH = original_path
+
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            assert check_column_exists(
+                cursor, "conversions", "content_hash"
+            ), "Column content_hash should exist"
+            conn.close()
+
+        finally:
+            if Path(db_path).exists():
+                Path(db_path).unlink()
+
+    def test_content_hash_migration_idempotent(self):
+        """Test content_hash migration can be run multiple times safely."""
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp_db:
+            db_path = tmp_db.name
+
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE conversions (
+                    id VARCHAR(36) PRIMARY KEY,
+                    content_hash VARCHAR(64)
+                )
+            """)
+            conn.commit()
+            conn.close()
+
+            scripts_dir = Path(__file__).parent.parent.parent / "scripts"
+            spec = importlib.util.spec_from_file_location(
+                "migrate_add_content_hash",
+                scripts_dir / "migrate_add_content_hash.py",
+            )
+            migrate_module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(migrate_module)
+
+            original_path = migrate_module.DATABASE_PATH
+            migrate_module.DATABASE_PATH = Path(db_path)
+
+            try:
+                result = migrate_module.migrate_database()
+                assert result == 0
+            finally:
+                migrate_module.DATABASE_PATH = original_path
+
+        finally:
+            if Path(db_path).exists():
+                Path(db_path).unlink()

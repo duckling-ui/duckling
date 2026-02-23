@@ -1,0 +1,51 @@
+# Publish Docker images to Docker Hub and GitHub Container Registry when PRs are merged to main.
+# Required secrets: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN
+# GHCR uses GITHUB_TOKEN (automatically provided by Actions)
+name: Publish Docker Images
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  publish:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./frontend/package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push to Docker Hub
+        run: |
+          ./scripts/docker-build.sh --push --registry ${{ secrets.DOCKERHUB_USERNAME }} --version ${{ steps.version.outputs.version }} --multi-platform
+
+      - name: Build and push to GitHub Container Registry
+        run: |
+          ./scripts/docker-build.sh --push --registry ghcr.io/${{ github.repository_owner }} --version ${{ steps.version.outputs.version }} --multi-platform --skip-docs

@@ -339,6 +339,9 @@ class TestHistoryEndpoint:
 
         assert "conversions" in data
         assert "storage" in data
+        assert "queue_depth" in data
+        assert "avg_processing_seconds" in data["conversions"]
+        assert "ocr_backend_breakdown" in data["conversions"]
 
     def test_search_history_empty(self, client):
         """Test searching history with empty query."""
@@ -422,6 +425,25 @@ class TestHistoryEndpoint:
         # No output directory or document JSON should exist in test environment.
         response = client.get(f"/api/history/{entry['id']}/load")
         assert response.status_code == 404
+
+    def test_generate_chunks_nonexistent(self, client):
+        """Test generate-chunks for non-existent history entry."""
+        response = client.post("/api/history/nonexistent-id/generate-chunks")
+        assert response.status_code == 404
+
+    def test_generate_chunks_not_completed(self, client):
+        """Test generate-chunks for non-completed entry."""
+        from services.history import history_service
+
+        entry = history_service.create_entry(
+            job_id="test-pending-chunks",
+            filename="test.pdf",
+            original_filename="test.pdf",
+        )
+        response = client.post(f"/api/history/{entry['id']}/generate-chunks")
+        assert response.status_code == 400
+        data = json.loads(response.data)
+        assert data["status"] == "pending"
 
     def test_reconcile_history(self, client):
         """Test POST /api/history/reconcile returns count and added_ids."""

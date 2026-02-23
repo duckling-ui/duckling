@@ -51,10 +51,12 @@ npm run test:watch
 ```
 backend/tests/
 ├── __init__.py
-├── conftest.py      # Shared fixtures
-├── test_api.py      # API endpoint tests
-├── test_converter.py # Converter service tests
-└── test_history.py  # History service tests
+├── conftest.py         # Shared fixtures
+├── test_api.py        # API endpoint tests
+├── test_converter.py  # Converter service tests
+├── test_content_store.py # Content-addressed storage utilities
+├── test_history.py    # History service tests
+└── test_migration.py  # Database migration scripts
 ```
 
 ### Fixtures

@@ -108,6 +108,13 @@ Before deploying to production, ensure:
 | `SECRET_KEY` | `dev-secret-key...` | Flask secret key (MUST change in production) |
 | `MAX_CONTENT_LENGTH` | `104857600` | Max upload size in bytes (100MB) |
 
+### CI/CD Secrets (GitHub Actions)
+
+The Publish Docker Images workflow uses repository secrets. Never commit these:
+
+- `DOCKERHUB_USERNAME` – Docker Hub username
+- `DOCKERHUB_TOKEN` – Docker Hub access token (or password) – store as a secret, never in code
+
 ## Known Limitations
 
 1. **XSS in Documentation Viewer**: The docs panel uses `dangerouslySetInnerHTML` to render markdown-converted HTML. This is acceptable because:

@@ -26,7 +26,7 @@ import json
 import os
 import threading
 from datetime import datetime
-from sqlalchemy import create_engine, Column, String, Float, DateTime, Text
+from sqlalchemy import create_engine, Column, String, Float, DateTime, Text, Integer
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.pool import StaticPool
@@ -74,6 +74,14 @@ class Conversion(Base):
     output_path = Column(String(500), nullable=True)
     file_size = Column(Float, nullable=True)  # Size in bytes
     document_json_path = Column(String(500), nullable=True)  # Path to stored DoclingDocument JSON
+    processing_duration_seconds = Column(Float, nullable=True)
+    ocr_backend_used = Column(String(50), nullable=True)
+    page_count = Column(Integer, nullable=True)
+    source_type = Column(String(20), nullable=True)  # upload, url, batch
+    cpu_usage_avg_during_conversion = Column(Float, nullable=True)
+    performance_device_used = Column(String(20), nullable=True)  # cpu, cuda, mps, auto
+    images_classify_enabled = Column(String(10), nullable=True)  # "true" | "false"
+    content_hash = Column(String(64), nullable=True)  # Content-addressed dedup hash
 
     def to_dict(self):
         """Convert model to dictionary."""
@@ -90,7 +98,15 @@ class Conversion(Base):
             "error_message": self.error_message,
             "output_path": self.output_path,
             "file_size": self.file_size,
-            "document_json_path": self.document_json_path
+            "document_json_path": self.document_json_path,
+            "processing_duration_seconds": self.processing_duration_seconds,
+            "ocr_backend_used": self.ocr_backend_used,
+            "page_count": self.page_count,
+            "source_type": self.source_type,
+            "cpu_usage_avg_during_conversion": self.cpu_usage_avg_during_conversion,
+            "performance_device_used": self.performance_device_used,
+            "images_classify_enabled": self.images_classify_enabled,
+            "content_hash": self.content_hash,
         }
 
     def set_settings(self, settings_dict):

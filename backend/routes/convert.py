@@ -528,21 +528,35 @@ def upload_and_convert():
         original_filename=file.filename,
         input_format=input_format,
         settings=settings,
-        file_size=file_size
+        file_size=file_size,
+        source_type="upload",
     )
 
     # Define callback to update history when conversion completes
     def on_complete(completed_job):
         status = "completed" if completed_job.status == ConversionStatus.COMPLETED else "failed"
+        duration = None
+        if completed_job.completed_at and completed_job.created_at:
+            duration = (completed_job.completed_at - completed_job.created_at).total_seconds()
+        ocr_backend = getattr(completed_job, "ocr_backend_used", None) or (
+            completed_job.settings.get("ocr", {}) or {}
+        ).get("backend")
         history_service.update_status(
             job_id=completed_job.id,
             status=status,
             confidence=completed_job.confidence,
             error_message=completed_job.error,
-            output_path=str(completed_job.output_paths.get("markdown", ""))
+            output_path=str(completed_job.output_paths.get("markdown", "")),
+            processing_duration_seconds=duration,
+            ocr_backend_used=ocr_backend,
+            page_count=getattr(completed_job, "page_count", None),
+            cpu_usage_avg_during_conversion=getattr(completed_job, "cpu_usage_avg_during_conversion", None),
+            performance_device_used=getattr(completed_job, "performance_device_used", None),
+            images_classify_enabled=getattr(completed_job, "images_classify_enabled", None),
+            content_hash=getattr(completed_job, "content_hash", None),
         )
         # Save document path if available
-        document_path = getattr(completed_job, 'document_json_path', None)
+        document_path = getattr(completed_job, "document_json_path", None)
         if document_path:
             history_service.update_document_path(completed_job.id, document_path)
 
@@ -621,21 +635,35 @@ def convert_from_url():
         original_filename=filename,
         input_format=input_format,
         settings=settings,
-        file_size=file_size
+        file_size=file_size,
+        source_type="url",
     )
 
     # Define callback to update history when conversion completes
     def on_complete(completed_job):
         status = "completed" if completed_job.status == ConversionStatus.COMPLETED else "failed"
+        duration = None
+        if completed_job.completed_at and completed_job.created_at:
+            duration = (completed_job.completed_at - completed_job.created_at).total_seconds()
+        ocr_backend = getattr(completed_job, "ocr_backend_used", None) or (
+            completed_job.settings.get("ocr", {}) or {}
+        ).get("backend")
         history_service.update_status(
             job_id=completed_job.id,
             status=status,
             confidence=completed_job.confidence,
             error_message=completed_job.error,
-            output_path=str(completed_job.output_paths.get("markdown", ""))
+            output_path=str(completed_job.output_paths.get("markdown", "")),
+            processing_duration_seconds=duration,
+            ocr_backend_used=ocr_backend,
+            page_count=getattr(completed_job, "page_count", None),
+            cpu_usage_avg_during_conversion=getattr(completed_job, "cpu_usage_avg_during_conversion", None),
+            performance_device_used=getattr(completed_job, "performance_device_used", None),
+            images_classify_enabled=getattr(completed_job, "images_classify_enabled", None),
+            content_hash=getattr(completed_job, "content_hash", None),
         )
         # Save document path if available
-        document_path = getattr(completed_job, 'document_json_path', None)
+        document_path = getattr(completed_job, "document_json_path", None)
         if document_path:
             history_service.update_document_path(completed_job.id, document_path)
 
@@ -725,21 +753,32 @@ def convert_from_urls_batch():
                 original_filename=filename,
                 input_format=input_format,
                 settings=settings,
-                file_size=file_size
+                file_size=file_size,
+                source_type="batch",
             )
 
             # Define callback to update history when conversion completes
             def on_complete(completed_job):
                 status = "completed" if completed_job.status == ConversionStatus.COMPLETED else "failed"
+                duration = None
+                if completed_job.completed_at and completed_job.created_at:
+                    duration = (completed_job.completed_at - completed_job.created_at).total_seconds()
+                ocr_backend = getattr(completed_job, "ocr_backend_used", None) or (
+                    completed_job.settings.get("ocr", {}) or {}
+                ).get("backend")
                 history_service.update_status(
                     job_id=completed_job.id,
                     status=status,
                     confidence=completed_job.confidence,
                     error_message=completed_job.error,
-                    output_path=str(completed_job.output_paths.get("markdown", ""))
+                    output_path=str(completed_job.output_paths.get("markdown", "")),
+                    processing_duration_seconds=duration,
+                    ocr_backend_used=ocr_backend,
+                    page_count=getattr(completed_job, "page_count", None),
+                    content_hash=getattr(completed_job, "content_hash", None),
                 )
                 # Save document path if available
-                document_path = getattr(completed_job, 'document_json_path', None)
+                document_path = getattr(completed_job, "document_json_path", None)
                 if document_path:
                     history_service.update_document_path(completed_job.id, document_path)
 
@@ -844,21 +883,32 @@ def upload_and_convert_batch():
             original_filename=file.filename,
             input_format=input_format,
             settings=settings,
-            file_size=file_size
+            file_size=file_size,
+            source_type="batch",
         )
 
         # Define callback to update history when conversion completes
         def on_complete(completed_job):
             status = "completed" if completed_job.status == ConversionStatus.COMPLETED else "failed"
+            duration = None
+            if completed_job.completed_at and completed_job.created_at:
+                duration = (completed_job.completed_at - completed_job.created_at).total_seconds()
+            ocr_backend = getattr(completed_job, "ocr_backend_used", None) or (
+                completed_job.settings.get("ocr", {}) or {}
+            ).get("backend")
             history_service.update_status(
                 job_id=completed_job.id,
                 status=status,
                 confidence=completed_job.confidence,
                 error_message=completed_job.error,
-                output_path=str(completed_job.output_paths.get("markdown", ""))
+                output_path=str(completed_job.output_paths.get("markdown", "")),
+                processing_duration_seconds=duration,
+                ocr_backend_used=ocr_backend,
+                page_count=getattr(completed_job, "page_count", None),
+                content_hash=getattr(completed_job, "content_hash", None),
             )
             # Save document path if available
-            document_path = getattr(completed_job, 'document_json_path', None)
+            document_path = getattr(completed_job, "document_json_path", None)
             if document_path:
                 history_service.update_document_path(completed_job.id, document_path)
 

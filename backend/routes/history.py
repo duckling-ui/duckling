@@ -28,6 +28,7 @@ from werkzeug.exceptions import NotFound
 
 from services.history import history_service
 from services.file_manager import file_manager
+from services.converter import converter_service
 
 history_bp = Blueprint("history", __name__)
 
@@ -125,6 +126,7 @@ def delete_history_entry(job_id: str):
 
     # Delete associated output files (file_manager.delete_output_folder validates internally)
     file_manager.delete_output_folder(job_id)
+    file_manager.cleanup_orphaned_content()
 
     # Delete history entry
     history_service.delete_entry(job_id)
@@ -151,6 +153,7 @@ def clear_history():
     # file_manager.delete_output_folder validates internally
     for entry in entries:
         file_manager.delete_output_folder(entry["id"])
+    file_manager.cleanup_orphaned_content()
 
     # Delete all history entries
     count = history_service.delete_all()
@@ -174,7 +177,8 @@ def get_history_stats():
 
     return jsonify({
         "conversions": stats,
-        "storage": storage_stats
+        "storage": storage_stats,
+        "queue_depth": converter_service.get_queue_depth(),
     })
 
 
@@ -507,5 +511,59 @@ def load_history_document(job_id: str):
         "tables_count": tables_count,
         "chunks_count": chunks_count,
         "completed_at": entry.get("completed_at")
+    })
+
+
+@history_bp.route("/history/<job_id>/generate-chunks", methods=["POST"])
+def generate_chunks(job_id: str):
+    """
+    Generate RAG chunks for a completed document on demand.
+
+    Loads the DoclingDocument from disk, applies current chunking settings,
+    and returns the generated chunks. Optionally saves to disk.
+    """
+    from pathlib import Path
+    from config import OUTPUT_FOLDER
+    from routes.settings import load_settings
+    from utils.security import validate_job_id, get_validated_output_dir
+
+    job_id = validate_job_id(job_id)
+    output_dir = get_validated_output_dir(job_id, Path(OUTPUT_FOLDER))
+
+    entry = history_service.get_entry(job_id)
+    if not entry:
+        raise NotFound(f"History entry {job_id} not found")
+
+    if entry.get("status") != "completed":
+        return jsonify({
+            "job_id": job_id,
+            "status": entry.get("status"),
+            "message": "Conversion not completed"
+        }), 400
+
+    doc = history_service.load_document(job_id)
+    if not doc:
+        return jsonify({
+            "job_id": job_id,
+            "error": "Document not found or could not be loaded"
+        }), 404
+
+    settings = load_settings()
+    chunks = converter_service.generate_chunks_for_document(doc, settings)
+
+    # Save chunks to disk if we have a valid output dir
+    if output_dir.exists() and chunks:
+        try:
+            stem = Path(entry.get("original_filename", "document")).stem
+            chunks_path = output_dir / f"{stem}.chunks.json"
+            with open(chunks_path, "w", encoding="utf-8") as f:
+                json.dump(chunks, f, indent=2, default=str)
+        except Exception as e:
+            print(f"[generate-chunks] Failed to save: {e}")
+
+    return jsonify({
+        "job_id": job_id,
+        "chunks": chunks,
+        "count": len(chunks)
     })
 

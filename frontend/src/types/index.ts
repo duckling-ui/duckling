@@ -208,6 +208,65 @@ export interface HistoryStats {
     processing: number;
     success_rate: number;
     format_breakdown: Record<string, number>;
+    avg_processing_seconds?: number;
+    ocr_backend_breakdown?: Record<string, number>;
+    output_format_breakdown?: Record<string, number>;
+    performance_device_breakdown?: Record<string, number>;
+    chunking_enabled_count?: number;
+    error_category_breakdown?: Record<string, number>;
+    source_type_breakdown?: Record<string, number>;
+    system?: {
+      cpu_count?: number;
+      hardware_type?: string;
+      gpu_name?: string | null;
+      gpu_memory_mb?: number | null;
+      cpu_usage_current?: number | null;
+    };
+    avg_pages_per_second?: number | null;
+    avg_pages_per_second_per_cpu?: number | null;
+    conversion_time_distribution?: {
+      p50: number;
+      p95: number;
+      p99: number;
+    } | null;
+    pages_per_second_over_time?: Array<{
+      job_id: string;
+      created_at: string | null;
+      pages_per_sec: number;
+    }>;
+    by_hardware?: Record<
+      string,
+      {
+        count: number;
+        avg_processing_seconds?: number;
+        avg_pages_per_second?: number;
+        conversion_time_p50?: number;
+        conversion_time_p95?: number;
+        conversion_time_p99?: number;
+      }
+    >;
+    by_ocr_backend?: Record<
+      string,
+      {
+        count: number;
+        avg_processing_seconds?: number;
+        avg_pages_per_second?: number;
+        conversion_time_p50?: number;
+        conversion_time_p95?: number;
+        conversion_time_p99?: number;
+      }
+    >;
+    by_images_classify?: Record<
+      string,
+      {
+        count: number;
+        avg_processing_seconds?: number;
+        avg_pages_per_second?: number;
+        conversion_time_p50?: number;
+        conversion_time_p95?: number;
+        conversion_time_p99?: number;
+      }
+    >;
   };
   storage: {
     uploads: {
@@ -222,6 +281,7 @@ export interface HistoryStats {
     };
     total_size_mb: number;
   };
+  queue_depth?: number;
 }
 
 export interface OcrSettingsResponse {

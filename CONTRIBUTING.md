@@ -63,6 +63,20 @@ cd frontend
 npm install
 ```
 
+### Database Migrations
+
+When the schema changes, migration scripts in `scripts/` must be run for existing deployments:
+
+```bash
+python3 scripts/migrate_add_stats_columns.py   # Adds stats columns (processing_duration_seconds, etc.)
+python3 scripts/migrate_add_document_path.py   # Adds document_json_path (if upgrading from older version)
+python3 scripts/migrate_add_cpu_usage_column.py # Adds cpu_usage_avg_during_conversion (if upgrading from older version)
+python3 scripts/migrate_add_config_columns.py   # Adds performance_device_used, images_classify_enabled
+python3 scripts/migrate_add_content_hash.py     # Adds content_hash for content-addressed deduplication
+```
+
+New installations create tables with the current schema automatically.
+
 ### Running Tests
 
 **Backend**:
@@ -248,6 +262,10 @@ it('should upload file on drop', async () => {
 2. CI checks must pass
 3. Code coverage should not decrease
 4. Documentation must be updated if needed
+
+## CI/CD and Docker Publishing
+
+When a PR is merged to `main`, the **Publish Docker Images** workflow runs automatically. It builds multi-platform images and pushes them to Docker Hub and GitHub Container Registry. Maintainers must configure `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` repository secrets for this to work. See [Docker Deployment](docs/getting-started/docker.md#automatic-publishing-cicd) for details.
 
 ## Getting Help
 
