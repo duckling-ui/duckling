@@ -199,9 +199,9 @@ class FileManager:
                 # Path traversal detected - path is outside output_folder
                 return False
 
-            if output_dir.exists():
+            if output_dir_resolved.exists():
                 # rmtree on a symlink removes the symlink, not the target
-                shutil.rmtree(output_dir)
+                shutil.rmtree(output_dir_resolved)
                 return True
         except Exception:
             pass
