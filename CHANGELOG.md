@@ -9,6 +9,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Docker image publishing workflow**: GitHub Action that runs when PRs are merged to `main`
+  - Builds multi-platform images (linux/amd64, linux/arm64)
+  - Pushes to Docker Hub and GitHub Container Registry
+  - Tags images with version from `package.json` and `latest`
+  - Requires `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` repository secrets
+
+- **Generate Chunks Now**: On-demand RAG chunk generation for completed documents
+  - "Generate Chunks Now" button in RAG Chunks tab when no chunks exist
+  - Uses current chunking settings; saves chunks to disk for download
+  - `POST /api/history/{job_id}/generate-chunks` endpoint
+- **Content-addressed deduplication**: Same file + same document-affecting settings reuse stored content instead of re-converting
+  - Content hash = SHA-256 of (file_hash + settings_hash), truncated to 32 chars
+  - Settings hash includes only `ocr`, `tables`, `images` (excludes performance, chunking, output format)
+  - Storage: `outputs/_content/{content_hash}/`; job outputs: `outputs/{job_id}/` symlinks to content store
+  - Cache hit: create symlink, load metadata, populate job, complete immediately (no Docling run)
+  - Cache miss: run conversion, move output to content store, create symlink, save metadata
+  - Each conversion still gets its own history entry; `DoclingDocument` and outputs stored once and shared via symlinks
+  - Database migration `scripts/migrate_add_content_hash.py` adds `content_hash` column
+  - Orphan cleanup: `cleanup_orphaned_content()` removes content store dirs not referenced by any job symlink (runs on history delete)
+
+- **Conversion statistics and metrics**: Extended history stats for Docling and Duckling usage analytics
+  - `GET /api/history/stats` now returns `avg_processing_seconds`, `ocr_backend_breakdown`, `output_format_breakdown`, `performance_device_breakdown`, `chunking_enabled_count`, `error_category_breakdown`, `source_type_breakdown`, and `queue_depth`
+  - Database migration `scripts/migrate_add_stats_columns.py` adds `processing_duration_seconds`, `ocr_backend_used`, `page_count`, and `source_type` columns to conversions table
+  - Conversion completion now records processing duration, OCR backend used, and page count
+  - Source type (upload, url, batch) tracked when creating history entries
+  - History panel displays average processing time and queue depth when available
+- **Statistics panel**: Dedicated viewer for conversion and usage statistics
+  - New Statistics button in header opens a slide-in panel with full stats
+  - Overview (total, success, failed, success rate, avg processing time, queue depth)
+  - Storage usage (uploads, outputs, total)
+  - Breakdowns: input formats, OCR backends, output formats, performance devices, source types, errors
+  - Chunking-enabled count
+  - "View full statistics" link in History panel opens Statistics panel
+- **Extended statistics**: Hardware and performance metrics
+  - System section: hardware type (CPU/CUDA/MPS), CPU count, current CPU usage, GPU info
+  - Average pages/sec and pages/sec per CPU
+  - Conversion time distribution (median, 95th, 99th percentile)
+  - Pages/sec over time chart (Recharts)
+  - CPU usage averaged during each conversion (stored in DB)
+  - Database migration `scripts/migrate_add_cpu_usage_column.py` adds `cpu_usage_avg_during_conversion` column
+  - CPU usage is now process-specific (Duckling backend process, runs Docling), not system-wide
+  - Per-conversion config stored: `performance_device_used` (resolved from "auto" at completion), `images_classify_enabled`
+  - Database migration `scripts/migrate_add_config_columns.py` adds these columns
+  - Stats breakdown by hardware, OCR backend, image classifier (pages/sec, conversion time per config)
+
 - **Document Persistence**: Processed documents are now stored on disk and can be reloaded from history
   - `DoclingDocument` objects are automatically saved as JSON files after conversion
   - Documents stored in conversion output directories (e.g., `outputs/{job_id}/document.json`)

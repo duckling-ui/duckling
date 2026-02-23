@@ -42,7 +42,8 @@ class HistoryService:
         original_filename: str,
         input_format: str = None,
         settings: Dict[str, Any] = None,
-        file_size: float = None
+        file_size: float = None,
+        source_type: str = None,
     ) -> Dict[str, Any]:
         """
         Create a new history entry.
@@ -54,6 +55,7 @@ class HistoryService:
             input_format: Detected input format
             settings: Conversion settings used
             file_size: File size in bytes
+            source_type: How the document was submitted (upload, url, batch)
 
         Returns:
             Dictionary representation of the created entry
@@ -66,7 +68,8 @@ class HistoryService:
                 input_format=input_format,
                 status="pending",
                 settings=json.dumps(settings) if settings else None,
-                file_size=file_size
+                file_size=file_size,
+                source_type=source_type,
             )
             session.add(entry)
             session.commit()
@@ -81,7 +84,14 @@ class HistoryService:
         status: str,
         confidence: float = None,
         error_message: str = None,
-        output_path: str = None
+        output_path: str = None,
+        processing_duration_seconds: float = None,
+        ocr_backend_used: str = None,
+        page_count: int = None,
+        cpu_usage_avg_during_conversion: float = None,
+        performance_device_used: str = None,
+        images_classify_enabled: bool = None,
+        content_hash: str = None,
     ) -> Optional[Dict[str, Any]]:
         """
         Update the status of a conversion entry.
@@ -92,6 +102,13 @@ class HistoryService:
             confidence: Conversion confidence score
             error_message: Error message if failed
             output_path: Path to output files
+            processing_duration_seconds: Duration of conversion in seconds
+            ocr_backend_used: OCR backend that was used (or "none" if fallback)
+            page_count: Number of pages in the document
+            cpu_usage_avg_during_conversion: Average CPU % during conversion
+            performance_device_used: Device used (cpu, cuda, mps, auto)
+            images_classify_enabled: Whether image classification was enabled
+            content_hash: Content-addressed dedup hash (for cache hits)
 
         Returns:
             Dictionary representation of updated entry or None if not found
@@ -108,6 +125,20 @@ class HistoryService:
                 entry.error_message = error_message
             if output_path:
                 entry.output_path = output_path
+            if processing_duration_seconds is not None:
+                entry.processing_duration_seconds = processing_duration_seconds
+            if ocr_backend_used is not None:
+                entry.ocr_backend_used = ocr_backend_used
+            if page_count is not None:
+                entry.page_count = page_count
+            if cpu_usage_avg_during_conversion is not None:
+                entry.cpu_usage_avg_during_conversion = cpu_usage_avg_during_conversion
+            if performance_device_used is not None:
+                entry.performance_device_used = performance_device_used
+            if images_classify_enabled is not None:
+                entry.images_classify_enabled = "true" if images_classify_enabled else "false"
+            if content_hash is not None:
+                entry.content_hash = content_hash
 
             if status in ["completed", "failed"]:
                 entry.completed_at = datetime.utcnow()
@@ -200,12 +231,36 @@ class HistoryService:
             session.commit()
             return count
 
+    def _parse_settings(self, settings_json: Optional[str]) -> Dict[str, Any]:
+        """Safely parse settings JSON. Returns empty dict on error."""
+        if not settings_json:
+            return {}
+        try:
+            return json.loads(settings_json)
+        except (json.JSONDecodeError, TypeError):
+            return {}
+
+    def _categorize_error(self, error_message: Optional[str]) -> str:
+        """Categorize error message for error_category_breakdown."""
+        if not error_message:
+            return "unknown"
+        err_lower = error_message.lower()
+        if any(x in err_lower for x in ["ocr", "easyocr", "tesseract", "ocrmac", "rapidocr", "cuda", "gpu"]):
+            return "ocr"
+        if any(x in err_lower for x in ["timeout", "timed out"]):
+            return "timeout"
+        if any(x in err_lower for x in ["memory", "oom"]):
+            return "memory"
+        if any(x in err_lower for x in ["not found", "no such file", "file not found"]):
+            return "file_not_found"
+        return "other"
+
     def get_stats(self) -> Dict[str, Any]:
         """
         Get statistics about conversion history.
 
         Returns:
-            Dictionary with statistics
+            Dictionary with statistics including extended metrics
         """
         with get_db_session() as session:
             total = session.query(Conversion).count()
@@ -221,15 +276,194 @@ class HistoryService:
                 if fmt:
                     format_counts[fmt] = format_counts.get(fmt, 0) + 1
 
-            return {
+            # Extended stats from all entries
+            all_entries = session.query(Conversion).all()
+            durations = []
+            ocr_backend_counts: Dict[str, int] = {}
+            output_format_counts: Dict[str, int] = {}
+            performance_device_counts: Dict[str, int] = {}
+            source_type_counts: Dict[str, int] = {}
+            chunking_enabled_count = 0
+            error_category_counts: Dict[str, int] = {}
+
+            for entry in all_entries:
+                settings = self._parse_settings(entry.settings)
+
+                # Processing duration: prefer stored column, else compute from timestamps
+                if entry.status in ("completed", "failed"):
+                    if getattr(entry, "processing_duration_seconds", None) is not None:
+                        durations.append(entry.processing_duration_seconds)
+                    elif entry.completed_at and entry.created_at:
+                        delta = entry.completed_at - entry.created_at
+                        durations.append(delta.total_seconds())
+
+                # OCR backend: prefer ocr_backend_used column, else from settings
+                ocr_backend = getattr(entry, "ocr_backend_used", None) or (settings.get("ocr") or {}).get("backend")
+                if ocr_backend:
+                    ocr_backend_counts[ocr_backend] = ocr_backend_counts.get(ocr_backend, 0) + 1
+
+                # Source type: from column
+                source_type = getattr(entry, "source_type", None)
+                if source_type:
+                    source_type_counts[source_type] = source_type_counts.get(source_type, 0) + 1
+
+                # Output default format from settings
+                output_format = (settings.get("output") or {}).get("default_format", "markdown")
+                output_format_counts[output_format] = output_format_counts.get(output_format, 0) + 1
+
+                # Performance device: prefer stored column, else from settings
+                perf_device = getattr(entry, "performance_device_used", None) or (settings.get("performance") or {}).get("device", "auto")
+                performance_device_counts[perf_device] = performance_device_counts.get(perf_device, 0) + 1
+
+                # Chunking enabled
+                if (settings.get("chunking") or {}).get("enabled", False):
+                    chunking_enabled_count += 1
+
+                # Error category for failed entries
+                if entry.status == "failed" and entry.error_message:
+                    category = self._categorize_error(entry.error_message)
+                    error_category_counts[category] = error_category_counts.get(category, 0) + 1
+
+            avg_processing_seconds = round(sum(durations) / len(durations), 1) if durations else None
+
+            # Build pages/sec and conversion time distribution from completed entries
+            # Also collect per-entry config for breakdown stats
+            pages_per_sec_list = []
+            completed_with_config: List[Dict[str, Any]] = []  # for breakdowns
+            for entry in all_entries:
+                if entry.status not in ("completed", "failed"):
+                    continue
+                dur = getattr(entry, "processing_duration_seconds", None)
+                if dur is None and entry.completed_at and entry.created_at:
+                    delta = entry.completed_at - entry.created_at
+                    dur = delta.total_seconds()
+                pages = getattr(entry, "page_count", None) or 0
+                pps = (pages / dur) if (dur and dur > 0 and pages and pages > 0) else None
+                if pps is not None:
+                    pages_per_sec_list.append((entry.id, entry.created_at, pps))
+                perf_device = getattr(entry, "performance_device_used", None) or (self._parse_settings(entry.settings).get("performance") or {}).get("device", "auto")
+                ocr_backend = getattr(entry, "ocr_backend_used", None) or (self._parse_settings(entry.settings).get("ocr") or {}).get("backend", "none")
+                img_classify = getattr(entry, "images_classify_enabled", None)
+                if img_classify is None:
+                    img_classify = (self._parse_settings(entry.settings).get("images") or {}).get("classify", False)
+                    img_classify = "true" if img_classify else "false"
+                completed_with_config.append({
+                    "dur": dur, "pages": pages, "pps": pps,
+                    "perf_device": perf_device, "ocr_backend": ocr_backend, "images_classify": img_classify,
+                })
+
+            avg_pages_per_second = None
+            avg_pages_per_second_per_cpu = None
+            conversion_time_distribution = None
+            pages_per_second_over_time = []
+
+            if pages_per_sec_list:
+                pps_values = [p[2] for p in pages_per_sec_list]
+                avg_pages_per_second = round(sum(pps_values) / len(pps_values), 2)
+                try:
+                    from utils.system_info import get_cpu_count
+                    cpu_count = get_cpu_count() or 1
+                    avg_pages_per_second_per_cpu = round(avg_pages_per_second / cpu_count, 2)
+                except Exception:
+                    avg_pages_per_second_per_cpu = avg_pages_per_second
+
+            if durations:
+                sorted_dur = sorted(durations)
+                n = len(sorted_dur)
+
+                def _percentile(arr, p):
+                    if not arr:
+                        return 0
+                    idx = min(int(n * p / 100), n - 1)
+                    return arr[idx]
+
+                conversion_time_distribution = {
+                    "p50": round(_percentile(sorted_dur, 50), 1),
+                    "p95": round(_percentile(sorted_dur, 95), 1),
+                    "p99": round(_percentile(sorted_dur, 99), 1),
+                }
+
+            for job_id, created_at, pps in sorted(pages_per_sec_list, key=lambda x: x[1] or datetime.min):
+                pages_per_second_over_time.append({
+                    "job_id": job_id,
+                    "created_at": created_at.isoformat() if created_at else None,
+                    "pages_per_sec": round(pps, 2),
+                })
+
+            # Breakdown stats by hardware, OCR backend, image classifier
+            def _group_stats(items: List[Dict], key: str) -> Dict[str, Dict]:
+                groups: Dict[str, List[Dict]] = {}
+                for item in items:
+                    k = item.get(key, "unknown")
+                    groups.setdefault(k, []).append(item)
+                result = {}
+                for k, group in groups.items():
+                    durs = [x["dur"] for x in group if x.get("dur")]
+                    pps_vals = [x["pps"] for x in group if x.get("pps") is not None]
+                    result[k] = {
+                        "count": len(group),
+                        "avg_processing_seconds": round(sum(durs) / len(durs), 1) if durs else None,
+                        "avg_pages_per_second": round(sum(pps_vals) / len(pps_vals), 2) if pps_vals else None,
+                    }
+                    if durs:
+                        sorted_dur = sorted(durs)
+                        n = len(sorted_dur)
+
+                        def _p(arr, pct):
+                            if not arr:
+                                return 0
+                            idx = min(int(n * pct / 100), n - 1)
+                            return arr[idx]
+
+                        result[k]["conversion_time_p50"] = round(_p(sorted_dur, 50), 1)
+                        result[k]["conversion_time_p95"] = round(_p(sorted_dur, 95), 1)
+                        result[k]["conversion_time_p99"] = round(_p(sorted_dur, 99), 1)
+                return result
+
+            by_hardware = _group_stats(completed_with_config, "perf_device")
+            by_ocr_backend = _group_stats(completed_with_config, "ocr_backend")
+            by_images_classify = _group_stats(completed_with_config, "images_classify")
+
+            # System info (hardware type, CPU count, current CPU % - process-specific)
+            system_info = {}
+            try:
+                from utils.system_info import get_hardware_type, get_cpu_usage
+                hw = get_hardware_type()
+                system_info = {
+                    "cpu_count": hw.get("cpu_count"),
+                    "hardware_type": hw.get("type"),
+                    "gpu_name": hw.get("gpu_name"),
+                    "gpu_memory_mb": hw.get("gpu_memory_mb"),
+                    "cpu_usage_current": get_cpu_usage(),
+                }
+            except Exception:
+                pass
+
+            result = {
                 "total": total,
                 "completed": completed,
                 "failed": failed,
                 "pending": pending,
                 "processing": processing,
                 "success_rate": round(completed / total * 100, 1) if total > 0 else 0,
-                "format_breakdown": format_counts
+                "format_breakdown": format_counts,
+                "avg_processing_seconds": avg_processing_seconds,
+                "ocr_backend_breakdown": ocr_backend_counts,
+                "output_format_breakdown": output_format_counts,
+                "performance_device_breakdown": performance_device_counts,
+                "chunking_enabled_count": chunking_enabled_count,
+                "error_category_breakdown": error_category_counts,
+                "source_type_breakdown": source_type_counts,
+                "system": system_info,
+                "avg_pages_per_second": avg_pages_per_second,
+                "avg_pages_per_second_per_cpu": avg_pages_per_second_per_cpu,
+                "conversion_time_distribution": conversion_time_distribution,
+                "pages_per_second_over_time": pages_per_second_over_time,
+                "by_hardware": by_hardware,
+                "by_ocr_backend": by_ocr_backend,
+                "by_images_classify": by_images_classify,
             }
+            return result
 
     def search(
         self,
@@ -351,7 +585,14 @@ class HistoryService:
             try:
                 return DoclingDocument.load_from_json(str(doc_path_resolved))
             except Exception as e:
-                print(f"[history] Error loading document: {e}")
+                err_str = str(e)
+                if "incompatible with SDK schema version" in err_str or "Doc version" in err_str:
+                    print(
+                        f"[history] Document schema version mismatch: {e}. "
+                        "Upgrade docling to load documents saved with a newer version: pip install --upgrade docling"
+                    )
+                else:
+                    print(f"[history] Error loading document: {e}")
                 return None
 
         # 1. Try path from DB

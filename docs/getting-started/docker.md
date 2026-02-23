@@ -105,6 +105,25 @@ Use the provided build script for easy image building. The script automatically 
 !!! note "Documentation Build"
     The build script automatically runs `mkdocs build` to ensure documentation is available in the Docker containers. If MkDocs is not installed, it will attempt to install it from `requirements-docs.txt`.
 
+### Automatic Publishing (CI/CD)
+
+When a pull request is merged to `main`, the [Publish Docker Images](https://github.com/davidgs/duckling/actions/workflows/publish-docker.yml) workflow automatically:
+
+1. Builds multi-platform images (linux/amd64, linux/arm64)
+2. Pushes to **Docker Hub** as `{DOCKERHUB_USERNAME}/duckling-backend` and `{DOCKERHUB_USERNAME}/duckling-frontend`
+3. Pushes to **GitHub Container Registry** as `ghcr.io/{owner}/duckling-backend` and `ghcr.io/{owner}/duckling-frontend`
+
+Images are tagged with the version from `frontend/package.json` and `latest`.
+
+**Required repository secrets** (Settings → Secrets and variables → Actions):
+
+| Secret | Description |
+|--------|-------------|
+| `DOCKERHUB_USERNAME` | Docker Hub username |
+| `DOCKERHUB_TOKEN` | Docker Hub access token (or password) |
+
+GHCR authentication uses `GITHUB_TOKEN`, which GitHub Actions provides automatically.
+
 ### Manual Build
 
 ```bash

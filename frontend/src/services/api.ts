@@ -201,6 +201,13 @@ export const getDocumentChunks = async (
   return response.data;
 };
 
+export const generateChunks = async (
+  jobId: string
+): Promise<{ job_id: string; chunks: DocumentChunk[]; count: number }> => {
+  const response = await api.post(`/history/${jobId}/generate-chunks`);
+  return response.data;
+};
+
 // Settings
 export const getSettings = async (): Promise<SettingsResponse> => {
   const response = await api.get('/settings');

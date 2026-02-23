@@ -54,8 +54,19 @@ try:
 except ImportError:
     CHUNKING_AVAILABLE = False
 
+import shutil
+
 from config import OUTPUT_FOLDER, DEFAULT_CONVERSION_SETTINGS
 from utils.security import validate_job_id, get_validated_output_dir
+from utils.content_store import (
+    compute_file_hash,
+    compute_settings_hash,
+    compute_content_hash,
+    get_content_store_path,
+    content_store_exists,
+    save_metadata,
+    load_metadata,
+)
 
 
 # Language code mapping for EasyOCR
@@ -239,6 +250,10 @@ class ConversionJob:
         self.chunks: List[Dict] = []
         self.page_count = 0
         self.document_metadata: Dict = {}
+        self.ocr_backend_used: Optional[str] = None  # Actual backend used (or "none" if fallback)
+        self.cpu_usage_avg_during_conversion: Optional[float] = None
+        self.performance_device_used: Optional[str] = None  # cpu, cuda, mps, auto
+        self.images_classify_enabled: Optional[bool] = None
 
 
 class ConverterService:
@@ -514,6 +529,12 @@ class ConverterService:
                 import time
                 time.sleep(1)
 
+    def get_queue_depth(self) -> int:
+        """Return current number of jobs waiting in the queue."""
+        if ConverterService._job_queue is None:
+            return 0
+        return ConverterService._job_queue.qsize()
+
     def start_conversion(self, job: ConversionJob, on_complete: Callable = None):
         """Queue a job for async conversion."""
         # Ensure worker is running
@@ -668,9 +689,102 @@ class ConverterService:
 
         return chunks
 
+    def generate_chunks_for_document(self, doc, settings: Dict[str, Any] = None) -> List[Dict]:
+        """
+        Generate RAG chunks for a DoclingDocument on demand.
+        Uses chunking settings from settings, or defaults if not provided.
+        """
+        chunks = []
+        if not CHUNKING_AVAILABLE:
+            return chunks
+
+        settings = settings or {}
+        chunking_settings = settings.get("chunking", {})
+        # For on-demand generation, always generate (ignore enabled flag)
+        max_tokens = chunking_settings.get("max_tokens", 512)
+        merge_peers = chunking_settings.get("merge_peers", True)
+
+        try:
+            chunker = HybridChunker(merge_peers=merge_peers)
+            for i, chunk in enumerate(chunker.chunk(doc)):
+                chunk_data = {
+                    "id": i + 1,
+                    "text": chunk.text,
+                    "meta": {}
+                }
+                if hasattr(chunk, 'meta'):
+                    if hasattr(chunk.meta, 'headings'):
+                        chunk_data["meta"]["headings"] = chunk.meta.headings
+                    if hasattr(chunk.meta, 'page'):
+                        chunk_data["meta"]["page"] = chunk.meta.page
+                chunks.append(chunk_data)
+        except Exception as e:
+            print(f"Error generating chunks: {e}")
+
+        return chunks
+
     def _run_conversion(self, job: ConversionJob, on_complete: Callable = None):
         """Run the actual conversion process."""
+        from utils.system_info import sample_cpu_during_conversion
+
+        # Content-addressed cache check: skip conversion if we have identical content
         try:
+            file_hash = compute_file_hash(job.input_path)
+            settings_hash = compute_settings_hash(job.settings)
+            content_hash = compute_content_hash(file_hash, settings_hash)
+            if content_store_exists(content_hash):
+                content_store_path = get_content_store_path(content_hash)
+                output_base = Path(OUTPUT_FOLDER) / job.id
+                if output_base.exists():
+                    shutil.rmtree(output_base)
+                output_base.symlink_to(content_store_path)
+                meta = load_metadata(content_hash)
+                if meta:
+                    output_paths_rel = meta.get("output_paths", {})
+                    job.output_paths = {
+                        k: str(output_base / v) for k, v in output_paths_rel.items()
+                    }
+                    doc_path_rel = meta.get("document_json_path", "")
+                    job.document_json_path = str(output_base / doc_path_rel) if doc_path_rel else None
+                    job.extracted_images = []
+                    for img in meta.get("extracted_images", []):
+                        img_copy = dict(img)
+                        if "path" in img_copy and img_copy["path"]:
+                            img_copy["path"] = str(output_base / img_copy["path"])
+                        job.extracted_images.append(img_copy)
+                    job.extracted_tables = []
+                    for tbl in meta.get("extracted_tables", []):
+                        tbl_copy = dict(tbl)
+                        for key in ("csv_path", "image_path"):
+                            if key in tbl_copy and tbl_copy[key]:
+                                tbl_copy[key] = str(output_base / tbl_copy[key])
+                        job.extracted_tables.append(tbl_copy)
+                    job.chunks = meta.get("chunks", [])
+                    job.page_count = meta.get("page_count", 0)
+                    job.confidence = meta.get("confidence")
+                job.content_hash = content_hash
+                job.status = ConversionStatus.COMPLETED
+                job.progress = 100
+                job.message = "Conversion completed (from cache)"
+                job.completed_at = datetime.utcnow()
+                if on_complete:
+                    on_complete(job)
+                return
+        except Exception as e:
+            print(f"[converter] Cache check skipped: {e}")
+
+        stop_event = threading.Event()
+        cpu_samples_container: list = []  # [list] - thread appends result here
+
+        def _sample_cpu():
+            samples = sample_cpu_during_conversion(stop_event)
+            cpu_samples_container.append(samples)
+
+        cpu_thread = None
+        try:
+            cpu_thread = threading.Thread(target=_sample_cpu, daemon=True)
+            cpu_thread.start()
+
             job.status = ConversionStatus.PROCESSING
             job.progress = 10
             job.message = "Starting document conversion..."
@@ -679,6 +793,7 @@ class ConverterService:
             ocr_enabled = job.settings.get("ocr", {}).get("enabled", True)
             ocr_language = job.settings.get("ocr", {}).get("language", "en")
             ocr_backend = job.settings.get("ocr", {}).get("backend", "easyocr")
+            job.ocr_backend_used = ocr_backend if ocr_enabled else "none"
 
             job.progress = 20
             if ocr_enabled:
@@ -723,6 +838,8 @@ class ConverterService:
                         converter = self._get_converter(fallback_settings)
                         job.progress = 30
                         result = converter.convert(job.input_path)
+                        job.ocr_backend_used = "none"
+                        job.settings = fallback_settings  # Use effective settings for content hash
                         job.message = "Converted without OCR (OCR initialization failed)"
                         print(f"[converter] Successfully converted without OCR")
                     except Exception as fallback_error:
@@ -862,6 +979,68 @@ class ConverterService:
                 except Exception as e:
                     print(f"[converter] Failed to save DoclingDocument: {e}")
 
+                # Content-addressed store: move to content store and symlink for deduplication
+                try:
+                    file_hash = compute_file_hash(job.input_path)
+                    settings_hash = compute_settings_hash(job.settings)
+                    content_hash = compute_content_hash(file_hash, settings_hash)
+                    content_store_path = get_content_store_path(content_hash)
+                    output_base_path = Path(OUTPUT_FOLDER) / job.id
+                    if content_store_path.exists():
+                        # Race: another job already stored this content
+                        shutil.rmtree(output_base_path)
+                        meta = load_metadata(content_hash)
+                    else:
+                        shutil.move(str(output_base_path), str(content_store_path))
+                        stem = Path(job.original_filename).stem
+                        meta = {
+                            "output_paths": {k: Path(v).name for k, v in job.output_paths.items()},
+                            "document_json_path": f"{stem}.document.json",
+                            "extracted_images": [],
+                            "extracted_tables": [],
+                            "chunks": job.chunks or [],
+                            "page_count": job.page_count,
+                            "confidence": job.confidence,
+                        }
+                        for img in (job.extracted_images or []):
+                            img_copy = dict(img)
+                            if img_copy.get("path"):
+                                try:
+                                    img_copy["path"] = str(Path(img_copy["path"]).relative_to(content_store_path))
+                                except ValueError:
+                                    img_copy["path"] = Path(img_copy["path"]).name
+                            meta["extracted_images"].append(img_copy)
+                        for tbl in (job.extracted_tables or []):
+                            tbl_copy = dict(tbl)
+                            for key in ("csv_path", "image_path"):
+                                if tbl_copy.get(key):
+                                    try:
+                                        tbl_copy[key] = str(Path(tbl_copy[key]).relative_to(content_store_path))
+                                    except ValueError:
+                                        tbl_copy[key] = Path(tbl_copy[key]).name
+                            meta["extracted_tables"].append(tbl_copy)
+                        save_metadata(content_hash, meta)
+                    output_base_path.symlink_to(content_store_path)
+                    if meta:
+                        job.output_paths = {k: str(output_base_path / v) for k, v in meta["output_paths"].items()}
+                        job.document_json_path = str(output_base_path / meta["document_json_path"])
+                        job.extracted_images = [
+                            {**img, "path": str(output_base_path / img["path"]) if img.get("path") else img}
+                            for img in meta.get("extracted_images", [])
+                        ]
+                        job.extracted_tables = [
+                            {
+                                **tbl,
+                                "csv_path": str(output_base_path / tbl["csv_path"]) if tbl.get("csv_path") else None,
+                                "image_path": str(output_base_path / tbl["image_path"]) if tbl.get("image_path") else None,
+                            }
+                            for tbl in meta.get("extracted_tables", [])
+                        ]
+                    job.content_hash = content_hash
+                    print(f"[converter] Stored in content store {content_hash}")
+                except Exception as e:
+                    print(f"[converter] Content store save skipped: {e}")
+
                 job.progress = 100
                 job.status = ConversionStatus.COMPLETED
 
@@ -893,6 +1072,23 @@ class ConverterService:
             job.message = f"Conversion failed: {str(e)}"
 
         finally:
+            stop_event.set()
+            if cpu_thread:
+                cpu_thread.join(timeout=2.0)
+            cpu_samples = cpu_samples_container[0] if cpu_samples_container else []
+            if cpu_samples:
+                job.cpu_usage_avg_during_conversion = round(sum(cpu_samples) / len(cpu_samples), 1)
+            # Record performance device: resolve "auto" to actual hardware at completion
+            perf_setting = (job.settings.get("performance") or {}).get("device", "auto")
+            if perf_setting == "auto":
+                try:
+                    from utils.system_info import get_hardware_type
+                    job.performance_device_used = get_hardware_type().get("type", "auto")
+                except Exception:
+                    job.performance_device_used = "auto"
+            else:
+                job.performance_device_used = perf_setting
+            job.images_classify_enabled = (job.settings.get("images") or {}).get("classify", False)
             job.completed_at = datetime.utcnow()
             if on_complete:
                 on_complete(job)

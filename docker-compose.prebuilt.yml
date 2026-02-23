@@ -7,7 +7,7 @@
 
 services:
   backend:
-    image: ${DOCKER_REGISTRY:-davidgs}/duckling-backend:${VERSION:-latest}
+    image: ${DOCKER_REGISTRY:-santafen}/duckling-backend:${VERSION:-latest}
     container_name: duckling-backend
     ports:
       - "5001:5001"
@@ -33,7 +33,7 @@ services:
       - duckling-network
 
   frontend:
-    image: ${DOCKER_REGISTRY:-davidgs}/duckling-frontend:${VERSION:-latest}
+    image: ${DOCKER_REGISTRY:-santafen}/duckling-frontend:${VERSION:-latest}
     container_name: duckling-frontend
     ports:
       - "3000:3000"

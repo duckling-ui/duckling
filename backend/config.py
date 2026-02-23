@@ -57,6 +57,8 @@ else:
 # Ensure directories exist (with parents to handle Docker volume mounts)
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
+CONTENT_STORE = OUTPUT_FOLDER / "_content"
+CONTENT_STORE.mkdir(parents=True, exist_ok=True)
 
 # Database configuration
 DATABASE_PATH = BACKEND_DIR / "history.db"

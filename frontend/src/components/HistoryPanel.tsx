@@ -39,12 +39,14 @@ interface HistoryPanelProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectEntry: (entry: HistoryEntry) => void;
+  onOpenStats?: () => void;
 }
 
 export default function HistoryPanel({
   isOpen,
   onClose,
   onSelectEntry,
+  onOpenStats,
 }: HistoryPanelProps) {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
@@ -163,7 +165,7 @@ export default function HistoryPanel({
 
             {/* Stats */}
             {statsQuery.data && (
-              <div className="px-6 py-4 border-b border-dark-800">
+              <div className="px-6 py-4 border-b border-dark-800 space-y-4">
                 <div className="grid grid-cols-3 gap-4">
                   <StatCard
                     label={t("historyPanel.total")}
@@ -180,6 +182,36 @@ export default function HistoryPanel({
                     color="red"
                   />
                 </div>
+                {(statsQuery.data.conversions.avg_processing_seconds != null ||
+                  (statsQuery.data.queue_depth != null &&
+                    statsQuery.data.queue_depth > 0) ||
+                  onOpenStats) && (
+                  <div className="flex flex-wrap items-center gap-4 text-sm text-dark-400">
+                    {statsQuery.data.conversions.avg_processing_seconds != null && (
+                      <span>
+                        {t("historyPanel.avgProcessingTime")}:{" "}
+                        {formatDuration(
+                          statsQuery.data.conversions.avg_processing_seconds
+                        )}
+                      </span>
+                    )}
+                    {statsQuery.data.queue_depth != null &&
+                      statsQuery.data.queue_depth > 0 && (
+                        <span>
+                          {t("historyPanel.queueDepth")}:{" "}
+                          {statsQuery.data.queue_depth}
+                        </span>
+                      )}
+                    {onOpenStats && (
+                      <button
+                        onClick={onOpenStats}
+                        className="text-primary-400 hover:text-primary-300 transition-colors underline"
+                      >
+                        {t("historyPanel.viewFullStats")}
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             )}
 
@@ -269,6 +301,15 @@ export default function HistoryPanel({
       )}
     </AnimatePresence>
   );
+}
+
+function formatDuration(seconds: number): string {
+  if (seconds < 60) {
+    return `${seconds.toFixed(1)}s`;
+  }
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.round(seconds % 60);
+  return secs > 0 ? `${mins}m ${secs}s` : `${mins}m`;
 }
 
 // Stat Card Component

@@ -31,6 +31,7 @@ import ConversionProgress from "./components/ConversionProgress";
 import ExportOptions from "./components/ExportOptions";
 import SettingsPanel from "./components/SettingsPanel";
 import HistoryPanel from "./components/HistoryPanel";
+import StatsPanel from "./components/StatsPanel";
 import DocsPanel from "./components/DocsPanel";
 import { convertFromUrl, convertFromUrlsBatch } from "./services/api";
 import type { HistoryEntry, ConversionResult } from "./types";
@@ -42,6 +43,7 @@ export default function App() {
   const { t, i18n } = useTranslation();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [statsOpen, setStatsOpen] = useState(false);
   const [docsOpen, setDocsOpen] = useState(false);
   const [batchModeEnabled, setBatchModeEnabled] = useState(false);
 
@@ -231,6 +233,25 @@ export default function App() {
                   </svg>
                   {t("actions.batch")}
                 </span>
+              </button>
+              <button
+                onClick={() => setStatsOpen(true)}
+                className="p-2.5 hover:bg-dark-800 rounded-lg transition-colors group"
+                title={t("actions.stats")}
+              >
+                <svg
+                  className="w-5 h-5 text-dark-400 group-hover:text-dark-200"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"
+                  />
+                </svg>
               </button>
               <button
                 onClick={() => setDocsOpen(true)}
@@ -546,6 +567,14 @@ export default function App() {
         isOpen={historyOpen}
         onClose={() => setHistoryOpen(false)}
         onSelectEntry={handleHistorySelect}
+        onOpenStats={() => {
+          setHistoryOpen(false);
+          setStatsOpen(true);
+        }}
+      />
+      <StatsPanel
+        isOpen={statsOpen}
+        onClose={() => setStatsOpen(false)}
       />
       <DocsPanel isOpen={docsOpen} onClose={() => setDocsOpen(false)} />
     </div>

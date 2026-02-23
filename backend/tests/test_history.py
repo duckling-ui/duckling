@@ -86,6 +86,18 @@ class TestHistoryService:
         entry = service.get_entry("nonexistent")
         assert entry is None
 
+    def test_create_entry_with_source_type(self):
+        """Test creating entry with source_type."""
+        service = HistoryService()
+        entry = service.create_entry(
+            job_id="test-source-type",
+            filename="test.pdf",
+            original_filename="test.pdf",
+            source_type="upload",
+        )
+        assert entry is not None
+        assert entry.get("source_type") == "upload"
+
     def test_update_status(self):
         """Test updating entry status."""
         service = HistoryService()
@@ -104,6 +116,32 @@ class TestHistoryService:
         assert updated["status"] == "completed"
         assert updated["confidence"] == 0.95
         assert updated["completed_at"] is not None
+
+    def test_update_status_with_metrics(self):
+        """Test updating status with processing metrics."""
+        service = HistoryService()
+        service.create_entry(
+            job_id="test-metrics",
+            filename="test.pdf",
+            original_filename="test.pdf"
+        )
+        updated = service.update_status(
+            job_id="test-metrics",
+            status="completed",
+            processing_duration_seconds=12.5,
+            ocr_backend_used="easyocr",
+            page_count=5,
+            cpu_usage_avg_during_conversion=45.2,
+            performance_device_used="cpu",
+            images_classify_enabled=True,
+        )
+        assert updated is not None
+        assert updated.get("processing_duration_seconds") == 12.5
+        assert updated.get("ocr_backend_used") == "easyocr"
+        assert updated.get("page_count") == 5
+        assert updated.get("cpu_usage_avg_during_conversion") == 45.2
+        assert updated.get("performance_device_used") == "cpu"
+        assert updated.get("images_classify_enabled") == "true"
 
     def test_update_status_with_error(self):
         """Test updating entry status with error."""
@@ -252,6 +290,9 @@ class TestHistoryService:
         assert "completed" in stats
         assert "failed" in stats
         assert "format_breakdown" in stats
+        assert "avg_processing_seconds" in stats
+        assert "ocr_backend_breakdown" in stats
+        assert "source_type_breakdown" in stats
 
     def test_search(self):
         """Test searching entries."""
@@ -512,6 +553,18 @@ class TestConversionModel:
 
         d = conversion.to_dict()
         assert d["document_json_path"] == "/path/to/document.json"
+
+    def test_to_dict_with_content_hash(self):
+        """Test converting model to dictionary with content_hash."""
+        conversion = Conversion(
+            id="test-content-hash",
+            filename="test.pdf",
+            original_filename="test.pdf",
+            content_hash="abc123def456",
+        )
+
+        d = conversion.to_dict()
+        assert d["content_hash"] == "abc123def456"
 
     def test_set_and_get_settings(self):
         """Test setting and getting settings."""
