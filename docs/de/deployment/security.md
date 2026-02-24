@@ -4,7 +4,7 @@ Sicherheitsbestimmungen und Härtungsleitfaden für Duckling.
 
 ## Zusammenfassung des Sicherheitsaudits
 
-Letztes Audit: Dezember 2024
+Letztes Audit: Dezember 2025
 
 ### Status der Schwachstellen
 

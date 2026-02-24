@@ -406,16 +406,6 @@ Access previously converted documents:
 
 - **Search**: Find documents by filename
 - **Filter**: Filter by status (completed, failed)
-- **Statistics**: View success rates and format breakdown
-- **Statistics Panel**: Dedicated viewer (header button) for full conversion analytics
-  - Overview metrics, storage usage, input/OCR/output format breakdowns
-  - Performance device and source type breakdowns
-  - System section: hardware type (CPU/CUDA/MPS), CPU count, current CPU usage (Duckling backend, runs Docling), GPU info
-  - Average pages/sec and pages/sec per CPU
-  - Conversion time distribution (median, 95th, 99th percentile)
-  - Pages/sec over time chart
-  - Performance by hardware, OCR backend, and image classifier (pages/sec vs conversion time per config)
-  - "View full statistics" link in History panel
 - **Export**: Download history as JSON
 - **Reload Documents**: Click on completed history entries to reload the converted document without re-conversion
   - Documents are automatically stored on disk after conversion
@@ -424,4 +414,32 @@ Access previously converted documents:
 - **Generate Chunks Now**: When no RAG chunks exist, generate them on demand using current chunking settings (no re-conversion needed)
   - Conversions with matching file content and document-affecting settings (OCR, tables, images) complete instantly from cache
   - Outputs are stored once in a content-addressed store and shared via symlinks
+
+### Statistics Panel
+
+A dedicated slide-in panel for full conversion analytics. Open via the **Statistics** button in the header or the **View full statistics** link in the History panel.
+
+**Overview:**
+
+- Total conversions, success/failed counts, success rate
+- Average processing time and queue depth
+
+**Storage usage:**
+
+- Uploads, outputs, and total storage
+
+**Breakdowns:**
+
+- Input formats, OCR backends, output formats
+- Performance devices (CPU/CUDA/MPS), source types
+- Error categories
+- Chunking-enabled count
+
+**Extended metrics:**
+
+- **System**: Hardware type (CPU/CUDA/MPS), CPU count, current CPU usage (Duckling backend process), GPU info
+- **Throughput**: Average pages/sec and pages/sec per CPU
+- **Conversion time distribution**: Median, 95th, and 99th percentile
+- **Pages/sec over time**: Chart showing throughput over conversion history
+- **Performance by config**: Pages/sec and conversion time by hardware, OCR backend, and image classifier
 

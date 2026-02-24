@@ -8,6 +8,66 @@ Eine moderne, benutzerfreundliche Web-Oberfläche für [Docling](https://github.
 
 Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konvertieren. Ob du Text aus PDFs extrahieren, Word-Dokumente nach Markdown konvertieren oder OCR für gescannte Bilder nutzen möchtest: Duckling macht es einfach.
 
+## Hauptfunktionen
+
+<div class="grid cards" markdown>
+
+-   :material-cursor-move:{ .lg .middle } __Drag-and-Drop-Upload__
+
+    ---
+
+    Ziehen Sie Ihre Dokumente einfach auf die Oberfläche für sofortige Verarbeitung
+
+-   :material-file-multiple:{ .lg .middle } __Stapelverarbeitung__
+
+    ---
+
+    Konvertieren Sie mehrere Dateien gleichzeitig mit paralleler Verarbeitung
+
+-   :material-format-list-bulleted:{ .lg .middle } __Multi-Format-Unterstützung__
+
+    ---
+
+    PDFs, Word-Dokumente, PowerPoints, Excel-Dateien, HTML, Markdown, Bilder und mehr
+
+-   :material-export:{ .lg .middle } __Mehrere Exportformate__
+
+    ---
+
+    Exportieren Sie nach Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks oder Klartext
+
+-   :material-image-multiple:{ .lg .middle } __Bild- und Tabellenextraktion__
+
+    ---
+
+    Extrahieren Sie eingebettete Bilder und Tabellen mit CSV-Export
+
+-   :material-puzzle:{ .lg .middle } __RAG-optimiertes Chunking__
+
+    ---
+
+    Generieren Sie Dokument-Segmente, die für RAG-Anwendungen optimiert sind
+
+-   :material-eye:{ .lg .middle } __Erweiterte OCR__
+
+    ---
+
+    Mehrere OCR-Backends mit GPU-Beschleunigungsunterstützung
+
+-   :material-history:{ .lg .middle } __Konvertierungsverlauf__
+
+    ---
+
+    Greifen Sie jederzeit auf zuvor konvertierte Dokumente zu
+
+-   :material-chart-line:{ .lg .middle } __Konvertierungsstatistiken__
+
+    ---
+
+    Analyse-Panel mit Durchsatz, Speichernutzung und Leistungsmetriken
+
+</div>
+
 ## Schnellstart
 
 Siehe **Getting Started**, um Duckling mit Docker oder lokal in der Entwicklung zu installieren und auszuführen.

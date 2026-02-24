@@ -4,7 +4,7 @@ Mejores prácticas de seguridad y guía de endurecimiento para Duckling.
 
 ## Resumen de la auditoría de seguridad
 
-Última auditoría: diciembre de 2024
+Última auditoría: diciembre de 2025
 
 ### Estado de las vulnerabilidades
 

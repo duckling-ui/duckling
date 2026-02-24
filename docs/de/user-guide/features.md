@@ -406,9 +406,40 @@ Access previously converted documents:
 
 - **Suche**: Dokumente nach Dateiname finden
 - **Filter**: Nach Status filtern (abgeschlossen, fehlgeschlagen)
-- **Statistiken**: Erfolgsraten und Formataufschlüsselung anzeigen
 - **Export**: Verlauf als JSON herunterladen
 - **Dokumente neu laden**: Klicken Sie auf abgeschlossene Verlaufseinträge, um das konvertierte Dokument ohne Neu-Konvertierung zu laden
   - Dokumente werden automatisch nach der Konvertierung auf der Festplatte gespeichert
   - Die vollständige Dokumentstruktur wird erhalten und kann sofort neu geladen werden
+- **Inhalts-Deduplizierung**: Gleiche Datei mit identischen Einstellungen verwendet gespeicherte Ausgabe erneut
+- **Chunks jetzt generieren**: Wenn keine RAG-Chunks existieren, können diese bei Bedarf mit aktuellen Chunking-Einstellungen generiert werden (ohne Neu-Konvertierung)
+  - Konvertierungen mit übereinstimmendem Dateiinhalt und dokumentenrelevanten Einstellungen (OCR, Tabellen, Bilder) werden sofort aus dem Cache abgeschlossen
+  - Ausgaben werden einmal in einem inhaltsadressierten Speicher gespeichert und per Symlinks geteilt
+
+### Statistik-Panel
+
+Ein dediziertes Schiebepanel für vollständige Konvertierungsanalysen. Öffnen Sie es über die **Statistiken**-Schaltfläche in der Kopfzeile oder den Link **Vollständige Statistiken anzeigen** im Verlaufs-Panel.
+
+**Übersicht:**
+
+- Gesamtkonvertierungen, Erfolgs-/Fehlschlag-Zählungen, Erfolgsrate
+- Durchschnittliche Verarbeitungszeit und Warteschlangentiefe
+
+**Speichernutzung:**
+
+- Uploads, Ausgaben und Gesamtspeicher
+
+**Aufschlüsselungen:**
+
+- Eingabeformate, OCR-Backends, Ausgabeformate
+- Leistungsgeräte (CPU/CUDA/MPS), Quelltypen
+- Fehlerkategorien
+- Chunking-aktivierte Anzahl
+
+**Erweiterte Metriken:**
+
+- **System**: Hardware-Typ (CPU/CUDA/MPS), CPU-Anzahl, aktuelle CPU-Auslastung (Duckling-Backend-Prozess), GPU-Info
+- **Durchsatz**: Durchschnittliche Seiten/Sekunde und Seiten/Sekunde pro CPU
+- **Konvertierungszeitverteilung**: Median, 95. und 99. Perzentil
+- **Seiten/Sekunde über Zeit**: Diagramm des Durchsatzes über den Konvertierungsverlauf
+- **Leistung nach Konfiguration**: Seiten/Sekunde und Konvertierungszeit nach Hardware, OCR-Backend und Bildklassifikator
 
