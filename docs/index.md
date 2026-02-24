@@ -60,6 +60,12 @@ Duckling provides an intuitive web interface for converting documents using IBM'
 
     Access previously converted documents anytime
 
+-   :material-chart-line:{ .lg .middle } __Conversion Statistics__
+
+    ---
+
+    Analytics panel with throughput, storage usage, and performance metrics
+
 </div>
 
 ## Quick Start

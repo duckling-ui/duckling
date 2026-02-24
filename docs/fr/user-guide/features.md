@@ -406,9 +406,40 @@ Access previously converted documents:
 
 - **Recherche**: Trouver des documents par nom de fichier
 - **Filtre**: Filtrer par statut (terminé, échoué)
-- **Statistiques**: Voir les taux de réussite et la répartition des formats
 - **Export**: Télécharger l'historique en JSON
 - **Recharger les documents**: Cliquez sur les entrées d'historique terminées pour recharger le document converti sans re-conversion
   - Les documents sont automatiquement stockés sur disque après conversion
   - La structure complète du document est préservée et peut être rechargée instantanément
+- **Déduplication du contenu**: Même fichier avec paramètres identiques réutilise la sortie stockée
+- **Générer les chunks maintenant**: Lorsqu'aucun chunk RAG n'existe, générez-les à la demande avec les paramètres de chunking actuels (sans re-conversion)
+  - Les conversions avec contenu de fichier et paramètres affectant le document (OCR, tableaux, images) correspondants se terminent instantanément depuis le cache
+  - Les sorties sont stockées une fois dans un magasin à adressage de contenu et partagées via des liens symboliques
+
+### Panneau des statistiques
+
+Un panneau coulissant dédié pour les analyses complètes de conversion. Ouvrez-le via le bouton **Statistiques** dans l'en-tête ou le lien **Voir les statistiques complètes** dans le panneau Historique.
+
+**Vue d'ensemble :**
+
+- Conversions totales, comptages succès/échecs, taux de réussite
+- Temps de traitement moyen et profondeur de la file d'attente
+
+**Utilisation du stockage :**
+
+- Téléchargements, sorties et stockage total
+
+**Répartitions :**
+
+- Formats d'entrée, backends OCR, formats de sortie
+- Périphériques de performance (CPU/CUDA/MPS), types de source
+- Catégories d'erreurs
+- Nombre avec chunking activé
+
+**Métriques étendues :**
+
+- **Système** : Type de matériel (CPU/CUDA/MPS), nombre de CPU, utilisation CPU actuelle (processus backend Duckling), infos GPU
+- **Débit** : Pages/sec moyennes et pages/sec par CPU
+- **Distribution du temps de conversion** : Médiane, 95e et 99e percentiles
+- **Pages/sec dans le temps** : Graphique du débit sur l'historique des conversions
+- **Performance par configuration** : Pages/sec et temps de conversion par matériel, backend OCR et classificateur d'images
 

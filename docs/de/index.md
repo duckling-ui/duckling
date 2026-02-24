@@ -60,6 +60,12 @@ Duckling bietet eine intuitive Web-Oberfläche zur Konvertierung von Dokumenten 
 
     Greifen Sie jederzeit auf zuvor konvertierte Dokumente zu
 
+-   :material-chart-line:{ .lg .middle } __Konvertierungsstatistiken__
+
+    ---
+
+    Analyse-Panel mit Durchsatz, Speichernutzung und Leistungsmetriken
+
 </div>
 
 ## Schnellstart

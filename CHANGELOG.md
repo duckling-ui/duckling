@@ -5,7 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+**Latest release:** [0.0.10](https://github.com/davidgs/duckling/releases/tag/v0.0.10) (2026-02-24)
+
 ## [Unreleased]
+
+### Planned
+
+- User authentication
+- Cloud storage integration
+- Conversion templates
+- API rate limiting
+- WebSocket for real-time updates
+- Dark/light theme toggle
+- Keyboard shortcuts
+- Accessibility improvements (WCAG 2.1)
+
+## [0.0.10] - 2026-02-24
 
 ### Added
 
@@ -68,21 +83,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Runs automatically on application startup
 - **Docling docs**: Added a curated Docling documentation section to the MkDocs site (vendored subset + sync script).
 
-### Security
-
-- **Hardened history load path handling**: `GET /api/history/{job_id}/load` now strictly validates `job_id` and constructs output paths using a safe-join + resolved-path containment check to prevent path traversal.
-
-### Fixed
-
-- **History load fallback crash**: Fixed an uninitialized `output_dir` reference when reconstructing results from disk (when stored document JSON is missing).
-- **Docs panel navigation sync**: Footer prev/next links now navigate within the in-app docs sidebar category, and navigating inside the embedded docs keeps the sidebar selection in sync.
-- **Docs rebuild error**: Fixed docs rebuild failing with `cannot access local variable 'shutil'` when building the MkDocs site.
-- **Docs rebuild environment mismatch**: Backend docs rebuild now prefers the repo-local `./venv` MkDocs environment to ensure required plugins (like `i18n`) are available.
-- **History panel load**: Fixed clicking a history entry not loading the document; now uses `/history/{id}/load` (disk) instead of `/convert/{id}/result` (in-memory).
-- **History load for all entries**: When `document_json_path` is missing in the DB, history load now finds and loads `*.document.json` from the output directory so all history items load, not just the first.
-- **Document panel not updating**: Fixed document viewing panel not refreshing when loading a different history item; now uses `key={result.job_id}` so the component remounts with fresh state.
-
-## [2.4.1] - 2026-01-26
+- **Internationalization (UI)**: Added French (`fr`) and German (`de`) UI translations (in addition to English/Spanish).
+- **Internationalization (Docs)**: Added MkDocs multilingual documentation with `/en/`, `/es/`, `/fr/`, `/de/` locale paths served by the backend docs viewer.
+- **Dropzone I18N**: Added internationalization strings for dropzone panel category labels (Documents, Web, Images, Data) in all supported languages.
+- **Session-Based User Settings**: User settings are now stored per-session in the database instead of a shared file
+  - Each user gets isolated settings based on their session ID
+  - Prevents settings conflicts in multi-user deployments
+  - Automatic migration from legacy `user_settings.json` file
+  - Settings persist across server restarts (database-backed)
 
 ### Security
 
@@ -91,9 +99,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated `vitest`: 1.6.1 → 4.0.18 (major update, fixes esbuild vulnerability)
   - Updated `@vitest/coverage-v8`: 1.6.1 → 4.0.18
   - Updated `@vitejs/plugin-react`: 4.7.0 → 5.1.2
+- **Hardened history load path handling**: `GET /api/history/{job_id}/load` now strictly validates `job_id` and constructs output paths using a safe-join + resolved-path containment check to prevent path traversal.
 
 ### Changed
 
+- **Backend Entry Point**: Renamed `app.py` to `duckling.py` throughout the codebase
+  - Flask application now uses `Flask("duckling")` instead of `Flask(__name__)`
+  - Updated all references in Dockerfiles, documentation, tests, and configuration files
+  - Gunicorn now uses `duckling:app` instead of `app:app`
 - **Updated frontend dependencies** (non-breaking updates):
   - `@tanstack/react-query`: 5.90.12 → 5.90.20 (patch)
   - `axios`: 1.13.2 → 1.13.3 (patch)
@@ -104,16 +117,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **History load fallback crash**: Fixed an uninitialized `output_dir` reference when reconstructing results from disk (when stored document JSON is missing).
+- **Docs panel navigation sync**: Footer prev/next links now navigate within the in-app docs sidebar category, and navigating inside the embedded docs keeps the sidebar selection in sync.
+- **Docs rebuild error**: Fixed docs rebuild failing with `cannot access local variable 'shutil'` when building the MkDocs site.
+- **Docs rebuild environment mismatch**: Backend docs rebuild now prefers the repo-local `./venv` MkDocs environment to ensure required plugins (like `i18n`) are available.
+- **History panel load**: Fixed clicking a history entry not loading the document; now uses `/history/{id}/load` (disk) instead of `/convert/{id}/result` (in-memory).
+- **History load for all entries**: When `document_json_path` is missing in the DB, history load now finds and loads `*.document.json` from the output directory so all history items load, not just the first.
+- **Document panel not updating**: Fixed document viewing panel not refreshing when loading a different history item; now uses `key={result.job_id}` so the component remounts with fresh state.
+- **Documentation Localization**: Fixed incomplete localization in documentation navigation
+  - Added comprehensive translation mappings for all common page names (conversion, history, settings, components, diagrams, etc.)
+  - Improved H1 title extraction from HTML with better regex patterns and error handling
+  - Fixed fallback logic to use translated page names instead of English slug-based titles
+  - Navigation now displays fully localized page names in Spanish, French, and German
+- **Dropzone Category Labels**: Fixed missing I18N strings for file format category labels in the dropzone panel
+  - Category labels (Documents, Web, Images, Data) now properly translate based on selected language
+  - Added translations for all supported languages (en, es, fr, de)
 - Updated `vitest.config.ts` for Vitest 4 compatibility (added `coverage.include` configuration)
 - Updated CI/CD Node.js version requirement to 22 (required for Vite 7)
 
-## [2.4.0] - 2026-01-08
+## [0.0.9] - 2026-01-08
 
 ### Added
 
 - **Custom Branding**: Updated UI with Duckling logo and version display
   - Custom duckling.png logo in header and favicon
-  - Version badge (v0.0.4) displayed next to app name
+  - Version badge displayed next to app name (reads from package.json)
   - Logo used in MkDocs documentation site
 
 - **URL-Based Document Conversion**: Convert documents directly from URLs
@@ -250,7 +278,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **OCR Backend Selection**: Changing OCR backend in settings now works correctly
   - Settings are properly loaded and applied during conversion
 
-## [2.3.0] - 2026-01-07
+## [0.0.8] - 2026-01-07
 
 ### Changed
 
@@ -258,7 +286,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated all documentation, code, and configuration files
   - Branding updated throughout the application
 
-## [2.2.0] - 2026-01-07
+## [0.0.7] - 2026-01-07
 
 ### Added
 
@@ -284,7 +312,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All Mermaid diagrams now render live in the documentation
 - Improved code examples with syntax highlighting
 
-## [2.1.0] - 2024-12-11
+## [0.0.6] - 2025-12-11
 
 ### Security
 
@@ -312,7 +340,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Backend now uses environment variables for all security-sensitive configuration
 - Default host changed from `0.0.0.0` to `127.0.0.1` for safer defaults
 
-## [2.0.0] - 2024-12-10
+## [0.0.5] - 2025-12-10
 
 ### Added
 
@@ -404,7 +432,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Confidence score calculation now uses cluster-level predictions
 - Better handling of partial conversion success
 
-## [1.1.0] - 2024-12-10
+## [0.0.4] - 2025-12-10
 
 ### Added
 
@@ -419,7 +447,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated converter service to use configurable pipeline options
 - Enhanced settings panel with OCR options
 
-## [1.0.0] - 2024-12-10
+## [0.0.3] - 2025-12-10
 
 ### Added
 
@@ -483,46 +511,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maximum file size limits (100MB default)
 - Secure filename handling
 
-## [Unreleased]
-
-### Added
-
-- **Internationalization (UI)**: Added French (`fr`) and German (`de`) UI translations (in addition to English/Spanish).
-- **Internationalization (Docs)**: Added MkDocs multilingual documentation with `/en/`, `/es/`, `/fr/`, `/de/` locale paths served by the backend docs viewer.
-- **Dropzone I18N**: Added internationalization strings for dropzone panel category labels (Documents, Web, Images, Data) in all supported languages.
-- **Session-Based User Settings**: User settings are now stored per-session in the database instead of a shared file
-  - Each user gets isolated settings based on their session ID
-  - Prevents settings conflicts in multi-user deployments
-  - Automatic migration from legacy `user_settings.json` file
-  - Settings persist across server restarts (database-backed)
-
-### Fixed
-
-- **Documentation Localization**: Fixed incomplete localization in documentation navigation
-  - Added comprehensive translation mappings for all common page names (conversion, history, settings, components, diagrams, etc.)
-  - Improved H1 title extraction from HTML with better regex patterns and error handling
-  - Fixed fallback logic to use translated page names instead of English slug-based titles
-  - Navigation now displays fully localized page names in Spanish, French, and German
-- **Dropzone Category Labels**: Fixed missing I18N strings for file format category labels in the dropzone panel
-  - Category labels (Documents, Web, Images, Data) now properly translate based on selected language
-  - Added translations for all supported languages (en, es, fr, de)
-
-### Changed
-
-- **Backend Entry Point**: Renamed `app.py` to `duckling.py` throughout the codebase
-  - Flask application now uses `Flask("duckling")` instead of `Flask(__name__)`
-  - Updated all references in Dockerfiles, documentation, tests, and configuration files
-  - Gunicorn now uses `duckling:app` instead of `app:app`
-  - Flask CLI now shows "Serving Flask app 'duckling'" instead of "Serving Flask app 'app'"
-
-### Planned
-
-- User authentication
-- Cloud storage integration
-- Conversion templates
-- API rate limiting
-- WebSocket for real-time updates
-- Dark/light theme toggle
-- Keyboard shortcuts
-- Accessibility improvements (WCAG 2.1)
-
+[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10...HEAD
+[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
+[0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
+[0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
+[0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7
+[0.0.6]: https://github.com/davidgs/duckling/compare/v0.0.5...v0.0.6
+[0.0.5]: https://github.com/davidgs/duckling/compare/v0.0.4...v0.0.5
+[0.0.4]: https://github.com/davidgs/duckling/compare/v0.0.3...v0.0.4
+[0.0.3]: https://github.com/davidgs/duckling/releases/tag/v0.0.3

@@ -24,7 +24,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Backend-Einstiegspunkt von `app.py` zu `duckling.py` umbenannt für bessere Klarheit.
 - Flask-Anwendungsname zu "duckling" geändert (zeigt "Serving Flask app 'duckling'").
 
-## [2.3.0] - 2026-01-07
+## [0.0.10] - 2026-02-24
+
+### Security
+
+- Frontend-Sicherheitslücken behoben (esbuild GHSA-67mh-4wv8-2f99): Vite 5→7, Vitest 1→4 und zugehörige Abhängigkeiten aktualisiert.
+
+### Fixed
+
+- `vitest.config.ts` für Vitest 4-Kompatibilität aktualisiert.
+- CI/CD Node.js-Versionsanforderung auf 22 aktualisiert (erforderlich für Vite 7).
+
+## [0.0.9] - 2026-01-08
+
+### Added
+
+- **Custom Branding**: Duckling-Logo und Versionsanzeige in der Kopfzeile.
+- **URL-basierte Dokumentenkonvertierung**: Konvertierung von URLs mit automatischer Bildextraktion für HTML.
+- **Dokumentenanreicherungsoptionen**: Code-, Formel-, Bildklassifizierung und Bildbeschreibung.
+- **Enrichment-Modell-Vorab-Download**: KI-Modelle vor der Verarbeitung herunterladen.
+- **Bildvorschau-Galerie**: Visuelle Miniaturansichten mit Lightbox-Viewer.
+- **OCR-Backend-Auto-Installation**: Ein-Klick-Installation für pip-installierbare Backends.
+- **Format-spezifische Vorschau**: Vorschau-Panel zeigt Inhalt im gewählten Exportformat.
+- **Gerendert vs. Roh-Vorschau-Modus**: Umschalter für HTML und Markdown.
+- **Erweiterte Docker-Unterstützung**: Multi-Stage-Dockerfiles, docker-compose-Varianten, Multi-Platform-Builds.
+
+### Fixed
+
+- Multi-Worker-Inhaltsabruf (Bilder, Tabellen, Ergebnisse).
+- HTML-Vorschau in der UI.
+- URL-Bildextraktion für nicht in Anführungszeichen gesetzte `src`-Attribute.
+- Dokumentations-Panel bedient jetzt vorgefertigte MkDocs-Site.
+- Umgebungsvariablen und `.env`-Laden.
+- Groß-/kleinschreibungsunabhängige Dateiendungen.
+- Konfidenz-Score und OCR-Backend-Auswahl.
+
+## [0.0.8] - 2026-01-07
 
 ### Changed
 
@@ -32,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated all documentation, code, and configuration files
   - Branding updated throughout the application
 
-## [2.2.0] - 2026-01-07
+## [0.0.7] - 2026-01-07
 
 ### Added
 
@@ -47,7 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation structure reorganized for better navigation
 - All diagrams converted to Mermaid format for live rendering
 
-## [2.1.0] - 2024-12-11
+## [0.0.6] - 2025-12-11
 
 ### Security
 
@@ -75,7 +110,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Backend now uses environment variables for all security-sensitive configuration
 - Default host changed from `0.0.0.0` to `127.0.0.1` for safer defaults
 
-## [2.0.0] - 2024-12-10
+## [0.0.5] - 2025-12-10
 
 ### Added
 
@@ -148,7 +183,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Confidence score calculation now uses cluster-level predictions
 - Better handling of partial conversion success
 
-## [1.1.0] - 2024-12-10
+## [0.0.4] - 2025-12-10
 
 ### Added
 
@@ -163,7 +198,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated converter service to use configurable pipeline options
 - Enhanced settings panel with OCR options
 
-## [1.0.0] - 2024-12-10
+## [0.0.3] - 2025-12-10
 
 ### Added
 

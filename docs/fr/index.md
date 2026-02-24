@@ -60,6 +60,12 @@ Duckling fournit une interface Web intuitive pour convertir des documents en uti
 
     Accédez aux documents précédemment convertis à tout moment
 
+-   :material-chart-line:{ .lg .middle } __Statistiques de conversion__
+
+    ---
+
+    Panneau d'analytique avec débit, utilisation du stockage et métriques de performance
+
 </div>
 
 ## Démarrage rapide
