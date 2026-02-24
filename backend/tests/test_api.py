@@ -473,3 +473,15 @@ class TestErrorHandling:
         )
         assert response.status_code in [400, 500]
 
+
+class TestSecurityFileManager:
+    """Tests for file_manager path traversal prevention."""
+
+    def test_delete_output_folder_rejects_path_traversal(self, app):
+        """delete_output_folder returns False for invalid job_id (path traversal)."""
+        from services.file_manager import file_manager
+
+        assert file_manager.delete_output_folder("../../../etc/passwd") is False
+        assert file_manager.delete_output_folder("..\\..\\..\\etc\\passwd") is False
+        assert file_manager.delete_output_folder("job/with/slash") is False
+

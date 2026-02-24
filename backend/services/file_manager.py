@@ -31,6 +31,8 @@ from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 
 from config import UPLOAD_FOLDER, OUTPUT_FOLDER, CONTENT_STORE, Config
+from werkzeug.exceptions import NotFound
+from utils.security import validate_job_id, get_validated_output_dir
 
 
 class FileManager:
@@ -185,22 +187,15 @@ class FileManager:
         If it's a symlink to content store, removes only the symlink (not the content).
         """
         try:
-            # Security: Validate job_id doesn't contain path traversal characters
-            if ".." in job_id or "/" in job_id or "\\" in job_id:
-                return False
-            output_dir = Path(self.output_folder) / job_id
-            # Security: Validate path is within output_folder to prevent path traversal
-            try:
-                output_dir_resolved = output_dir.resolve()
-                output_folder_resolved = Path(self.output_folder).resolve()
-                output_dir_resolved.relative_to(output_folder_resolved)
-            except ValueError:
-                # Path traversal detected - path is outside output_folder
-                return False
+            validate_job_id(job_id)
+            output_dir = get_validated_output_dir(job_id, Path(self.output_folder))
+            output_dir_resolved = output_dir.resolve()
             if output_dir_resolved.exists():
                 # rmtree on a symlink removes the symlink, not the target
                 shutil.rmtree(output_dir_resolved)
                 return True
+        except NotFound:
+            return False
         except Exception:
             pass
         return False

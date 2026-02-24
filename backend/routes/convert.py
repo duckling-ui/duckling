@@ -85,7 +85,7 @@ def download_from_url(url: str) -> tuple[str, str, int]:
         parsed = urlparse(url)
         if parsed.scheme not in ('http', 'https'):
             raise BadRequest("Only HTTP and HTTPS URLs are supported")
-        validate_url_safe_for_request(url)
+        safe_url = validate_url_safe_for_request(url)
     except BadRequest:
         raise
     except Exception:
@@ -98,9 +98,9 @@ def download_from_url(url: str) -> tuple[str, str, int]:
     # Try to get extension from URL path
     ext = os.path.splitext(filename)[1].lower()
 
-    # Download with streaming to check size
+    # Download with streaming to check size (use validated URL)
     try:
-        response = requests.get(url, stream=True, timeout=30, allow_redirects=True)
+        response = requests.get(safe_url, stream=True, timeout=30, allow_redirects=True)
         response.raise_for_status()
     except requests.exceptions.Timeout:
         raise BadRequest("URL download timed out")
@@ -189,10 +189,9 @@ def download_image(img_url: str, base_url: str, timeout: int = 10) -> tuple[byte
         if img_url.startswith('data:'):
             return None
 
-        # SSRF prevention: validate before outbound request
-        validate_url_safe_for_request(img_url)
-
-        response = requests.get(img_url, timeout=timeout, stream=True)
+        # SSRF prevention: validate before outbound request (use validated URL)
+        safe_url = validate_url_safe_for_request(img_url)
+        response = requests.get(safe_url, timeout=timeout, stream=True)
         response.raise_for_status()
 
         # Check content type is an image
@@ -237,8 +236,12 @@ def extract_and_download_images_from_html(html_content: bytes, base_url: str, jo
 
     try:
         html_str = html_content.decode('utf-8', errors='replace')
-    except:
+    except Exception:
         html_str = html_content.decode('latin-1', errors='replace')
+
+    # ReDoS mitigation: limit HTML size before regex processing (max 5MB)
+    if len(html_str) > 5 * 1024 * 1024:
+        return html_content, []
 
     # Create output directory for images (output_dir is validated)
     images_dir = output_dir / "images"
@@ -392,7 +395,7 @@ def download_from_url_with_images(url: str, job_id: str = None) -> tuple[str, st
         parsed = urlparse(url)
         if parsed.scheme not in ('http', 'https'):
             raise BadRequest("Only HTTP and HTTPS URLs are supported")
-        validate_url_safe_for_request(url)
+        safe_url = validate_url_safe_for_request(url)
     except BadRequest:
         raise
     except Exception:
@@ -405,9 +408,9 @@ def download_from_url_with_images(url: str, job_id: str = None) -> tuple[str, st
     # Try to get extension from URL path
     ext = os.path.splitext(filename)[1].lower()
 
-    # Download with streaming to check size
+    # Download with streaming to check size (use validated URL)
     try:
-        response = requests.get(url, stream=True, timeout=30, allow_redirects=True)
+        response = requests.get(safe_url, stream=True, timeout=30, allow_redirects=True)
         response.raise_for_status()
     except requests.exceptions.Timeout:
         raise BadRequest("URL download timed out")

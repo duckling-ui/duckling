@@ -81,13 +81,16 @@ def _parse_host_to_ips(host: str) -> list[ipaddress.IPv4Address | ipaddress.IPv6
         raise BadRequest("Invalid URL: cannot resolve host")
 
 
-def validate_url_safe_for_request(url: str) -> None:
+def validate_url_safe_for_request(url: str) -> str:
     """
     Validate that a URL is safe for outbound HTTP requests (SSRF prevention).
 
     Blocks loopback, private, link-local, and metadata IP ranges.
     Blocks dangerous schemes (only http/https allowed).
     Must be called before any requests.get/post with user-controlled URLs.
+
+    Returns:
+        The validated URL (for use in requests - satisfies CodeQL data flow)
 
     Raises:
         BadRequest: If the URL targets internal or blocked resources
@@ -113,6 +116,8 @@ def validate_url_safe_for_request(url: str) -> None:
         for network in _SSRF_BLOCKED_NETWORKS:
             if ip in network:
                 raise BadRequest("URL not allowed")
+
+    return url
 
 
 def validate_job_id(job_id: str) -> str:

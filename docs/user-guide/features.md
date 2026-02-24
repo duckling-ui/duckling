@@ -442,3 +442,31 @@ A dedicated slide-in panel for full conversion analytics. Open via the **Statist
 - **Pages/sec over time**: Chart showing throughput over conversion history
 - **Performance by config**: Pages/sec and conversion time by hardware, OCR backend, and image classifier
 
+### Statistics Panel
+
+A dedicated slide-in panel for full conversion analytics. Open via the **Statistics** button in the header or the **View full statistics** link in the History panel.
+
+**Overview:**
+
+- Total conversions, success/failed counts, success rate
+- Average processing time and queue depth
+
+**Storage usage:**
+
+- Uploads, outputs, and total storage
+
+**Breakdowns:**
+
+- Input formats, OCR backends, output formats
+- Performance devices (CPU/CUDA/MPS), source types
+- Error categories
+- Chunking-enabled count
+
+**Extended metrics:**
+
+- **System**: Hardware type (CPU/CUDA/MPS), CPU count, current CPU usage (Duckling backend process), GPU info
+- **Throughput**: Average pages/sec and pages/sec per CPU
+- **Conversion time distribution**: Median, 95th, and 99th percentile
+- **Pages/sec over time**: Chart showing throughput over conversion history
+- **Performance by config**: Pages/sec and conversion time by hardware, OCR backend, and image classifier
+

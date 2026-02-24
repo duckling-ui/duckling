@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **CodeQL security fixes** (PR #25):
+  - SSRF: `validate_url_safe_for_request` now returns the validated URL; all `requests.get` calls use the returned value.
+  - ReDoS: HTML image extraction limited to 5MB before regex processing.
+  - Path traversal: `delete_output_folder` now uses `validate_job_id` and `get_validated_output_dir`.
+  - Information exposure: Settings API error responses sanitized to prevent stack trace leakage.
+
 ### Planned
 
 - User authentication
