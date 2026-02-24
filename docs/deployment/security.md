@@ -4,7 +4,7 @@ Security best practices and hardening guide for Duckling.
 
 ## Security Audit Summary
 
-Last audit: December 2024
+Last audit: December 2025
 
 ### Vulnerability Status
 

@@ -5,7 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+**Latest release:** [0.0.10](https://github.com/davidgs/duckling/releases/tag/v0.0.10) (2026-02-24)
+
 ## [Unreleased]
+
+### Planned
+
+- User authentication
+- Cloud storage integration
+- Conversion templates
+- API rate limiting
+- WebSocket for real-time updates
+- Dark/light theme toggle
+- Keyboard shortcuts
+- Accessibility improvements (WCAG 2.1)
+
+## [0.0.10] - 2026-02-24
 
 ### Added
 
@@ -35,6 +50,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multilingual MkDocs documentation (English, Spanish, French, German) served under `/api/docs/site/<locale>/`.
 - Dropzone panel category labels (Documents, Web, Images, Data) now fully internationalized.
 - Docling docs section in MkDocs (curated, vendored subset of upstream Docling documentation + sync script).
+- **Session-Based User Settings**: User settings stored per-session in the database instead of a shared file.
+
+### Security
+
+- Fixed frontend security vulnerabilities (esbuild GHSA-67mh-4wv8-2f99): Updated Vite 5→7, Vitest 1→4, and related dependencies.
+
+### Changed
+
+- Backend entry point renamed from `app.py` to `duckling.py` for better clarity.
+- Flask application name changed to "duckling" (displays as "Serving Flask app 'duckling'").
 
 ### Fixed
 
@@ -47,13 +72,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix clicking a history entry not loading the document; now uses the history load endpoint (disk) instead of the in-memory result endpoint.
 - When `document_json_path` is missing in the DB, history load now finds and loads `*.document.json` from the output directory so all history items load, not just the first.
 - Document viewing panel now refreshes when loading a different history item (uses component key to remount with fresh state).
+- Updated `vitest.config.ts` for Vitest 4 compatibility.
+- Updated CI/CD Node.js version requirement to 22 (required for Vite 7).
 
-### Changed
+## [0.0.9] - 2026-01-08
 
-- Backend entry point renamed from `app.py` to `duckling.py` for better clarity.
-- Flask application name changed to "duckling" (displays as "Serving Flask app 'duckling'").
+### Added
 
-## [2.3.0] - 2026-01-07
+- **Custom Branding**: Duckling logo and version display in header.
+- **URL-Based Document Conversion**: Convert documents from URLs with automatic image extraction for HTML.
+- **Document Enrichment Options**: Code enrichment, formula enrichment, picture classification, picture description.
+- **Enrichment Model Pre-Download**: Download AI models before processing.
+- **Image Preview Gallery**: Visual thumbnails with lightbox viewer.
+- **OCR Backend Auto-Installation**: One-click installation for pip-installable backends.
+- **Format-Specific Preview**: Preview panel shows content in selected export format.
+- **Rendered vs Raw Preview Mode**: Toggle for HTML and Markdown.
+- **Enhanced Docker Support**: Multi-stage Dockerfiles, docker-compose variants, multi-platform builds.
+
+### Fixed
+
+- Multi-worker content retrieval (images, tables, results).
+- HTML preview in UI.
+- URL image extraction for unquoted `src` attributes.
+- Documentation panel now serves pre-built MkDocs site.
+- Environment variables and `.env` loading.
+- Case-insensitive file extensions.
+- Confidence score and OCR backend selection.
+
+## [0.0.8] - 2026-01-07
 
 ### Changed
 
@@ -61,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Updated all documentation, code, and configuration files
   - Branding updated throughout the application
 
-## [2.2.0] - 2026-01-07
+## [0.0.7] - 2026-01-07
 
 ### Added
 
@@ -76,7 +122,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Documentation structure reorganized for better navigation
 - All diagrams converted to Mermaid format for live rendering
 
-## [2.1.0] - 2024-12-11
+## [0.0.6] - 2025-12-11
 
 ### Security
 
@@ -104,7 +150,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Backend now uses environment variables for all security-sensitive configuration
 - Default host changed from `0.0.0.0` to `127.0.0.1` for safer defaults
 
-## [2.0.0] - 2024-12-10
+## [0.0.5] - 2025-12-10
 
 ### Added
 
@@ -177,7 +223,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Confidence score calculation now uses cluster-level predictions
 - Better handling of partial conversion success
 
-## [1.1.0] - 2024-12-10
+## [0.0.4] - 2025-12-10
 
 ### Added
 
@@ -192,7 +238,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated converter service to use configurable pipeline options
 - Enhanced settings panel with OCR options
 
-## [1.0.0] - 2024-12-10
+## [0.0.3] - 2025-12-10
 
 ### Added
 
@@ -238,16 +284,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maximum file size limits
 - Secure filename handling
 
-## [Unreleased]
-
-### Planned
-
-- User authentication
-- Cloud storage integration
-- Conversion templates
-- API rate limiting
-- WebSocket for real-time updates
-- Dark/light theme toggle
-- Keyboard shortcuts
-- Accessibility improvements (WCAG 2.1)
-
+[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10...HEAD
+[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
+[0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
+[0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
+[0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7
+[0.0.6]: https://github.com/davidgs/duckling/compare/v0.0.5...v0.0.6
+[0.0.5]: https://github.com/davidgs/duckling/compare/v0.0.4...v0.0.5
+[0.0.4]: https://github.com/davidgs/duckling/compare/v0.0.3...v0.0.4
+[0.0.3]: https://github.com/davidgs/duckling/releases/tag/v0.0.3
