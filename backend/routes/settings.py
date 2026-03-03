@@ -23,6 +23,7 @@
 """Settings API endpoints."""
 
 import json
+import logging
 import subprocess
 import sys
 import platform
@@ -114,8 +115,10 @@ def check_ocr_backend_installed(backend: str) -> dict:
             try:
                 pytesseract.get_tesseract_version()
                 result["available"] = True
-            except Exception as e:
-                result["error"] = f"pytesseract installed but Tesseract binary not found: {e}"
+            except Exception:
+                # Log detailed error server-side but do not expose exception details to the client
+                logging.exception("pytesseract installed but Tesseract binary not found")
+                result["error"] = "pytesseract installed but Tesseract binary not found"
         elif backend == "ocrmac":
             if platform.system() != "Darwin":
                 result["error"] = "OcrMac is only available on macOS"
@@ -136,10 +139,14 @@ def check_ocr_backend_installed(backend: str) -> dict:
                     result["available"] = True
                 except ImportError:
                     pass
-    except ImportError as e:
-        result["error"] = f"Package not installed: {e}"
-    except Exception as e:
-        result["error"] = str(e)
+    except ImportError:
+        # Log detailed error server-side but return a generic message to the client
+        logging.exception("Required OCR backend package is not installed")
+        result["error"] = "Required OCR backend package is not installed"
+    except Exception:
+        # Log unexpected errors without exposing internal details to the client
+        logging.exception("Unexpected error while checking OCR backend")
+        result["error"] = "Unexpected error while checking OCR backend"
 
     return result
 

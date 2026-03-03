@@ -50,6 +50,7 @@ Last audit: March 3, 2026
 - **Minimatch ReDoS (GHSA-3ppc-4f35-3m26)**: Added npm override for `@typescript-eslint/typescript-estree` to use `minimatch 9.0.6`.
 - **Werkzeug safe_join Windows device names (CVE-2026-27199, GHSA-29vq-49wr-vm6x)**: Upgraded werkzeug 3.1.4 → 3.1.6 to fix multi-segment paths like `example/NUL` on Windows.
 - **Flask session Vary: Cookie (CVE-2026-27205)**: Upgraded flask 3.0.0 → 3.1.3 so `Vary: Cookie` is set when session is accessed via `in` operator (e.g., `"session_id" not in session`).
+- **SSRF prevention**: `validate_url_safe_for_request()` blocks loopback, private IPs, link-local, metadata endpoints. Applied to `download_from_url`, `download_from_url_with_images`, `download_image`.
 
 ## Security Measures
 
@@ -64,6 +65,7 @@ Last audit: March 3, 2026
    - File upload validation (extension whitelist)
    - File size limits (100MB default)
    - Search query length limits and sanitization
+   - URL validation for outbound requests (SSRF prevention): blocks loopback, private IPs, link-local, metadata endpoints
 
 3. **Path Traversal Protection**
    - All file serving endpoints validate paths

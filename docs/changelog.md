@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed Rollup path traversal (GHSA-mw96-cpmx-2vgc) and Minimatch ReDoS (GHSA-3ppc-4f35-3m26) via npm overrides in frontend: `rollup >=4.59.0`, `minimatch 9.0.6` for `@typescript-eslint/typescript-estree`.
 - Fixed Werkzeug safe_join Windows device names in multi-segment paths (CVE-2026-27199, GHSA-29vq-49wr-vm6x): upgraded werkzeug 3.1.4 → 3.1.6.
 - Fixed Flask session Vary: Cookie header when using `in` operator (CVE-2026-27205): upgraded flask 3.0.0 → 3.1.3.
+- **SSRF prevention**: URL validation before outbound requests in `download_from_url`, `download_from_url_with_images`, and `download_image`; blocks loopback, private IPs, link-local, metadata, and dangerous schemes.
 
 ### Planned
 

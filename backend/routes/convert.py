@@ -33,13 +33,16 @@ from pathlib import Path
 from urllib.parse import urlparse, unquote, urljoin
 from flask import Blueprint, request, jsonify, send_file
 from werkzeug.exceptions import BadRequest, NotFound
+import logging
 
 from services.converter import converter_service, ConversionStatus
 from services.file_manager import file_manager
 from services.history import history_service
 from config import DEFAULT_CONVERSION_SETTINGS, OUTPUT_FOLDER, BACKEND_DIR
 from routes.settings import load_settings
-from utils.security import validate_job_id, get_validated_output_dir
+from utils.security import validate_job_id, get_validated_output_dir, validate_url_safe_for_request
+
+logger = logging.getLogger(__name__)
 
 convert_bp = Blueprint("convert", __name__)
 
@@ -75,11 +78,14 @@ def download_from_url(url: str) -> tuple[str, str, int]:
     Raises:
         BadRequest: If the URL is invalid or the file type is not allowed
     """
-    # Validate URL
+    # Validate URL (scheme + SSRF check)
     try:
         parsed = urlparse(url)
         if parsed.scheme not in ('http', 'https'):
             raise BadRequest("Only HTTP and HTTPS URLs are supported")
+        validate_url_safe_for_request(url)
+    except BadRequest:
+        raise
     except Exception:
         raise BadRequest("Invalid URL format")
 
@@ -180,6 +186,9 @@ def download_image(img_url: str, base_url: str, timeout: int = 10) -> tuple[byte
         # Skip data URIs (already embedded)
         if img_url.startswith('data:'):
             return None
+
+        # SSRF prevention: validate before outbound request
+        validate_url_safe_for_request(img_url)
 
         response = requests.get(img_url, timeout=timeout, stream=True)
         response.raise_for_status()
@@ -376,11 +385,14 @@ def download_from_url_with_images(url: str, job_id: str = None) -> tuple[str, st
     Raises:
         BadRequest: If the URL is invalid or the file type is not allowed
     """
-    # Validate URL
+    # Validate URL (scheme + SSRF check)
     try:
         parsed = urlparse(url)
         if parsed.scheme not in ('http', 'https'):
             raise BadRequest("Only HTTP and HTTPS URLs are supported")
+        validate_url_safe_for_request(url)
+    except BadRequest:
+        raise
     except Exception:
         raise BadRequest("Invalid URL format")
 
@@ -801,10 +813,12 @@ def convert_from_urls_batch():
                 "error": str(e.description)
             })
         except Exception as e:
+            # Log the full exception with stack trace on the server, but do not expose details to the client
+            logger.exception("Unexpected error while processing URL '%s'", url)
             jobs.append({
                 "url": url,
                 "status": "rejected",
-                "error": f"Failed to process URL: {str(e)}"
+                "error": "Failed to process URL"
             })
 
     return jsonify({
