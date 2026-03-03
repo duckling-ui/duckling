@@ -4,6 +4,8 @@
 #   2. Add POSTHOG_API_KEY to repo Secrets (Settings > Secrets and variables > Actions)
 #   3. Configure custom domain duckling-ui.org in Pages settings if not already done
 name: Deploy Docs
+permissions:
+  contents: read
 
 on:
   push:
