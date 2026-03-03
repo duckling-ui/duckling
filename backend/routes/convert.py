@@ -44,6 +44,8 @@ from utils.security import validate_job_id, get_validated_output_dir, validate_u
 
 logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
+
 convert_bp = Blueprint("convert", __name__)
 
 
