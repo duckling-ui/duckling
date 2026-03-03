@@ -12,7 +12,7 @@
 
 ## Security Audit Summary
 
-Last audit: January 26, 2026
+Last audit: March 3, 2026
 
 ### Vulnerability Status
 
@@ -44,6 +44,12 @@ Last audit: January 26, 2026
   - `eslint-plugin-react-refresh`: 0.4.24 → 0.4.26 (patch)
   - `tailwindcss`: 3.4.18 → 3.4.19 (patch)
   - `@testing-library/react`: 14.3.1 → 16.3.2 (minor)
+
+**Fixed Rollup and Minimatch vulnerabilities (March 2026)**
+- **Rollup path traversal (GHSA-mw96-cpmx-2vgc)**: Added npm override `rollup >=4.59.0` (already resolved to 4.59.0 via Vite).
+- **Minimatch ReDoS (GHSA-3ppc-4f35-3m26)**: Added npm override for `@typescript-eslint/typescript-estree` to use `minimatch 9.0.6`.
+- **Werkzeug safe_join Windows device names (CVE-2026-27199, GHSA-29vq-49wr-vm6x)**: Upgraded werkzeug 3.1.4 → 3.1.6 to fix multi-segment paths like `example/NUL` on Windows.
+- **Flask session Vary: Cookie (CVE-2026-27205)**: Upgraded flask 3.0.0 → 3.1.3 so `Vary: Cookie` is set when session is accessed via `in` operator (e.g., `"session_id" not in session`).
 
 ## Security Measures
 
