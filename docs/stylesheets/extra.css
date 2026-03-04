@@ -35,6 +35,17 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
+/* Clickable card links - whole tile is interactive */
+.grid.cards .card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.grid.cards .card-link:hover {
+  color: inherit;
+}
+
 /* Code block styling */
 .highlight pre {
   border-radius: 0.5rem;

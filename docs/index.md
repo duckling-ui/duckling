@@ -12,59 +12,77 @@ Duckling provides an intuitive web interface for converting documents using IBM'
 
 <div class="grid cards" markdown>
 
--   :material-cursor-move:{ .lg .middle } __Drag-and-Drop Upload__
+-   <a href="user-guide/features/#drag-and-drop" class="card-link" markdown="1">
+    :material-cursor-move:{ .lg .middle } __Drag-and-Drop Upload__
 
     ---
 
     Simply drag your documents onto the interface for instant processing
+    </a>
 
--   :material-file-multiple:{ .lg .middle } __Batch Processing__
+-   <a href="user-guide/features/#batch-processing" class="card-link" markdown="1">
+    :material-file-multiple:{ .lg .middle } __Batch Processing__
 
     ---
 
     Convert multiple files at once with parallel processing
+    </a>
 
--   :material-format-list-bulleted:{ .lg .middle } __Multi-Format Support__
+-   <a href="user-guide/formats/" class="card-link" markdown="1">
+    :material-format-list-bulleted:{ .lg .middle } __Multi-Format Support__
 
     ---
 
     PDFs, Word docs, PowerPoints, Excel files, HTML, Markdown, images, and more
+    </a>
 
--   :material-export:{ .lg .middle } __Multiple Export Formats__
+-   <a href="user-guide/features/#export-formats" class="card-link" markdown="1">
+    :material-export:{ .lg .middle } __Multiple Export Formats__
 
     ---
 
     Export to Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks, or plain text
+    </a>
 
--   :material-image-multiple:{ .lg .middle } __Image & Table Extraction__
+-   <a href="user-guide/features/#table-extraction" class="card-link" markdown="1">
+    :material-image-multiple:{ .lg .middle } __Image & Table Extraction__
 
     ---
 
     Extract embedded images and tables with CSV export
+    </a>
 
--   :material-puzzle:{ .lg .middle } __RAG-Ready Chunking__
+-   <a href="user-guide/features/#rag-chunking" class="card-link" markdown="1">
+    :material-puzzle:{ .lg .middle } __RAG-Ready Chunking__
 
     ---
 
     Generate document chunks optimized for RAG applications
+    </a>
 
--   :material-eye:{ .lg .middle } __Advanced OCR__
+-   <a href="user-guide/features/#ocr-optical-character-recognition" class="card-link" markdown="1">
+    :material-eye:{ .lg .middle } __Advanced OCR__
 
     ---
 
     Multiple OCR backends with GPU acceleration support
+    </a>
 
--   :material-history:{ .lg .middle } __Conversion History__
+-   <a href="user-guide/features/#conversion-history" class="card-link" markdown="1">
+    :material-history:{ .lg .middle } __Conversion History__
 
     ---
 
     Access previously converted documents anytime
+    </a>
 
--   :material-chart-line:{ .lg .middle } __Conversion Statistics__
+-   <a href="user-guide/features/#statistics-panel" class="card-link" markdown="1">
+    :material-chart-line:{ .lg .middle } __Conversion Statistics__
 
     ---
 
     Analytics panel with throughput, storage usage, and performance metrics
+    </a>
 
 </div>
 

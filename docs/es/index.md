@@ -12,59 +12,77 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
 
 <div class="grid cards" markdown>
 
--   :material-cursor-move:{ .lg .middle } __Carga por arrastrar y soltar__
+-   <a href="user-guide/features/#drag-and-drop" class="card-link" markdown="1">
+    :material-cursor-move:{ .lg .middle } __Carga por arrastrar y soltar__
 
     ---
 
     Simplemente arrastra tus documentos a la interfaz para procesamiento instantáneo
+    </a>
 
--   :material-file-multiple:{ .lg .middle } __Procesamiento por lotes__
+-   <a href="user-guide/features/#batch-processing" class="card-link" markdown="1">
+    :material-file-multiple:{ .lg .middle } __Procesamiento por lotes__
 
     ---
 
     Convierte múltiples archivos a la vez con procesamiento paralelo
+    </a>
 
--   :material-format-list-bulleted:{ .lg .middle } __Soporte multi-formato__
+-   <a href="user-guide/formats/" class="card-link" markdown="1">
+    :material-format-list-bulleted:{ .lg .middle } __Soporte multi-formato__
 
     ---
 
     PDFs, documentos Word, PowerPoints, archivos Excel, HTML, Markdown, imágenes y más
+    </a>
 
--   :material-export:{ .lg .middle } __Múltiples formatos de exportación__
+-   <a href="user-guide/features/#export-formats" class="card-link" markdown="1">
+    :material-export:{ .lg .middle } __Múltiples formatos de exportación__
 
     ---
 
     Exporta a Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks o texto plano
+    </a>
 
--   :material-image-multiple:{ .lg .middle } __Extracción de imágenes y tablas__
+-   <a href="user-guide/features/#table-extraction" class="card-link" markdown="1">
+    :material-image-multiple:{ .lg .middle } __Extracción de imágenes y tablas__
 
     ---
 
     Extrae imágenes y tablas incrustadas con exportación CSV
+    </a>
 
--   :material-puzzle:{ .lg .middle } __Fragmentación lista para RAG__
+-   <a href="user-guide/features/#rag-chunking" class="card-link" markdown="1">
+    :material-puzzle:{ .lg .middle } __Fragmentación lista para RAG__
 
     ---
 
     Genera fragmentos de documentos optimizados para aplicaciones RAG
+    </a>
 
--   :material-eye:{ .lg .middle } __OCR avanzado__
+-   <a href="user-guide/features/#ocr-optical-character-recognition" class="card-link" markdown="1">
+    :material-eye:{ .lg .middle } __OCR avanzado__
 
     ---
 
     Múltiples backends OCR con soporte de aceleración GPU
+    </a>
 
--   :material-history:{ .lg .middle } __Historial de conversiones__
+-   <a href="user-guide/features/#conversion-history" class="card-link" markdown="1">
+    :material-history:{ .lg .middle } __Historial de conversiones__
 
     ---
 
     Accede a documentos previamente convertidos en cualquier momento
+    </a>
 
--   :material-chart-line:{ .lg .middle } __Estadísticas de conversión__
+-   <a href="user-guide/features/#statistics-panel" class="card-link" markdown="1">
+    :material-chart-line:{ .lg .middle } __Estadísticas de conversión__
 
     ---
 
     Panel de análisis con rendimiento, uso de almacenamiento y métricas de rendimiento
+    </a>
 
 </div>
 

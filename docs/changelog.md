@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Documentation navigation**: Switched from horizontal top tabs to a single left sidebar with collapsible tree navigation; each major category (Home, Getting Started, etc.) can be expanded or collapsed.
+- **Key Features tiles**: Each feature tile on the docs homepage is now a clickable link to its detailed documentation (Features or Formats page).
+
 ### Security
 
 - Fixed Rollup path traversal (GHSA-mw96-cpmx-2vgc) and Minimatch ReDoS (GHSA-3ppc-4f35-3m26) via npm overrides in frontend: `rollup >=4.59.0`, `minimatch 9.0.6` for `@typescript-eslint/typescript-estree`.
