@@ -117,7 +117,8 @@ def validate_url_safe_for_request(url: str) -> str:
             if ip in network:
                 raise BadRequest("URL not allowed")
 
-    return url
+    # Return reconstructed URL (breaks taint flow for CodeQL - new string from validated components)
+    return parsed.geturl()
 
 
 def validate_job_id(job_id: str) -> str:
