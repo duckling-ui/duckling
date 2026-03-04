@@ -5,7 +5,7 @@
 site_name: Duckling UI
 site_description: A modern, user-friendly graphical interface for Docling - the powerful document conversion library by IBM
 site_author: Duckling Contributors
-site_url: https://duckling-ui.org/
+site_url: https://davidgs.github.io/duckling/
 
 # Repository
 repo_name: davidgs/duckling
@@ -309,9 +309,7 @@ extra:
       link: https://github.com/davidgs/duckling
       name: Duckling on GitHub
   generator: false
-  analytics:
-    provider: google
-    property: G-XXXXXXXXXX
+  # analytics omitted — PostHog used in docs/overrides/main.html
   alternate:
     - name: "🇺🇸 English"
       link: https://duckling-ui.org/

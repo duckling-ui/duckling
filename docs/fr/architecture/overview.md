@@ -1,12 +1,12 @@
-# Vue d'ensemble du système
+# System Overview
 
-Architecture de haut niveau et flux de données dans Duckling.
+High-level architecture and data flow in Duckling.
 
-## Diagramme d'architecture
+## Architecture Diagram
 
-![Architecture système](../arch.png)
+![System Architecture](../arch.png)
 
-## Vue détaillée des couches
+## Detailed Layer View
 
 ```mermaid
 graph TB
@@ -54,9 +54,9 @@ graph TB
     Docling --> FileSystem
 ```
 
-## Flux de données
+## Data Flow
 
-### Flux de conversion de document
+### Document Conversion Flow
 
 ```mermaid
 sequenceDiagram
@@ -83,74 +83,75 @@ sequenceDiagram
     U->>F: Download
 ```
 
-### Pipeline de conversion
+### Conversion Pipeline
 
-| Étape | Description |
-|-------|-------------|
-| 1 | **Requête de téléversement** - Fichier reçu via POST |
-| 2 | **Validation et stockage du fichier** - Vérifier l'extension, enregistrer dans uploads/ |
-| 3 | **Création du job** - UUID assigné, entrée créée |
-| 4 | **Mise en file d'attente pour traitement** - Ajouté à la file d'attente |
-| 5 | **Thread worker récupère le job** - Lorsque la capacité est disponible |
-| 6 | **DocumentConverter initialisé** - Avec paramètres OCR, tableaux, images |
-| 7 | **Conversion du document** - Extraire images, tableaux, segments |
-| 8 | **Export vers formats** - MD, HTML, JSON, TXT, DocTags, Tokens |
-| 9 | **Mise à jour du statut et historique** - Marquer comme terminé, stocker les métadonnées |
-| 10 | **Résultats disponibles** - Prêts pour téléchargement |
+| Step | Description |
+|------|-------------|
+| 1 | **Upload Request** - File received via POST |
+| 2 | **File Validation & Storage** - Check extension, save to uploads/ |
+| 3 | **Job Creation** - UUID assigned, entry created |
+| 4 | **Queue for Processing** - Added to job queue |
+| 5 | **Worker Thread Picks Up Job** - When capacity available |
+| 6 | **DocumentConverter Initialized** - With OCR, table, image settings |
+| 7 | **Document Conversion** - Extract images, tables, chunks |
+| 8 | **Export to Formats** - MD, HTML, JSON, TXT, DocTags, Tokens |
+| 9 | **Update Job Status & History** - Mark complete, store metadata |
+| 10 | **Results Available** - Ready for download |
 
-## Système de file d'attente de jobs
+## Job Queue System
 
-Pour éviter l'épuisement de la mémoire lors du traitement de plusieurs documents :
+To prevent memory exhaustion when processing multiple documents:
 
 ```python
 class ConverterService:
-    _job_queue: Queue       # Jobs en attente
-    _worker_thread: Thread  # Processeur en arrière-plan
-    _max_concurrent_jobs = 2  # Limiter le traitement parallèle
+    _job_queue: Queue       # Pending jobs
+    _worker_thread: Thread  # Background processor
+    _max_concurrent_jobs = 2  # Limit parallel processing
 ```
 
-Le thread worker :
+The worker thread:
 
-1. Surveille la file d'attente
-2. Démarre les threads de conversion jusqu'à la limite concurrente
-3. Suit les threads actifs et nettoie ceux terminés
-4. Empêche l'épuisement des ressources pendant le traitement par lot
+1. Monitors the job queue
+2. Starts conversion threads up to the concurrent limit
+3. Tracks active threads and cleans up completed ones
+4. Prevents resource exhaustion during batch processing
 
-## Schéma de base de données
+## Database Schema
 
-### Table Conversion
+### Conversion Table
 
-| Colonne | Type | Description |
+| Column | Type | Description |
 |--------|------|-------------|
-| `id` | VARCHAR(36) | Clé primaire (UUID) |
-| `filename` | VARCHAR(255) | Nom de fichier nettoyé |
-| `original_filename` | VARCHAR(255) | Nom de téléversement original |
-| `input_format` | VARCHAR(50) | Format détecté |
+| `id` | VARCHAR(36) | Primary key (UUID) |
+| `filename` | VARCHAR(255) | Sanitized filename |
+| `original_filename` | VARCHAR(255) | Original upload name |
+| `input_format` | VARCHAR(50) | Detected format |
 | `status` | VARCHAR(50) | pending/processing/completed/failed |
-| `confidence` | FLOAT | Score de confiance OCR |
-| `error_message` | TEXT | Détails d'erreur si échec |
-| `output_path` | VARCHAR(500) | Chemin vers les fichiers de sortie |
-| `settings` | TEXT | Paramètres JSON utilisés |
-| `file_size` | FLOAT | Taille du fichier en octets |
-| `created_at` | DATETIME | Horodatage de téléversement |
-| `completed_at` | DATETIME | Horodatage de fin |
+| `confidence` | FLOAT | OCR confidence score |
+| `error_message` | TEXT | Error details if failed |
+| `output_path` | VARCHAR(500) | Path to output files |
+| `settings` | TEXT | JSON settings used |
+| `file_size` | FLOAT | File size in bytes |
+| `created_at` | DATETIME | Upload timestamp |
+| `completed_at` | DATETIME | Completion timestamp |
 
-## Considérations de sécurité
+## Security Considerations
 
-| Préoccupation | Atténuation |
-|----------------|-------------|
-| **Téléversement de fichiers** | Seules les extensions autorisées acceptées |
-| **Taille de fichier** | Maximum configurable (par défaut 100MB) |
-| **Noms de fichiers** | Nettoyés avant stockage |
-| **Accès aux fichiers** | Servis uniquement via l'API, pas de chemins directs |
-| **CORS** | Restreint à l'origine du frontend |
+| Concern | Mitigation |
+|---------|------------|
+| **File Upload** | Only allowed extensions accepted |
+| **File Size** | Configurable max (default 100MB) |
+| **Filenames** | Sanitized before storage |
+| **File Access** | Served through API only, no direct paths |
+| **CORS** | Restricted to frontend origin |
 
-## Optimisations de performance
+## Performance Optimizations
 
-| Optimisation | Description |
+| Optimization | Description |
 |--------------|-------------|
-| **Mise en cache du convertisseur** | Instances DocumentConverter mises en cache par hash de paramètres |
-| **File d'attente de jobs** | Traitement séquentiel empêche l'épuisement de la mémoire |
-| **Chargement paresseux** | Composants lourds chargés à la demande |
-| **Mise en cache React Query** | Réponses API mises en cache et dédupliquées |
-| **Traitement en arrière-plan** | Les conversions ne bloquent pas l'API |
+| **Converter Caching** | DocumentConverter instances cached by settings hash |
+| **Job Queue** | Sequential processing prevents memory exhaustion |
+| **Lazy Loading** | Heavy components loaded on demand |
+| **React Query Caching** | API responses cached and deduplicated |
+| **Background Processing** | Conversions don't block the API |
+

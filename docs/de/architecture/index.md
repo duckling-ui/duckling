@@ -1,10 +1,10 @@
-# Architektur
+# Architecture
 
-Technische Architekturdokumentation für Duckling.
+Technical architecture documentation for Duckling.
 
-## Überblick
+## Overview
 
-Duckling ist eine Full-Stack-Webanwendung mit klarer Trennung zwischen Frontend und Backend:
+Duckling is a full-stack web application with a clear separation between frontend and backend:
 
 ```mermaid
 graph LR
@@ -20,63 +20,63 @@ graph LR
     style E fill:#f59e0b,color:#fff
 ```
 
-## Abschnitte
+## Sections
 
 <div class="grid cards" markdown>
 
--   :material-view-dashboard:{ .lg .middle } __Systemübersicht__
+-   :material-view-dashboard:{ .lg .middle } __System Overview__
 
     ---
 
-    High-Level-Architektur und Datenfluss
+    High-level architecture and data flow
 
-    [:octicons-arrow-right-24: Übersicht](overview.md)
+    [:octicons-arrow-right-24: Overview](overview.md)
 
--   :material-puzzle:{ .lg .middle } __Komponenten__
-
-    ---
-
-    Frontend- und Backend-Komponentendetails
-
-    [:octicons-arrow-right-24: Komponenten](components.md)
-
--   :material-chart-box:{ .lg .middle } __Diagramme__
+-   :material-puzzle:{ .lg .middle } __Components__
 
     ---
 
-    Architekturdiagramme und Flussdiagramme
+    Frontend and backend component details
 
-    [:octicons-arrow-right-24: Diagramme](diagrams.md)
+    [:octicons-arrow-right-24: Components](components.md)
+
+-   :material-chart-box:{ .lg .middle } __Diagrams__
+
+    ---
+
+    Architecture diagrams and flowcharts
+
+    [:octicons-arrow-right-24: Diagrams](diagrams.md)
 
 </div>
 
-## Wichtige Designentscheidungen
+## Key Design Decisions
 
-### Trennung der Belange
+### Separation of Concerns
 
-- **Frontend**: React mit TypeScript für Typsicherheit und moderne UI
-- **Backend**: Flask für Einfachheit und Zugriff auf das Python-Ökosystem
-- **Engine**: Docling für Dokumentkonvertierung (IBMs Bibliothek)
+- **Frontend**: React with TypeScript for type safety and modern UI
+- **Backend**: Flask for simplicity and Python ecosystem access
+- **Engine**: Docling for document conversion (IBM's library)
 
-### Asynchrone Verarbeitung
+### Async Processing
 
-Die Dokumentkonvertierung wird asynchron behandelt:
+Document conversion is handled asynchronously:
 
-1. Client lädt Datei hoch
-2. Server gibt sofort Job-ID zurück
-3. Client fragt Status ab
-4. Server verarbeitet im Hintergrundthread
-5. Ergebnisse verfügbar, wenn abgeschlossen
+1. Client uploads file
+2. Server returns job ID immediately
+3. Client polls for status
+4. Server processes in background thread
+5. Results available when complete
 
-### Job-Warteschlange
+### Job Queue
 
-Eine threadbasierte Job-Warteschlange verhindert Speichererschöpfung:
+A thread-based job queue prevents memory exhaustion:
 
-- Maximum 2 gleichzeitige Konvertierungen
-- Jobs werden in Warteschlange gestellt, wenn Kapazität erreicht
-- Automatische Bereinigung abgeschlossener Jobs
+- Maximum 2 concurrent conversions
+- Jobs queued when capacity reached
+- Automatic cleanup of completed jobs
 
-### Einstellungspersistenz
+### Settings Persistence
 
 Einstellungen werden pro Benutzersitzung gespeichert und pro Konvertierung angewendet:
 
@@ -90,21 +90,22 @@ Einstellungen sind pro Benutzersitzung isoliert, sodass Multi-User-Bereitstellun
 
 ### Frontend
 
-| Technologie | Zweck |
-|------------|-------|
-| React 18 | UI-Framework |
-| TypeScript | Typsicherheit |
+| Technology | Purpose |
+|------------|---------|
+| React 18 | UI framework |
+| TypeScript | Type safety |
 | Tailwind CSS | Styling |
-| Framer Motion | Animationen |
-| Axios | HTTP-Client |
-| Vite | Build-Tool |
+| Framer Motion | Animations |
+| Axios | HTTP client |
+| Vite | Build tool |
 
 ### Backend
 
-| Technologie | Zweck |
-|------------|-------|
-| Flask | Web-Framework |
-| SQLAlchemy | Datenbank-ORM |
-| SQLite | Verlaufsspeicherung |
-| Docling | Dokumentkonvertierung |
-| Threading | Asynchrone Verarbeitung |
+| Technology | Purpose |
+|------------|---------|
+| Flask | Web framework |
+| SQLAlchemy | Database ORM |
+| SQLite | History storage |
+| Docling | Document conversion |
+| Threading | Async processing |
+

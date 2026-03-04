@@ -1,0 +1,87 @@
+# Deploy documentation to duckling-ui.org when PRs are merged to main.
+# Required setup:
+#   1. Repo Settings > Pages > Build and deployment: Source = "GitHub Actions"
+#   2. Add POSTHOG_API_KEY to repo Secrets (Settings > Secrets and variables > Actions)
+#   3. Configure custom domain duckling-ui.org in Pages settings if not already done
+name: Deploy Docs
+permissions:
+  contents: read
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build Docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+          cache-dependency-path: requirements-docs.txt
+
+      - name: Install docs dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-docs.txt
+
+      - name: Inject PostHog API key
+        run: |
+          # Replace placeholder with secret; if secret is unset, PostHog won't init in deployed docs
+          sed -i "s|__POSTHOG_API_KEY__|${{ secrets.POSTHOG_API_KEY }}|g" docs/overrides/main.html
+
+      - name: Update version in mkdocs.yml
+        run: |
+          python scripts/get_version.py || echo "Warning: Could not update version, continuing with existing version"
+
+      - name: Build docs (strict)
+        run: |
+          mkdocs build --strict
+
+      - name: Copy versions.json to site directory
+        run: |
+          if [ -f "docs/versions.json" ] && [ -d "site" ]; then
+            cp docs/versions.json site/versions.json
+            echo "Copied versions.json to site directory"
+          fi
+
+      - name: Copy sitemap.xml to language directories
+        run: |
+          if [ -f "site/sitemap.xml" ]; then
+            for lang in es fr de; do
+              lang_dir="site/$lang"
+              if [ -d "$lang_dir" ]; then
+                cp site/sitemap.xml "$lang_dir/sitemap.xml"
+              fi
+            done
+            if [ ! -d "site/en" ]; then
+              mkdir -p site/en
+            fi
+            cp site/sitemap.xml site/en/sitemap.xml
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

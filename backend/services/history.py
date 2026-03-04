@@ -549,7 +549,6 @@ class HistoryService:
         """
         from pathlib import Path
         from config import OUTPUT_FOLDER
-        from werkzeug.exceptions import NotFound
         from werkzeug.utils import safe_join
 
         try:
@@ -793,7 +792,6 @@ class HistoryService:
                 print(f"[history] Failed to reconcile {job_id}: {e}")
 
         return added_count, added
-
 
 # Singleton instance
 history_service = HistoryService()

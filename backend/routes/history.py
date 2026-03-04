@@ -513,7 +513,6 @@ def load_history_document(job_id: str):
         "completed_at": entry.get("completed_at")
     })
 
-
 @history_bp.route("/history/<job_id>/generate-chunks", methods=["POST"])
 def generate_chunks(job_id: str):
     """
@@ -566,4 +565,3 @@ def generate_chunks(job_id: str):
         "chunks": chunks,
         "count": len(chunks)
     })
-

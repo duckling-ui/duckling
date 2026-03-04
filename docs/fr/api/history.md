@@ -1,22 +1,22 @@
-# API de l'historique
+# History API
 
-Endpoints pour accéder à l'historique des conversions.
+Endpoints for accessing conversion history.
 
-## Obtenir l'historique des conversions
+## Get Conversion History
 
 ```http
 GET /api/history
 ```
 
-### Paramètres de requête
+### Query Parameters
 
-| Nom | Type | Par défaut | Description |
-|------|------|-----------|-------------|
-| `limit` | int | 50 | Nombre maximum d'entrées à retourner |
-| `offset` | int | 0 | Nombre d'entrées à ignorer |
-| `status` | string | - | Filtrer par statut |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `limit` | int | 50 | Maximum entries to return |
+| `offset` | int | 0 | Number of entries to skip |
+| `status` | string | - | Filter by status |
 
-### Réponse
+### Response
 
 ```json
 {
@@ -41,27 +41,27 @@ GET /api/history
 
 ---
 
-## Obtenir l'historique récent
+## Get Recent History
 
 ```http
 GET /api/history/recent
 ```
 
-### Paramètres de requête
+### Query Parameters
 
-| Nom | Type | Par défaut | Description |
-|------|------|-----------|-------------|
-| `limit` | int | 10 | Nombre maximum d'entrées à retourner |
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| `limit` | int | 10 | Maximum entries to return |
 
 ---
 
-## Obtenir une entrée d'historique
+## Get History Entry
 
 ```http
 GET /api/history/{job_id}
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -183,7 +183,7 @@ La réconciliation s'exécute également automatiquement au démarrage de l'appl
 DELETE /api/history/{job_id}
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -194,13 +194,13 @@ DELETE /api/history/{job_id}
 
 ---
 
-## Obtenir les statistiques de l'historique
+## Get History Statistics
 
 ```http
 GET /api/history/stats
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -220,20 +220,20 @@ GET /api/history/stats
 
 ---
 
-## Rechercher dans l'historique
+## Search History
 
 ```http
 GET /api/history/search
 ```
 
-### Paramètres de requête
+### Query Parameters
 
-| Nom | Type | Requis | Description |
-|------|------|--------|-------------|
-| `q` | string | Oui | Requête de recherche |
-| `limit` | int | Non | Résultats maximum (par défaut : 20) |
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| `q` | string | Yes | Search query |
+| `limit` | int | No | Maximum results (default: 20) |
 
-### Réponse
+### Response
 
 ```json
 {
@@ -245,23 +245,23 @@ GET /api/history/search
 
 ---
 
-## Exporter l'historique
+## Export History
 
 ```http
 GET /api/history/export
 ```
 
-**Réponse** : Téléchargement d'un fichier JSON avec toutes les entrées d'historique
+**Response**: JSON file download with all history entries
 
 ---
 
-## Effacer tout l'historique
+## Clear All History
 
 ```http
 DELETE /api/history
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -269,3 +269,4 @@ DELETE /api/history
   "count": 150
 }
 ```
+

@@ -1,20 +1,14 @@
 # Erste Schritte
 
-Willkommen bei Duckling! Dieser Abschnitt hilft Ihnen, schnell loszulegen.
+Dieser Abschnitt beschreibt Installation und Ausführung von Duckling.
 
-!!! tip "Schnellster Start"
-    **Docker verwenden?** Führen Sie diesen einzelnen Befehl aus und Sie sind fertig:
-    ```bash
-    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
-    ```
-    Öffnen Sie dann [http://localhost:3000](http://localhost:3000) in Ihrem Browser.
+## Inhalt
 
-## Voraussetzungen
+- Installation
+- Quick Start
+- Docker
 
-=== "Docker (Empfohlen)"
 
-    - **Docker 20.10+**
-    - **Docker Compose 2.0+**
 
     Das war's! Kein Python oder Node.js erforderlich.
 
@@ -60,3 +54,4 @@ Wählen Sie die Installationsmethode, die für Sie am besten funktioniert:
 ## Was kommt als Nächstes?Nach der Installation erkunden Sie:1. **[Funktionen](../user-guide/features.md)** - Erfahren Sie mehr über alle Funktionen
 2. **[Konfiguration](../user-guide/configuration.md)** - Passen Sie die Einstellungen an Ihre Bedürfnisse an
 3. **[API-Referenz](../api/index.md)** - Integrieren Sie mit Ihren Anwendungen
+

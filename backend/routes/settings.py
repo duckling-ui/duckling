@@ -23,6 +23,7 @@
 """Settings API endpoints."""
 
 import json
+import logging
 import subprocess
 import sys
 import platform
@@ -43,6 +44,23 @@ from config import (
 from models.database import UserSettings, get_db_session
 
 settings_bp = Blueprint("settings", __name__)
+
+# Max length for error messages returned to clients (prevents stack trace exposure)
+_MAX_ERROR_MESSAGE_LENGTH = 200
+
+
+def _sanitize_error_for_client(msg: str | None) -> str:
+    """
+    Sanitize error message for API response to prevent information exposure.
+    Strips traceback-like content and limits length.
+    """
+    if not msg:
+        return "Unknown error"
+    # Take first line only (avoids multi-line tracebacks)
+    first_line = msg.split("\n")[0].strip()
+    # Limit length and allow only safe chars
+    safe = "".join(c for c in first_line[: _MAX_ERROR_MESSAGE_LENGTH] if c.isprintable() or c in " \t")
+    return safe or "Unknown error"
 
 
 def get_compatible_rapidocr_version() -> str:
@@ -114,8 +132,10 @@ def check_ocr_backend_installed(backend: str) -> dict:
             try:
                 pytesseract.get_tesseract_version()
                 result["available"] = True
-            except Exception as e:
-                result["error"] = f"pytesseract installed but Tesseract binary not found: {e}"
+            except Exception:
+                # Log detailed error server-side but do not expose exception details to the client
+                logging.exception("pytesseract installed but Tesseract binary not found")
+                result["error"] = "pytesseract installed but Tesseract binary not found"
         elif backend == "ocrmac":
             if platform.system() != "Darwin":
                 result["error"] = "OcrMac is only available on macOS"
@@ -136,10 +156,14 @@ def check_ocr_backend_installed(backend: str) -> dict:
                     result["available"] = True
                 except ImportError:
                     pass
-    except ImportError as e:
-        result["error"] = f"Package not installed: {e}"
-    except Exception as e:
-        result["error"] = str(e)
+    except ImportError:
+        # Log detailed error server-side but return a generic message to the client
+        logging.exception("Required OCR backend package is not installed")
+        result["error"] = "Required OCR backend package is not installed"
+    except Exception:
+        # Log unexpected errors without exposing internal details to the client
+        logging.exception("Unexpected error while checking OCR backend")
+        result["error"] = "Unexpected error while checking OCR backend"
 
     return result
 
@@ -653,7 +677,7 @@ def install_ocr_backend_endpoint(backend_id: str):
         return jsonify({
             "message": f"Failed to install {backend_id}",
             "success": False,
-            "error": result.get("error", "Unknown error"),
+            "error": _sanitize_error_for_client(result.get("error")),
             "requires_system_install": result.get("requires_system_install", False),
             "packages": result.get("packages", [])
         }), 400
@@ -727,7 +751,7 @@ def update_ocr_settings():
                 if not install_result["success"]:
                     return jsonify({
                         "error": f"Backend '{ocr_settings['backend']}' is not available and installation failed",
-                        "install_error": install_result.get("error"),
+                        "install_error": _sanitize_error_for_client(install_result.get("error")),
                         "requires_system_install": install_result.get("requires_system_install", False),
                         "backend_status": backend_status
                     }), 400
@@ -1272,7 +1296,7 @@ def get_enrichment_models_status():
             **model_info,
             "downloaded": status.get("downloaded", False),
             "available": status.get("available", False),
-            "error": status.get("error"),
+            "error": _sanitize_error_for_client(status.get("error")),
             "requires_upgrade": status.get("requires_upgrade", False),
             "docling_version": status.get("docling_version")
         })
@@ -1291,12 +1315,13 @@ def get_enrichment_model_status(model_id: str):
     status = check_enrichment_model_status(model_id)
     model_info = ENRICHMENT_MODELS[model_id]
 
-    # Include download progress if available
+    # Include download progress if available; sanitize error for client
     progress = _model_download_progress.get(model_id, {})
+    safe_status = {**status, "error": _sanitize_error_for_client(status.get("error"))}
 
     return jsonify({
         **model_info,
-        **status,
+        **safe_status,
         "download_progress": progress
     })
 
@@ -1329,7 +1354,7 @@ def download_enrichment_model_endpoint(model_id: str):
         return jsonify({
             "message": f"Failed to download model",
             "success": False,
-            "error": result.get("error", "Unknown error"),
+            "error": _sanitize_error_for_client(result.get("error")),
             "model_id": model_id
         }), 500
 

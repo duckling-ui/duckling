@@ -1,12 +1,12 @@
-# Systemübersicht
+# System Overview
 
-High-Level-Architektur und Datenfluss in Duckling.
+High-level architecture and data flow in Duckling.
 
-## Architekturdiagramm
+## Architecture Diagram
 
-![Systemarchitektur](../arch.png)
+![System Architecture](../arch.png)
 
-## Detaillierte Schichtenansicht
+## Detailed Layer View
 
 ```mermaid
 graph TB
@@ -54,9 +54,9 @@ graph TB
     Docling --> FileSystem
 ```
 
-## Datenfluss
+## Data Flow
 
-### Dokumentkonvertierungs-Fluss
+### Document Conversion Flow
 
 ```mermaid
 sequenceDiagram
@@ -83,74 +83,75 @@ sequenceDiagram
     U->>F: Download
 ```
 
-### Konvertierungspipeline
+### Conversion Pipeline
 
-| Schritt | Beschreibung |
-|---------|--------------|
-| 1 | **Upload-Anfrage** - Datei über POST empfangen |
-| 2 | **Dateivalidierung & -speicherung** - Erweiterung prüfen, in uploads/ speichern |
-| 3 | **Job-Erstellung** - UUID zugewiesen, Eintrag erstellt |
-| 4 | **Zur Verarbeitung in Warteschlange** - Zur Job-Warteschlange hinzugefügt |
-| 5 | **Worker-Thread übernimmt Job** - Wenn Kapazität verfügbar |
-| 6 | **DocumentConverter initialisiert** - Mit OCR-, Tabellen-, Bildeinstellungen |
-| 7 | **Dokumentkonvertierung** - Bilder, Tabellen, Chunks extrahieren |
-| 8 | **Export in Formate** - MD, HTML, JSON, TXT, DocTags, Tokens |
-| 9 | **Job-Status & Verlauf aktualisieren** - Als abgeschlossen markieren, Metadaten speichern |
-| 10 | **Ergebnisse verfügbar** - Bereit zum Download |
+| Step | Description |
+|------|-------------|
+| 1 | **Upload Request** - File received via POST |
+| 2 | **File Validation & Storage** - Check extension, save to uploads/ |
+| 3 | **Job Creation** - UUID assigned, entry created |
+| 4 | **Queue for Processing** - Added to job queue |
+| 5 | **Worker Thread Picks Up Job** - When capacity available |
+| 6 | **DocumentConverter Initialized** - With OCR, table, image settings |
+| 7 | **Document Conversion** - Extract images, tables, chunks |
+| 8 | **Export to Formats** - MD, HTML, JSON, TXT, DocTags, Tokens |
+| 9 | **Update Job Status & History** - Mark complete, store metadata |
+| 10 | **Results Available** - Ready for download |
 
-## Job-Warteschlangen-System
+## Job Queue System
 
-Um Speichererschöpfung bei der Verarbeitung mehrerer Dokumente zu verhindern:
+To prevent memory exhaustion when processing multiple documents:
 
 ```python
 class ConverterService:
-    _job_queue: Queue       # Ausstehende Jobs
-    _worker_thread: Thread  # Hintergrundprozessor
-    _max_concurrent_jobs = 2  # Parallele Verarbeitung begrenzen
+    _job_queue: Queue       # Pending jobs
+    _worker_thread: Thread  # Background processor
+    _max_concurrent_jobs = 2  # Limit parallel processing
 ```
 
-Der Worker-Thread:
+The worker thread:
 
-1. Überwacht die Job-Warteschlange
-2. Startet Konvertierungs-Threads bis zur gleichzeitigen Grenze
-3. Verfolgt aktive Threads und bereinigt abgeschlossene
-4. Verhindert Ressourcenerschöpfung während Stapelverarbeitung
+1. Monitors the job queue
+2. Starts conversion threads up to the concurrent limit
+3. Tracks active threads and cleans up completed ones
+4. Prevents resource exhaustion during batch processing
 
-## Datenbankschema
+## Database Schema
 
-### Konvertierungs-Tabelle
+### Conversion Table
 
-| Spalte | Typ | Beschreibung |
-|--------|-----|--------------|
-| `id` | VARCHAR(36) | Primärschlüssel (UUID) |
-| `filename` | VARCHAR(255) | Bereinigter Dateiname |
-| `original_filename` | VARCHAR(255) | Originaler Upload-Name |
-| `input_format` | VARCHAR(50) | Erkanntes Format |
+| Column | Type | Description |
+|--------|------|-------------|
+| `id` | VARCHAR(36) | Primary key (UUID) |
+| `filename` | VARCHAR(255) | Sanitized filename |
+| `original_filename` | VARCHAR(255) | Original upload name |
+| `input_format` | VARCHAR(50) | Detected format |
 | `status` | VARCHAR(50) | pending/processing/completed/failed |
-| `confidence` | FLOAT | OCR-Konfidenz-Score |
-| `error_message` | TEXT | Fehlerdetails bei Fehlschlag |
-| `output_path` | VARCHAR(500) | Pfad zu Ausgabedateien |
-| `settings` | TEXT | Verwendete JSON-Einstellungen |
-| `file_size` | FLOAT | Dateigröße in Bytes |
-| `created_at` | DATETIME | Upload-Zeitstempel |
-| `completed_at` | DATETIME | Abschluss-Zeitstempel |
+| `confidence` | FLOAT | OCR confidence score |
+| `error_message` | TEXT | Error details if failed |
+| `output_path` | VARCHAR(500) | Path to output files |
+| `settings` | TEXT | JSON settings used |
+| `file_size` | FLOAT | File size in bytes |
+| `created_at` | DATETIME | Upload timestamp |
+| `completed_at` | DATETIME | Completion timestamp |
 
-## Sicherheitsüberlegungen
+## Security Considerations
 
-| Anliegen | Minderung |
-|----------|----------|
-| **Datei-Upload** | Nur erlaubte Erweiterungen akzeptiert |
-| **Dateigröße** | Konfigurierbares Maximum (Standard 100MB) |
-| **Dateinamen** | Vor Speicherung bereinigt |
-| **Dateizugriff** | Nur über API bereitgestellt, keine direkten Pfade |
-| **CORS** | Auf Frontend-Herkunft beschränkt |
+| Concern | Mitigation |
+|---------|------------|
+| **File Upload** | Only allowed extensions accepted |
+| **File Size** | Configurable max (default 100MB) |
+| **Filenames** | Sanitized before storage |
+| **File Access** | Served through API only, no direct paths |
+| **CORS** | Restricted to frontend origin |
 
-## Leistungsoptimierungen
+## Performance Optimizations
 
-| Optimierung | Beschreibung |
-|-------------|--------------|
-| **Converter-Caching** | DocumentConverter-Instanzen nach Einstellungs-Hash gecacht |
-| **Job-Warteschlange** | Sequenzielle Verarbeitung verhindert Speichererschöpfung |
-| **Lazy Loading** | Schwere Komponenten bei Bedarf geladen |
-| **React Query-Caching** | API-Antworten gecacht und dedupliziert |
-| **Hintergrundverarbeitung** | Konvertierungen blockieren die API nicht |
+| Optimization | Description |
+|--------------|-------------|
+| **Converter Caching** | DocumentConverter instances cached by settings hash |
+| **Job Queue** | Sequential processing prevents memory exhaustion |
+| **Lazy Loading** | Heavy components loaded on demand |
+| **React Query Caching** | API responses cached and deduplicated |
+| **Background Processing** | Conversions don't block the API |
+

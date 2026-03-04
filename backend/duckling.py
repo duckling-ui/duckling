@@ -654,6 +654,12 @@ def create_app(config_class=None):
         except ValueError:
             abort(403, "Invalid locale")
 
+        # Ensure base_dir is within SITE_DIR
+        try:
+            base_dir.resolve().relative_to(SITE_DIR.resolve())
+        except ValueError:
+            abort(403, "Invalid locale")
+
         # Default to index.html
         if not trimmed or trimmed.endswith("/"):
             trimmed = trimmed + "index.html" if trimmed else "index.html"

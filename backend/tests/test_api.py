@@ -264,7 +264,6 @@ class TestDocsEndpoints:
         # If still not found, try any doc with "Sicherheit" in the name
         if security is None:
             security = next((d for d in docs if "Sicherheit" in (d.get("name") or "")), None)
-
         assert security is not None, (
             f"Page 'deployment/security' not found in docs. "
             f"Available paths: {[d.get('path') for d in docs]}. "
@@ -473,4 +472,16 @@ class TestErrorHandling:
             content_type="application/json"
         )
         assert response.status_code in [400, 500]
+
+
+class TestSecurityFileManager:
+    """Tests for file_manager path traversal prevention."""
+
+    def test_delete_output_folder_rejects_path_traversal(self, app):
+        """delete_output_folder returns False for invalid job_id (path traversal)."""
+        from services.file_manager import file_manager
+
+        assert file_manager.delete_output_folder("../../../etc/passwd") is False
+        assert file_manager.delete_output_folder("..\\..\\..\\etc\\passwd") is False
+        assert file_manager.delete_output_folder("job/with/slash") is False
 

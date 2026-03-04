@@ -1,12 +1,12 @@
 # Duckling
 
-Eine moderne, benutzerfreundliche grafische Oberfläche für [Docling](https://github.com/docling-project/docling) – die leistungsstarke Dokumentkonvertierungsbibliothek von IBM.
+Eine moderne, benutzerfreundliche Web-Oberfläche für [Docling](https://github.com/docling-project/docling) (IBM) – eine leistungsstarke Bibliothek zur Dokumentkonvertierung.
 
 ![Duckling Screenshot](main-german.png)
 
 ## Überblick
 
-Duckling bietet eine intuitive Web-Oberfläche zur Konvertierung von Dokumenten mit IBMs Docling-Bibliothek. Ob Sie Text aus PDFs extrahieren, Word-Dokumente nach Markdown konvertieren oder OCR für gescannte Bilder durchführen möchten – Duckling macht es einfach.
+Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konvertieren. Ob du Text aus PDFs extrahieren, Word-Dokumente nach Markdown konvertieren oder OCR für gescannte Bilder nutzen möchtest: Duckling macht es einfach.
 
 ## Hauptfunktionen
 
@@ -68,25 +68,16 @@ Duckling bietet eine intuitive Web-Oberfläche zur Konvertierung von Dokumenten 
 
 </div>
 
+
 ## Schnellstart
 
-Starten Sie in wenigen Minuten:
+Siehe **Getting Started**, um Duckling mit Docker oder lokal in der Entwicklung zu installieren und auszuführen.
 
-=== "Docker (Empfohlen)"
+## Übersetzungsstatus
 
-    **Ein-Befehl-Start mit vorgefertigten Images:**
-    ```bash
-    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
-    ```
+Die deutsche Dokumentation ist in Arbeit. Einige Seiten können vorläufig oder nur teilweise übersetzt sein.
 
-    **Oder lokal erstellen:**
-    ```bash
-    git clone https://github.com/davidgs/duckling.git
-    cd duckling
-    docker-compose up --build
-    ```
 
-=== "Lokale Entwicklung"
 
     ```bash
     # Repository klonen

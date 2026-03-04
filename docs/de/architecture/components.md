@@ -1,20 +1,20 @@
-# Komponenten
+# Components
 
-Detaillierte Komponentendokumentation für Duckling.
+Detailed component documentation for Duckling.
 
-## Frontend-Architektur
+## Frontend Architecture
 
-### Technologie-Stack
+### Technology Stack
 
-- **React 18** - UI-Framework mit funktionalen Komponenten und Hooks
-- **TypeScript** - Typsicheres JavaScript
-- **Tailwind CSS** - Utility-First CSS-Framework
-- **Framer Motion** - Animationsbibliothek
-- **React Query** - Server-State-Management
-- **Axios** - HTTP-Client
-- **Vite** - Build-Tool und Dev-Server
+- **React 18** - UI framework with functional components and hooks
+- **TypeScript** - Type-safe JavaScript
+- **Tailwind CSS** - Utility-first CSS framework
+- **Framer Motion** - Animation library
+- **React Query** - Server state management
+- **Axios** - HTTP client
+- **Vite** - Build tool and dev server
 
-### Komponentenstruktur
+### Component Structure
 
 ```mermaid
 graph TD
@@ -37,134 +37,134 @@ graph TD
     style Panels fill:#8b5cf6,color:#fff
 ```
 
-### Komponentendateien
+### Component Files
 
-| Pfad | Beschreibung |
-|------|--------------|
-| `src/App.tsx` | Hauptanwendungskomponente |
-| `src/main.tsx` | Anwendungseinstiegspunkt |
-| `src/index.css` | Globale Styles |
-| `src/components/DropZone.tsx` | Datei-Upload mit Drag-and-Drop |
-| `src/components/ConversionProgress.tsx` | Fortschrittsanzeige |
-| `src/components/ExportOptions.tsx` | Download und Vorschau der Ergebnisse |
-| `src/components/SettingsPanel.tsx` | Konfigurationspanel |
-| `src/components/HistoryPanel.tsx` | Konvertierungsverlauf |
-| `src/components/DocsPanel.tsx` | Dokumentations-Viewer |
-| `src/hooks/useConversion.ts` | Konvertierungsstatus und -aktionen |
-| `src/hooks/useSettings.ts` | Einstellungs-State-Management |
-| `src/services/api.ts` | API-Client-Funktionen |
-| `src/types/index.ts` | TypeScript-Interfaces |
+| Path | Description |
+|------|-------------|
+| `src/App.tsx` | Main application component |
+| `src/main.tsx` | Application entry point |
+| `src/index.css` | Global styles |
+| `src/components/DropZone.tsx` | File upload with drag-and-drop |
+| `src/components/ConversionProgress.tsx` | Progress display |
+| `src/components/ExportOptions.tsx` | Download and preview results |
+| `src/components/SettingsPanel.tsx` | Configuration panel |
+| `src/components/HistoryPanel.tsx` | Conversion history |
+| `src/components/DocsPanel.tsx` | Documentation viewer |
+| `src/hooks/useConversion.ts` | Conversion state and actions |
+| `src/hooks/useSettings.ts` | Settings state management |
+| `src/services/api.ts` | API client functions |
+| `src/types/index.ts` | TypeScript interfaces |
 
-### State-Management
+### State Management
 
-Die Anwendung verwendet eine Kombination aus:
+The application uses a combination of:
 
-1. **Lokaler State** - Komponentenebener State mit `useState`
-2. **React Query** - Server-State-Caching und Synchronisation
-3. **Benutzerdefinierte Hooks** - Eingekapselte Geschäftslogik
+1. **Local State** - Component-level state with `useState`
+2. **React Query** - Server state caching and synchronization
+3. **Custom Hooks** - Encapsulated business logic
 
-### Wichtige Hooks
+### Key Hooks
 
 #### `useConversion`
 
-Verwaltet den Dokumentkonvertierungs-Workflow:
+Manages the document conversion workflow:
 
-- Datei-Upload (einzeln und stapelweise)
-- Status-Abfrage
-- Ergebnisabruf
-- Download-Handling
+- File upload (single and batch)
+- Status polling
+- Result retrieval
+- Download handling
 
 #### `useSettings`
 
-Verwaltet Anwendungseinstellungen:
+Manages application settings:
 
-- OCR-, Tabellen-, Bild-, Leistungs- und Chunking-Einstellungen
-- Einstellungspersistenz über API
-- Einstellungsvalidierung
+- OCR, table, image, performance, chunking settings
+- Settings persistence via API
+- Settings validation
 
 ---
 
-## Backend-Architektur
+## Backend Architecture
 
-### Technologie-Stack
+### Technology Stack
 
-- **Flask** - Web-Framework
-- **SQLAlchemy** - ORM für Datenbankoperationen
-- **SQLite** - Eingebettete Datenbank für Verlauf
-- **Docling** - Dokumentkonvertierungs-Engine
-- **Threading** - Asynchrone Job-Verarbeitung
+- **Flask** - Web framework
+- **SQLAlchemy** - ORM for database operations
+- **SQLite** - Embedded database for history
+- **Docling** - Document conversion engine
+- **Threading** - Async job processing
 
-### Modulstruktur
+### Module Structure
 
-| Pfad | Beschreibung |
-|------|--------------|
-| `backend/duckling.py` | Flask-Anwendungsfactory |
-| `backend/config.py` | Konfiguration und Standardwerte |
-| `backend/models/database.py` | SQLAlchemy-Modelle |
-| `backend/routes/convert.py` | Konvertierungs-Endpoints |
-| `backend/routes/settings.py` | Einstellungs-Endpoints |
-| `backend/routes/history.py` | Verlaufs-Endpoints |
-| `backend/services/converter.py` | Docling-Integration |
-| `backend/services/file_manager.py` | Dateioperationen |
-| `backend/services/history.py` | Verlaufs-CRUD |
-| `backend/tests/` | Testsuite |
+| Path | Description |
+|------|-------------|
+| `backend/duckling.py` | Flask application factory |
+| `backend/config.py` | Configuration and defaults |
+| `backend/models/database.py` | SQLAlchemy models |
+| `backend/routes/convert.py` | Conversion endpoints |
+| `backend/routes/settings.py` | Settings endpoints |
+| `backend/routes/history.py` | History endpoints |
+| `backend/services/converter.py` | Docling integration |
+| `backend/services/file_manager.py` | File operations |
+| `backend/services/history.py` | History CRUD |
+| `backend/tests/` | Test suite |
 
 ### Services
 
 #### ConverterService
 
-Behandelt Dokumentkonvertierung mit Docling:
+Handles document conversion using Docling:
 
 ```python
 class ConverterService:
     def convert(self, file_path: str, settings: dict) -> ConversionResult:
-        """Dokument mit den angegebenen Einstellungen konvertieren."""
+        """Convert a document with the given settings."""
         pass
 
     def get_status(self, job_id: str) -> JobStatus:
-        """Status eines Konvertierungsjobs abrufen."""
+        """Get the status of a conversion job."""
         pass
 ```
 
 #### FileManager
 
-Verwaltet Datei-Uploads und -Ausgaben:
+Manages file uploads and outputs:
 
 ```python
 class FileManager:
     def save_upload(self, file) -> str:
-        """Hochgeladene Datei speichern und Pfad zurückgeben."""
+        """Save uploaded file and return path."""
         pass
 
     def get_output_path(self, job_id: str) -> str:
-        """Ausgabeverzeichnis für einen Job abrufen."""
+        """Get output directory for a job."""
         pass
 ```
 
 #### HistoryService
 
-CRUD-Operationen für Konvertierungsverlauf:
+CRUD operations for conversion history:
 
 ```python
 class HistoryService:
     def create(self, job_id: str, filename: str) -> Conversion:
-        """Neuen Verlaufseintrag erstellen."""
+        """Create a new history entry."""
         pass
 
     def update(self, job_id: str, **kwargs) -> Conversion:
-        """Bestehenden Eintrag aktualisieren."""
+        """Update an existing entry."""
         pass
 
     def get_stats(self) -> dict:
-        """Konvertierungsstatistiken abrufen."""
+        """Get conversion statistics."""
         pass
 ```
 
 ---
 
-## OCR-Integration
+## OCR Integration
 
-Docling unterstützt mehrere OCR-Backends:
+Docling supports multiple OCR backends:
 
 ```mermaid
 graph LR
@@ -186,18 +186,18 @@ graph LR
     style Rapid fill:#f59e0b,color:#fff
 ```
 
-| Backend | Beschreibung | GPU-Unterstützung |
-|---------|-------------|-------------------|
-| **EasyOCR** | Allzweck, mehrsprachig | Ja |
-| **Tesseract** | Klassische OCR-Engine | Nein |
-| **OcrMac** | macOS Vision Framework | Nein |
-| **RapidOCR** | Schnell, ONNX-basiert | Nein |
+| Backend | Description | GPU Support |
+|---------|-------------|-------------|
+| **EasyOCR** | General-purpose, multi-language | Yes |
+| **Tesseract** | Classic OCR engine | No |
+| **OcrMac** | macOS Vision framework | No |
+| **RapidOCR** | Fast ONNX-based | No |
 
-Das Backend fällt automatisch auf Nicht-OCR-Verarbeitung zurück, wenn die OCR-Initialisierung fehlschlägt.
+The backend automatically falls back to non-OCR processing if OCR initialization fails.
 
 ---
 
-## Stapelverarbeitung
+## Batch Processing
 
 ```mermaid
 sequenceDiagram
@@ -224,11 +224,12 @@ sequenceDiagram
     F->>F: Show progress per file
 ```
 
-| Schritt | Beschreibung |
-|---------|--------------|
-| 1 | Frontend sendet POST /convert/batch mit mehreren Dateien |
-| 2 | Backend speichert jede Datei, erstellt Jobs, reiht alle ein |
-| 3 | Backend gibt 202 mit Array von Job-IDs zurück |
-| 4 | Frontend fragt Status für jeden Job gleichzeitig ab |
-| 5 | Backend verarbeitet max. 2 Jobs gleichzeitig, reiht Rest ein |
-| 6 | Frontend zeigt Fortschritt pro Datei an |
+| Step | Description |
+|------|-------------|
+| 1 | Frontend sends POST /convert/batch with multiple files |
+| 2 | Backend saves each file, creates jobs, queues all |
+| 3 | Backend returns 202 with array of job IDs |
+| 4 | Frontend polls status for each job simultaneously |
+| 5 | Backend processes max 2 jobs at a time, queues rest |
+| 6 | Frontend displays per-file progress |
+

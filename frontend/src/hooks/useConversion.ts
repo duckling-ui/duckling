@@ -421,8 +421,8 @@ export function useConversion(options: UseConversionOptions = {}) {
       setStatusMessage('Document loaded from history');
       onComplete?.(result);
     } catch (err: unknown) {
-      const errorMsg = (err as { response?: { data?: { message?: string }; message?: string }; message?: string })?.response?.data?.message || 
-                      (err as { message?: string })?.message || 
+      const errorMsg = (err as { response?: { data?: { message?: string }; message?: string }; message?: string })?.response?.data?.message ||
+                      (err as { message?: string })?.message ||
                       'Failed to load document';
       setError(errorMsg);
       setState('error');

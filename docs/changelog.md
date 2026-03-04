@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- Fixed Rollup path traversal (GHSA-mw96-cpmx-2vgc) and Minimatch ReDoS (GHSA-3ppc-4f35-3m26) via npm overrides in frontend: `rollup >=4.59.0`, `minimatch 9.0.6` for `@typescript-eslint/typescript-estree`.
+- Fixed Werkzeug safe_join Windows device names in multi-segment paths (CVE-2026-27199, GHSA-29vq-49wr-vm6x): upgraded werkzeug 3.1.4 → 3.1.6.
+- Fixed Flask session Vary: Cookie header when using `in` operator (CVE-2026-27205): upgraded flask 3.0.0 → 3.1.3.
+- **SSRF prevention**: URL validation before outbound requests in `download_from_url`, `download_from_url_with_images`, and `download_image`; blocks loopback, private IPs, link-local, metadata, and dangerous schemes.
+- **CodeQL security fixes**:
+  - SSRF: `validate_url_safe_for_request` now returns the validated URL; all `requests.get` calls use the returned value to satisfy data-flow analysis.
+  - ReDoS: HTML image extraction limited to 5MB before regex processing to mitigate polynomial regex on user-controlled content.
+  - Path traversal: `delete_output_folder` now uses `validate_job_id` and `get_validated_output_dir` from security utils instead of manual checks.
+  - Information exposure: Settings API error responses sanitized via `_sanitize_error_for_client` to prevent stack trace or sensitive data leakage.
+
 ### Planned
 
 - User authentication

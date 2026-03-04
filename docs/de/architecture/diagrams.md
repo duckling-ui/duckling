@@ -1,8 +1,8 @@
-# Architekturdiagramme
+# Architecture Diagrams
 
-Visuelle Diagramme für die Duckling-Architektur.
+Visual diagrams for Duckling architecture.
 
-## Systemarchitektur-Übersicht
+## System Architecture Overview
 
 ```mermaid
 flowchart LR
@@ -27,7 +27,7 @@ flowchart LR
 
 ---
 
-## Einfache Architektur
+## Simple Architecture
 
 ```mermaid
 graph LR
@@ -45,7 +45,7 @@ graph LR
 
 ---
 
-## Detaillierte Schichtenansicht
+## Detailed Layer View
 
 ```mermaid
 graph TB
@@ -95,7 +95,7 @@ graph TB
 
 ---
 
-## Konvertierungs-Fluss
+## Conversion Flow
 
 ```mermaid
 sequenceDiagram
@@ -124,7 +124,7 @@ sequenceDiagram
 
 ---
 
-## Stapelverarbeitung
+## Batch Processing
 
 ```mermaid
 sequenceDiagram
@@ -153,9 +153,9 @@ sequenceDiagram
 
 ---
 
-## Skalierungsarchitektur
+## Scaling Architecture
 
-Für Produktionsbereitstellungen mit hohem Verkehrsaufkommen:
+For production deployments with high traffic:
 
 ```mermaid
 graph LR
@@ -185,7 +185,7 @@ graph LR
 
 ---
 
-## Komponentenbaum
+## Component Tree
 
 ```mermaid
 graph TD
@@ -210,7 +210,7 @@ graph TD
 
 ---
 
-## OCR-Optionen
+## OCR Options
 
 ```mermaid
 graph LR
@@ -234,14 +234,15 @@ graph LR
 
 ---
 
-## Statische Diagrammbilder
+## Static Diagram Images
 
-Für Umgebungen, die Mermaid-Rendering nicht unterstützen, sind statische Bilder verfügbar:
+For environments that don't support Mermaid rendering, static images are available:
 
-- [Systemarchitektur](../arch.png)
-- [Detaillierte Schichtenansicht](../Detailed-Layer-View.png)
-- [Konvertierungspipeline](../ConversionPipeline.png)
-- [Stapelverarbeitung](../BatchProcessing.png)
-- [Skalierungsarchitektur](../ScalingArchitecture.png)
-- [Komponentenbaum](../ComponentTree.png)
-- [OCR-Optionen](../OCR.png)
+- [System Architecture](../arch.png)
+- [Detailed Layer View](../Detailed-Layer-View.png)
+- [Conversion Pipeline](../ConversionPipeline.png)
+- [Batch Processing](../BatchProcessing.png)
+- [Scaling Architecture](../ScalingArchitecture.png)
+- [Component Tree](../ComponentTree.png)
+- [OCR Options](../OCR.png)
+

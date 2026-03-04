@@ -1,6 +1,9 @@
-# API des paramètres
+# Settings API
 
-Endpoints pour gérer les paramètres de conversion.
+Endpoints for managing conversion settings.
+
+!!! note "Stockage basé sur les sessions"
+    Les paramètres sont stockés par session utilisateur dans la base de données. Les paramètres de chaque utilisateur sont isolés et n'affectent pas les autres utilisateurs, ce qui rend Duckling sûr pour les déploiements multi-utilisateurs.
 
 !!! note "Stockage basé sur les sessions"
     Les paramètres sont stockés par session utilisateur dans la base de données. Les paramètres de chaque utilisateur sont isolés et n'affectent pas les autres utilisateurs, ce qui rend Duckling sûr pour les déploiements multi-utilisateurs.
@@ -11,7 +14,7 @@ Endpoints pour gérer les paramètres de conversion.
 GET /api/settings
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -62,14 +65,14 @@ GET /api/settings
 
 ---
 
-## Mettre à jour les paramètres
+## Update Settings
 
 ```http
 PUT /api/settings
 Content-Type: application/json
 ```
 
-### Corps de la requête
+### Request Body
 
 ```json
 {
@@ -83,31 +86,31 @@ Content-Type: application/json
 }
 ```
 
-### Réponse
+### Response
 
-Retourne l'objet de paramètres mis à jour.
+Returns the updated settings object.
 
 ---
 
-## Réinitialiser les paramètres aux valeurs par défaut
+## Reset Settings to Defaults
 
 ```http
 POST /api/settings/reset
 ```
 
-### Réponse
+### Response
 
-Retourne l'objet de paramètres par défaut.
+Returns the default settings object.
 
 ---
 
-## Obtenir les formats pris en charge
+## Get Supported Formats
 
 ```http
 GET /api/settings/formats
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -126,28 +129,28 @@ GET /api/settings/formats
 
 ---
 
-## Paramètres OCR
+## OCR Settings
 
-### Obtenir les paramètres OCR
+### Get OCR Settings
 
 ```http
 GET /api/settings/ocr
 ```
 
-### Mettre à jour les paramètres OCR
+### Update OCR Settings
 
 ```http
 PUT /api/settings/ocr
 Content-Type: application/json
 ```
 
-**Paramètres de requête :**
+**Query Parameters:**
 
-| Paramètre | Type | Description |
+| Parameter | Type | Description |
 |-----------|------|-------------|
-| `auto_install` | boolean | Si `true`, installe automatiquement les backends installables via pip |
+| `auto_install` | boolean | If `true`, automatically install pip-installable backends |
 
-### Réponse/Requête
+### Response/Request
 
 ```json
 {
@@ -166,27 +169,27 @@ Content-Type: application/json
     {"code": "fr", "name": "French"}
   ],
   "available_backends": [
-    {"id": "easyocr", "name": "EasyOCR", "description": "OCR polyvalent avec support GPU"},
-    {"id": "tesseract", "name": "Tesseract", "description": "Moteur OCR classique"},
-    {"id": "ocrmac", "name": "macOS Vision", "description": "OCR natif macOS (Mac uniquement)"},
-    {"id": "rapidocr", "name": "RapidOCR", "description": "OCR rapide avec runtime ONNX"}
+    {"id": "easyocr", "name": "EasyOCR", "description": "General-purpose OCR with GPU support"},
+    {"id": "tesseract", "name": "Tesseract", "description": "Classic OCR engine"},
+    {"id": "ocrmac", "name": "macOS Vision", "description": "Native macOS OCR (Mac only)"},
+    {"id": "rapidocr", "name": "RapidOCR", "description": "Fast OCR with ONNX runtime"}
   ]
 }
 ```
 
 ---
 
-## Gestion des backends OCR
+## OCR Backend Management
 
-### Obtenir le statut de tous les backends
+### Get All Backend Status
 
 ```http
 GET /api/settings/ocr/backends
 ```
 
-Retourne le statut d'installation pour tous les backends OCR.
+Returns installation status for all OCR backends.
 
-### Réponse
+### Response
 
 ```json
 {
@@ -194,39 +197,39 @@ Retourne le statut d'installation pour tous les backends OCR.
     {
       "id": "easyocr",
       "name": "EasyOCR",
-      "description": "OCR polyvalent avec support GPU",
+      "description": "General-purpose OCR with GPU support",
       "installed": true,
       "available": true,
       "error": null,
       "pip_installable": true,
       "requires_system_install": false,
       "platform": null,
-      "note": "Le premier lancement téléchargera les modèles de langue (~100MB par langue)"
+      "note": "First run will download language models (~100MB per language)"
     },
     {
       "id": "tesseract",
       "name": "Tesseract",
-      "description": "Moteur OCR classique",
+      "description": "Classic OCR engine",
       "installed": false,
       "available": false,
       "error": "Package not installed",
       "pip_installable": true,
       "requires_system_install": true,
       "platform": null,
-      "note": "Nécessite que Tesseract soit installé sur votre système"
+      "note": "Requires Tesseract to be installed on your system"
     }
   ],
   "current_platform": "darwin"
 }
 ```
 
-### Vérifier un backend spécifique
+### Check Specific Backend
 
 ```http
 GET /api/settings/ocr/backends/{backend_id}/check
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -236,19 +239,19 @@ GET /api/settings/ocr/backends/{backend_id}/check
   "error": null,
   "pip_installable": true,
   "requires_system_install": false,
-  "note": "Le premier lancement téléchargera les modèles de langue"
+  "note": "First run will download language models"
 }
 ```
 
-### Installer un backend
+### Install Backend
 
 ```http
 POST /api/settings/ocr/backends/{backend_id}/install
 ```
 
-Installe un backend OCR installable via pip.
+Installs a pip-installable OCR backend.
 
-### Réponse (Succès)
+### Response (Success)
 
 ```json
 {
@@ -256,11 +259,11 @@ Installe un backend OCR installable via pip.
   "success": true,
   "installed": true,
   "available": true,
-  "note": "Le premier lancement téléchargera les modèles de langue"
+  "note": "First run will download language models"
 }
 ```
 
-### Réponse (Déjà installé)
+### Response (Already Installed)
 
 ```json
 {
@@ -269,7 +272,7 @@ Installe un backend OCR installable via pip.
 }
 ```
 
-### Réponse (Nécessite une installation système)
+### Response (Requires System Install)
 
 ```json
 {
@@ -282,22 +285,22 @@ Installe un backend OCR installable via pip.
 
 ---
 
-## Paramètres des tableaux
+## Table Settings
 
-### Obtenir les paramètres des tableaux
+### Get Table Settings
 
 ```http
 GET /api/settings/tables
 ```
 
-### Mettre à jour les paramètres des tableaux
+### Update Table Settings
 
 ```http
 PUT /api/settings/tables
 Content-Type: application/json
 ```
 
-### Requête/Réponse
+### Request/Response
 
 ```json
 {
@@ -312,22 +315,22 @@ Content-Type: application/json
 
 ---
 
-## Paramètres des images
+## Image Settings
 
-### Obtenir les paramètres des images
+### Get Image Settings
 
 ```http
 GET /api/settings/images
 ```
 
-### Mettre à jour les paramètres des images
+### Update Image Settings
 
 ```http
 PUT /api/settings/images
 Content-Type: application/json
 ```
 
-### Requête/Réponse
+### Request/Response
 
 ```json
 {
@@ -344,15 +347,15 @@ Content-Type: application/json
 
 ---
 
-## Paramètres d'enrichissement
+## Enrichment Settings
 
-### Obtenir les paramètres d'enrichissement
+### Get Enrichment Settings
 
 ```http
 GET /api/settings/enrichment
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -364,37 +367,37 @@ GET /api/settings/enrichment
   },
   "options": {
     "code_enrichment": {
-      "description": "Améliorer les blocs de code avec détection de langage et coloration syntaxique",
+      "description": "Enhance code blocks with language detection and syntax highlighting",
       "default": false,
-      "note": "Peut augmenter le temps de traitement"
+      "note": "May increase processing time"
     },
     "formula_enrichment": {
-      "description": "Extraire les représentations LaTeX des formules mathématiques",
+      "description": "Extract LaTeX representations from mathematical formulas",
       "default": false,
-      "note": "Permet un meilleur rendu des formules dans les exports"
+      "note": "Enables better formula rendering in exports"
     },
     "picture_classification": {
-      "description": "Classer les images par type (figure, graphique, diagramme, photo, etc.)",
+      "description": "Classify images by type (figure, chart, diagram, photo, etc.)",
       "default": false,
-      "note": "Ajoute des balises sémantiques aux images extraites"
+      "note": "Adds semantic tags to extracted images"
     },
     "picture_description": {
-      "description": "Générer des légendes descriptives pour les images en utilisant des modèles de vision IA",
+      "description": "Generate descriptive captions for images using AI vision models",
       "default": false,
-      "note": "Nécessite un téléchargement de modèle supplémentaire, augmente considérablement le temps de traitement"
+      "note": "Requires additional model download, significantly increases processing time"
     }
   }
 }
 ```
 
-### Mettre à jour les paramètres d'enrichissement
+### Update Enrichment Settings
 
 ```http
 PUT /api/settings/enrichment
 Content-Type: application/json
 ```
 
-### Requête
+### Request
 
 ```json
 {
@@ -403,7 +406,7 @@ Content-Type: application/json
 }
 ```
 
-### Réponse
+### Response
 
 ```json
 {
@@ -417,34 +420,34 @@ Content-Type: application/json
 }
 ```
 
-| Champ | Type | Description |
+| Field | Type | Description |
 |-------|------|-------------|
-| `code_enrichment` | boolean | Améliorer les blocs de code avec détection de langage |
-| `formula_enrichment` | boolean | Extraire LaTeX des formules mathématiques |
-| `picture_classification` | boolean | Classer les images par type sémantique |
-| `picture_description` | boolean | Générer des légendes IA pour les images |
+| `code_enrichment` | boolean | Enhance code blocks with language detection |
+| `formula_enrichment` | boolean | Extract LaTeX from mathematical formulas |
+| `picture_classification` | boolean | Classify images by semantic type |
+| `picture_description` | boolean | Generate AI captions for images |
 
-!!! warning "Temps de traitement"
-    L'activation de `formula_enrichment` et surtout de `picture_description` peut considérablement augmenter le temps de traitement des documents.
+!!! warning "Processing Time"
+    Enabling `formula_enrichment` and especially `picture_description` can significantly increase document processing time.
 
 ---
 
-## Paramètres de performance
+## Performance Settings
 
-### Obtenir les paramètres de performance
+### Get Performance Settings
 
 ```http
 GET /api/settings/performance
 ```
 
-### Mettre à jour les paramètres de performance
+### Update Performance Settings
 
 ```http
 PUT /api/settings/performance
 Content-Type: application/json
 ```
 
-### Requête/Réponse
+### Request/Response
 
 ```json
 {
@@ -458,22 +461,22 @@ Content-Type: application/json
 
 ---
 
-## Paramètres de segmentation
+## Chunking Settings
 
-### Obtenir les paramètres de segmentation
+### Get Chunking Settings
 
 ```http
 GET /api/settings/chunking
 ```
 
-### Mettre à jour les paramètres de segmentation
+### Update Chunking Settings
 
 ```http
 PUT /api/settings/chunking
 Content-Type: application/json
 ```
 
-### Requête/Réponse
+### Request/Response
 
 ```json
 {
@@ -487,22 +490,22 @@ Content-Type: application/json
 
 ---
 
-## Paramètres de sortie
+## Output Settings
 
-### Obtenir les paramètres de sortie
+### Get Output Settings
 
 ```http
 GET /api/settings/output
 ```
 
-### Mettre à jour les paramètres de sortie
+### Update Output Settings
 
 ```http
 PUT /api/settings/output
 Content-Type: application/json
 ```
 
-### Requête/Réponse
+### Request/Response
 
 ```json
 {
@@ -511,3 +514,4 @@ Content-Type: application/json
   }
 }
 ```
+

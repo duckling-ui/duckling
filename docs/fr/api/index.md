@@ -1,16 +1,16 @@
-# Référence API
+# API Reference
 
-Documentation complète de l'API du backend Duckling.
+Complete API documentation for the Duckling backend.
 
-## URL de base
+## Base URL
 
 ```
 http://localhost:5001/api
 ```
 
-## Authentification
+## Authentication
 
-Actuellement, l'API ne nécessite pas d'authentification. Pour les déploiements en production, envisagez d'ajouter un middleware d'authentification.
+Currently, the API does not require authentication. For production deployments, consider adding authentication middleware.
 
 ## Sections
 
@@ -20,74 +20,74 @@ Actuellement, l'API ne nécessite pas d'authentification. Pour les déploiements
 
     ---
 
-    Téléverser et convertir des documents
+    Upload and convert documents
 
-    [:octicons-arrow-right-24: API de conversion](conversion.md)
+    [:octicons-arrow-right-24: Conversion API](conversion.md)
 
--   :material-cog:{ .lg .middle } __Paramètres__
-
-    ---
-
-    Obtenir et mettre à jour la configuration
-
-    [:octicons-arrow-right-24: API des paramètres](settings.md)
-
--   :material-history:{ .lg .middle } __Historique__
+-   :material-cog:{ .lg .middle } __Settings__
 
     ---
 
-    Accéder à l'historique des conversions
+    Get and update configuration
 
-    [:octicons-arrow-right-24: API de l'historique](history.md)
+    [:octicons-arrow-right-24: Settings API](settings.md)
+
+-   :material-history:{ .lg .middle } __History__
+
+    ---
+
+    Access conversion history
+
+    [:octicons-arrow-right-24: History API](history.md)
 
 </div>
 
-## Référence rapide
+## Quick Reference
 
-### Endpoints de conversion
+### Conversion Endpoints
 
-| Endpoint | Méthode | Description |
+| Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/convert` | POST | Téléverser et convertir un document |
-| `/convert/batch` | POST | Convertir plusieurs documents en lot |
-| `/convert/{job_id}/status` | GET | Obtenir le statut de conversion |
-| `/convert/{job_id}/result` | GET | Obtenir le résultat de conversion |
-| `/convert/{job_id}/images` | GET | Lister les images extraites |
-| `/convert/{job_id}/images/{id}` | GET | Télécharger une image extraite |
-| `/convert/{job_id}/tables` | GET | Lister les tableaux extraits |
-| `/convert/{job_id}/tables/{id}/csv` | GET | Télécharger un tableau en CSV |
-| `/convert/{job_id}/chunks` | GET | Obtenir les segments du document |
-| `/export/{job_id}/{format}` | GET | Télécharger le fichier converti |
+| `/convert` | POST | Upload and convert a document |
+| `/convert/batch` | POST | Batch convert multiple documents |
+| `/convert/{job_id}/status` | GET | Get conversion status |
+| `/convert/{job_id}/result` | GET | Get conversion result |
+| `/convert/{job_id}/images` | GET | List extracted images |
+| `/convert/{job_id}/images/{id}` | GET | Download extracted image |
+| `/convert/{job_id}/tables` | GET | List extracted tables |
+| `/convert/{job_id}/tables/{id}/csv` | GET | Download table as CSV |
+| `/convert/{job_id}/chunks` | GET | Get document chunks |
+| `/export/{job_id}/{format}` | GET | Download converted file |
 
-### Endpoints des paramètres
+### Settings Endpoints
 
-| Endpoint | Méthode | Description |
+| Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/settings` | GET/PUT | Obtenir/mettre à jour tous les paramètres |
-| `/settings/reset` | POST | Réinitialiser aux valeurs par défaut |
-| `/settings/formats` | GET | Lister les formats pris en charge |
-| `/settings/ocr` | GET/PUT | Paramètres OCR |
-| `/settings/tables` | GET/PUT | Paramètres des tableaux |
-| `/settings/images` | GET/PUT | Paramètres des images |
-| `/settings/performance` | GET/PUT | Paramètres de performance |
-| `/settings/chunking` | GET/PUT | Paramètres de segmentation |
+| `/settings` | GET/PUT | Get/update all settings |
+| `/settings/reset` | POST | Reset to defaults |
+| `/settings/formats` | GET | List supported formats |
+| `/settings/ocr` | GET/PUT | OCR settings |
+| `/settings/tables` | GET/PUT | Table settings |
+| `/settings/images` | GET/PUT | Image settings |
+| `/settings/performance` | GET/PUT | Performance settings |
+| `/settings/chunking` | GET/PUT | Chunking settings |
 
-### Endpoints de l'historique
+### History Endpoints
 
-| Endpoint | Méthode | Description |
+| Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/history` | GET | Lister l'historique des conversions |
-| `/history/{job_id}` | GET | Obtenir une entrée d'historique |
-| `/history/stats` | GET | Obtenir les statistiques de conversion |
-| `/history/search` | GET | Rechercher dans l'historique |
+| `/history` | GET | List conversion history |
+| `/history/{job_id}` | GET | Get history entry |
+| `/history/stats` | GET | Get conversion statistics |
+| `/history/search` | GET | Search history |
 
-## Vérification de santé
+## Health Check
 
 ```http
 GET /health
 ```
 
-**Réponse**
+**Response**
 
 ```json
 {
@@ -96,32 +96,33 @@ GET /health
 }
 ```
 
-## Réponses d'erreur
+## Error Responses
 
-Tous les endpoints peuvent renvoyer des réponses d'erreur au format suivant :
+All endpoints may return error responses in the following format:
 
 ```json
 {
-  "error": "Type d'erreur",
-  "message": "Message d'erreur détaillé"
+  "error": "Error type",
+  "message": "Detailed error message"
 }
 ```
 
-### Codes de statut HTTP
+### HTTP Status Codes
 
 | Code | Description |
 |------|-------------|
-| 200 | Succès |
-| 202 | Accepté (opération asynchrone démarrée) |
-| 400 | Requête invalide (entrée invalide) |
-| 404 | Non trouvé |
-| 413 | Charge utile trop volumineuse |
-| 500 | Erreur interne du serveur |
+| 200 | Success |
+| 202 | Accepted (async operation started) |
+| 400 | Bad Request (invalid input) |
+| 404 | Not Found |
+| 413 | Payload Too Large |
+| 500 | Internal Server Error |
 
-## Limitation du débit
+## Rate Limiting
 
-Actuellement, aucune limitation du débit n'est implémentée. Pour les déploiements en production, envisagez d'ajouter un middleware de limitation du débit.
+Currently, no rate limiting is implemented. For production deployments, consider adding rate limiting middleware.
 
 ## CORS
 
-L'API autorise les requêtes cross-origin depuis l'origine du frontend configurée (par défaut : `http://localhost:3000`).
+The API allows cross-origin requests from the configured frontend origin (default: `http://localhost:3000`).
+
