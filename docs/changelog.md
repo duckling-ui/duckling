@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Documentation navigation**: Switched from horizontal top tabs to a single left sidebar with collapsible tree navigation; each major category (Home, Getting Started, etc.) can be expanded or collapsed.
 - **Key Features tiles**: Each feature tile on the docs homepage is now a clickable link to its detailed documentation (Features or Formats page).
+- **CONTRIBUTING.md**: Added DCO (Developer Certificate of Origin) sign-off requirement for all commits.
+- **Contributing documentation**: Full translations for German (de), Spanish (es), and French (fr); all locales now have consistent, complete content including DCO requirements.
 
 ### Security
 

@@ -1,8 +1,8 @@
-# Conversion API
+# Konvertierung API
 
-Endpoints for uploading and converting documents.
+Endpoints for uploading und converting documents.
 
-## Upload and Convert Single Document
+## Upload und Convert Single Document
 
 ```http
 POST /api/convert
@@ -11,10 +11,10 @@ Content-Type: multipart/form-data
 
 ### Parameters
 
-| Name | Type | Required | Description |
+| Name | Type | Required | Beschreibung |
 |------|------|----------|-------------|
-| `file` | File | Yes | Document to convert |
-| `settings` | JSON string | No | Conversion settings override |
+| `file` | Datei | Yes | Document to convert |
+| `settings` | JSON string | No | Konvertierung settings override |
 
 ### Example Request
 
@@ -24,7 +24,7 @@ curl -X POST http://localhost:5001/api/convert \
   -F 'settings={"ocr":{"enabled":true,"language":"en"}}'
 ```
 
-### Response (202 Accepted)
+### Antwort (202 Accepted)
 
 ```json
 {
@@ -47,10 +47,10 @@ Content-Type: multipart/form-data
 
 ### Parameters
 
-| Name | Type | Required | Description |
+| Name | Type | Required | Beschreibung |
 |------|------|----------|-------------|
-| `files` | File[] | Yes | Documents to convert |
-| `settings` | JSON string | No | Conversion settings override |
+| `files` | Datei[] | Yes | Documents to convert |
+| `settings` | JSON string | No | Konvertierung settings override |
 
 ### Example Request
 
@@ -61,7 +61,7 @@ curl -X POST http://localhost:5001/api/convert/batch \
   -F "files=@image.png"
 ```
 
-### Response (202 Accepted)
+### Antwort (202 Accepted)
 
 ```json
 {
@@ -101,10 +101,10 @@ Content-Type: application/json
 
 ### Parameters
 
-| Name | Type | Required | Description |
+| Name | Type | Required | Beschreibung |
 |------|------|----------|-------------|
 | `url` | string | Yes | URL of the document to convert |
-| `settings` | object | No | Conversion settings override |
+| `settings` | object | No | Konvertierung settings override |
 
 ### Example Request
 
@@ -117,7 +117,7 @@ curl -X POST http://localhost:5001/api/convert/url \
   }'
 ```
 
-### Response (202 Accepted)
+### Antwort (202 Accepted)
 
 ```json
 {
@@ -141,10 +141,10 @@ Content-Type: application/json
 
 ### Parameters
 
-| Name | Type | Required | Description |
+| Name | Type | Required | Beschreibung |
 |------|------|----------|-------------|
 | `urls` | string[] | Yes | Array of URLs to convert |
-| `settings` | object | No | Conversion settings override |
+| `settings` | object | No | Konvertierung settings override |
 
 ### Example Request
 
@@ -160,7 +160,7 @@ curl -X POST http://localhost:5001/api/convert/url/batch \
   }'
 ```
 
-### Response (202 Accepted)
+### Antwort (202 Accepted)
 
 ```json
 {
@@ -192,13 +192,13 @@ curl -X POST http://localhost:5001/api/convert/url/batch \
 
 ---
 
-## Get Conversion Status
+## Get Konvertierung Status
 
 ```http
 GET /api/convert/{job_id}/status
 ```
 
-### Response (Processing)
+### Antwort (Verarbeitung)
 
 ```json
 {
@@ -209,7 +209,7 @@ GET /api/convert/{job_id}/status
 }
 ```
 
-### Response (Completed)
+### Antwort (Completed)
 
 ```json
 {
@@ -226,7 +226,7 @@ GET /api/convert/{job_id}/status
 }
 ```
 
-### Response (Failed)
+### Antwort (Failed)
 
 ```json
 {
@@ -240,13 +240,13 @@ GET /api/convert/{job_id}/status
 
 ---
 
-## Get Conversion Result
+## Get Konvertierung Result
 
 ```http
 GET /api/convert/{job_id}/result
 ```
 
-### Response
+### Antwort
 
 ```json
 {
@@ -272,13 +272,13 @@ GET /api/convert/{job_id}/result
 
 ---
 
-## Get Extracted Images
+## Get Extrahierened Images
 
 ```http
 GET /api/convert/{job_id}/images
 ```
 
-### Response
+### Antwort
 
 ```json
 {
@@ -305,23 +305,23 @@ GET /api/convert/{job_id}/images
 
 ---
 
-## Download Extracted Image
+## Herunterladen Extrahierened Image
 
 ```http
 GET /api/convert/{job_id}/images/{image_id}
 ```
 
-**Response**: Binary image file (PNG)
+**Antwort**: Binary image file (PNG)
 
 ---
 
-## Get Extracted Tables
+## Get Extrahierened Tables
 
 ```http
 GET /api/convert/{job_id}/tables
 ```
 
-### Response
+### Antwort
 
 ```json
 {
@@ -345,23 +345,23 @@ GET /api/convert/{job_id}/tables
 
 ---
 
-## Download Table as CSV
+## Herunterladen Table as CSV
 
 ```http
 GET /api/convert/{job_id}/tables/{table_id}/csv
 ```
 
-**Response**: CSV file
+**Antwort**: CSV file
 
 ---
 
-## Download Table as Image
+## Herunterladen Table as Image
 
 ```http
 GET /api/convert/{job_id}/tables/{table_id}/image
 ```
 
-**Response**: Binary image file (PNG)
+**Antwort**: Binary image file (PNG)
 
 ---
 
@@ -371,7 +371,7 @@ GET /api/convert/{job_id}/tables/{table_id}/image
 GET /api/convert/{job_id}/chunks
 ```
 
-### Response
+### Antwort
 
 ```json
 {
@@ -406,7 +406,7 @@ GET /api/convert/{job_id}/chunks
 GET /api/export/{job_id}/{format}
 ```
 
-### Supported Formats
+### Unterstützte Formate
 
 - `markdown`
 - `html`
@@ -416,7 +416,7 @@ GET /api/export/{job_id}/{format}
 - `document_tokens`
 - `chunks`
 
-**Response**: File download with appropriate MIME type
+**Antwort**: Datei download with appropriate MIME type
 
 ---
 
@@ -426,7 +426,7 @@ GET /api/export/{job_id}/{format}
 DELETE /api/convert/{job_id}
 ```
 
-### Response
+### Antwort
 
 ```json
 {

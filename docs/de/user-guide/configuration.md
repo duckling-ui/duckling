@@ -1,10 +1,10 @@
-# Configuration Guide
+# Konfiguration Guide
 
 Complete reference for all Duckling configuration options.
 
-## Environment Variables
+## Umgebungsvariablen
 
-Create a `.env` file in the `backend` directory:
+Erstellen Sie eine `.env` file in the `backend` directory:
 
 ```env
 # Flask Configuration
@@ -19,7 +19,7 @@ MAX_CONTENT_LENGTH=104857600   # Max upload size in bytes (100MB default)
 DATABASE_URL=sqlite:///history.db
 ```
 
-### Production Environment
+### Produktion Environment
 
 ```env
 FLASK_ENV=production
@@ -28,22 +28,22 @@ DEBUG=False
 MAX_CONTENT_LENGTH=209715200   # 200MB for production
 ```
 
-!!! danger "Security Warning"
-    Never use the default `SECRET_KEY` in production. Generate a secure random key.
+!!! danger "Sicherheit Warning"
+    Never use the default `SECRET_KEY` in der Produktion. Generate a secure rundom key.
 
 ---
 
-## OCR Settings
+## OCR-Einstellungen
 
-OCR (Optical Character Recognition) extracts text from images and scanned documents.
+OCR (Optical Character Recognition) extracts text from images und scanned documents.
 
-### Configuration Options
+### Konfiguration Options
 
-| Setting | Type | Default | Description |
+| Einstellung | Type | Stundard | Beschreibung |
 |---------|------|---------|-------------|
 | `enabled` | boolean | `true` | Enable/disable OCR processing |
-| `backend` | string | `"easyocr"` | OCR engine to use |
-| `language` | string | `"en"` | Primary language for recognition |
+| `backend` | string | `"easyocr"` | Zu verwendende OCR-Engine |
+| `language` | string | `"en"` | Hauptsprache for recognition |
 | `force_full_page_ocr` | boolean | `false` | OCR entire page vs detected regions |
 | `use_gpu` | boolean | `false` | Enable GPU acceleration (EasyOCR only) |
 | `confidence_threshold` | float | `0.5` | Minimum confidence for results (0-1) |
@@ -65,8 +65,8 @@ OCR (Optical Character Recognition) extracts text from images and scanned docume
     }
     ```
 
-    - **GPU Support**: Yes (CUDA)
-    - **Languages**: 80+
+    - **GPU-Unterstützung**: Yes (CUDA)
+    - **Spraches**: 80+
     - **Note**: May have initialization issues on some systems
 
 === "Tesseract"
@@ -82,8 +82,8 @@ OCR (Optical Character Recognition) extracts text from images and scanned docume
     }
     ```
 
-    - **GPU Support**: No
-    - **Languages**: 100+
+    - **GPU-Unterstützung**: No
+    - **Spraches**: 100+
     - **Requires**: Tesseract installed on system
 
 === "macOS Vision"
@@ -99,8 +99,9 @@ OCR (Optical Character Recognition) extracts text from images and scanned docume
     }
     ```
 
-    - **GPU Support**: Uses Apple Neural Engine
+    - **GPU-Unterstützung**: Uses Apple Neural Engine
     - **Requires**: macOS 10.15+
+    - **Sprache codes**: Duckling accepts short codes like `en`, `de`, `fr` und will normalize them to Vision locale tags (for example `en-US`) during conversion.
 
 === "RapidOCR"
 
@@ -115,12 +116,12 @@ OCR (Optical Character Recognition) extracts text from images and scanned docume
     }
     ```
 
-    - **GPU Support**: No
-    - **Languages**: Limited
+    - **GPU-Unterstützung**: No
+    - **Spraches**: Limited
 
-### Supported Languages
+### Supported Spraches
 
-| Code | Language | Code | Language |
+| Code | Sprache | Code | Sprache |
 |------|----------|------|----------|
 | `en` | English | `ja` | Japanese |
 | `de` | German | `zh` | Chinese (Simplified) |
@@ -134,22 +135,22 @@ OCR (Optical Character Recognition) extracts text from images and scanned docume
 
 ---
 
-## Table Settings
+## Tabelleneinstellungen
 
-Configure how tables are detected and extracted from documents.
+Configure how tables are detected und extracted from documents.
 
-### Configuration Options
+### Konfiguration Options
 
-| Setting | Type | Default | Description |
+| Einstellung | Type | Stundard | Beschreibung |
 |---------|------|---------|-------------|
 | `enabled` | boolean | `true` | Enable table detection |
 | `structure_extraction` | boolean | `true` | Preserve table structure |
-| `mode` | string | `"accurate"` | Detection mode |
+| `mode` | string | `"genau"` | Detection mode |
 | `do_cell_matching` | boolean | `true` | Match cell content to structure |
 
-### Detection Modes
+### Detection Moduss
 
-=== "Accurate Mode"
+=== "Accurate Modus"
 
     ```json
     {
@@ -161,12 +162,12 @@ Configure how tables are detected and extracted from documents.
     }
     ```
 
-    - Higher precision table detection
+    - Hocher precision table detection
     - Better cell boundary recognition
     - Slower processing
     - Recommended for complex tables
 
-=== "Fast Mode"
+=== "Fast Modus"
 
     ```json
     {
@@ -184,24 +185,24 @@ Configure how tables are detected and extracted from documents.
 
 ---
 
-## Image Settings
+## Bildeinstellungen
 
-Configure image extraction and processing.
+Configure image extraction und processing.
 
-### Configuration Options
+### Konfiguration Options
 
-| Setting | Type | Default | Description |
+| Einstellung | Type | Stundard | Beschreibung |
 |---------|------|---------|-------------|
-| `extract` | boolean | `true` | Extract embedded images |
-| `classify` | boolean | `true` | Classify and tag images |
+| `extract` | boolean | `true` | Eingebettete Bilder extrahieren |
+| `classify` | boolean | `true` | Classify und tag images |
 | `generate_page_images` | boolean | `false` | Create images of each page |
-| `generate_picture_images` | boolean | `true` | Extract pictures as files |
-| `generate_table_images` | boolean | `true` | Extract tables as images |
-| `images_scale` | float | `1.0` | Scale factor for images (0.1-4.0) |
+| `generate_picture_images` | boolean | `true` | Extrahieren pictures as files |
+| `generate_table_images` | boolean | `true` | Extrahieren tables as images |
+| `images_scale` | float | `1.0` | Skalierung factor for images (0.1-4.0) |
 
-### Example Configurations
+### Example Konfigurations
 
-=== "High Quality"
+=== "Hoch Quality"
 
     ```json
     {
@@ -232,30 +233,30 @@ Configure image extraction and processing.
 
 ---
 
-## Performance Settings
+## Leistung Einstellungen
 
-Optimize processing speed and resource usage.
+Optimize processing speed und resource usage.
 
-### Configuration Options
+### Konfiguration Options
 
-| Setting | Type | Default | Description |
+| Einstellung | Type | Stundard | Beschreibung |
 |---------|------|---------|-------------|
-| `device` | string | `"auto"` | Processing device |
+| `device` | string | `"auto"` | Verarbeitung device |
 | `num_threads` | int | `4` | CPU threads (1-32) |
 | `document_timeout` | int/null | `null` | Max processing time in seconds |
 
 ### Device Options
 
-| Device | Description | Best For |
+| Device | Beschreibung | Am besten für |
 |--------|-------------|----------|
 | `auto` | Automatically select best device | General use |
 | `cpu` | Force CPU processing | Servers without GPU |
 | `cuda` | NVIDIA GPU acceleration | Linux/Windows with NVIDIA GPU |
-| `mps` | Apple Metal Performance Shaders | macOS with Apple Silicon |
+| `mps` | Apple Metal Leistung Shaders | macOS with Apple Silicon |
 
-### Example Configurations
+### Example Konfigurations
 
-=== "High Performance (GPU)"
+=== "Hoch Leistung (GPU)"
 
     ```json
     {
@@ -293,19 +294,19 @@ Optimize processing speed and resource usage.
 
 ---
 
-## Chunking Settings
+## Chunking Einstellungen
 
 Configure document chunking for RAG applications.
 
-### Configuration Options
+### Konfiguration Options
 
-| Setting | Type | Default | Description |
+| Einstellung | Type | Stundard | Beschreibung |
 |---------|------|---------|-------------|
 | `enabled` | boolean | `false` | Enable document chunking |
 | `max_tokens` | int | `512` | Maximum tokens per chunk |
 | `merge_peers` | boolean | `true` | Merge undersized chunks |
 
-### Example Configurations
+### Example Konfigurations
 
 === "RAG-Optimized"
 
@@ -333,17 +334,17 @@ Configure document chunking for RAG applications.
 
 ---
 
-## Output Settings
+## Output Einstellungen
 
 Configure default output format.
 
-| Setting | Type | Default | Description |
+| Einstellung | Type | Stundard | Beschreibung |
 |---------|------|---------|-------------|
-| `default_format` | string | `"markdown"` | Default export format |
+| `default_format` | string | `"markdown"` | Stundard export format |
 
 ---
 
-## Complete Configuration Example
+## Complete Konfiguration Example
 
 ```json
 {
@@ -388,15 +389,15 @@ Configure default output format.
 
 ---
 
-## Configuration via API
+## Konfiguration via API
 
-### Get Current Settings
+### Get Current Einstellungen
 
 ```bash
 curl http://localhost:5001/api/settings
 ```
 
-### Update Settings
+### Update Einstellungen
 
 ```bash
 curl -X PUT http://localhost:5001/api/settings \
@@ -407,7 +408,7 @@ curl -X PUT http://localhost:5001/api/settings \
   }'
 ```
 
-### Reset to Defaults
+### Reset to Stundards
 
 ```bash
 curl -X POST http://localhost:5001/api/settings/reset
@@ -415,22 +416,22 @@ curl -X POST http://localhost:5001/api/settings/reset
 
 ---
 
-## Troubleshooting
+## Fehlerbehebung
 
 ### OCR Not Working
 
 1. **EasyOCR initialization error**: Switch to `ocrmac` (macOS) or `tesseract`
-2. **GPU errors**: Set `use_gpu: false`
-3. **Low confidence results**: Lower `confidence_threshold`
+2. **GPU errors**: Setzen `use_gpu: false`
+3. **Niedrig confidence results**: Niedriger `confidence_threshold`
 
-### Slow Processing
+### Slow Verarbeitung
 
 1. Reduce `images_scale` to `0.5`
 2. Use `mode: "fast"` for tables
 3. Disable `generate_page_images`
 4. Increase `num_threads`
 
-### Memory Issues
+### Speicherprobleme
 
 1. Enable `document_timeout` (e.g., 120 seconds)
 2. Process fewer files in batch

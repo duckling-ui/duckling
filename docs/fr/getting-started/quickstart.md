@@ -1,16 +1,16 @@
-# Quick Start
+# Démarrage rapide
 
-Get started with Duckling in 5 minutes.
+Démarrez avec Duckling en 5 minutes.
 
-## Starting the Application
+## Démarrer l'application
 
-Choose your preferred method:
+Choisissez votre méthode préférée :
 
-=== "Docker (Recommended)"
+=== "Docker (recommeté)"
 
-    The fastest way to get started - no dependencies to install!
+    Le moyen le plus rapide de démarrer - aucune dépendance à installer !
 
-    **Option 1: Pre-built Images (Fastest)**
+    **Option 1 : Images préconstruites (le plus rapide)**
     ```bash
     # Download the compose file
     curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml
@@ -19,7 +19,7 @@ Choose your preferred method:
     docker-compose -f docker-compose.prebuilt.yml up -d
     ```
 
-    **Option 2: Build Locally**
+    **Option 2 : Construire localement**
     ```bash
     # Clone and start
     git clone https://github.com/davidgs/duckling.git
@@ -27,14 +27,14 @@ Choose your preferred method:
     docker-compose up --build
     ```
 
-    The UI will be available at `http://localhost:3000`
+    L'interface sera disponible à `http://localhost:3000`
 
-    !!! tip "First Run"
-        The first startup may take a few minutes as Docker downloads/builds the images.
+    !!! tip "Premier démarrage"
+        Le premier démarrage peut prendre quelques minutes pendant que Docker télécharge/construit les images.
 
-=== "Manual Setup"
+=== "Configuration manuelle"
 
-    ### Terminal 1: Backend
+    ### Terminal 1 : Backend
 
     ```bash
     cd backend
@@ -42,105 +42,105 @@ Choose your preferred method:
     python duckling.py
     ```
 
-    The API will be available at `http://localhost:5001`
+    L'API sera disponible à `http://localhost:5001`
 
-    ### Terminal 2: Frontend
+    ### Terminal 2 : Frontend
 
     ```bash
     cd frontend
     npm run dev
     ```
 
-    The UI will be available at `http://localhost:3000`
+    L'interface sera disponible à `http://localhost:3000`
 
-## Your First Conversion
+## Votre première conversion
 
-### 1. Open the Application
+### 1. Ouvrir l'application
 
-Navigate to `http://localhost:3000` in your browser.
+Accédez à `http://localhost:3000` dans votre navigateur.
 
 <figure markdown="span">
-  ![Duckling Interface](../assets/screenshots/ui/dropzone-empty.png){ loading=lazy }
-  <figcaption>The main Duckling interface</figcaption>
+  ![Duckling Interface](../assets/screenshots/ui/main-english.png){ loading=lazy }
+  <figcaption>L'interface principale de Duckling</figcaption>
 </figure>
 
-### 2. Upload a Document
+### 2. Télécharger un document
 
-Drag and drop a PDF, Word document, or image onto the drop zone, or click to browse.
+Glissez-déposez un PDF, document Word ou image dans la zone de dépôt, ou cliquez pour parcourir.
 
 <figure markdown="span">
   ![Uploading Document](../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
-  <figcaption>Upload progress indicator</figcaption>
+  <figcaption>Indicateur de progression du téléchargement</figcaption>
 </figure>
 
-### 3. Watch the Progress
+### 3. Suivre la progression
 
-The conversion progress will be displayed in real-time.
+La progression de la conversion sera affichée en temps réel.
 
 <figure markdown="span">
   ![Conversion Progress](../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
-  <figcaption>Real-time conversion progress</figcaption>
+  <figcaption>Progression de conversion en temps réel</figcaption>
 </figure>
 
-### 4. Download Results
+### 4. Télécharger les résultats
 
-Once complete, choose your export format:
+Une fois terminé, choisissez votre format d'exportation :
 
 <figure markdown="span">
   ![Conversion Complete](../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
-  <figcaption>Conversion complete with export options</figcaption>
+  <figcaption>Conversion terminée avec options d'export</figcaption>
 </figure>
 
-- **Markdown** - Great for documentation
-- **HTML** - Web-ready output
-- **JSON** - Full document structure
-- **Plain Text** - Simple text extraction
+- **Markdown** - Idéal pour la documentation
+- **HTML** - Sortie prête pour le web
+- **JSON** - Structure complète du document
+- **Texte brut** - Extraireion de texte simple
 
-## Basic Configuration
+## Configuration de base
 
-Click the :material-cog: **Settings** button to configure:
+Cliquez sur :material-cog: **Paramètres** bouton pour configurer :
 
-### OCR Settings
+### Paramètres OCR
 
-| Setting | Default | Description |
+| Paramètre | Par défaut | Description |
 |---------|---------|-------------|
-| Enabled | `true` | Enable OCR for scanned documents |
-| Backend | `easyocr` | OCR engine to use |
-| Language | `en` | Primary language |
+| Activé | `true` | Activer l'OCR pour les documents numérisés |
+| Backend | `easyocr` | Moteur OCR à utiliser |
+| Langue | `en` | Langue principale |
 
-### Table Settings
+### Paramètres des tableaux
 
-| Setting | Default | Description |
+| Paramètre | Par défaut | Description |
 |---------|---------|-------------|
-| Enabled | `true` | Extract tables from documents |
-| Mode | `accurate` | Detection accuracy level |
+| Activé | `true` | Extraire les tableaux des documents |
+| Mode | `précis` | Niveau de précision de détection |
 
-### Image Settings
+### Paramètres des images
 
-| Setting | Default | Description |
+| Paramètre | Par défaut | Description |
 |---------|---------|-------------|
-| Extract | `true` | Extract embedded images |
-| Scale | `1.0` | Image output scale |
+| Extraire | `true` | Extraire les images intégrées |
+| Échelle | `1.0` | Échelle de sortie des images |
 
-## Batch Processing
+## Traitement par lots
 
-To convert multiple files at once:
+Pour convertir plusieurs fichiers à la fois :
 
-1. Toggle **Batch Mode** in the header
-2. Drag multiple files onto the drop zone
-3. All files will be processed simultaneously
+1. Activer **Mode lot** dans l'en-tête
+2. Glissez plusieurs fichiers dans la zone de dépôt
+3. Tous les fichiers seront traités simultanément
 
 <figure markdown="span">
-  ![Batch Mode](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Batch mode with multiple files</figcaption>
+  ![Mode lot](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+  <figcaption>Mode lot avec plusieurs fichiers</figcaption>
 </figure>
 
-!!! tip "Performance"
-    Batch processing uses a job queue with a maximum of 2 concurrent conversions to prevent memory exhaustion.
+!!! tip "Performances"
+    Le traitement par lots utilise une file d'attente de tâches avec un maximum de 2 conversions simultanées pour éviter l'épuisement de la mémoire.
 
-## Using the API
+## Utiliser l'API
 
-For programmatic access, use the REST API:
+Pour un accès programmatique, utilisez l'API REST :
 
 ```bash
 # Upload and convert a document
@@ -154,11 +154,11 @@ curl -X POST http://localhost:5001/api/convert \
 }
 ```
 
-Check the [API Reference](../api/index.md) for complete documentation.
+Consultez la [Référence API](../api/index.md) pour la documentation complète.
 
-## Next Steps
+## Prochaines étapes
 
-- [Features](../user-guide/features.md) - Explore all capabilities
-- [Configuration](../user-guide/configuration.md) - Advanced settings
-- [API Reference](../api/index.md) - Integrate with your apps
+- [Fonctionnalités](../user-guide/features.md) - Explorer toutes les fonctionnalités
+- [Configuration](../user-guide/configuration.md) - Paramètres avancés
+- [Référence API](../api/index.md) - Intégrer à vos applications
 

@@ -1,15 +1,15 @@
-# Testing
+# Tests
 
-Guide for writing and running tests in Duckling.
+Anleitung zum Schreiben und Ausführen von Tests in Duckling.
 
-## Overview
+## Überblick
 
-- **Backend**: pytest with coverage
-- **Frontend**: Vitest with React Testing Library
+- **Backend**: pytest mit Coverage
+- **Frontend**: Vitest mit React Testing Library
 
-## Running Tests
+## Tests ausführen
 
-### Backend Tests
+### Backend-Tests
 
 ```bash
 cd backend
@@ -17,26 +17,26 @@ source venv/bin/activate
 pytest
 ```
 
-With coverage:
+Mit Coverage:
 
 ```bash
 pytest --cov=. --cov-report=html
 ```
 
-### Frontend Tests
+### Frontend-Tests
 
 ```bash
 cd frontend
 npm test
 ```
 
-With coverage:
+Mit Coverage:
 
 ```bash
 npm run test:coverage
 ```
 
-Watch mode:
+Watch-Modus:
 
 ```bash
 npm run test:watch
@@ -44,17 +44,19 @@ npm run test:watch
 
 ---
 
-## Backend Testing
+## Backend-Tests
 
-### Test Structure
+### Teststruktur
 
 ```
 backend/tests/
 ├── __init__.py
-├── conftest.py      # Shared fixtures
-├── test_api.py      # API endpoint tests
-├── test_converter.py # Converter service tests
-└── test_history.py  # History service tests
+├── conftest.py         # Gemeinsame Fixtures
+├── test_api.py         # API-Endpunkt-Tests
+├── test_converter.py   # Converter-Service-Tests
+├── test_content_store.py # Content-addressed Storage Utilities
+├── test_history.py     # History-Service-Tests
+└── test_migration.py   # Datenbank-Migrationsskripte
 ```
 
 ### Fixtures
@@ -83,7 +85,7 @@ def sample_pdf():
     pass
 ```
 
-### Example Tests
+### Beispieltests
 
 ```python
 def test_convert_pdf_success(client, sample_pdf):
@@ -136,14 +138,14 @@ def test_conversion_with_mock(client):
 
 ---
 
-## Frontend Testing
+## Frontend-Tests
 
-### Test Structure
+### Teststruktur
 
 ```
 frontend/src/tests/
-├── setup.ts         # Test setup
-├── App.test.tsx     # App component tests
+├── setup.ts         # Test-Setup
+├── App.test.tsx     # App-Komponenten-Tests
 ├── DropZone.test.tsx
 ├── useConversion.test.ts
 └── api.test.ts
@@ -160,7 +162,7 @@ import { vi } from 'vitest';
 global.fetch = vi.fn();
 ```
 
-### Component Tests
+### Komponenten-Tests
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -204,7 +206,7 @@ describe('DropZone', () => {
 });
 ```
 
-### Hook Tests
+### Hook-Tests
 
 ```typescript
 import { renderHook, act } from '@testing-library/react';
@@ -230,7 +232,7 @@ describe('useConversion', () => {
 });
 ```
 
-### API Mocking
+### API-Mocking
 
 ```typescript
 import { vi } from 'vitest';
@@ -256,42 +258,42 @@ describe('conversion flow', () => {
 
 ---
 
-## Test Guidelines
+## Testrichtlinien
 
 ### Backend
 
-- Use pytest for testing
-- Aim for >80% code coverage
-- Test both success and error cases
-- Use fixtures for common setup
-- Mock external services (Docling, file system)
+- pytest für Tests verwenden
+- Ziel: >80 % Code-Abdeckung
+- Erfolgs- und Fehlerfälle testen
+- Fixtures für gemeinsames Setup
+- Externe Dienste mocken (Docling, Dateisystem)
 
 ### Frontend
 
-- Use Vitest and React Testing Library
-- Test component rendering and interactions
-- Mock API calls appropriately
-- Test error states and loading states
-- Use `userEvent` for realistic interactions
+- Vitest und React Testing Library verwenden
+- Komponenten-Rendering und Interaktionen testen
+- API-Aufrufe angemessen mocken
+- Fehler- und Ladezustände testen
+- `userEvent` für realistische Interaktionen
 
-### General
+### Allgemein
 
-- Write descriptive test names
-- One assertion per test when possible
-- Test edge cases
-- Keep tests independent
-- Clean up after tests
+- Aussagekräftige Testnamen
+- Eine Assertion pro Test wenn möglich
+- Randfälle testen
+- Tests unabhängig halten
+- Nach Tests aufräumen
 
 ---
 
 ## Continuous Integration
 
-Tests run automatically on:
+Tests laufen automatisch bei:
 
-- Pull request creation
-- Push to main branch
+- Erstellung eines Pull Requests
+- Push auf den main-Branch
 
-### CI Configuration
+### CI-Konfiguration
 
 ```yaml
 # .github/workflows/test.yml
@@ -324,4 +326,3 @@ jobs:
           npm ci
           npm test
 ```
-

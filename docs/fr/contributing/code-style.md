@@ -1,17 +1,17 @@
-# Code Style
+# Style de code
 
-Coding standards and conventions for Duckling.
+Normes et conventions de codage pour Duckling.
 
 ## Python (Backend)
 
-### General Guidelines
+### Directives générales
 
-- Follow PEP 8 guidelines
-- Use type hints
-- Maximum line length: 100 characters
-- Use docstrings for functions and classes
+- Suivre les directives PEP 8
+- Utiliser les type hints
+- Longueur maximale de ligne : 100 caractères
+- Utiliser des docstrings pour les fonctions et classes
 
-### Function Documentation
+### Documentation des fonctions
 
 ```python
 def convert_document(file_path: str, settings: dict) -> ConversionResult:
@@ -32,7 +32,7 @@ def convert_document(file_path: str, settings: dict) -> ConversionResult:
     pass
 ```
 
-### Class Documentation
+### Documentation des classes
 
 ```python
 class ConverterService:
@@ -51,11 +51,11 @@ class ConverterService:
 
 ### Imports
 
-Order imports as:
+Ordre des imports :
 
-1. Standard library
-2. Third-party packages
-3. Local modules
+1. Bibliothèque standard
+2. Paquets tiers
+3. Modules locaux
 
 ```python
 import os
@@ -69,9 +69,9 @@ from models.database import Conversion
 from services.converter import ConverterService
 ```
 
-### Formatting
+### Formatage
 
-Use Black for automatic formatting:
+Utiliser Black pour le formatage automatique :
 
 ```bash
 pip install black
@@ -82,14 +82,14 @@ black backend/
 
 ## TypeScript/React (Frontend)
 
-### General Guidelines
+### Directives générales
 
-- Use functional components with hooks
-- Use TypeScript for type safety
-- Follow ESLint configuration
-- Use meaningful component and variable names
+- Utiliser des composants fonctionnels avec des hooks
+- Utiliser TypeScript pour la sécurité des types
+- Suivre la configuration ESLint
+- Utiliser des noms significatifs pour les composants et variables
 
-### Component Structure
+### Structure des composants
 
 ```typescript
 interface ButtonProps {
@@ -133,7 +133,7 @@ export function useConversion() {
 }
 ```
 
-### File Organization
+### Organisation des fichiers
 
 ```
 components/
@@ -165,9 +165,9 @@ import { useConversion } from '@/hooks/useConversion';
 import type { ConversionResult } from '@/types';
 ```
 
-### Formatting
+### Formatage
 
-Use Prettier for automatic formatting:
+Utiliser Prettier pour le formatage automatique :
 
 ```bash
 npm run format
@@ -175,9 +175,9 @@ npm run format
 
 ---
 
-## Commit Messages
+## Messages de commit
 
-Follow [Conventional Commits](https://www.conventionalcommits.org/):
+Suivre les [Conventional Commits](https://www.conventionalcommits.org/) :
 
 ```
 type(scope): description
@@ -191,15 +191,15 @@ type(scope): description
 
 | Type | Description |
 |------|-------------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation changes |
-| `style` | Code style changes (formatting) |
-| `refactor` | Code refactoring |
-| `test` | Adding/updating tests |
-| `chore` | Maintenance tasks |
+| `feat` | Nouvelle fonctionnalité |
+| `fix` | Correction de bug |
+| `docs` | Documentation |
+| `style` | Style de code (formatage) |
+| `refactor` | Refactorisation |
+| `test` | Ajout/mise à jour de tests |
+| `chore` | Maintenance |
 
-### Examples
+### Exemples
 
 ```
 feat(upload): add drag-and-drop file upload
@@ -208,6 +208,8 @@ Implemented drag-and-drop functionality using react-dropzone.
 Supports multiple file selection in batch mode.
 
 Closes #123
+
+Signed-off-by: Your Name <your.email@example.com>
 ```
 
 ```
@@ -223,20 +225,38 @@ docs(readme): update installation instructions
 Added Docker setup instructions and troubleshooting section.
 ```
 
+### Signature DCO
+
+Tous les commits **DOIVENT** être signés avec le [Developer Certificate of Origin (DCO)](https://developercertificate.org/). Cela certifie que vous avez le droit de soumettre la contribution sous la licence du projet.
+
+Ajoutez la signature à chaque commit avec `git commit -s` :
+
+```bash
+git commit -s -m "feat(upload): add drag-and-drop file upload"
+```
+
+Cela ajoute une ligne `Signed-off-by:` avec votre nom et email de votre configuration Git. Vous pouvez aussi l'ajouter manuellement à la fin du message de commit :
+
+```
+Signed-off-by: Your Name <your.email@example.com>
+```
+
+Les PR avec des commits non signés ne seront pas fusionnées.
+
 ---
 
 ## CSS/Tailwind
 
-### Class Organization
+### Organisation des classes
 
-Order Tailwind classes consistently:
+Ordre des classes Tailwind de manière cohérente :
 
 1. Layout (flex, grid, position)
-2. Spacing (margin, padding)
-3. Sizing (width, height)
-4. Typography (font, text)
-5. Visual (background, border, shadow)
-6. Interactive (hover, focus)
+2. Espacement (margin, padding)
+3. Taille (width, height)
+4. Typographie (font, text)
+5. Visuel (background, border, shadow)
+6. Interactif (hover, focus)
 
 ```tsx
 <div className="flex items-center gap-4 p-4 w-full text-sm bg-gray-800 rounded-lg hover:bg-gray-700">
@@ -244,28 +264,28 @@ Order Tailwind classes consistently:
 </div>
 ```
 
-### Custom Classes
+### Classes personnalisées
 
-Use `@apply` sparingly, prefer composition:
+Utiliser `@apply` avec parcimonie, préférer la composition :
 
 ```css
-/* Prefer this */
+/* Préférer ceci */
 .btn-primary {
   @apply px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600;
 }
 
-/* Over inline classes everywhere */
+/* Plutôt que des classes inline partout */
 ```
 
 ---
 
-## API Design
+## Conception API
 
-### Endpoint Naming
+### Nommage des endpoints
 
-- Use nouns, not verbs
-- Use plural forms
-- Use kebab-case for multi-word resources
+- Utiliser des noms, pas des verbes
+- Utiliser les formes plurielles
+- Utiliser kebab-case pour les ressources multi-mots
 
 ```
 GET    /api/conversions
@@ -275,7 +295,7 @@ DELETE /api/conversions/{id}
 GET    /api/conversions/{id}/status
 ```
 
-### Response Format
+### Format de réponse
 
 ```json
 {
@@ -288,7 +308,7 @@ GET    /api/conversions/{id}/status
 }
 ```
 
-### Error Format
+### Format d'erreur
 
 ```json
 {
@@ -300,4 +320,3 @@ GET    /api/conversions/{id}/status
   }
 }
 ```
-

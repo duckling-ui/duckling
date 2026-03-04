@@ -1,6 +1,6 @@
-# Supported Formats
+# Formats pris en charge
 
-Complete reference for input and output formats supported by Duckling.
+Complete reference for input et output formats supported by Duckling.
 
 ## Input Formats
 
@@ -10,18 +10,18 @@ Complete reference for input and output formats supported by Duckling.
 |--------|------------|-------------|-------|
 | PDF | `.pdf` | Portable Document Format | Full support including scanned PDFs with OCR |
 | Word | `.docx` | Microsoft Word | Modern format only (not `.doc`) |
-| PowerPoint | `.pptx` | Microsoft PowerPoint | Extracts text and images from slides |
-| Excel | `.xlsx` | Microsoft Excel | Extracts tables and data |
-| HTML | `.html`, `.htm` | Web pages | Preserves structure and formatting |
+| PowerPoint | `.pptx` | Microsoft PowerPoint | Extraires text et images from slides |
+| Excel | `.xlsx` | Microsoft Excel | Extraires tables et data |
+| HTML | `.html`, `.htm` | Web pages | Preserves structure et formatting |
 | Markdown | `.md`, `.markdown` | Markdown files | Full CommonMark support |
 
 ### Images
 
 | Format | Extensions | Description | Notes |
 |--------|------------|-------------|-------|
-| PNG | `.png` | Portable Network Graphics | Best for screenshots and diagrams |
+| PNG | `.png` | Portable Network Graphics | Best for screenshots et diagrams |
 | JPEG | `.jpg`, `.jpeg` | Joint Photographic Experts Group | Best for photos |
-| TIFF | `.tiff`, `.tif` | Tagged Image File Format | Multi-page support |
+| TIFF | `.tiff`, `.tif` | Tagged Image Fichier Format | Multi-page support |
 | GIF | `.gif` | Graphics Interchange Format | First frame only |
 | WebP | `.webp` | Web Picture format | Modern web format |
 | BMP | `.bmp` | Bitmap | Uncompressed images |
@@ -40,7 +40,7 @@ Complete reference for input and output formats supported by Duckling.
 
 #### Markdown (`.md`)
 
-Best for documentation and content that needs formatting.
+Best for documentation et content that needs formatting.
 
 ```markdown
 # Document Title
@@ -67,7 +67,7 @@ Web-ready format with styling preserved.
 <p>This is a paragraph with <strong>bold</strong> and <em>italic</em> text.</p>
 ```
 
-#### Plain Text (`.txt`)
+#### Texte brut (`.txt`)
 
 Simple text without any formatting.
 
@@ -83,7 +83,7 @@ This is a paragraph with bold and italic text.
 
 #### JSON (`.json`)
 
-Full document structure in JSON format. Lossless representation.
+Structure complète du document in JSON format. Lossless representation.
 
 ```json
 {
@@ -159,7 +159,7 @@ Document chunks optimized for retrieval-augmented generation.
 | Documentation | Markdown |
 | Web publishing | HTML |
 | Data processing | JSON |
-| Search indexing | Plain Text |
+| Search indexing | Texte brut |
 | NLP/ML pipelines | Document Tokens |
 | RAG applications | RAG Chunks |
 | Semantic analysis | DocTags |
@@ -186,6 +186,6 @@ curl http://localhost:5001/api/export/{job_id}/html
 | Markdown | `text/markdown` |
 | HTML | `text/html` |
 | JSON | `application/json` |
-| Plain Text | `text/plain` |
+| Texte brut | `text/plain` |
 | DocTags | `application/xml` |
 

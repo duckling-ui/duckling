@@ -1,19 +1,19 @@
-# Docker Deployment
+# Déploiement Docker
 
-Deploy Duckling using Docker for quick setup and isolation.
+Déployez Duckling avec Docker pour une configuration rapide et une isolation.
 
-!!! success "TL;DR - One Command Start"
+!!! success "TL;DR - Démarrage en une commete"
     ```bash
     curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
     ```
-    Then open `http://localhost:3000` 🎉
+    Puis ouvrez `http://localhost:3000` 🎉
 
-## Prerequisites
+## Prérequis
 
 - Docker 20.10+
 - Docker Compose 2.0+
 
-## Quick Start
+## Démarrage rapide
 
 ### Option 1: Build Locally
 
@@ -39,19 +39,19 @@ curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.p
 docker-compose -f docker-compose.prebuilt.yml up -d
 ```
 
-Access the application at `http://localhost:3000`
+Accédez à l'application à `http://localhost:3000`
 
-## Docker Compose Files
+## Fichiers Docker Compose
 
 Duckling provides several Docker Compose configurations:
 
-| File | Purpose |
+| Fichier | Objectif |
 |------|---------|
-| `docker-compose.yml` | Development with local builds |
-| `docker-compose.prod.yml` | Production overrides |
-| `docker-compose.prebuilt.yml` | Pre-built images from registry |
+| `docker-compose.yml` | Développement avec builds locaux |
+| `docker-compose.prod.yml` | Surcharges de production |
+| `docker-compose.prebuilt.yml` | Images préconstruites du registre |
 
-### Development
+### Développement
 
 ```bash
 docker-compose up --build
@@ -76,11 +76,11 @@ DOCKER_REGISTRY=ghcr.io/yourusername docker-compose -f docker-compose.prebuilt.y
 VERSION=1.0.0 docker-compose -f docker-compose.prebuilt.yml up -d
 ```
 
-## Building Docker Images
+## Construire les images Docker
 
-### Build Script
+### Script de construction
 
-Use the provided build script for easy image building. The script automatically builds the MkDocs documentation before building Docker images:
+Utilisez le script de construction fourni pour une construction d'images facile. Le script construit automatiquement la documentation MkDocs avant de construire les images Docker :
 
 ```bash
 # Build images locally (includes documentation build)
@@ -102,10 +102,29 @@ Use the provided build script for easy image building. The script automatically 
 ./scripts/docker-build.sh --skip-docs
 ```
 
-!!! note "Documentation Build"
-    The build script automatically runs `mkdocs build` to ensure documentation is available in the Docker containers. If MkDocs is not installed, it will attempt to install it from `requirements-docs.txt`.
+!!! note "Construction de la documentation"
+    Le script de construction exécute automatiquement `mkdocs build` pour s'assurer que la documentation est disponible dans les conteneurs Docker. Si MkDocs n'est pas installé, il tentera de l'installer depuis `requirements-docs.txt`.
 
-### Manual Build
+### Publication automatique (CI/CD)
+
+Lorsqu'une pull request est fusionnée dans `main`, the [Publish Docker Images](https://github.com/davidgs/duckling/actions/workflows/publish-docker.yml) workflow automatically:
+
+1. Construit des images multi-plateformes (linux/amd64, linux/arm64)
+2. Pousse vers **Docker Hub** comme `{DOCKERHUB_USERNAME}/duckling-backend` et `{DOCKERHUB_USERNAME}/duckling-frontend`
+3. Pousse vers **GitHub Container Registry** comme `ghcr.io/{owner}/duckling-backend` et `ghcr.io/{owner}/duckling-frontend`
+
+Les images sont étiquetées avec la version de `frontend/package.json` et `latest`.
+
+**Secrets de dépôt requis** (Paramètres → Secrets et variables → Actions):
+
+| Secret | Description |
+|--------|-------------|
+| `DOCKERHUB_USERNAME` | Nom d'utilisateur Docker Hub |
+| `DOCKERHUB_TOKEN` | Jeton d'accès Docker Hub (ou mot de passe) |
+
+L'authentification GHCR utilise `GITHUB_TOKEN`, que GitHub Actions fournit automatiquement.
+
+### Construction manuelle
 
 ```bash
 # Backend (production target)
@@ -117,9 +136,9 @@ cd frontend
 docker build --target production -t duckling-frontend:latest .
 ```
 
-## Environment Variables
+## Variables d'environnement
 
-Create a `.env` file in the project root:
+Créez un `.env` fichier à la racine du projet :
 
 ```env
 # Security (required for production)
@@ -134,15 +153,15 @@ DOCKER_REGISTRY=davidgs
 VERSION=latest
 ```
 
-!!! warning "Security"
-    Always set a strong `SECRET_KEY` in production. Generate one with:
+!!! warning "Sécurité"
+    Définissez toujours une `SECRET_KEY` en production. Générez-en un avec :
     ```bash
     python -c "import secrets; print(secrets.token_hex(32))"
     ```
 
-## Managing Containers
+## Gérer les conteneurs
 
-### View Status
+### Voir le statut
 
 ```bash
 # Container status
@@ -152,7 +171,7 @@ docker-compose ps
 docker stats
 ```
 
-### View Logs
+### Voir les journaux
 
 ```bash
 # All services
@@ -165,7 +184,7 @@ docker-compose logs -f backend
 docker-compose logs --tail=100 backend
 ```
 
-### Stop Services
+### Arrêter les services
 
 ```bash
 # Stop containers
@@ -178,7 +197,7 @@ docker-compose down -v
 docker-compose down --rmi all
 ```
 
-### Restart Services
+### Redémarrer les services
 
 ```bash
 # Restart all
@@ -188,9 +207,9 @@ docker-compose restart
 docker-compose restart backend
 ```
 
-## GPU Support
+## Support GPU
 
-For GPU-accelerated OCR with NVIDIA GPUs:
+Pour l'OCR accéléré par GPU avec des GPU NVIDIA :
 
 ```yaml
 # docker-compose.gpu.yml
@@ -216,11 +235,11 @@ docker-compose -f docker-compose.yml -f docker-compose.gpu.yml up
 ```
 
 !!! note "NVIDIA Container Toolkit"
-    GPU support requires the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html).
+    Le support GPU nécessite le [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html).
 
-## Persistent Storage
+## Stockage persistant
 
-### Default (Bind Mounts)
+### Par défaut (Bind Mounts)
 
 ```yaml
 volumes:
@@ -228,7 +247,7 @@ volumes:
   - ./outputs:/app/outputs
 ```
 
-### Named Volumes (Recommended for Production)
+### Volumes nommés (recommeté pour la production)
 
 ```yaml
 services:
@@ -244,7 +263,7 @@ volumes:
   duckling-data:
 ```
 
-### Backup Data
+### Sauvegarder les données
 
 ```bash
 # Backup volumes
@@ -254,9 +273,9 @@ docker run --rm -v duckling-outputs:/data -v $(pwd):/backup alpine tar cvf /back
 docker run --rm -v duckling-outputs:/data -v $(pwd):/backup alpine tar xvf /backup/outputs-backup.tar -C /
 ```
 
-## Health Checks
+## Contrôles de santé
 
-Both containers include health checks:
+Les deux conteneurs incluent des contrôles de santé :
 
 ```bash
 # Check backend health
@@ -268,7 +287,7 @@ curl -I http://localhost:3000
 # Response: HTTP/1.1 200 OK
 ```
 
-Docker Compose waits for health checks:
+Docker Compose attend les contrôles de santé :
 
 ```yaml
 frontend:
@@ -277,9 +296,9 @@ frontend:
       condition: service_healthy
 ```
 
-## Resource Limits
+## Limites de ressources
 
-Production configuration includes resource limits:
+La configuration de production inclut des limites de ressources :
 
 ```yaml
 services:
@@ -301,9 +320,9 @@ services:
           memory: 256M
 ```
 
-## Networking
+## Réseau
 
-Services communicate over a bridge network:
+Les services communiquent via un réseau bridge :
 
 ```yaml
 networks:
@@ -311,15 +330,15 @@ networks:
     driver: bridge
 ```
 
-The frontend proxies API requests to the backend:
+Le frontend fait proxy des requêtes API vers le backend :
 
 ```
 Browser → Frontend (nginx:3000) → Backend (flask:5001)
 ```
 
-## Troubleshooting
+## Dépannage
 
-### Container Won't Start
+### Le conteneur ne démarre pas
 
 ```bash
 # Check logs
@@ -332,9 +351,9 @@ docker-compose ps
 docker inspect duckling-backend
 ```
 
-### Port Conflicts
+### Conflits de ports
 
-Change ports in `docker-compose.yml`:
+Changer les ports dans `docker-compose.yml`:
 
 ```yaml
 services:
@@ -346,7 +365,7 @@ services:
       - "8080:3000"  # Change external port
 ```
 
-### Build Failures
+### Échecs de construction
 
 ```bash
 # Clean build cache
@@ -356,7 +375,7 @@ docker builder prune
 docker-compose build --no-cache
 ```
 
-### Memory Issues
+### Problèmes de mémoire
 
 ```bash
 # Check memory usage
@@ -366,7 +385,7 @@ docker stats
 # Settings → Resources → Memory
 ```
 
-### Network Issues
+### Problèmes de réseau
 
 ```bash
 # List networks
@@ -381,8 +400,8 @@ docker network prune
 docker-compose up
 ```
 
-## Next Steps
+## Prochaines étapes
 
-- [Production Deployment](../deployment/production.md) - Production-ready setup
-- [Scaling](../deployment/scaling.md) - Scale for high traffic
-- [Security](../deployment/security.md) - Security best practices
+- [Production Déploiement](../deployment/production.md) - Production-ready setup
+- [Mise à l'échelle](../deployment/scaling.md) - Échelle for high traffic
+- [Sécurité](../deployment/security.md) - Sécurité best practices

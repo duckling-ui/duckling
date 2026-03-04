@@ -1,14 +1,14 @@
-# Development Setup
+# Entwicklungsumgebung
 
-Set up your development environment for contributing to Duckling.
+Richten Sie Ihre Entwicklungsumgebung für die Mitarbeit an Duckling ein.
 
-## Prerequisites
+## Voraussetzungen
 
 - Python 3.10+
 - Node.js 18+
 - Git
 
-## Backend Setup
+## Backend-Einrichtung
 
 ```bash
 cd backend
@@ -17,14 +17,14 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Frontend Setup
+## Frontend-Einrichtung
 
 ```bash
 cd frontend
 npm install
 ```
 
-## Running Development Servers
+## Entwicklungsserver starten
 
 ### Backend
 
@@ -34,7 +34,7 @@ source venv/bin/activate
 python duckling.py
 ```
 
-Backend runs at: `http://localhost:5001`
+Backend läuft unter: `http://localhost:5001`
 
 ### Frontend
 
@@ -43,34 +43,34 @@ cd frontend
 npm run dev
 ```
 
-Frontend runs at: `http://localhost:3000`
+Frontend läuft unter: `http://localhost:3000`
 
-## Project Structure
+## Projektstruktur
 
 ```
 duckling/
 ├── backend/
-│   ├── duckling.py         # Flask application entry
-│   ├── config.py           # Configuration
-│   ├── models/             # Database models
-│   ├── routes/             # API endpoints
-│   ├── services/           # Business logic
-│   └── tests/              # Backend tests
+│   ├── duckling.py         # Flask-Anwendungseinstieg
+│   ├── config.py           # Konfiguration
+│   ├── models/             # Datenbankmodelle
+│   ├── routes/             # API-Endpunkte
+│   ├── services/           # Geschäftslogik
+│   └── tests/              # Backend-Tests
 ├── frontend/
 │   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── hooks/          # Custom React hooks
-│   │   ├── services/       # API client
-│   │   └── types/          # TypeScript types
-│   └── tests/              # Frontend tests
-└── docs/                   # Documentation
+│   │   ├── components/     # React-Komponenten
+│   │   ├── hooks/          # Benutzerdefinierte React-Hooks
+│   │   ├── services/       # API-Client
+│   │   └── types/          # TypeScript-Typen
+│   └── tests/              # Frontend-Tests
+└── docs/                   # Dokumentation
 ```
 
-## IDE Setup
+## IDE-Einrichtung
 
 ### VS Code
 
-Recommended extensions:
+Empfohlene Erweiterungen:
 
 - Python
 - Pylance
@@ -78,7 +78,7 @@ Recommended extensions:
 - Prettier
 - Tailwind CSS IntelliSense
 
-### Settings
+### Einstellungen
 
 `.vscode/settings.json`:
 
@@ -93,9 +93,9 @@ Recommended extensions:
 }
 ```
 
-## Environment Variables
+## Umgebungsvariablen
 
-Create `.env` files for local development:
+Erstellen Sie `.env`-Dateien für die lokale Entwicklung:
 
 ### Backend (.env)
 
@@ -113,10 +113,10 @@ VITE_API_URL=http://localhost:5001/api
 
 ## Hot Reloading
 
-Both servers support hot reloading:
+Beide Server unterstützen Hot Reloading:
 
-- **Backend**: Flask debug mode auto-reloads on file changes
-- **Frontend**: Vite HMR updates components without page refresh
+- **Backend**: Flask-Debug-Modus lädt bei Dateiänderungen automatisch neu
+- **Frontend**: Vite HMR aktualisiert Komponenten ohne Seitenaktualisierung
 
 ## Debugging
 
@@ -147,11 +147,11 @@ Both servers support hot reloading:
 
 ### Frontend
 
-Use browser DevTools with React Developer Tools extension.
+Browser-DevTools mit React Developer Tools-Erweiterung verwenden.
 
-## Common Tasks
+## Häufige Aufgaben
 
-### Update Dependencies
+### Abhängigkeiten aktualisieren
 
 ```bash
 # Backend
@@ -163,20 +163,19 @@ cd frontend
 npm update
 ```
 
-### Generate Types
+### Typen generieren
 
 ```bash
 cd frontend
-npm run generate-types  # If available
+npm run generate-types  # Falls verfügbar
 ```
 
-### Build for Production
+### Für Produktion bauen
 
 ```bash
 # Frontend
 cd frontend
 npm run build
 
-# Backend (no build needed)
+# Backend (kein Build erforderlich)
 ```
-

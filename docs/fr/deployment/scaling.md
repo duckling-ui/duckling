@@ -1,8 +1,8 @@
-# Scaling
+# Mise à l'échelle
 
 Guide for scaling Duckling for high-traffic deployments.
 
-## Architecture for Scale
+## Architecture for Échelle
 
 ```mermaid
 graph LR
@@ -30,7 +30,7 @@ graph LR
     style S3 fill:#22c55e,color:#fff
 ```
 
-## Horizontal Scaling
+## Horizontal Mise à l'échelle
 
 For high-traffic deployments:
 
@@ -43,11 +43,11 @@ For high-traffic deployments:
 
 ## Resource Requirements
 
-| Deployment | CPU | RAM | Storage |
+| Déploiement | CPU | RAM | Storage |
 |------------|-----|-----|---------|
-| Development | 2 cores | 4GB | 10GB |
+| Développement | 2 cores | 4GB | 10GB |
 | Small (< 100 docs/day) | 4 cores | 8GB | 50GB |
-| Medium (< 1000 docs/day) | 8 cores | 16GB | 200GB |
+| Moyen (< 1000 docs/day) | 8 cores | 16GB | 200GB |
 | Large (> 1000 docs/day) | 16+ cores | 32GB+ | 500GB+ |
 
 ---
@@ -167,7 +167,7 @@ def migrate():
 
 ## Object Storage (S3)
 
-Use S3 or compatible storage for uploads and outputs:
+Use S3 or compatible storage for uploads et outputs:
 
 ### Configuration
 
@@ -184,7 +184,7 @@ s3 = boto3.client(
 BUCKET_NAME = 'duckling-files'
 ```
 
-### File Operations
+### Fichier Operations
 
 ```python
 def upload_to_s3(file_path: str, key: str):
@@ -260,16 +260,16 @@ Key metrics to monitor:
 
 - Conversion rate (documents/minute)
 - Queue depth
-- Processing time (p50, p95, p99)
+- Traitement time (p50, p95, p99)
 - Error rate
 - Memory usage
 - CPU utilization
 
 ---
 
-## Kubernetes Deployment
+## Kubernetes Déploiement
 
-### Deployment
+### Déploiement
 
 ```yaml
 apiVersion: apps/v1

@@ -1,14 +1,14 @@
-# Development Setup
+# Configuration du développement
 
-Set up your development environment for contributing to Duckling.
+Configurez votre environnement de développement pour contribuer à Duckling.
 
-## Prerequisites
+## Prérequis
 
 - Python 3.10+
 - Node.js 18+
 - Git
 
-## Backend Setup
+## Configuration du backend
 
 ```bash
 cd backend
@@ -17,14 +17,14 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Frontend Setup
+## Configuration du frontend
 
 ```bash
 cd frontend
 npm install
 ```
 
-## Running Development Servers
+## Lancer les serveurs de développement
 
 ### Backend
 
@@ -34,7 +34,7 @@ source venv/bin/activate
 python duckling.py
 ```
 
-Backend runs at: `http://localhost:5001`
+Le backend s'exécute sur : `http://localhost:5001`
 
 ### Frontend
 
@@ -43,34 +43,34 @@ cd frontend
 npm run dev
 ```
 
-Frontend runs at: `http://localhost:3000`
+Le frontend s'exécute sur : `http://localhost:3000`
 
-## Project Structure
+## Structure du projet
 
 ```
 duckling/
 ├── backend/
-│   ├── duckling.py         # Flask application entry
+│   ├── duckling.py         # Point d'entrée de l'application Flask
 │   ├── config.py           # Configuration
-│   ├── models/             # Database models
-│   ├── routes/             # API endpoints
-│   ├── services/           # Business logic
-│   └── tests/              # Backend tests
+│   ├── models/             # Modèles de base de données
+│   ├── routes/             # Endpoints API
+│   ├── services/           # Logique métier
+│   └── tests/              # Tests backend
 ├── frontend/
 │   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── hooks/          # Custom React hooks
-│   │   ├── services/       # API client
-│   │   └── types/          # TypeScript types
-│   └── tests/              # Frontend tests
+│   │   ├── components/     # Composants React
+│   │   ├── hooks/          # Hooks React personnalisés
+│   │   ├── services/       # Client API
+│   │   └── types/          # Types TypeScript
+│   └── tests/              # Tests frontend
 └── docs/                   # Documentation
 ```
 
-## IDE Setup
+## Configuration de l'IDE
 
 ### VS Code
 
-Recommended extensions:
+Extensions recommandées :
 
 - Python
 - Pylance
@@ -78,9 +78,9 @@ Recommended extensions:
 - Prettier
 - Tailwind CSS IntelliSense
 
-### Settings
+### Paramètres
 
-`.vscode/settings.json`:
+`.vscode/settings.json` :
 
 ```json
 {
@@ -93,9 +93,9 @@ Recommended extensions:
 }
 ```
 
-## Environment Variables
+## Variables d'environnement
 
-Create `.env` files for local development:
+Créez des fichiers `.env` pour le développement local :
 
 ### Backend (.env)
 
@@ -111,18 +111,18 @@ DEBUG=True
 VITE_API_URL=http://localhost:5001/api
 ```
 
-## Hot Reloading
+## Rechargement à chaud
 
-Both servers support hot reloading:
+Les deux serveurs prennent en charge le rechargement à chaud :
 
-- **Backend**: Flask debug mode auto-reloads on file changes
-- **Frontend**: Vite HMR updates components without page refresh
+- **Backend** : Le mode debug Flask recharge automatiquement lors des changements de fichiers
+- **Frontend** : Vite HMR met à jour les composants sans rechargement de page
 
-## Debugging
+## Débogage
 
 ### Backend (VS Code)
 
-`.vscode/launch.json`:
+`.vscode/launch.json` :
 
 ```json
 {
@@ -147,11 +147,11 @@ Both servers support hot reloading:
 
 ### Frontend
 
-Use browser DevTools with React Developer Tools extension.
+Utilisez les DevTools du navigateur avec l'extension React Developer Tools.
 
-## Common Tasks
+## Tâches courantes
 
-### Update Dependencies
+### Mettre à jour les dépendances
 
 ```bash
 # Backend
@@ -163,20 +163,19 @@ cd frontend
 npm update
 ```
 
-### Generate Types
+### Générer les types
 
 ```bash
 cd frontend
-npm run generate-types  # If available
+npm run generate-types  # Si disponible
 ```
 
-### Build for Production
+### Compiler pour la production
 
 ```bash
 # Frontend
 cd frontend
 npm run build
 
-# Backend (no build needed)
+# Backend (pas de compilation nécessaire)
 ```
-

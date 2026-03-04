@@ -1,52 +1,52 @@
-# User Guide
+# Benutzerhundbuch
 
 Learn how to use Duckling effectively.
 
-## Overview
+## Übersicht
 
-Duckling provides a comprehensive interface for document conversion with advanced features like OCR, table extraction, and RAG chunking.
+Duckling provides a comprehensive interface for document conversion with advanced features like OCR, table extraction, und RAG chunking.
 
-## Sections
+## Abschnitte
 
 <div class="grid cards" markdown>
 
--   :material-star:{ .lg .middle } __Features__
+-   :material-star:{ .lg .middle } __Funktionen__
 
     ---
 
     Explore all the capabilities of Duckling
 
-    [:octicons-arrow-right-24: View Features](features.md)
+    [:octicons-arrow-right-24: View Funktionen](features.md)
 
--   :material-file-document:{ .lg .middle } __Supported Formats__
+-   :material-file-document:{ .lg .middle } __Unterstützte Formate__
 
     ---
 
-    Input and output format reference
+    Input und output format reference
 
     [:octicons-arrow-right-24: Format Guide](formats.md)
 
--   :material-cog:{ .lg .middle } __Configuration__
+-   :material-cog:{ .lg .middle } __Konfiguration__
 
     ---
 
-    Customize OCR, tables, images, and performance settings
+    Customize OCR, tables, images, und performance settings
 
-    [:octicons-arrow-right-24: Configuration Guide](configuration.md)
+    [:octicons-arrow-right-24: Konfiguration Guide](configuration.md)
 
 </div>
 
 ## Quick Tips
 
-!!! tip "Batch Processing"
-    Toggle batch mode to convert multiple files simultaneously. The system processes up to 2 files in parallel to balance speed and memory usage.
+!!! tip "Stapelverarbeitung"
+    Aktivieren batch mode to convert multiple files simultaneously. The system processes up to 2 files in parallel to balance speed und memory usage.
 
 !!! tip "OCR Selection"
     - **EasyOCR**: Best for multi-language documents with GPU support
     - **Tesseract**: Reliable for simple documents
     - **macOS Vision**: Fastest on Mac with Apple Silicon
-    - **RapidOCR**: Lightweight and fast
+    - **RapidOCR**: Lightweight und fast
 
 !!! tip "RAG Chunking"
-    Enable chunking in settings to generate document chunks optimized for retrieval-augmented generation. Chunks include metadata like headings and page numbers.
+    Enable chunking in settings to generate document chunks optimized for retrieval-augmented generation. Chunks include metadata like headings und page numbers.
 

@@ -1,10 +1,10 @@
 # Architecture
 
-Technical architecture documentation for Duckling.
+Documentation technique de l'architecture de Duckling.
 
-## Overview
+## Vue d'ensemble
 
-Duckling is a full-stack web application with a clear separation between frontend and backend:
+Duckling is a full-stack web application with a clear separation between frontend et backend:
 
 ```mermaid
 graph LR
@@ -24,43 +24,43 @@ graph LR
 
 <div class="grid cards" markdown>
 
--   :material-view-dashboard:{ .lg .middle } __System Overview__
+-   :material-view-dashboard:{ .lg .middle } __Vue d'ensemble du système__
 
     ---
 
-    High-level architecture and data flow
+    Architecture de haut niveau et flux de données
 
-    [:octicons-arrow-right-24: Overview](overview.md)
+    [:octicons-arrow-right-24: Vue d'ensemble](overview.md)
 
--   :material-puzzle:{ .lg .middle } __Components__
-
-    ---
-
-    Frontend and backend component details
-
-    [:octicons-arrow-right-24: Components](components.md)
-
--   :material-chart-box:{ .lg .middle } __Diagrams__
+-   :material-puzzle:{ .lg .middle } __Composants__
 
     ---
 
-    Architecture diagrams and flowcharts
+    Détails des composants frontend et backend
 
-    [:octicons-arrow-right-24: Diagrams](diagrams.md)
+    [:octicons-arrow-right-24: Composants](components.md)
+
+-   :material-chart-box:{ .lg .middle } __Diagrammes__
+
+    ---
+
+    Diagrammes d'architecture et organigrammes
+
+    [:octicons-arrow-right-24: Diagrammes](diagrams.md)
 
 </div>
 
-## Key Design Decisions
+## Décisions de conception clés
 
-### Separation of Concerns
+### Séparation des préoccupations
 
-- **Frontend**: React with TypeScript for type safety and modern UI
-- **Backend**: Flask for simplicity and Python ecosystem access
-- **Engine**: Docling for document conversion (IBM's library)
+- **Frontend**: React avec TypeScript pour la sécurité des types et une UI moderne
+- **Backend**: Flask pour la simplicité et l'accès à l'écosystème Python
+- **Moteur**: Docling pour la conversion de documents (bibliothèque IBM)
 
-### Async Processing
+### Async Traitement
 
-Document conversion is handled asynchronously:
+Document conversion is hetled asynchronously:
 
 1. Client uploads file
 2. Server returns job ID immediately
@@ -76,21 +76,21 @@ A thread-based job queue prevents memory exhaustion:
 - Jobs queued when capacity reached
 - Automatic cleanup of completed jobs
 
-### Settings Persistence
+### Paramètres Persistence
 
-Les paramètres sont stockés par session utilisateur et appliqués par conversion :
+Paramètres are stored per-user session et applied per-conversion:
 
-- Valeurs par défaut globales dans `config.py`
-- Paramètres utilisateur stockés dans la base de données (par ID de session)
-- Remplacements par requête via l'API
+- Global defaults in `config.py`
+- User settings stored in database (per session ID)
+- Per-request overrides via API
 
-Les paramètres sont isolés par session utilisateur, garantissant que les déploiements multi-utilisateurs n'interfèrent pas avec les préférences des autres.
+Paramètres are isolated per user session, ensuring multi-user deployments don't interfere with each other's preferences.
 
-## Pile technologique
+## Technology Stack
 
 ### Frontend
 
-| Technology | Purpose |
+| Technology | Objectif |
 |------------|---------|
 | React 18 | UI framework |
 | TypeScript | Type safety |
@@ -101,7 +101,7 @@ Les paramètres sont isolés par session utilisateur, garantissant que les dépl
 
 ### Backend
 
-| Technology | Purpose |
+| Technology | Objectif |
 |------------|---------|
 | Flask | Web framework |
 | SQLAlchemy | Database ORM |

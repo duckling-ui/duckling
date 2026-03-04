@@ -1,43 +1,102 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+Alle bemerkenswerten Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+**Neueste Version:** [0.0.10](https://github.com/davidgs/duckling/releases/tag/v0.0.10) (2026-02-24)
 
-### Added
+## [Unveröffentlicht]
 
-- Unterstützung für UI-Sprachen (Englisch `en`, Spanisch `es`, Französisch `fr`, Deutsch `de`) mit Sprachumschalter.
+### Geändert
+
+- **Dokumentationsnavigation**: Wechsel von horizontalen Top-Tabs zu einer einzelnen linken Seitenleiste mit aufklappbarer Baumnavigation; jede Hauptkategorie (Startseite, Erste Schritte usw.) kann ein- oder ausgeklappt werden.
+- **Schlüsselfunktionen-Kacheln**: Jede Funktionskachel auf der Dokumentations-Startseite ist jetzt ein klickbarer Link zu ihrer detaillierten Dokumentation (Seite Funktionen oder Formate).
+- **CONTRIBUTING.md**: DCO-Signatur (Developer Certificate of Origin) für alle Commits hinzugefügt.
+- **Contributing-Dokumentation**: Vollständige Übersetzungen für Deutsch (de), Spanisch (es) und Französisch (fr); alle Locales haben jetzt konsistenten, vollständigen Inhalt inklusive DCO-Anforderungen.
+
+### Sicherheit
+
+- Rollup Path-Traversal (GHSA-mw96-cpmx-2vgc) und Minimatch ReDoS (GHSA-3ppc-4f35-3m26) per npm-Overrides im Frontend behoben: `rollup >=4.59.0`, `minimatch 9.0.6` für `@typescript-eslint/typescript-estree`.
+- Werkzeug safe_join für Windows-Gerätenamen in mehrsegmentigen Pfaden behoben (CVE-2026-27199, GHSA-29vq-49wr-vm6x): werkzeug 3.1.4 → 3.1.6.
+- Flask-Session Vary: Cookie-Header bei Verwendung des `in`-Operators behoben (CVE-2026-27205): flask 3.0.0 → 3.1.3.
+- **SSRF-Prävention**: URL-Validierung vor ausgehenden Anfragen in `download_from_url`, `download_from_url_with_images` und `download_image`; blockiert Loopback, private IPs, Link-Local, Metadata und gefährliche Schemas.
+- **CodeQL-Sicherheitsfixes**:
+  - SSRF: `validate_url_safe_for_request` gibt jetzt die validierte URL zurück; alle `requests.get`-Aufrufe verwenden den Rückgabewert zur Erfüllung der Datenflussanalyse.
+  - ReDoS: HTML-Bildextraktion vor Regex-Verarbeitung auf 5 MB begrenzt, um polynomielle Regex auf benutzerkontrolliertem Inhalt zu mindern.
+  - Path-Traversal: `delete_output_folder` verwendet jetzt `validate_job_id` und `get_validated_output_dir` aus den Sicherheits-Utilities statt manueller Prüfungen.
+  - Informationsoffenlegung: Einstellungs-API-Fehlerantworten werden über `_sanitize_error_for_client` bereinigt, um Stack-Trace- oder sensible Datenlecks zu verhindern.
+
+### Geplant
+
+- Benutzerauthentifizierung
+- Cloud-Speicher-Integration
+- Konvertierungsvorlagen
+- API-Ratenbegrenzung
+- WebSocket für Echtzeit-Updates
+- Dunkel-/Hell-Theme-Umschalter
+- Tastaturkürzel
+- Barrierefreiheitsverbesserungen (WCAG 2.1)
+
+## [0.0.10] - 2026-02-24
+
+### Hinzugefügt
+
+- **Docker-Image-Publishing-Workflow**: GitHub Action läuft bei PR-Merges in `main`, baut Multi-Platform-Images und pusht zu Docker Hub und GitHub Container Registry (benötigt `DOCKERHUB_USERNAME`- und `DOCKERHUB_TOKEN`-Secrets).
+- **Chunks jetzt generieren**: Button im RAG-Chunks-Tab zur bedarfsgesteuerten Chunk-Generierung für abgeschlossene Dokumente (`POST /api/history/{job_id}/generate-chunks`)
+- **Inhaltsadressierte Deduplizierung**: Gleiche Datei + gleiche dokumentbeeinflussende Einstellungen nutzen gespeicherten Inhalt statt Neu-Konvertierung
+  - Cache-Treffer: Symlink erstellen, Metadaten laden, sofort abschließen (kein Docling-Lauf)
+  - Cache-Fehler: Konvertierung ausführen, Ausgabe in Content-Store verschieben, Symlink erstellen
+  - Datenbank-Migration `scripts/migrate_add_content_hash.py` fügt Spalte `content_hash` hinzu
+- **Konvertierungsstatistiken und -metriken**: Erweiterte History-Statistiken für Docling- und Duckling-Nutzungsanalysen
+  - `GET /api/history/stats` liefert `avg_processing_seconds`, `ocr_backend_breakdown`, `output_format_breakdown`, `performance_device_breakdown`, `chunking_enabled_count`, `error_category_breakdown`, `source_type_breakdown` und `queue_depth`
+  - Datenbank-Migration `scripts/migrate_add_stats_columns.py` fügt Stats-Spalten zur conversions-Tabelle hinzu
+  - History-Panel zeigt durchschnittliche Verarbeitungszeit und Warteschlangentiefe, wenn verfügbar
+- **Statistik-Panel**: Dedizierter Viewer für Konvertierungsstatistiken (Header-Button, „Vollständige Statistiken anzeigen“ aus History)
+- **Erweiterte Statistiken**: Hardware- und Leistungsmetriken im Statistik-Panel
+  - System-Abschnitt: Hardware-Typ (CPU/CUDA/MPS), CPU-Anzahl, aktuelle CPU-Auslastung, GPU-Infos
+  - Durchschnittliche Seiten/Sek und Seiten/Sek pro CPU
+  - Konvertierungszeitverteilung (Median, 95., 99. Perzentil)
+  - Seiten/Sek-Diagramm über Zeit
+  - CPU-Auslastung während jeder Konvertierung gemittelt (in DB gespeichert)
+  - Datenbank-Migration `scripts/migrate_add_cpu_usage_column.py` fügt Spalte `cpu_usage_avg_during_conversion` hinzu
+  - CPU-Auslastung ist jetzt prozessspezifisch (Duckling-Backend-Prozess, führt Docling aus), nicht systemweit
+  - Pro-Konvertierung-Konfiguration gespeichert: `performance_device_used` (von „auto“ bei Abschluss aufgelöst), `images_classify_enabled`
+  - Datenbank-Migration `scripts/migrate_add_config_columns.py` fügt diese Spalten hinzu
+  - Stats-Aufschlüsselung nach Hardware, OCR-Backend, Bildklassifikator (Seiten/Sek, Konvertierungszeit pro Konfiguration)
+- UI-Sprachunterstützung (Englisch `en`, Spanisch `es`, Französisch `fr`, Deutsch `de`) mit Sprachumschalter.
 - Mehrsprachige MkDocs-Dokumentation (Englisch, Spanisch, Französisch, Deutsch) unter `/api/docs/site/<locale>/`.
-- Kategoriebeschriftungen im Dropzone-Panel (Dokumente, Web, Bilder, Daten) jetzt vollständig internationalisiert.
+- Dropzone-Panel-Kategoriebeschriftungen (Dokumente, Web, Bilder, Daten) jetzt vollständig internationalisiert.
+- Docling-Docs-Abschnitt in MkDocs (kuratierte, vendored Teilmenge der Upstream-Docling-Dokumentation + Sync-Skript).
+- **Sitzungsbasierte Benutzereinstellungen**: Benutzereinstellungen pro Sitzung in der Datenbank statt in einer gemeinsamen Datei gespeichert.
 
-### Fixed
+### Sicherheit
+
+- Frontend-Sicherheitslücken behoben (esbuild GHSA-67mh-4wv8-2f99): Vite 5→7, Vitest 1→4 und zugehörige Abhängigkeiten aktualisiert.
+
+### Geändert
+
+- Backend-Einstiegspunkt von `app.py` zu `duckling.py` umbenannt für bessere Klarheit.
+- Flask-Anwendungsname zu „duckling“ geändert (zeigt „Serving Flask app 'duckling'“).
+
+### Behoben
 
 - Die Dokumentationsnavigation zeigt jetzt vollständig lokalisierte Seitennamen in allen unterstützten Sprachen an.
 - Kategoriebeschriftungen für Dateiformate im Dropzone-Panel werden jetzt korrekt basierend auf der ausgewählten Sprache übersetzt.
 - Verbesserte Extraktion von Dokumentationsseitentiteln mit besserem Fallback auf übersetzte Namen.
-
-### Changed
-
-- Backend-Einstiegspunkt von `app.py` zu `duckling.py` umbenannt für bessere Klarheit.
-- Flask-Anwendungsname zu "duckling" geändert (zeigt "Serving Flask app 'duckling'").
-
-## [0.0.10] - 2026-02-24
-
-### Security
-
-- Frontend-Sicherheitslücken behoben (esbuild GHSA-67mh-4wv8-2f99): Vite 5→7, Vitest 1→4 und zugehörige Abhängigkeiten aktualisiert.
-
-### Fixed
-
-- `vitest.config.ts` für Vitest 4-Kompatibilität aktualisiert.
+- Prev/Next-Links in der Fußzeile des eingebetteten Docs-Panels bleiben innerhalb der aktuellen Seitenleisten-Kategorie, und die Navigation innerhalb der eingebetteten Docs hält die Seitenleisten-Auswahl synchron.
+- Fehlgeschlagener Docs-Rebuild der eingebetteten App mit `cannot access local variable 'shutil'` beim MkDocs-Site-Build behoben.
+- Backend-Docs-Rebuild bevorzugt jetzt die repo-lokale `./venv` MkDocs-Umgebung, um erforderliche Plugins (wie `i18n`) sicherzustellen.
+- Behoben: Klick auf History-Eintrag lud Dokument nicht; verwendet jetzt den History-Load-Endpoint (Festplatte) statt des In-Memory-Ergebnis-Endpoints.
+- Wenn `document_json_path` in der DB fehlt, findet und lädt History-Load jetzt `*.document.json` aus dem Ausgabeverzeichnis, sodass alle History-Einträge geladen werden, nicht nur der erste.
+- Dokumentenansichts-Panel aktualisiert sich jetzt beim Laden eines anderen History-Eintrags (verwendet Komponenten-Key zum Remount mit frischem Zustand).
+- `vitest.config.ts` für Vitest-4-Kompatibilität aktualisiert.
 - CI/CD Node.js-Versionsanforderung auf 22 aktualisiert (erforderlich für Vite 7).
 
 ## [0.0.9] - 2026-01-08
 
-### Added
+### Hinzugefügt
 
 - **Custom Branding**: Duckling-Logo und Versionsanzeige in der Kopfzeile.
 - **URL-basierte Dokumentenkonvertierung**: Konvertierung von URLs mit automatischer Bildextraktion für HTML.
@@ -49,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Gerendert vs. Roh-Vorschau-Modus**: Umschalter für HTML und Markdown.
 - **Erweiterte Docker-Unterstützung**: Multi-Stage-Dockerfiles, docker-compose-Varianten, Multi-Platform-Builds.
 
-### Fixed
+### Behoben
 
 - Multi-Worker-Inhaltsabruf (Bilder, Tabellen, Ergebnisse).
 - HTML-Vorschau in der UI.
@@ -61,199 +120,195 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.8] - 2026-01-07
 
-### Changed
+### Geändert
 
-- **Renamed**: Project renamed from "Docling UI" to "Duckling"
-  - Updated all documentation, code, and configuration files
-  - Branding updated throughout the application
+- **Umbenannt**: Projekt von „Docling UI“ zu „Duckling“ umbenannt
+  - Alle Dokumentation, Code und Konfigurationsdateien aktualisiert
+  - Branding in der gesamten Anwendung aktualisiert
 
 ## [0.0.7] - 2026-01-07
 
-### Added
+### Hinzugefügt
 
-- **MkDocs Documentation**: Migrated documentation to MkDocs with Material theme
-  - Modern, searchable documentation site
-  - Dark/light theme toggle
-  - Mermaid diagram support
-  - Improved navigation and organization
+- **MkDocs-Dokumentation**: Dokumentation zu MkDocs mit Material-Theme migriert
+  - Moderne, durchsuchbare Dokumentationsseite
+  - Dunkel-/Hell-Theme-Umschalter
+  - Mermaid-Diagramm-Unterstützung
+  - Verbesserte Navigation und Organisation
 
-### Changed
+### Geändert
 
-- Documentation structure reorganized for better navigation
-- All diagrams converted to Mermaid format for live rendering
+- Dokumentationsstruktur für bessere Navigation reorganisiert
+- Alle Diagramme in Mermaid-Format für Live-Rendering konvertiert
 
 ## [0.0.6] - 2025-12-11
 
-### Security
+### Sicherheit
 
-- **CRITICAL**: Fixed Flask debug mode enabled by default in production
-  - Debug mode now controlled by `FLASK_DEBUG` environment variable (default: false)
-  - Host binding defaults to `127.0.0.1` instead of `0.0.0.0`
-- **HIGH**: Updated vulnerable dependencies
+- **KRITISCH**: Flask-Debug-Modus standardmäßig in Produktion aktiviert – behoben
+  - Debug-Modus wird jetzt durch Umgebungsvariable `FLASK_DEBUG` gesteuert (Standard: false)
+  - Host-Binding standardmäßig `127.0.0.1` statt `0.0.0.0`
+- **HOCH**: Anfällige Abhängigkeiten aktualisiert
   - `flask-cors`: 4.0.0 → 6.0.0 (CVE-2024-1681, CVE-2024-6844, CVE-2024-6866, CVE-2024-6839)
   - `gunicorn`: 21.2.0 → 23.0.0 (CVE-2024-1135, CVE-2024-6827)
   - `werkzeug`: 3.0.1 → 3.1.4 (CVE-2024-34069, CVE-2024-49766, CVE-2024-49767, CVE-2025-66221)
-- **MEDIUM**: Added path traversal protection to file serving endpoints
-  - Image serving validates paths don't escape allowed directories
-  - Blocks directory traversal sequences (`..`)
-- **MEDIUM**: Enhanced SQL query sanitization
-  - Search queries now escape LIKE wildcards
-  - Added query length limits
-- Added comprehensive `SECURITY.md` with:
-  - Security audit summary
-  - Production deployment checklist
-  - Environment variable documentation
-  - Vulnerability reporting guidelines
+- **MITTEL**: Path-Traversal-Schutz für Datei-Serving-Endpoints hinzugefügt
+  - Bild-Serving validiert, dass Pfade erlaubte Verzeichnisse nicht verlassen
+  - Blockiert Verzeichnis-Traversal-Sequenzen (`..`)
+- **MITTEL**: Erweiterte SQL-Abfrage-Sanitisierung
+  - Suchabfragen escapen jetzt LIKE-Wildcards
+  - Abfragelängenlimits hinzugefügt
+- Umfassendes `SECURITY.md` hinzugefügt mit:
+  - Sicherheitsaudit-Zusammenfassung
+  - Produktions-Deployment-Checkliste
+  - Umgebungsvariablen-Dokumentation
+  - Richtlinien zur Meldung von Schwachstellen
 
-### Changed
+### Geändert
 
-- Backend now uses environment variables for all security-sensitive configuration
-- Default host changed from `0.0.0.0` to `127.0.0.1` for safer defaults
+- Backend verwendet jetzt Umgebungsvariablen für alle sicherheitsrelevanten Konfigurationen
+- Standard-Host von `0.0.0.0` auf `127.0.0.1` für sicherere Defaults geändert
 
 ## [0.0.5] - 2025-12-10
 
-### Added
+### Hinzugefügt
 
-- **Batch Processing**: Upload and convert multiple files at once
-  - Toggle batch mode in the header
-  - Process multiple documents simultaneously
+- **Stapelverarbeitung**: Mehrere Dateien gleichzeitig hochladen und konvertieren
+  - Stapelmodus im Header umschalten
+  - Mehrere Dokumente gleichzeitig verarbeiten
 
-- **Image & Table Extraction**:
-  - Extract embedded images from documents
-  - Download individual images
-  - Extract tables with full data preservation
-  - Export tables to CSV format
-  - View table previews in the UI
+- **Bild- und Tabellenextraktion**:
+  - Eingebettete Bilder aus Dokumenten extrahieren
+  - Einzelne Bilder herunterladen
+  - Tabellen mit vollständiger Datenerhaltung extrahieren
+  - Tabellen als CSV exportieren
+  - Tabellenvorschauen in der UI anzeigen
 
-- **RAG/Chunking Support**:
-  - Document chunking for RAG applications
-  - Configurable max tokens per chunk (64-8192)
-  - Merge peers option for undersized chunks
-  - Download chunks as JSON
+- **RAG/Chunking-Unterstützung**:
+  - Dokumenten-Chunking für RAG-Anwendungen
+  - Konfigurierbare max. Tokens pro Chunk (64-8192)
+  - Merge-Peers-Option für unterdimensionierte Chunks
+  - Chunks als JSON herunterladen
 
-- **Additional Export Formats**:
-  - Document Tokens (`.tokens.json`)
-  - RAG Chunks (`.chunks.json`)
-  - Enhanced DocTags export
+- **Zusätzliche Exportformate**:
+  - Dokument-Tokens (`.tokens.json`)
+  - RAG-Chunks (`.chunks.json`)
+  - Erweiterter DocTags-Export
 
-- **Advanced OCR Options**:
-  - Multiple OCR backends: EasyOCR, Tesseract, macOS Vision, RapidOCR
-  - GPU acceleration support (EasyOCR)
-  - Configurable confidence threshold (0-1)
-  - Bitmap area threshold control
-  - Support for 28+ languages
+- **Erweiterte OCR-Optionen**:
+  - Mehrere OCR-Backends: EasyOCR, Tesseract, macOS Vision, RapidOCR
+  - GPU-Beschleunigungsunterstützung (EasyOCR)
+  - Konfigurierbarer Konfidenzschwellenwert (0-1)
+  - Bitmap-Bereichsschwellenwert-Steuerung
+  - Unterstützung für 28+ Sprachen
 
-- **Table Structure Options**:
-  - Fast vs Accurate detection modes
-  - Cell matching configuration
-  - Structure extraction toggle
+- **Tabellenstruktur-Optionen**:
+  - Schnell vs. Präzise Erkennungsmodi
+  - Zellabgleich-Konfiguration
+  - Strukturextraktions-Umschalter
 
-- **Image Generation Options**:
-  - Generate page images
-  - Extract picture images
-  - Extract table images
-  - Configurable image scale (0.1x - 4.0x)
+- **Bildgenerierungs-Optionen**:
+  - Seitenbilder generieren
+  - Bildbilder extrahieren
+  - Tabellenbilder extrahieren
+  - Konfigurierbare Bildskalierung (0.1x - 4.0x)
 
-- **Performance/Accelerator Options**:
-  - Device selection: Auto, CPU, CUDA, MPS (Apple Silicon)
-  - Thread count configuration (1-32)
-  - Document timeout setting
+- **Performance/Akzelerator-Optionen**:
+  - Geräteauswahl: Auto, CPU, CUDA, MPS (Apple Silicon)
+  - Thread-Anzahl-Konfiguration (1-32)
+  - Dokument-Timeout-Einstellung
 
-- **New API Endpoints**:
-  - `POST /api/convert/batch` - Batch conversion
-  - `GET /api/convert/<job_id>/images` - List extracted images
-  - `GET /api/convert/<job_id>/images/<id>` - Download image
-  - `GET /api/convert/<job_id>/tables` - List extracted tables
-  - `GET /api/convert/<job_id>/tables/<id>/csv` - Download table CSV
-  - `GET /api/convert/<job_id>/tables/<id>/image` - Download table image
-  - `GET /api/convert/<job_id>/chunks` - Get document chunks
-  - `GET/PUT /api/settings/performance` - Performance settings
-  - `GET/PUT /api/settings/chunking` - Chunking settings
-  - `GET /api/settings/formats` - List all supported formats
+- **Neue API-Endpoints**:
+  - `POST /api/convert/batch` - Stapelkonvertierung
+  - `GET /api/convert/<job_id>/images` - Extrahierte Bilder auflisten
+  - `GET /api/convert/<job_id>/images/<id>` - Bild herunterladen
+  - `GET /api/convert/<job_id>/tables` - Extrahierte Tabellen auflisten
+  - `GET /api/convert/<job_id>/tables/<id>/csv` - Tabellen-CSV herunterladen
+  - `GET /api/convert/<job_id>/tables/<id>/image` - Tabellenbild herunterladen
+  - `GET /api/convert/<job_id>/chunks` - Dokument-Chunks abrufen
+  - `GET/PUT /api/settings/performance` - Performance-Einstellungen
+  - `GET/PUT /api/settings/chunking` - Chunking-Einstellungen
+  - `GET /api/settings/formats` - Alle unterstützten Formate auflisten
 
-### Changed
+### Geändert
 
-- **Settings Panel**: Completely redesigned with all new options
-- **Export Options**: Enhanced with tabs for different content types
-- **DropZone**: Updated with format categories and batch mode support
-- **Converter Service**: Major refactoring for dynamic pipeline options
+- **Einstellungs-Panel**: Vollständig neu gestaltet mit allen neuen Optionen
+- **Export-Optionen**: Mit Tabs für verschiedene Inhaltstypen erweitert
+- **DropZone**: Mit Formatkategorien und Stapelmodus-Unterstützung aktualisiert
+- **Converter-Service**: Große Refaktorierung für dynamische Pipeline-Optionen
 
-### Fixed
+### Behoben
 
-- Confidence score calculation now uses cluster-level predictions
-- Better handling of partial conversion success
+- Konfidenz-Score-Berechnung verwendet jetzt Cluster-Level-Vorhersagen
+- Bessere Handhabung von teilweisem Konvertierungserfolg
 
 ## [0.0.4] - 2025-12-10
 
-### Added
+### Hinzugefügt
 
-- **OCR Support**: Full OCR integration using EasyOCR
-  - Support for 14+ languages
-  - Force Full Page OCR option
-  - Configurable OCR settings
-- **Improved Confidence Calculation**: Average confidence from layout predictions
+- **OCR-Unterstützung**: Vollständige OCR-Integration mit EasyOCR
+  - Unterstützung für 14+ Sprachen
+  - Option „Force Full Page OCR“
+  - Konfigurierbare OCR-Einstellungen
+- **Verbesserte Konfidenzberechnung**: Durchschnittliche Konfidenz aus Layout-Vorhersagen
 
-### Changed
+### Geändert
 
-- Updated converter service to use configurable pipeline options
-- Enhanced settings panel with OCR options
+- Converter-Service für konfigurierbare Pipeline-Optionen aktualisiert
+- Einstellungs-Panel mit OCR-Optionen erweitert
 
 ## [0.0.3] - 2025-12-10
 
-### Added
+### Hinzugefügt
 
-- Initial release of Duckling
-- **Frontend Features**:
-  - Drag-and-drop file upload
-  - Real-time conversion progress
-  - Multi-format export options
-  - Settings panel
-  - Conversion history panel
-  - Dark theme with teal accent
-  - Responsive design
-  - Animated transitions
+- Erste Veröffentlichung von Duckling
+- **Frontend-Funktionen**:
+  - Drag-and-Drop-Datei-Upload
+  - Echtzeit-Konvertierungsfortschritt
+  - Multi-Format-Export-Optionen
+  - Einstellungs-Panel
+  - Konvertierungs-History-Panel
+  - Dunkles Theme mit Türkis-Akzent
+  - Responsives Design
+  - Animierte Übergänge
 
-- **Backend Features**:
-  - Flask REST API with CORS
-  - Async document conversion
-  - SQLite-based history
-  - File upload management
-  - Configurable settings
-  - Health check endpoint
+- **Backend-Funktionen**:
+  - Flask-REST-API mit CORS
+  - Asynchrone Dokumentenkonvertierung
+  - SQLite-basierte History
+  - Datei-Upload-Verwaltung
+  - Konfigurierbare Einstellungen
+  - Health-Check-Endpoint
 
-- **Supported Input Formats**:
+- **Unterstützte Eingabeformate**:
   - PDF, Word, PowerPoint, Excel
   - HTML, Markdown, CSV
-  - Images (PNG, JPG, TIFF, etc.)
+  - Bilder (PNG, JPG, TIFF usw.)
   - AsciiDoc, XML
 
-- **Export Formats**:
+- **Exportformate**:
   - Markdown, HTML, JSON
   - DocTags, Plain Text
 
 - **Developer Experience**:
-  - Comprehensive test suites
-  - Docker support
+  - Umfassende Test-Suites
+  - Docker-Unterstützung
   - TypeScript
-  - ESLint configuration
+  - ESLint-Konfiguration
 
-### Security
+### Sicherheit
 
-- Input validation for file uploads
-- File type restrictions
-- Maximum file size limits
-- Secure filename handling
+- Eingabevalidierung für Datei-Uploads
+- Dateityp-Einschränkungen
+- Maximale Dateigrößenlimits
+- Sichere Dateinamenbehandlung
 
-## [Unreleased]
-
-### Planned
-
-- User authentication
-- Cloud storage integration
-- Conversion templates
-- API rate limiting
-- WebSocket for real-time updates
-- Dark/light theme toggle
-- Keyboard shortcuts
-- Accessibility improvements (WCAG 2.1)
-
+[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10...HEAD
+[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
+[0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
+[0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
+[0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7
+[0.0.6]: https://github.com/davidgs/duckling/compare/v0.0.5...v0.0.6
+[0.0.5]: https://github.com/davidgs/duckling/compare/v0.0.4...v0.0.5
+[0.0.4]: https://github.com/davidgs/duckling/compare/v0.0.3...v0.0.4
+[0.0.3]: https://github.com/davidgs/duckling/releases/tag/v0.0.3

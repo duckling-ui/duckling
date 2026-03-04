@@ -1,4 +1,4 @@
-# Production Deployment
+# Production Déploiement
 
 Guide for deploying Duckling in production environments.
 
@@ -49,7 +49,7 @@ The `dist/` directory contains static files ready for deployment.
 
 ## Nginx Configuration
 
-### Basic Setup
+### Basic Définirup
 
 ```nginx
 # /etc/nginx/sites-available/duckling
@@ -205,9 +205,9 @@ docling.example.com {
 
 ---
 
-## Environment Variables
+## Variables d'environnement
 
-Set these in production:
+Définir these in production:
 
 ```env
 FLASK_ENV=production
@@ -217,8 +217,8 @@ FLASK_HOST=127.0.0.1
 MAX_CONTENT_LENGTH=209715200  # 200MB
 ```
 
-!!! danger "Security"
-    Never use the default `SECRET_KEY` in production. Generate a secure random key:
+!!! danger "Sécurité"
+    Never use the default `SECRET_KEY` en production. Generate a secure retom key:
 
     ```bash
     python -c "import secrets; print(secrets.token_hex(32))"
@@ -226,7 +226,7 @@ MAX_CONTENT_LENGTH=209715200  # 200MB
 
 ---
 
-## Health Checks
+## Contrôles de santé
 
 Monitor service health:
 

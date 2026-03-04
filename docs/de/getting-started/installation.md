@@ -1,74 +1,74 @@
 # Installation
 
-This guide covers setting up Duckling for local development.
+Diese Anleitung beschreibt die Einrichtung von Duckling für die lokale Entwicklung.
 
-## Prerequisites
+## Voraussetzungen
 
-- Python 3.10+ (3.13 recommended)
+- Python 3.10+ (3.13 empfohlen)
 - Node.js 18+
-- npm or yarn
+- npm oder yarn
 - Git
 
-## Step-by-Step Installation
+## Schritt-für-Schritt-Installation
 
-### 1. Clone the Repository
+### 1. Repository klonen
 
 ```bash
 git clone https://github.com/davidgs/duckling.git
 cd duckling
 ```
 
-### 2. Backend Setup
+### 2. Backend-Einrichtung
 
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Unter Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 3. Frontend Setup
+### 3. Frontend-Einrichtung
 
 ```bash
 cd ../frontend
 npm install
 ```
 
-### 4. Build Documentation (Optional)
+### 4. Dokumentation bauen (optional)
 
-To view documentation within the Duckling UI, build the MkDocs site:
+Um die Dokumentation in der Duckling-UI anzuzeigen, bauen Sie die MkDocs-Site:
 
 ```bash
-cd ..  # Return to project root
+cd ..  # Zurück zum Projektstammverzeichnis
 pip install -r requirements-docs.txt
 mkdocs build
 ```
 
 !!! tip "Auto-Build"
-    If MkDocs is installed, the backend will automatically build the documentation when you first open the docs panel in the UI.
+    Wenn MkDocs installiert ist, baut das Backend die Dokumentation automatisch, wenn Sie zum ersten Mal den Dokumentationsbereich in der UI öffnen.
 
-## Environment Configuration
+## Umgebungskonfiguration
 
-### Backend Environment Variables
+### Backend-Umgebungsvariablen
 
-Create a `.env` file in the `backend` directory:
+Erstellen Sie eine `.env`-Datei im Verzeichnis `backend`:
 
 ```env
-# Flask Configuration
+# Flask-Konfiguration
 FLASK_ENV=development
 SECRET_KEY=your-secret-key
 DEBUG=True
 
-# File Handling
+# Dateiverarbeitung
 MAX_CONTENT_LENGTH=104857600  # 100MB
 ```
 
-!!! warning "Production Security"
-    In production, always set a strong `SECRET_KEY` and set `DEBUG=False`.
+!!! warning "Produktionssicherheit"
+    In der Produktion immer eine starke `SECRET_KEY` setzen und `DEBUG=False`.
 
-## Verifying Installation
+## Installation überprüfen
 
-### Check Backend
+### Backend prüfen
 
 ```bash
 cd backend
@@ -76,20 +76,20 @@ source venv/bin/activate
 python duckling.py
 ```
 
-You should see:
+Sie sollten sehen:
 
 ```
  * Running on http://127.0.0.1:5001
 ```
 
-### Check Frontend
+### Frontend prüfen
 
 ```bash
 cd frontend
 npm run dev
 ```
 
-You should see:
+Sie sollten sehen:
 
 ```
   VITE v5.x.x  ready in xxx ms
@@ -97,45 +97,44 @@ You should see:
   ➜  Local:   http://localhost:3000/
 ```
 
-## Troubleshooting
+## Fehlerbehebung
 
-### Python Version Issues
+### Python-Versionsprobleme
 
-If you encounter Python version issues:
+Bei Python-Versionsproblemen:
 
 ```bash
-# Check Python version
+# Python-Version prüfen
 python --version
 
-# Use specific Python version
+# Bestimmte Python-Version verwenden
 python3.13 -m venv venv
 ```
 
-### Node.js Version Issues
+### Node.js-Versionsprobleme
 
 ```bash
-# Check Node version
+# Node-Version prüfen
 node --version
 
-# Use nvm to switch versions
+# nvm zum Wechseln der Versionen verwenden
 nvm install 18
 nvm use 18
 ```
 
-### Dependency Installation Failures
+### Abhängigkeitsinstallationsfehler
 
 ```bash
-# Backend - try upgrading pip
+# Backend - pip aktualisieren
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Frontend - clear cache
+# Frontend - Cache leeren
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-## Next Steps
+## Nächste Schritte
 
-- [Quick Start](quickstart.md) - Learn the basics
-- [Configuration](../user-guide/configuration.md) - Customize settings
-
+- [Schnellstart](quickstart.md) - Grundlagen lernen
+- [Konfiguration](../user-guide/configuration.md) - Einstellungen anpassen

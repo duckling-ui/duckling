@@ -1,8 +1,8 @@
-# Scaling
+# Skalierung
 
 Guide for scaling Duckling for high-traffic deployments.
 
-## Architecture for Scale
+## Architektur for Skalierung
 
 ```mermaid
 graph LR
@@ -30,7 +30,7 @@ graph LR
     style S3 fill:#22c55e,color:#fff
 ```
 
-## Horizontal Scaling
+## Horizontal Skalierung
 
 For high-traffic deployments:
 
@@ -43,11 +43,11 @@ For high-traffic deployments:
 
 ## Resource Requirements
 
-| Deployment | CPU | RAM | Storage |
+| Bereitstellung | CPU | RAM | Storage |
 |------------|-----|-----|---------|
-| Development | 2 cores | 4GB | 10GB |
+| Entwicklung | 2 cores | 4GB | 10GB |
 | Small (< 100 docs/day) | 4 cores | 8GB | 50GB |
-| Medium (< 1000 docs/day) | 8 cores | 16GB | 200GB |
+| Mittel (< 1000 docs/day) | 8 cores | 16GB | 200GB |
 | Large (> 1000 docs/day) | 16+ cores | 32GB+ | 500GB+ |
 
 ---
@@ -90,7 +90,7 @@ For production with multiple workers, replace the threading-based queue with Red
 pip install celery redis
 ```
 
-### Configuration
+### Konfiguration
 
 ```python
 # celery_config.py
@@ -138,7 +138,7 @@ celery -A celery_config worker --loglevel=info --concurrency=4
 
 For multi-instance deployments, migrate from SQLite to PostgreSQL:
 
-### Configuration
+### Konfiguration
 
 ```python
 # config.py
@@ -167,9 +167,9 @@ def migrate():
 
 ## Object Storage (S3)
 
-Use S3 or compatible storage for uploads and outputs:
+Use S3 or compatible storage for uploads und outputs:
 
-### Configuration
+### Konfiguration
 
 ```python
 import boto3
@@ -184,7 +184,7 @@ s3 = boto3.client(
 BUCKET_NAME = 'duckling-files'
 ```
 
-### File Operations
+### Datei Operations
 
 ```python
 def upload_to_s3(file_path: str, key: str):
@@ -258,18 +258,18 @@ conversion_counter = metrics.counter(
 
 Key metrics to monitor:
 
-- Conversion rate (documents/minute)
+- Konvertierung rate (documents/minute)
 - Queue depth
-- Processing time (p50, p95, p99)
+- Verarbeitung time (p50, p95, p99)
 - Error rate
 - Memory usage
 - CPU utilization
 
 ---
 
-## Kubernetes Deployment
+## Kubernetes Bereitstellung
 
-### Deployment
+### Bereitstellung
 
 ```yaml
 apiVersion: apps/v1
