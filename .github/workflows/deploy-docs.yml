@@ -80,7 +80,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: site
-
+      - name: list
+        run: pwd; ls -la
       - name: rsync deployments
         uses: burnett01/rsync-deployments@7.0.1
         with:
