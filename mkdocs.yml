@@ -309,9 +309,7 @@ extra:
       link: https://github.com/davidgs/duckling
       name: Duckling on GitHub
   generator: false
-  analytics:
-    provider: google
-    property: G-XXXXXXXXXX
+  # analytics omitted — PostHog used in docs/overrides/main.html
   alternate:
     - name: "🇺🇸 English"
       link: https://duckling-ui.org/
