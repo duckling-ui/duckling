@@ -175,7 +175,7 @@ npm run format
 
 ---
 
-## Commit-Nachrichten
+## Commit-Nachrichten {#commit-messages}
 
 [Conventional Commits](https://www.conventionalcommits.org/) befolgen:
 
@@ -225,7 +225,7 @@ docs(readme): update installation instructions
 Added Docker setup instructions and troubleshooting section.
 ```
 
-### DCO-Signatur
+### DCO-Signatur {#dco-sign-off}
 
 Alle Commits **MÜSSEN** mit dem [Developer Certificate of Origin (DCO)](https://developercertificate.org/) signiert werden. Dies bestätigt, dass Sie das Recht haben, den Beitrag unter der Projektlizenz einzureichen.
 

@@ -238,11 +238,11 @@ graph LR
 
 For environments that don't support Mermaid rendering, static images are available:
 
-- [System Arquitectura](../arch.png)
-- [Detailed Layer View](../Detailed-Layer-View.png)
-- [Conversión Pipeline](../ConversiónPipeline.png)
-- [Procesamiento por lotes](../BatchProcesyo.png)
-- [Escalado Arquitectura](../EscaladoArquitectura.png)
-- [Component Tree](../ComponentTree.png)
-- [OCR Options](../OCR.png)
+- [Arquitectura del sistema](../../arch.png)
+- [Vista detallada por capas](../../Detailed-Layer-View.png)
+- [Pipeline de conversión](../../ConversionPipeline.png)
+- [Procesamiento por lotes](../../BatchProcessing.png)
+- [Arquitectura de escalado](../../ScalingArchitecture.png)
+- [Árbol de componentes](../../ComponentTree.png)
+- [Opciones OCR](../../OCR.png)
 

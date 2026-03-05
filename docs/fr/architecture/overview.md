@@ -4,7 +4,7 @@ Architecture de haut niveau et flux de données in Duckling.
 
 ## Architecture Diagram
 
-![System Architecture](../arch.png)
+![Architecture système](../../arch.png)
 
 ## Detailed Layer View
 
