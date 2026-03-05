@@ -1,10 +1,10 @@
-# System Overview
+# Vue d'ensemble du système
 
-High-level architecture and data flow in Duckling.
+Architecture de haut niveau et flux de données in Duckling.
 
 ## Architecture Diagram
 
-![System Architecture](../arch.png)
+![Architecture système](../../arch.png)
 
 ## Detailed Layer View
 
@@ -87,13 +87,13 @@ sequenceDiagram
 
 | Step | Description |
 |------|-------------|
-| 1 | **Upload Request** - File received via POST |
-| 2 | **File Validation & Storage** - Check extension, save to uploads/ |
+| 1 | **Upload Request** - Fichier received via POST |
+| 2 | **Fichier Validation & Storage** - Check extension, save to uploads/ |
 | 3 | **Job Creation** - UUID assigned, entry created |
-| 4 | **Queue for Processing** - Added to job queue |
+| 4 | **Queue for Traitement** - Added to job queue |
 | 5 | **Worker Thread Picks Up Job** - When capacity available |
 | 6 | **DocumentConverter Initialized** - With OCR, table, image settings |
-| 7 | **Document Conversion** - Extract images, tables, chunks |
+| 7 | **Document Conversion** - Extraire images, tables, chunks |
 | 8 | **Export to Formats** - MD, HTML, JSON, TXT, DocTags, Tokens |
 | 9 | **Update Job Status & History** - Mark complete, store metadata |
 | 10 | **Results Available** - Ready for download |
@@ -113,7 +113,7 @@ The worker thread:
 
 1. Monitors the job queue
 2. Starts conversion threads up to the concurrent limit
-3. Tracks active threads and cleans up completed ones
+3. Tracks active threads et cleans up completed ones
 4. Prevents resource exhaustion during batch processing
 
 ## Database Schema
@@ -131,27 +131,27 @@ The worker thread:
 | `error_message` | TEXT | Error details if failed |
 | `output_path` | VARCHAR(500) | Path to output files |
 | `settings` | TEXT | JSON settings used |
-| `file_size` | FLOAT | File size in bytes |
+| `file_size` | FLOAT | Fichier size in bytes |
 | `created_at` | DATETIME | Upload timestamp |
 | `completed_at` | DATETIME | Completion timestamp |
 
-## Security Considerations
+## Sécurité Considerations
 
 | Concern | Mitigation |
 |---------|------------|
-| **File Upload** | Only allowed extensions accepted |
-| **File Size** | Configurable max (default 100MB) |
-| **Filenames** | Sanitized before storage |
-| **File Access** | Served through API only, no direct paths |
+| **Fichier Upload** | Only allowed extensions accepted |
+| **Fichier Size** | Configurable max (default 100MB) |
+| **Fichiernames** | Sanitized before storage |
+| **Fichier Access** | Served through API only, no direct paths |
 | **CORS** | Restricted to frontend origin |
 
-## Performance Optimizations
+## Performances Optimizations
 
 | Optimization | Description |
 |--------------|-------------|
 | **Converter Caching** | DocumentConverter instances cached by settings hash |
 | **Job Queue** | Sequential processing prevents memory exhaustion |
-| **Lazy Loading** | Heavy components loaded on demand |
-| **React Query Caching** | API responses cached and deduplicated |
-| **Background Processing** | Conversions don't block the API |
+| **Lazy Loading** | Heavy components loaded on demet |
+| **React Query Caching** | API responses cached et deduplicated |
+| **Background Traitement** | Conversions don't block the API |
 

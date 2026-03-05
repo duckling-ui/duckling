@@ -1,10 +1,10 @@
-# System Overview
+# Systemübersicht
 
-High-level architecture and data flow in Duckling.
+Architektur auf hoher Ebene und Datenfluss in Duckling.
 
-## Architecture Diagram
+## Architektur Diagram
 
-![System Architecture](../arch.png)
+![Systemarchitektur](../../arch.png)
 
 ## Detailed Layer View
 
@@ -56,7 +56,7 @@ graph TB
 
 ## Data Flow
 
-### Document Conversion Flow
+### Document Konvertierung Flow
 
 ```mermaid
 sequenceDiagram
@@ -83,18 +83,18 @@ sequenceDiagram
     U->>F: Download
 ```
 
-### Conversion Pipeline
+### Konvertierung Pipeline
 
-| Step | Description |
+| Step | Beschreibung |
 |------|-------------|
-| 1 | **Upload Request** - File received via POST |
-| 2 | **File Validation & Storage** - Check extension, save to uploads/ |
+| 1 | **Upload Request** - Datei received via POST |
+| 2 | **Datei Validation & Storage** - Check extension, save to uploads/ |
 | 3 | **Job Creation** - UUID assigned, entry created |
-| 4 | **Queue for Processing** - Added to job queue |
+| 4 | **Queue for Verarbeitung** - Added to job queue |
 | 5 | **Worker Thread Picks Up Job** - When capacity available |
 | 6 | **DocumentConverter Initialized** - With OCR, table, image settings |
-| 7 | **Document Conversion** - Extract images, tables, chunks |
-| 8 | **Export to Formats** - MD, HTML, JSON, TXT, DocTags, Tokens |
+| 7 | **Document Konvertierung** - Extrahieren images, tables, chunks |
+| 8 | **Export to Formate** - MD, HTML, JSON, TXT, DocTags, Tokens |
 | 9 | **Update Job Status & History** - Mark complete, store metadata |
 | 10 | **Results Available** - Ready for download |
 
@@ -113,14 +113,14 @@ The worker thread:
 
 1. Monitors the job queue
 2. Starts conversion threads up to the concurrent limit
-3. Tracks active threads and cleans up completed ones
+3. Tracks active threads und cleans up completed ones
 4. Prevents resource exhaustion during batch processing
 
 ## Database Schema
 
-### Conversion Table
+### Konvertierung Table
 
-| Column | Type | Description |
+| Column | Type | Beschreibung |
 |--------|------|-------------|
 | `id` | VARCHAR(36) | Primary key (UUID) |
 | `filename` | VARCHAR(255) | Sanitized filename |
@@ -131,27 +131,27 @@ The worker thread:
 | `error_message` | TEXT | Error details if failed |
 | `output_path` | VARCHAR(500) | Path to output files |
 | `settings` | TEXT | JSON settings used |
-| `file_size` | FLOAT | File size in bytes |
+| `file_size` | FLOAT | Datei size in bytes |
 | `created_at` | DATETIME | Upload timestamp |
 | `completed_at` | DATETIME | Completion timestamp |
 
-## Security Considerations
+## Sicherheit Considerations
 
 | Concern | Mitigation |
 |---------|------------|
-| **File Upload** | Only allowed extensions accepted |
-| **File Size** | Configurable max (default 100MB) |
-| **Filenames** | Sanitized before storage |
-| **File Access** | Served through API only, no direct paths |
+| **Datei Upload** | Only allowed extensions accepted |
+| **Datei Size** | Configurable max (default 100MB) |
+| **Dateinames** | Sanitized before storage |
+| **Datei Access** | Served through API only, no direct paths |
 | **CORS** | Restricted to frontend origin |
 
-## Performance Optimizations
+## Leistung Optimizations
 
-| Optimization | Description |
+| Optimization | Beschreibung |
 |--------------|-------------|
 | **Converter Caching** | DocumentConverter instances cached by settings hash |
 | **Job Queue** | Sequential processing prevents memory exhaustion |
-| **Lazy Loading** | Heavy components loaded on demand |
-| **React Query Caching** | API responses cached and deduplicated |
-| **Background Processing** | Conversions don't block the API |
+| **Lazy Loading** | Heavy components loaded on demund |
+| **React Query Caching** | API responses cached und deduplicated |
+| **Background Verarbeitung** | Konvertierungs don't block the API |
 

@@ -1,18 +1,18 @@
-# Components
+# Komponenten
 
 Detailed component documentation for Duckling.
 
-## Frontend Architecture
+## Frontend Architektur
 
 ### Technology Stack
 
-- **React 18** - UI framework with functional components and hooks
+- **React 18** - UI framework with functional components und hooks
 - **TypeScript** - Type-safe JavaScript
 - **Tailwind CSS** - Utility-first CSS framework
 - **Framer Motion** - Animation library
 - **React Query** - Server state management
 - **Axios** - HTTP client
-- **Vite** - Build tool and dev server
+- **Vite** - Build tool und dev server
 
 ### Component Structure
 
@@ -37,21 +37,21 @@ graph TD
     style Panels fill:#8b5cf6,color:#fff
 ```
 
-### Component Files
+### Component Dateis
 
-| Path | Description |
+| Path | Beschreibung |
 |------|-------------|
 | `src/App.tsx` | Main application component |
 | `src/main.tsx` | Application entry point |
 | `src/index.css` | Global styles |
-| `src/components/DropZone.tsx` | File upload with drag-and-drop |
-| `src/components/ConversionProgress.tsx` | Progress display |
-| `src/components/ExportOptions.tsx` | Download and preview results |
-| `src/components/SettingsPanel.tsx` | Configuration panel |
-| `src/components/HistoryPanel.tsx` | Conversion history |
-| `src/components/DocsPanel.tsx` | Documentation viewer |
-| `src/hooks/useConversion.ts` | Conversion state and actions |
-| `src/hooks/useSettings.ts` | Settings state management |
+| `src/components/DropZone.tsx` | Datei upload with drag-und-drop |
+| `src/components/KonvertierungProgress.tsx` | Progress display |
+| `src/components/ExportOptions.tsx` | Herunterladen und preview results |
+| `src/components/EinstellungenPanel.tsx` | Konfiguration panel |
+| `src/components/HistoryPanel.tsx` | Konvertierung history |
+| `src/components/DocsPanel.tsx` | Dokumentation viewer |
+| `src/hooks/useKonvertierung.ts` | Konvertierung state und actions |
+| `src/hooks/useEinstellungen.ts` | Einstellungen state management |
 | `src/services/api.ts` | API client functions |
 | `src/types/index.ts` | TypeScript interfaces |
 
@@ -60,31 +60,31 @@ graph TD
 The application uses a combination of:
 
 1. **Local State** - Component-level state with `useState`
-2. **React Query** - Server state caching and synchronization
+2. **React Query** - Server state caching und synchronization
 3. **Custom Hooks** - Encapsulated business logic
 
 ### Key Hooks
 
-#### `useConversion`
+#### `useKonvertierung`
 
 Manages the document conversion workflow:
 
-- File upload (single and batch)
+- Datei upload (single und batch)
 - Status polling
 - Result retrieval
-- Download handling
+- Herunterladen hundling
 
-#### `useSettings`
+#### `useEinstellungen`
 
 Manages application settings:
 
 - OCR, table, image, performance, chunking settings
-- Settings persistence via API
-- Settings validation
+- Einstellungen persistence via API
+- Einstellungen validation
 
 ---
 
-## Backend Architecture
+## Backend Architektur
 
 ### Technology Stack
 
@@ -96,16 +96,16 @@ Manages application settings:
 
 ### Module Structure
 
-| Path | Description |
+| Path | Beschreibung |
 |------|-------------|
 | `backend/duckling.py` | Flask application factory |
-| `backend/config.py` | Configuration and defaults |
+| `backend/config.py` | Konfiguration und defaults |
 | `backend/models/database.py` | SQLAlchemy models |
-| `backend/routes/convert.py` | Conversion endpoints |
-| `backend/routes/settings.py` | Settings endpoints |
+| `backend/routes/convert.py` | Konvertierung endpoints |
+| `backend/routes/settings.py` | Einstellungen endpoints |
 | `backend/routes/history.py` | History endpoints |
 | `backend/services/converter.py` | Docling integration |
-| `backend/services/file_manager.py` | File operations |
+| `backend/services/file_manager.py` | Datei operations |
 | `backend/services/history.py` | History CRUD |
 | `backend/tests/` | Test suite |
 
@@ -113,7 +113,7 @@ Manages application settings:
 
 #### ConverterService
 
-Handles document conversion using Docling:
+Hundles document conversion using Docling:
 
 ```python
 class ConverterService:
@@ -126,9 +126,9 @@ class ConverterService:
         pass
 ```
 
-#### FileManager
+#### DateiManager
 
-Manages file uploads and outputs:
+Manages file uploads und outputs:
 
 ```python
 class FileManager:
@@ -186,7 +186,7 @@ graph LR
     style Rapid fill:#f59e0b,color:#fff
 ```
 
-| Backend | Description | GPU Support |
+| Backend | Beschreibung | GPU-Unterstützung |
 |---------|-------------|-------------|
 | **EasyOCR** | General-purpose, multi-language | Yes |
 | **Tesseract** | Classic OCR engine | No |
@@ -197,7 +197,7 @@ The backend automatically falls back to non-OCR processing if OCR initialization
 
 ---
 
-## Batch Processing
+## Stapelverarbeitung
 
 ```mermaid
 sequenceDiagram
@@ -224,7 +224,7 @@ sequenceDiagram
     F->>F: Show progress per file
 ```
 
-| Step | Description |
+| Step | Beschreibung |
 |------|-------------|
 | 1 | Frontend sends POST /convert/batch with multiple files |
 | 2 | Backend saves each file, creates jobs, queues all |

@@ -1,15 +1,15 @@
-# Testing
+# Tests
 
-Guide for writing and running tests in Duckling.
+Guide pour écrire et exécuter des tests dans Duckling.
 
-## Overview
+## Aperçu
 
-- **Backend**: pytest with coverage
-- **Frontend**: Vitest with React Testing Library
+- **Backend** : pytest avec couverture
+- **Frontend** : Vitest avec React Testing Library
 
-## Running Tests
+## Exécuter les tests
 
-### Backend Tests
+### Tests backend
 
 ```bash
 cd backend
@@ -17,26 +17,26 @@ source venv/bin/activate
 pytest
 ```
 
-With coverage:
+Avec couverture :
 
 ```bash
 pytest --cov=. --cov-report=html
 ```
 
-### Frontend Tests
+### Tests frontend
 
 ```bash
 cd frontend
 npm test
 ```
 
-With coverage:
+Avec couverture :
 
 ```bash
 npm run test:coverage
 ```
 
-Watch mode:
+Mode watch :
 
 ```bash
 npm run test:watch
@@ -44,17 +44,19 @@ npm run test:watch
 
 ---
 
-## Backend Testing
+## Tests backend
 
-### Test Structure
+### Structure des tests
 
 ```
 backend/tests/
 ├── __init__.py
-├── conftest.py      # Shared fixtures
-├── test_api.py      # API endpoint tests
-├── test_converter.py # Converter service tests
-└── test_history.py  # History service tests
+├── conftest.py         # Fixtures partagées
+├── test_api.py         # Tests des endpoints API
+├── test_converter.py   # Tests du service converter
+├── test_content_store.py # Utilitaires de stockage content-addressed
+├── test_history.py     # Tests du service history
+└── test_migration.py   # Scripts de migration de base de données
 ```
 
 ### Fixtures
@@ -83,7 +85,7 @@ def sample_pdf():
     pass
 ```
 
-### Example Tests
+### Exemples de tests
 
 ```python
 def test_convert_pdf_success(client, sample_pdf):
@@ -136,20 +138,20 @@ def test_conversion_with_mock(client):
 
 ---
 
-## Frontend Testing
+## Tests frontend
 
-### Test Structure
+### Structure des tests
 
 ```
 frontend/src/tests/
-├── setup.ts         # Test setup
-├── App.test.tsx     # App component tests
+├── setup.ts         # Configuration des tests
+├── App.test.tsx     # Tests du composant App
 ├── DropZone.test.tsx
 ├── useConversion.test.ts
 └── api.test.ts
 ```
 
-### Setup
+### Configuration
 
 ```typescript
 // setup.ts
@@ -160,7 +162,7 @@ import { vi } from 'vitest';
 global.fetch = vi.fn();
 ```
 
-### Component Tests
+### Tests de composants
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -204,7 +206,7 @@ describe('DropZone', () => {
 });
 ```
 
-### Hook Tests
+### Tests de hooks
 
 ```typescript
 import { renderHook, act } from '@testing-library/react';
@@ -230,7 +232,7 @@ describe('useConversion', () => {
 });
 ```
 
-### API Mocking
+### Mocking API
 
 ```typescript
 import { vi } from 'vitest';
@@ -256,42 +258,42 @@ describe('conversion flow', () => {
 
 ---
 
-## Test Guidelines
+## Directives de test
 
 ### Backend
 
-- Use pytest for testing
-- Aim for >80% code coverage
-- Test both success and error cases
-- Use fixtures for common setup
-- Mock external services (Docling, file system)
+- Utiliser pytest pour les tests
+- Viser >80 % de couverture de code
+- Tester les cas de succès et d'erreur
+- Utiliser des fixtures pour la configuration commune
+- Mocker les services externes (Docling, système de fichiers)
 
 ### Frontend
 
-- Use Vitest and React Testing Library
-- Test component rendering and interactions
-- Mock API calls appropriately
-- Test error states and loading states
-- Use `userEvent` for realistic interactions
+- Utiliser Vitest et React Testing Library
+- Tester le rendu et les interactions des composants
+- Mocker les appels API de manière appropriée
+- Tester les états d'erreur et de chargement
+- Utiliser `userEvent` pour des interactions réalistes
 
-### General
+### Général
 
-- Write descriptive test names
-- One assertion per test when possible
-- Test edge cases
-- Keep tests independent
-- Clean up after tests
+- Écrire des noms de test descriptifs
+- Une assertion par test lorsque possible
+- Tester les cas limites
+- Garder les tests indépendants
+- Nettoyer après les tests
 
 ---
 
-## Continuous Integration
+## Intégration continue
 
-Tests run automatically on:
+Les tests s'exécutent automatiquement lors de :
 
-- Pull request creation
-- Push to main branch
+- La création d'un pull request
+- Un push sur la branche main
 
-### CI Configuration
+### Configuration CI
 
 ```yaml
 # .github/workflows/test.yml
@@ -324,4 +326,3 @@ jobs:
           npm ci
           npm test
 ```
-

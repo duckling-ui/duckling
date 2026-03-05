@@ -35,9 +35,10 @@ Please read the full [Code of Conduct](CODE_OF_CONDUCT.MD) before contributing.
 3. **Make your changes**
 4. **Write/update tests**
 5. **Run tests**: Ensure all tests pass
-6. **Commit with clear messages**: Follow conventional commits
-7. **Push to your fork**
-8. **Create a Pull Request**
+6. **Commit with clear messages**: Follow conventional commits (see [Commit Messages](#commit-messages))
+7. **Sign off all commits with DCO**: Every commit MUST include a `Signed-off-by:` line (see [DCO Sign-off](#dco-sign-off))
+8. **Push to your fork**
+9. **Create a Pull Request**
 
 ## Development Setup
 
@@ -182,6 +183,8 @@ type(scope): description
 [optional body]
 
 [optional footer]
+
+Signed-off-by: Your Name <your.email@example.com>
 ```
 
 Types:
@@ -199,6 +202,24 @@ feat(upload): add drag-and-drop file upload
 fix(converter): handle large PDF files correctly
 docs(readme): update installation instructions
 ```
+
+### DCO Sign-off
+
+All commits **MUST** be signed off with the [Developer Certificate of Origin (DCO)](https://developercertificate.org/). This certifies that you have the right to submit the contribution under the project's license.
+
+Add the sign-off to every commit using `git commit -s`:
+
+```bash
+git commit -s -m "feat(upload): add drag-and-drop file upload"
+```
+
+This appends a `Signed-off-by:` line with your name and email from your Git config. You can also add it manually at the end of your commit message:
+
+```
+Signed-off-by: Your Name <your.email@example.com>
+```
+
+PRs with unsigned commits will not be merged.
 
 ## Project Structure
 

@@ -1,46 +1,46 @@
-# Supported Formats
+# Unterstützte Formate
 
-Complete reference for input and output formats supported by Duckling.
+Complete reference for input und output formats supported by Duckling.
 
-## Input Formats
+## Input Formate
 
 ### Documents
 
-| Format | Extensions | Description | Notes |
+| Format | Extensions | Beschreibung | Notes |
 |--------|------------|-------------|-------|
 | PDF | `.pdf` | Portable Document Format | Full support including scanned PDFs with OCR |
-| Word | `.docx` | Microsoft Word | Modern format only (not `.doc`) |
-| PowerPoint | `.pptx` | Microsoft PowerPoint | Extracts text and images from slides |
-| Excel | `.xlsx` | Microsoft Excel | Extracts tables and data |
-| HTML | `.html`, `.htm` | Web pages | Preserves structure and formatting |
+| Word | `.docx` | Microsoft Word | Modusrn format only (not `.doc`) |
+| PowerPoint | `.pptx` | Microsoft PowerPoint | Extrahierens text und images from slides |
+| Excel | `.xlsx` | Microsoft Excel | Extrahierens tables und data |
+| HTML | `.html`, `.htm` | Web pages | Preserves structure und formatting |
 | Markdown | `.md`, `.markdown` | Markdown files | Full CommonMark support |
 
 ### Images
 
-| Format | Extensions | Description | Notes |
+| Format | Extensions | Beschreibung | Notes |
 |--------|------------|-------------|-------|
-| PNG | `.png` | Portable Network Graphics | Best for screenshots and diagrams |
+| PNG | `.png` | Portable Network Graphics | Best for screenshots und diagrams |
 | JPEG | `.jpg`, `.jpeg` | Joint Photographic Experts Group | Best for photos |
-| TIFF | `.tiff`, `.tif` | Tagged Image File Format | Multi-page support |
+| TIFF | `.tiff`, `.tif` | Tagged Image Datei Format | Multi-page support |
 | GIF | `.gif` | Graphics Interchange Format | First frame only |
-| WebP | `.webp` | Web Picture format | Modern web format |
+| WebP | `.webp` | Web Picture format | Modusrn web format |
 | BMP | `.bmp` | Bitmap | Uncompressed images |
 
 ### Technical Documents
 
-| Format | Extensions | Description | Notes |
+| Format | Extensions | Beschreibung | Notes |
 |--------|------------|-------------|-------|
 | AsciiDoc | `.asciidoc`, `.adoc` | Technical documentation | Full AsciiDoc syntax |
 | PubMed XML | `.xml` | Scientific articles | PubMed Central format |
 | USPTO XML | `.xml` | Patent documents | US Patent format |
 
-## Output Formats
+## Output Formate
 
-### Text Formats
+### Text Formate
 
 #### Markdown (`.md`)
 
-Best for documentation and content that needs formatting.
+Best for documentation und content that needs formatting.
 
 ```markdown
 # Document Title
@@ -67,7 +67,7 @@ Web-ready format with styling preserved.
 <p>This is a paragraph with <strong>bold</strong> and <em>italic</em> text.</p>
 ```
 
-#### Plain Text (`.txt`)
+#### Klartext (`.txt`)
 
 Simple text without any formatting.
 
@@ -79,11 +79,11 @@ Section 1
 This is a paragraph with bold and italic text.
 ```
 
-### Structured Formats
+### Structured Formate
 
 #### JSON (`.json`)
 
-Full document structure in JSON format. Lossless representation.
+Vollständige Dokumentstruktur in JSON format. Lossless representation.
 
 ```json
 {
@@ -130,7 +130,7 @@ Token-level representation for NLP applications.
 }
 ```
 
-### RAG Formats
+### RAG Formate
 
 #### RAG Chunks (`.chunks.json`)
 
@@ -156,10 +156,10 @@ Document chunks optimized for retrieval-augmented generation.
 
 | Use Case | Recommended Format |
 |----------|-------------------|
-| Documentation | Markdown |
+| Dokumentation | Markdown |
 | Web publishing | HTML |
 | Data processing | JSON |
-| Search indexing | Plain Text |
+| Search indexing | Klartext |
 | NLP/ML pipelines | Document Tokens |
 | RAG applications | RAG Chunks |
 | Semantic analysis | DocTags |
@@ -186,6 +186,6 @@ curl http://localhost:5001/api/export/{job_id}/html
 | Markdown | `text/markdown` |
 | HTML | `text/html` |
 | JSON | `application/json` |
-| Plain Text | `text/plain` |
+| Klartext | `text/plain` |
 | DocTags | `application/xml` |
 

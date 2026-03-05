@@ -73,9 +73,10 @@ By participating in this project, you agree to abide by our [Code of Conduct](co
 3. **Make your changes**
 4. **Write/update tests**
 5. **Run tests**: Ensure all tests pass
-6. **Commit with clear messages**: Follow conventional commits
-7. **Push to your fork**
-8. **Create a Pull Request**
+6. **Commit with clear messages**: Follow conventional commits (see [Code Style](code-style.md#commit-messages))
+7. **Sign off all commits with DCO**: Every commit MUST include a `Signed-off-by:` line (see [Code Style](code-style.md#dco-sign-off))
+8. **Push to your fork**
+9. **Create a Pull Request**
 
 ## Review Process
 

@@ -1,4 +1,4 @@
-# API Reference
+# API-Referenz
 
 Complete API documentation for the Duckling backend.
 
@@ -12,25 +12,25 @@ http://localhost:5001/api
 
 Currently, the API does not require authentication. For production deployments, consider adding authentication middleware.
 
-## Sections
+## Abschnitte
 
 <div class="grid cards" markdown>
 
--   :material-file-document-multiple:{ .lg .middle } __Conversion__
+-   :material-file-document-multiple:{ .lg .middle } __Konvertierung__
 
     ---
 
-    Upload and convert documents
+    Upload und convert documents
 
-    [:octicons-arrow-right-24: Conversion API](conversion.md)
+    [:octicons-arrow-right-24: Konvertierung API](conversion.md)
 
--   :material-cog:{ .lg .middle } __Settings__
+-   :material-cog:{ .lg .middle } __Einstellungen__
 
     ---
 
-    Get and update configuration
+    Get und update configuration
 
-    [:octicons-arrow-right-24: Settings API](settings.md)
+    [:octicons-arrow-right-24: Einstellungen API](settings.md)
 
 -   :material-history:{ .lg .middle } __History__
 
@@ -42,26 +42,26 @@ Currently, the API does not require authentication. For production deployments, 
 
 </div>
 
-## Quick Reference
+## Kurzreferenz
 
-### Conversion Endpoints
+### Konvertierung Endpoints
 
-| Endpoint | Method | Description |
+| Endpoint | Methode | Beschreibung |
 |----------|--------|-------------|
-| `/convert` | POST | Upload and convert a document |
+| `/convert` | POST | Dokument hochladen und konvertieren |
 | `/convert/batch` | POST | Batch convert multiple documents |
 | `/convert/{job_id}/status` | GET | Get conversion status |
 | `/convert/{job_id}/result` | GET | Get conversion result |
 | `/convert/{job_id}/images` | GET | List extracted images |
-| `/convert/{job_id}/images/{id}` | GET | Download extracted image |
+| `/convert/{job_id}/images/{id}` | GET | Herunterladen extracted image |
 | `/convert/{job_id}/tables` | GET | List extracted tables |
-| `/convert/{job_id}/tables/{id}/csv` | GET | Download table as CSV |
+| `/convert/{job_id}/tables/{id}/csv` | GET | Herunterladen table as CSV |
 | `/convert/{job_id}/chunks` | GET | Get document chunks |
-| `/export/{job_id}/{format}` | GET | Download converted file |
+| `/export/{job_id}/{format}` | GET | Herunterladen converted file |
 
-### Settings Endpoints
+### Einstellungen Endpoints
 
-| Endpoint | Method | Description |
+| Endpoint | Methode | Beschreibung |
 |----------|--------|-------------|
 | `/settings` | GET/PUT | Get/update all settings |
 | `/settings/reset` | POST | Reset to defaults |
@@ -69,12 +69,12 @@ Currently, the API does not require authentication. For production deployments, 
 | `/settings/ocr` | GET/PUT | OCR settings |
 | `/settings/tables` | GET/PUT | Table settings |
 | `/settings/images` | GET/PUT | Image settings |
-| `/settings/performance` | GET/PUT | Performance settings |
+| `/settings/performance` | GET/PUT | Leistung settings |
 | `/settings/chunking` | GET/PUT | Chunking settings |
 
 ### History Endpoints
 
-| Endpoint | Method | Description |
+| Endpoint | Methode | Beschreibung |
 |----------|--------|-------------|
 | `/history` | GET | List conversion history |
 | `/history/{job_id}` | GET | Get history entry |
@@ -87,7 +87,7 @@ Currently, the API does not require authentication. For production deployments, 
 GET /health
 ```
 
-**Response**
+**Antwort**
 
 ```json
 {
@@ -96,7 +96,7 @@ GET /health
 }
 ```
 
-## Error Responses
+## Error Antworts
 
 All endpoints may return error responses in the following format:
 
@@ -109,7 +109,7 @@ All endpoints may return error responses in the following format:
 
 ### HTTP Status Codes
 
-| Code | Description |
+| Code | Beschreibung |
 |------|-------------|
 | 200 | Success |
 | 202 | Accepted (async operation started) |

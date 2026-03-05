@@ -1,8 +1,8 @@
-# Architecture Diagrams
+# Architecture Diagrammes
 
 Visual diagrams for Duckling architecture.
 
-## System Architecture Overview
+## System Architecture Vue d'ensemble
 
 ```mermaid
 flowchart LR
@@ -124,7 +124,7 @@ sequenceDiagram
 
 ---
 
-## Batch Processing
+## Traitement par lots
 
 ```mermaid
 sequenceDiagram
@@ -153,7 +153,7 @@ sequenceDiagram
 
 ---
 
-## Scaling Architecture
+## Mise à l'échelle Architecture
 
 For production deployments with high traffic:
 
@@ -238,11 +238,11 @@ graph LR
 
 For environments that don't support Mermaid rendering, static images are available:
 
-- [System Architecture](../arch.png)
-- [Detailed Layer View](../Detailed-Layer-View.png)
-- [Conversion Pipeline](../ConversionPipeline.png)
-- [Batch Processing](../BatchProcessing.png)
-- [Scaling Architecture](../ScalingArchitecture.png)
-- [Component Tree](../ComponentTree.png)
-- [OCR Options](../OCR.png)
+- [Architecture système](../../arch.png)
+- [Vue détaillée par couches](../../Detailed-Layer-View.png)
+- [Pipeline de conversion](../../ConversionPipeline.png)
+- [Traitement par lots](../../BatchProcessing.png)
+- [Architecture de mise à l'échelle](../../ScalingArchitecture.png)
+- [Arbre des composants](../../ComponentTree.png)
+- [Options OCR](../../OCR.png)
 

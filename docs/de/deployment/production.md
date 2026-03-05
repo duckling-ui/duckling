@@ -1,4 +1,4 @@
-# Production Deployment
+# Produktion Bereitstellung
 
 Guide for deploying Duckling in production environments.
 
@@ -18,7 +18,7 @@ pip install gunicorn
 gunicorn -w 4 -b 0.0.0.0:5001 duckling:app
 ```
 
-### Recommended Configuration
+### Recommended Konfiguration
 
 ```bash
 gunicorn \
@@ -47,9 +47,9 @@ The `dist/` directory contains static files ready for deployment.
 
 ---
 
-## Nginx Configuration
+## Nginx Konfiguration
 
-### Basic Setup
+### Basic Setzenup
 
 ```nginx
 # /etc/nginx/sites-available/duckling
@@ -81,7 +81,7 @@ server {
 }
 ```
 
-### Full Production Configuration
+### Full Produktion Konfiguration
 
 ```nginx
 upstream docling_backend {
@@ -205,9 +205,9 @@ docling.example.com {
 
 ---
 
-## Environment Variables
+## Umgebungsvariablen
 
-Set these in production:
+Setzen these in production:
 
 ```env
 FLASK_ENV=production
@@ -217,8 +217,8 @@ FLASK_HOST=127.0.0.1
 MAX_CONTENT_LENGTH=209715200  # 200MB
 ```
 
-!!! danger "Security"
-    Never use the default `SECRET_KEY` in production. Generate a secure random key:
+!!! danger "Sicherheit"
+    Never use the default `SECRET_KEY` in der Produktion. Generate a secure rundom key:
 
     ```bash
     python -c "import secrets; print(secrets.token_hex(32))"
@@ -226,7 +226,7 @@ MAX_CONTENT_LENGTH=209715200  # 200MB
 
 ---
 
-## Health Checks
+## Health-Checks
 
 Monitor service health:
 

@@ -1,74 +1,74 @@
 # Installation
 
-This guide covers setting up Duckling for local development.
+Ce guide couvre la configuration de Duckling pour le développement local.
 
-## Prerequisites
+## Prérequis
 
-- Python 3.10+ (3.13 recommended)
+- Python 3.10+ (3.13 recommandé)
 - Node.js 18+
-- npm or yarn
+- npm ou yarn
 - Git
 
-## Step-by-Step Installation
+## Installation étape par étape
 
-### 1. Clone the Repository
+### 1. Cloner le dépôt
 
 ```bash
 git clone https://github.com/davidgs/duckling.git
 cd duckling
 ```
 
-### 2. Backend Setup
+### 2. Configuration du backend
 
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # Sous Windows : venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 3. Frontend Setup
+### 3. Configuration du frontend
 
 ```bash
 cd ../frontend
 npm install
 ```
 
-### 4. Build Documentation (Optional)
+### 4. Compiler la documentation (optionnel)
 
-To view documentation within the Duckling UI, build the MkDocs site:
+Pour afficher la documentation dans l'interface Duckling, compilez le site MkDocs :
 
 ```bash
-cd ..  # Return to project root
+cd ..  # Retour à la racine du projet
 pip install -r requirements-docs.txt
 mkdocs build
 ```
 
-!!! tip "Auto-Build"
-    If MkDocs is installed, the backend will automatically build the documentation when you first open the docs panel in the UI.
+!!! tip "Compilation automatique"
+    Si MkDocs est installé, le backend compilera automatiquement la documentation lors de la première ouverture du panneau de documentation dans l'interface.
 
-## Environment Configuration
+## Configuration de l'environnement
 
-### Backend Environment Variables
+### Variables d'environnement du backend
 
-Create a `.env` file in the `backend` directory:
+Créez un fichier `.env` dans le répertoire `backend` :
 
 ```env
-# Flask Configuration
+# Configuration Flask
 FLASK_ENV=development
 SECRET_KEY=your-secret-key
 DEBUG=True
 
-# File Handling
+# Gestion des fichiers
 MAX_CONTENT_LENGTH=104857600  # 100MB
 ```
 
-!!! warning "Production Security"
-    In production, always set a strong `SECRET_KEY` and set `DEBUG=False`.
+!!! warning "Sécurité en production"
+    En production, définissez toujours une `SECRET_KEY` robuste et `DEBUG=False`.
 
-## Verifying Installation
+## Vérifier l'installation
 
-### Check Backend
+### Vérifier le backend
 
 ```bash
 cd backend
@@ -76,20 +76,20 @@ source venv/bin/activate
 python duckling.py
 ```
 
-You should see:
+Vous devriez voir :
 
 ```
  * Running on http://127.0.0.1:5001
 ```
 
-### Check Frontend
+### Vérifier le frontend
 
 ```bash
 cd frontend
 npm run dev
 ```
 
-You should see:
+Vous devriez voir :
 
 ```
   VITE v5.x.x  ready in xxx ms
@@ -97,45 +97,44 @@ You should see:
   ➜  Local:   http://localhost:3000/
 ```
 
-## Troubleshooting
+## Dépannage
 
-### Python Version Issues
+### Problèmes de version Python
 
-If you encounter Python version issues:
+En cas de problèmes de version Python :
 
 ```bash
-# Check Python version
+# Vérifier la version de Python
 python --version
 
-# Use specific Python version
+# Utiliser une version spécifique de Python
 python3.13 -m venv venv
 ```
 
-### Node.js Version Issues
+### Problèmes de version Node.js
 
 ```bash
-# Check Node version
+# Vérifier la version de Node
 node --version
 
-# Use nvm to switch versions
+# Utiliser nvm pour changer de version
 nvm install 18
 nvm use 18
 ```
 
-### Dependency Installation Failures
+### Échecs d'installation des dépendances
 
 ```bash
-# Backend - try upgrading pip
+# Backend - mettre à jour pip
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Frontend - clear cache
+# Frontend - vider le cache
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-## Next Steps
+## Prochaines étapes
 
-- [Quick Start](quickstart.md) - Learn the basics
-- [Configuration](../user-guide/configuration.md) - Customize settings
-
+- [Démarrage rapide](quickstart.md) - Apprendre les bases
+- [Configuration](../user-guide/configuration.md) - Personnaliser les paramètres

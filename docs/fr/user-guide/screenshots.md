@@ -1,4 +1,4 @@
-# Screenshots Gallery
+# Captures d'écran Gallery
 
 This page provides a visual tour of the Duckling interface. All screenshots are captured in dark mode.
 
@@ -9,7 +9,7 @@ This page provides a visual tour of the Duckling interface. All screenshots are 
 
 ### Dropzone
 
-The main upload area where you drag and drop documents for conversion.
+The main upload area where you drag et drop documents for conversion.
 
 === "Empty State"
 
@@ -29,13 +29,13 @@ The main upload area where you drag and drop documents for conversion.
 
     <figure markdown="span">
       ![Dropzone Uploading](../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
-      <figcaption>Upload progress indicator</figcaption>
+      <figcaption>Indicateur de progression du téléchargement</figcaption>
     </figure>
 
-=== "Batch Mode"
+=== "Mode lot"
 
     <figure markdown="span">
-      ![Batch Mode](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+      ![Mode lot](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
       <figcaption>Multiple files in batch mode</figcaption>
     </figure>
 
@@ -43,7 +43,7 @@ The main upload area where you drag and drop documents for conversion.
 
 <figure markdown="span">
   ![Header](../assets/screenshots/ui/header.png){ loading=lazy }
-  <figcaption>Application header with batch toggle and settings button</figcaption>
+  <figcaption>Application header with batch toggle et settings button</figcaption>
 </figure>
 
 ### History Panel
@@ -64,14 +64,14 @@ The main upload area where you drag and drop documents for conversion.
 
 ---
 
-## Settings Panel
+## Paramètres Panel
 
-### OCR Settings
+### Paramètres OCR
 
-=== "Overview"
+=== "Vue d'ensemble"
 
     <figure markdown="span">
-      ![OCR Settings](../assets/screenshots/settings/settings-ocr.png){ loading=lazy }
+      ![Paramètres OCR](../assets/screenshots/settings/settings-ocr.png){ loading=lazy }
       <figcaption>OCR configuration options</figcaption>
     </figure>
 
@@ -89,27 +89,27 @@ The main upload area where you drag and drop documents for conversion.
       <figcaption>Manual installation instructions for Tesseract</figcaption>
     </figure>
 
-### Table Settings
+### Paramètres des tableaux
 
 <figure markdown="span">
-  ![Table Settings](../assets/screenshots/settings/settings-tables.svg){ loading=lazy }
+  ![Paramètres des tableaux](../assets/screenshots/settings/settings-tables.svg){ loading=lazy }
   <figcaption>Table extraction configuration</figcaption>
 </figure>
 
-### Image Settings
+### Paramètres des images
 
 <figure markdown="span">
-  ![Image Settings](../assets/screenshots/settings/settings-images.svg){ loading=lazy }
+  ![Paramètres des images](../assets/screenshots/settings/settings-images.svg){ loading=lazy }
   <figcaption>Image extraction options</figcaption>
 </figure>
 
-### Enrichment Settings
+### Enrichment Paramètres
 
 === "All Options"
 
     <figure markdown="span">
-      ![Enrichment Settings](../assets/screenshots/settings/settings-enrichment.png){ loading=lazy }
-      <figcaption>Document enrichment options: code, formula, picture classification, and description</figcaption>
+      ![Enrichment Paramètres](../assets/screenshots/settings/settings-enrichment.png){ loading=lazy }
+      <figcaption>Document enrichment options: code, formula, picture classification, et description</figcaption>
     </figure>
 
 === "Warning Message"
@@ -119,25 +119,25 @@ The main upload area where you drag and drop documents for conversion.
       <figcaption>Warning displayed when slow enrichment features are enabled</figcaption>
     </figure>
 
-### Performance Settings
+### Performances Paramètres
 
 <figure markdown="span">
-  ![Performance Settings](../assets/screenshots/settings/settings-performance.svg){ loading=lazy }
-  <figcaption>Processing performance configuration</figcaption>
+  ![Performances Paramètres](../assets/screenshots/settings/settings-performance.svg){ loading=lazy }
+  <figcaption>Traitement performance configuration</figcaption>
 </figure>
 
-### Chunking Settings
+### Chunking Paramètres
 
 <figure markdown="span">
-  ![Chunking Settings](../assets/screenshots/settings/settings-chunking.svg){ loading=lazy }
+  ![Chunking Paramètres](../assets/screenshots/settings/settings-chunking.svg){ loading=lazy }
   <figcaption>RAG chunking configuration</figcaption>
 </figure>
 
-### Output Settings
+### Output Paramètres
 
 <figure markdown="span">
-  ![Output Settings](../assets/screenshots/settings/settings-output.svg){ loading=lazy }
-  <figcaption>Default output format selection</figcaption>
+  ![Output Paramètres](../assets/screenshots/settings/settings-output.svg){ loading=lazy }
+  <figcaption>Par défaut output format selection</figcaption>
 </figure>
 
 ---
@@ -162,11 +162,11 @@ The main upload area where you drag and drop documents for conversion.
 
 ### Preview Modes
 
-=== "Rendered/Raw Toggle"
+=== "Rendered/Raw Activer"
 
     <figure markdown="span">
-      ![Preview Toggle](../assets/screenshots/export/preview-toggle.png){ loading=lazy }
-      <figcaption>Toggle between rendered and raw views</figcaption>
+      ![Preview Activer](../assets/screenshots/export/preview-toggle.png){ loading=lazy }
+      <figcaption>Activer between rendered et raw views</figcaption>
     </figure>
 
 === "Markdown Rendered"
@@ -206,7 +206,7 @@ The main upload area where you drag and drop documents for conversion.
 
 ---
 
-## Features in Action
+## Fonctionnalités in Action
 
 ### Conversion Status
 
@@ -237,14 +237,14 @@ The main upload area where you drag and drop documents for conversion.
 
     <figure markdown="span">
       ![Images Gallery](../assets/screenshots/features/images-gallery.png){ loading=lazy }
-      <figcaption>Extracted images as thumbnails</figcaption>
+      <figcaption>Extraireed images as thumbnails</figcaption>
     </figure>
 
 === "Hover Actions"
 
     <figure markdown="span">
       ![Images Hover](../assets/screenshots/features/images-hover.png){ loading=lazy }
-      <figcaption>View and download buttons on hover</figcaption>
+      <figcaption>View et download buttons on hover</figcaption>
     </figure>
 
 === "Lightbox"
@@ -260,14 +260,14 @@ The main upload area where you drag and drop documents for conversion.
 
     <figure markdown="span">
       ![Tables List](../assets/screenshots/features/tables-list.svg){ loading=lazy }
-      <figcaption>Extracted tables with previews</figcaption>
+      <figcaption>Extraireed tables with previews</figcaption>
     </figure>
 
-=== "Download Options"
+=== "Télécharger Options"
 
     <figure markdown="span">
-      ![Tables Download](../assets/screenshots/features/tables-download.svg){ loading=lazy }
-      <figcaption>CSV and image export options</figcaption>
+      ![Tables Télécharger](../assets/screenshots/features/tables-download.svg){ loading=lazy }
+      <figcaption>CSV et image export options</figcaption>
     </figure>
 
 ### RAG Chunks

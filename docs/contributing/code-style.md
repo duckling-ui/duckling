@@ -208,6 +208,8 @@ Implemented drag-and-drop functionality using react-dropzone.
 Supports multiple file selection in batch mode.
 
 Closes #123
+
+Signed-off-by: Your Name <your.email@example.com>
 ```
 
 ```
@@ -222,6 +224,24 @@ docs(readme): update installation instructions
 
 Added Docker setup instructions and troubleshooting section.
 ```
+
+### DCO Sign-off
+
+All commits **MUST** be signed off with the [Developer Certificate of Origin (DCO)](https://developercertificate.org/). This certifies that you have the right to submit the contribution under the project's license.
+
+Add the sign-off to every commit using `git commit -s`:
+
+```bash
+git commit -s -m "feat(upload): add drag-and-drop file upload"
+```
+
+This appends a `Signed-off-by:` line with your name and email from your Git config. You can also add it manually at the end of your commit message:
+
+```
+Signed-off-by: Your Name <your.email@example.com>
+```
+
+PRs with unsigned commits will not be merged.
 
 ---
 

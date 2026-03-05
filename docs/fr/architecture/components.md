@@ -1,4 +1,4 @@
-# Components
+# Composants
 
 Detailed component documentation for Duckling.
 
@@ -6,13 +6,13 @@ Detailed component documentation for Duckling.
 
 ### Technology Stack
 
-- **React 18** - UI framework with functional components and hooks
+- **React 18** - UI framework with functional components et hooks
 - **TypeScript** - Type-safe JavaScript
 - **Tailwind CSS** - Utility-first CSS framework
 - **Framer Motion** - Animation library
 - **React Query** - Server state management
 - **Axios** - HTTP client
-- **Vite** - Build tool and dev server
+- **Vite** - Build tool et dev server
 
 ### Component Structure
 
@@ -37,21 +37,21 @@ graph TD
     style Panels fill:#8b5cf6,color:#fff
 ```
 
-### Component Files
+### Component Fichiers
 
 | Path | Description |
 |------|-------------|
 | `src/App.tsx` | Main application component |
 | `src/main.tsx` | Application entry point |
 | `src/index.css` | Global styles |
-| `src/components/DropZone.tsx` | File upload with drag-and-drop |
+| `src/components/DropZone.tsx` | Fichier upload with drag-et-drop |
 | `src/components/ConversionProgress.tsx` | Progress display |
-| `src/components/ExportOptions.tsx` | Download and preview results |
-| `src/components/SettingsPanel.tsx` | Configuration panel |
+| `src/components/ExportOptions.tsx` | Télécharger et preview results |
+| `src/components/ParamètresPanel.tsx` | Configuration panel |
 | `src/components/HistoryPanel.tsx` | Conversion history |
 | `src/components/DocsPanel.tsx` | Documentation viewer |
-| `src/hooks/useConversion.ts` | Conversion state and actions |
-| `src/hooks/useSettings.ts` | Settings state management |
+| `src/hooks/useConversion.ts` | Conversion state et actions |
+| `src/hooks/useParamètres.ts` | Paramètres state management |
 | `src/services/api.ts` | API client functions |
 | `src/types/index.ts` | TypeScript interfaces |
 
@@ -60,7 +60,7 @@ graph TD
 The application uses a combination of:
 
 1. **Local State** - Component-level state with `useState`
-2. **React Query** - Server state caching and synchronization
+2. **React Query** - Server state caching et synchronization
 3. **Custom Hooks** - Encapsulated business logic
 
 ### Key Hooks
@@ -69,18 +69,18 @@ The application uses a combination of:
 
 Manages the document conversion workflow:
 
-- File upload (single and batch)
+- Fichier upload (single et batch)
 - Status polling
 - Result retrieval
-- Download handling
+- Télécharger hetling
 
-#### `useSettings`
+#### `useParamètres`
 
 Manages application settings:
 
 - OCR, table, image, performance, chunking settings
-- Settings persistence via API
-- Settings validation
+- Paramètres persistence via API
+- Paramètres validation
 
 ---
 
@@ -99,13 +99,13 @@ Manages application settings:
 | Path | Description |
 |------|-------------|
 | `backend/duckling.py` | Flask application factory |
-| `backend/config.py` | Configuration and defaults |
+| `backend/config.py` | Configuration et defaults |
 | `backend/models/database.py` | SQLAlchemy models |
 | `backend/routes/convert.py` | Conversion endpoints |
-| `backend/routes/settings.py` | Settings endpoints |
+| `backend/routes/settings.py` | Paramètres endpoints |
 | `backend/routes/history.py` | History endpoints |
 | `backend/services/converter.py` | Docling integration |
-| `backend/services/file_manager.py` | File operations |
+| `backend/services/file_manager.py` | Fichier operations |
 | `backend/services/history.py` | History CRUD |
 | `backend/tests/` | Test suite |
 
@@ -113,7 +113,7 @@ Manages application settings:
 
 #### ConverterService
 
-Handles document conversion using Docling:
+Hetles document conversion using Docling:
 
 ```python
 class ConverterService:
@@ -126,9 +126,9 @@ class ConverterService:
         pass
 ```
 
-#### FileManager
+#### FichierManager
 
-Manages file uploads and outputs:
+Manages file uploads et outputs:
 
 ```python
 class FileManager:
@@ -186,7 +186,7 @@ graph LR
     style Rapid fill:#f59e0b,color:#fff
 ```
 
-| Backend | Description | GPU Support |
+| Backend | Description | Support GPU |
 |---------|-------------|-------------|
 | **EasyOCR** | General-purpose, multi-language | Yes |
 | **Tesseract** | Classic OCR engine | No |
@@ -197,7 +197,7 @@ The backend automatically falls back to non-OCR processing if OCR initialization
 
 ---
 
-## Batch Processing
+## Traitement par lots
 
 ```mermaid
 sequenceDiagram

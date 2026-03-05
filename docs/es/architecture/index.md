@@ -2,16 +2,16 @@
 
 Documentación técnica de la arquitectura de Duckling.
 
-## Visión General
+## Resumen
 
-Duckling es una aplicación web full-stack con una clara separación entre frontend y backend:
+Duckling is a full-stack web application with a clear separation between frontend y backend:
 
 ```mermaid
 graph LR
-    A[Navegador] --> B[Frontend React]
-    B --> C[Backend Flask]
-    C --> D[Motor Docling]
-    D --> E[(Almacenamiento)]
+    A[Browser] --> B[React Frontend]
+    B --> C[Flask Backend]
+    C --> D[Docling Engine]
+    D --> E[(Storage)]
 
     style A fill:#3b82f6,color:#fff
     style B fill:#1e3a5f,color:#fff
@@ -24,13 +24,13 @@ graph LR
 
 <div class="grid cards" markdown>
 
--   :material-view-dashboard:{ .lg .middle } __Vista General del Sistema__
+-   :material-view-dashboard:{ .lg .middle } __Resumen del sistema__
 
     ---
 
     Arquitectura de alto nivel y flujo de datos
 
-    [:octicons-arrow-right-24: Vista General](overview.md)
+    [:octicons-arrow-right-24: Resumen](overview.md)
 
 -   :material-puzzle:{ .lg .middle } __Componentes__
 
@@ -44,67 +44,68 @@ graph LR
 
     ---
 
-    Diagramas de arquitectura y diagramas de flujo
+    Diagramas de arquitectura y flujos
 
     [:octicons-arrow-right-24: Diagramas](diagrams.md)
 
 </div>
 
-## Decisiones de Diseño Clave
+## Decisiones de diseño clave
 
-### Separación de Responsabilidades
+### Separación de responsabilidades
 
-- **Frontend**: React con TypeScript para seguridad de tipos e interfaz moderna
+- **Frontend**: React con TypeScript para seguridad de tipos y UI moderna
 - **Backend**: Flask por simplicidad y acceso al ecosistema Python
 - **Motor**: Docling para conversión de documentos (biblioteca de IBM)
 
-### Procesamiento Asíncrono
+### Async Procesyo
 
-La conversión de documentos se maneja de forma asíncrona:
+Document conversion is hyled asynchronously:
 
-1. El cliente sube el archivo
-2. El servidor devuelve un ID de trabajo inmediatamente
-3. El cliente consulta el estado
-4. El servidor procesa en un hilo en segundo plano
-5. Los resultados están disponibles cuando se completa
+1. Client uploads file
+2. Server returns job ID immediately
+3. Client polls for status
+4. Server processes in background thread
+5. Results available when complete
 
-### Cola de Trabajos
+### Job Queue
 
-Una cola de trabajos basada en hilos previene el agotamiento de memoria:
+A thread-based job queue prevents memory exhaustion:
 
-- Máximo 2 conversiones simultáneas
-- Los trabajos se ponen en cola cuando se alcanza la capacidad
-- Limpieza automática de trabajos completados
+- Maximum 2 concurrent conversions
+- Jobs queued when capacity reached
+- Automatic cleanup of completed jobs
 
-### Persistencia de Configuración
+### Configuración Persistence
 
-Los ajustes se almacenan por sesión de usuario y se aplican por conversión:
+Configuración are stored per-user session y applied per-conversion:
 
-- Valores predeterminados globales en `config.py`
-- Configuración de usuario almacenada en la base de datos (por ID de sesión)
-- Anulaciones por solicitud a través de la API
+- Global defaults in `config.py`
+- User settings stored in database (per session ID)
+- Per-request overrides via API
 
-Los ajustes están aislados por sesión de usuario, garantizando que los despliegues multi-usuario no interfieran con las preferencias de otros.
+Configuración are isolated per user session, ensuring multi-user deployments don't interfere with each other's preferences.
 
-## Stack Tecnológico
+## Technology Stack
 
 ### Frontend
 
-| Tecnología | Propósito |
-|------------|-----------|
-| React 18 | Framework de UI |
-| TypeScript | Seguridad de tipos |
-| Tailwind CSS | Estilos |
-| Framer Motion | Animaciones |
-| Axios | Cliente HTTP |
-| Vite | Herramienta de construcción |
+| Technology | Propósito |
+|------------|---------|
+| React 18 | UI framework |
+| TypeScript | Type safety |
+| Tailwind CSS | Styling |
+| Framer Motion | Animations |
+| Axios | HTTP client |
+| Vite | Build tool |
 
 ### Backend
 
-| Tecnología | Propósito |
-|------------|-----------|
-| Flask | Framework web |
-| SQLAlchemy | ORM de base de datos |
-| SQLite | Almacenamiento de historial |
-| Docling | Conversión de documentos |
-| Threading | Procesamiento asíncrono |
+| Technology | Propósito |
+|------------|---------|
+| Flask | Web framework |
+| SQLAlchemy | Database ORM |
+| SQLite | History storage |
+| Docling | Document conversion |
+| Threading | Async processing |
+
