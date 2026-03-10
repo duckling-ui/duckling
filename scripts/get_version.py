@@ -133,50 +133,6 @@ def update_mkdocs_yml(version: str) -> bool:
         return False
 
 
-def create_versions_json(version: str) -> bool:
-    """Create versions.json file for mike provider.
-
-    Creates versions.json in both:
-    - docs/ directory (for mkdocs serve)
-    - site/ directory (for mkdocs build, if it exists)
-    """
-    root_dir = Path(__file__).parent.parent
-    site_dir = root_dir / "site"
-    docs_dir = root_dir / "docs"
-
-    # Create versions.json structure that mike expects
-    versions_data = [
-        {
-            "version": version,
-            "title": version,
-            "aliases": ["latest"]
-        }
-    ]
-
-    success = False
-
-    # Create in docs directory (for serving)
-    docs_versions_json = docs_dir / "versions.json"
-    try:
-        with open(docs_versions_json, "w", encoding="utf-8") as f:
-            json.dump(versions_data, f, indent=2)
-        success = True
-    except IOError as e:
-        print(f"Warning: Could not create versions.json in docs: {e}", file=sys.stderr)
-
-    # Also create in site directory if it exists (for built site)
-    if site_dir.exists():
-        site_versions_json = site_dir / "versions.json"
-        try:
-            with open(site_versions_json, "w", encoding="utf-8") as f:
-                json.dump(versions_data, f, indent=2)
-            success = True
-        except IOError as e:
-            print(f"Warning: Could not create versions.json in site: {e}", file=sys.stderr)
-
-    return success
-
-
 def main():
     """Main entry point."""
     # Try package.json first
@@ -191,21 +147,16 @@ def main():
         print("Warning: Could not determine version, using default '0.0.10'", file=sys.stderr)
         version = "0.0.10"
 
-    # Update mkdocs.yml
+    # Update mkdocs.yml (mike generates versions.json during deploy)
     mkdocs_updated = update_mkdocs_yml(version)
-
-    # Create versions.json for mike provider
-    versions_json_created = create_versions_json(version)
 
     if mkdocs_updated:
         print(f"Updated mkdocs.yml with version: {version}")
-    if versions_json_created:
-        print(f"Created versions.json with version: {version}")
 
     # Output version to stdout for use in scripts
     print(version)
 
-    if mkdocs_updated or versions_json_created:
+    if mkdocs_updated:
         return 0
     else:
         print(f"Warning: Could not update version files, but version is: {version}", file=sys.stderr)

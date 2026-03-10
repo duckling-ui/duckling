@@ -236,7 +236,7 @@ def test_requirements_docs_content():
     req_path = PROJECT_ROOT / "requirements-docs.txt"
     content = req_path.read_text()
 
-    required_packages = ["mkdocs", "mkdocs-material"]
+    required_packages = ["mike", "mkdocs", "mkdocs-material"]
     for package in required_packages:
         assert package in content, f"Required package '{package}' not in requirements-docs.txt"
 

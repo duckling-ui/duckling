@@ -1,11 +1,11 @@
 # Deploy documentation to duckling-ui.org when PRs are merged to main.
+# Uses mike for multi-version docs; deploys to gh-pages, then rsyncs to duckling-ui.org.
 # Required setup:
-#   1. Repo Settings > Pages > Build and deployment: Source = "GitHub Actions"
-#   2. Add POSTHOG_API_KEY to repo Secrets (Settings > Secrets and variables > Actions)
-#   3. Configure custom domain duckling-ui.org in Pages settings if not already done
+#   1. Add POSTHOG_API_KEY to repo Secrets (Settings > Secrets and variables > Actions)
+#   2. Configure REMOTE_PATH, SSH_HOST, SSH_PORT, SSH_USER, WEBSITE_DEPLOY_KEY, DEPLOY_KEY_PASS
 name: Deploy Docs
 permissions:
-  contents: read
+  contents: write  # Required for mike to push to gh-pages
 
 on:
   push:
@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for mike
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -33,60 +35,58 @@ jobs:
 
       - name: Inject PostHog API key
         run: |
-          # Replace placeholder with secret; if secret is unset, PostHog won't init in deployed docs
           sed -i "s|__POSTHOG_API_KEY__|${{ secrets.POSTHOG_API_KEY }}|g" docs/overrides/main.html
 
       - name: Update version in mkdocs.yml
         run: |
           python scripts/get_version.py || echo "Warning: Could not update version, continuing with existing version"
 
-      - name: Build docs (strict)
+      - name: Fetch gh-pages for mike
         run: |
-          mkdocs build --strict
+          git fetch origin gh-pages --depth=1 || true
 
-      - name: Copy versions.json to site directory
+      - name: Configure Git for mike
         run: |
-          if [ -f "docs/versions.json" ] && [ -d "site" ]; then
-            cp docs/versions.json site/versions.json
-            echo "Copied versions.json to site directory"
-          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Copy sitemap.xml to language directories
+      - name: Deploy docs with mike
         run: |
-          if [ -f "site/sitemap.xml" ]; then
-            for lang in es fr de; do
-              lang_dir="site/$lang"
-              if [ -d "$lang_dir" ]; then
-                cp site/sitemap.xml "$lang_dir/sitemap.xml"
-              fi
-            done
-            if [ ! -d "site/en" ]; then
-              mkdir -p site/en
-            fi
-            cp site/sitemap.xml site/en/sitemap.xml
-          fi
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: site
-          path: site
+          VERSION=$(python scripts/get_version.py 2>/dev/null || echo "0.0.10")
+          mike deploy --push --update-aliases --alias-type redirect "$VERSION" latest
+          mike set-default --push latest
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download site artifact
-        uses: actions/download-artifact@v4
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
         with:
-          name: site
-      - name: list
-        run: pwd; ls -la
+          ref: gh-pages
+          path: site
+
+      - name: Copy sitemap.xml to language directories
+        run: |
+          for ver_dir in site/*/; do
+            if [ -f "${ver_dir}sitemap.xml" ]; then
+              for lang in es fr de; do
+                lang_dir="${ver_dir}${lang}"
+                if [ -d "$lang_dir" ]; then
+                  cp "${ver_dir}sitemap.xml" "$lang_dir/sitemap.xml"
+                fi
+              done
+              en_dir="${ver_dir}en"
+              mkdir -p "$en_dir"
+              cp "${ver_dir}sitemap.xml" "$en_dir/sitemap.xml"
+            fi
+          done
+
       - name: rsync deployments
         uses: burnett01/rsync-deployments@7.0.1
         with:
           switches: -avzr
-          path: .
+          path: site
           remote_path: ${{ secrets.REMOTE_PATH }}
           remote_host: ${{ secrets.SSH_HOST }}
           remote_port: ${{ secrets.SSH_PORT }}

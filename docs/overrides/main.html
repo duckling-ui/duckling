@@ -25,6 +25,8 @@
 {% extends "base.html" %}
 
 {% block extrahead %}
+<link rel="apple-touch-icon" href="{{ config.theme.favicon | url }}">
+<link rel="apple-touch-icon-precomposed" href="{{ config.theme.favicon | url }}">
 <!-- Default Statcounter code for Duckling
 https://duckling-ui.org -->
 <script type="text/javascript">

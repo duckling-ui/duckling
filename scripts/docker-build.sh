@@ -110,10 +110,6 @@ if [ "$SKIP_DOCS" = false ]; then
                 echo -e "${GREEN}✓ Documentation built (with warnings)${NC}"
             fi
         fi
-        # Copy versions.json to site directory if it exists
-        if [ -f "docs/versions.json" ] && [ -d "site" ]; then
-            cp docs/versions.json site/versions.json
-        fi
         # Copy sitemap.xml to each language directory for SEO crawlers
         # Note: English (default locale) is at site root, not site/en/
         if [ -f "site/sitemap.xml" ]; then
