@@ -109,7 +109,7 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 
 ## Documentation (MkDocs)
 
-Duckling uses MkDocs + `mkdocs-static-i18n` for multilingual docs.
+Duckling uses MkDocs + `mkdocs-static-i18n` for multilingual docs. Production docs at [duckling-ui.org](https://duckling-ui.org) are built with [mike](https://github.com/jimporter/mike) for multi-version support.
 
 - Build (strict):
 

@@ -138,17 +138,7 @@ def build_docs():
 
         if last_result.returncode == 0:
             logger.info("Documentation built successfully")
-            # Copy versions.json to site directory if it exists
-            docs_versions_json = PROJECT_ROOT / "docs" / "versions.json"
             site_dir = PROJECT_ROOT / "site"
-            site_versions_json = site_dir / "versions.json"
-            if docs_versions_json.exists() and site_dir.exists():
-                try:
-                    shutil.copy2(docs_versions_json, site_versions_json)
-                    logger.info("Copied versions.json to site directory")
-                except Exception as e:
-                    logger.warning(f"Could not copy versions.json: {e}")
-
             # Copy sitemap.xml to each language directory for SEO crawlers
             # Note: English (default locale) is at site root, not site/en/
             sitemap_xml = site_dir / "sitemap.xml"

@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Documentation**: Repository button now says "Star on GitHub" instead of "Go to repository" to encourage starring (links to the repo where users can star).
+- **Documentation**: Switched to mike for multi-version docs; deploys to gh-pages then rsyncs to duckling-ui.org. Root and `/latest/` redirect correctly; version selector works.
+
 ### Security
 
 - **CodeQL security fixes** (PR #25):

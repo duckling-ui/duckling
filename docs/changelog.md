@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Repository button**: Documentation header/sidebar repo link now says "Star on GitHub" instead of "Go to repository" to encourage starring (links to the repo where users can star).
+- **Documentation**: Switched to mike for multi-version docs; deploys to gh-pages then rsyncs to duckling-ui.org. Root and `/latest/` redirect correctly; version selector works.
 - **Documentation navigation**: Switched from horizontal top tabs to a single left sidebar with collapsible tree navigation; each major category (Home, Getting Started, etc.) can be expanded or collapsed.
 - **Key Features tiles**: Each feature tile on the docs homepage is now a clickable link to its detailed documentation (Features or Formats page).
 - **CONTRIBUTING.md**: Added DCO (Developer Certificate of Origin) sign-off requirement for all commits.

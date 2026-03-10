@@ -50,12 +50,6 @@ echo "Updating version in mkdocs.yml..."
 # Build docs
 "$MKDOCS_BIN" build --strict
 
-# Copy versions.json to site directory if it exists in docs
-if [ -f "$ROOT_DIR/docs/versions.json" ] && [ -d "$ROOT_DIR/site" ]; then
-  cp "$ROOT_DIR/docs/versions.json" "$ROOT_DIR/site/versions.json"
-  echo "Copied versions.json to site directory"
-fi
-
 # Copy sitemap.xml to each language directory for SEO crawlers
 # Note: English (default locale) is at site root, not site/en/
 if [ -f "$ROOT_DIR/site/sitemap.xml" ]; then
