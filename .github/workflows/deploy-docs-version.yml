@@ -44,6 +44,11 @@ jobs:
             sed -i "s|__POSTHOG_API_KEY__|${{ secrets.POSTHOG_API_KEY }}|g" docs/overrides/main.html
           fi
 
+      - name: Set version in mkdocs.yml for correct version selector
+        run: |
+          VERSION="${{ github.event.inputs.version }}"
+          sed -i "s/\(default:\s*\)[0-9.]\+/\1$VERSION/" mkdocs.yml
+
       - name: Fetch gh-pages for mike
         run: |
           git fetch origin gh-pages --depth=1 || true
