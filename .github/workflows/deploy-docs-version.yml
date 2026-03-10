@@ -1,25 +1,30 @@
-# Deploy documentation to duckling-ui.org when PRs are merged to main.
-# Uses mike for multi-version docs; deploys to gh-pages, then rsyncs to duckling-ui.org.
-# Required setup:
-#   1. Add POSTHOG_API_KEY to repo Secrets (Settings > Secrets and variables > Actions)
-#   2. Configure REMOTE_PATH, SSH_HOST, SSH_PORT, SSH_USER, WEBSITE_DEPLOY_KEY, DEPLOY_KEY_PASS
-name: Deploy Docs
+# Manually deploy docs for a specific version (backfill older versions).
+# Run from Actions > Deploy Docs Version > Run workflow.
+# Use version without 'v' prefix (e.g. 0.0.9, 0.0.8).
+# Older tags may fail if mkdocs structure changed significantly.
+name: Deploy Docs Version
 permissions:
-  contents: write  # Required for mike to push to gh-pages
+  contents: read
+  contents: write
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to deploy (e.g. 0.0.9)"
+        required: true
+        type: string
 
 jobs:
   build:
-    name: Build Docs
+    name: Build and deploy version
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout tag
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Full history for mike
+          ref: v${{ github.event.inputs.version }}
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -32,14 +37,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements-docs.txt
+          pip install mike  # Ensure mike is present (older tags may not have it)
 
       - name: Inject PostHog API key
         run: |
-          sed -i "s|__POSTHOG_API_KEY__|${{ secrets.POSTHOG_API_KEY }}|g" docs/overrides/main.html
-
-      - name: Update version in mkdocs.yml
-        run: |
-          python scripts/get_version.py || echo "Warning: Could not update version, continuing with existing version"
+          if grep -q "__POSTHOG_API_KEY__" docs/overrides/main.html 2>/dev/null; then
+            sed -i "s|__POSTHOG_API_KEY__|${{ secrets.POSTHOG_API_KEY }}|g" docs/overrides/main.html
+          fi
 
       - name: Fetch gh-pages for mike
         run: |
@@ -50,10 +54,10 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Deploy docs with mike
+      - name: Deploy version with mike
         run: |
-          VERSION=$(python scripts/get_version.py 2>/dev/null || echo "0.0.10")
-          mike deploy --push --update-aliases --alias-type redirect "$VERSION" latest
+          VERSION="${{ github.event.inputs.version }}"
+          mike deploy --push --alias-type redirect "$VERSION"
           mike set-default --push latest
 
   deploy:
