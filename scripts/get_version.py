@@ -151,9 +151,9 @@ def main():
     mkdocs_updated = update_mkdocs_yml(version)
 
     if mkdocs_updated:
-        print(f"Updated mkdocs.yml with version: {version}")
+        print(f"Updated mkdocs.yml with version: {version}", file=sys.stderr)
 
-    # Output version to stdout for use in scripts
+    # Output version to stdout only (for VERSION=$(python scripts/get_version.py))
     print(version)
 
     if mkdocs_updated:
