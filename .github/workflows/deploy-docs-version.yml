@@ -4,7 +4,6 @@
 # Older tags may fail if mkdocs structure changed significantly.
 name: Deploy Docs Version
 permissions:
-  contents: read
   contents: write
 
 on:
