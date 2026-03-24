@@ -1,4 +1,6 @@
-# MkDocs Documentation Dependencies
+# MkDocs-only dependencies (CI, ./scripts/docs-build.sh, contributors who build docs without the full backend).
+# Running the API + in-app docs build: use backend/requirements.txt only (includes this stack + Flask/Docling).
+# Keep package lines in sync with the MkDocs block in backend/requirements.txt.
 # Install with: pip install -r requirements-docs.txt
 
 mike>=1.1.0

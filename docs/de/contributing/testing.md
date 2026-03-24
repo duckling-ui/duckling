@@ -272,6 +272,7 @@ describe('conversion flow', () => {
 
 - Vitest und React Testing Library verwenden
 - Komponenten-Rendering und Interaktionen testen
+- Globale Events (z. B. `window` `message`), die von einem `useEffect` verarbeitet werden und von asynchron geladenen Daten abhängen, erst auslösen, nachdem die Effekte gelaufen sind (z. B. `await act(async () => { await new Promise((r) => setTimeout(r, 0)); })`), damit in der CI nicht vor dem Registrieren der Listener gefeuert wird
 - API-Aufrufe angemessen mocken
 - Fehler- und Ladezustände testen
 - `userEvent` für realistische Interaktionen

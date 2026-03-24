@@ -272,6 +272,7 @@ describe('conversion flow', () => {
 
 - Use Vitest and React Testing Library
 - Test component rendering and interactions
+- When firing global events (for example `window` `message`) handled by a `useEffect` that depends on async-loaded data, wait for effects to run after the data appears (for example `await act(async () => { await new Promise((r) => setTimeout(r, 0)); })`) so CI does not dispatch before listeners attach
 - Mock API calls appropriately
 - Test error states and loading states
 - Use `userEvent` for realistic interactions

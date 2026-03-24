@@ -5,9 +5,30 @@ Alle bemerkenswerten Änderungen an diesem Projekt werden in dieser Datei dokume
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spec/v2.0.0.html).
 
-**Neueste Version:** [0.0.10](https://github.com/davidgs/duckling/releases/tag/v0.0.10) (2026-02-24)
+**Neueste Version:** [0.0.10a](https://github.com/davidgs/duckling/releases/tag/v0.0.10a) (2026-03-23)
 
 ## [Unveröffentlicht]
+
+### Behoben
+
+- **Frontend-Tests**: Der Iframe-Navigationstest für `DocsPanel` wartet nach abgeschlossenem gemocktem `fetch` auf die Registrierung des `message`-Listeners und nutzt ein längeres `waitFor`-Timeout, damit die CI auf langsameren Runnern stabil bleibt.
+
+### Geplant
+
+- Benutzerauthentifizierung
+- Cloud-Speicher-Integration
+- Konvertierungsvorlagen
+- API-Ratenbegrenzung
+- WebSocket für Echtzeit-Updates
+- Dunkel-/Hell-Theme-Umschalter
+- Tastaturkürzel
+- Barrierefreiheitsverbesserungen (WCAG 2.1)
+
+## [0.0.10a] - 2026-03-23
+
+### Behoben
+
+- **Backend-Abhängigkeiten**: Eine einzige Datei `backend/requirements.txt` für API und In-App-MkDocs-Builds; doppelte `backend/requirements-docs.txt` entfernt.
 
 ### Geändert
 
@@ -28,18 +49,7 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
   - Path-Traversal: `delete_output_folder` verwendet jetzt `validate_job_id` und `get_validated_output_dir` aus den Sicherheits-Utilities statt manueller Prüfungen.
   - Informationsoffenlegung: Einstellungs-API-Fehlerantworten werden über `_sanitize_error_for_client` bereinigt, um Stack-Trace- oder sensible Datenlecks zu verhindern.
 
-### Geplant
-
-- Benutzerauthentifizierung
-- Cloud-Speicher-Integration
-- Konvertierungsvorlagen
-- API-Ratenbegrenzung
-- WebSocket für Echtzeit-Updates
-- Dunkel-/Hell-Theme-Umschalter
-- Tastaturkürzel
-- Barrierefreiheitsverbesserungen (WCAG 2.1)
-
-## [0.0.10] - 2026-02-24
+## [0.0.10a] - 2026-02-24
 
 ### Hinzugefügt
 
@@ -303,8 +313,9 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 - Maximale Dateigrößenlimits
 - Sichere Dateinamenbehandlung
 
-[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10...HEAD
-[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
+[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10a...HEAD
+[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.10...v0.0.10a
+[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7

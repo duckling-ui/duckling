@@ -167,7 +167,7 @@ def build_docs():
             return False
     except FileNotFoundError:
         logger.warning(
-            "MkDocs tooling not installed. Install with: pip install -r requirements-docs.txt"
+            "MkDocs tooling not installed. Install backend deps: pip install -r requirements.txt (from the backend directory)"
         )
         return False
     except subprocess.TimeoutExpired:

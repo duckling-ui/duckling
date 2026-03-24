@@ -103,7 +103,7 @@ Verwenden Sie das bereitgestellte Build-Skript für einfaches Image-Building. Da
 ```
 
 !!! note "Dokumentations-Build"
-    Das Build-Skript führt automatisch aus `mkdocs build` um sicherzustellen, dass die Dokumentation in den Docker-Containern verfügbar ist. Wenn MkDocs nicht installiert ist, wird versucht, es aus zu installieren `requirements-docs.txt`.
+    Das Skript führt `mkdocs build` für die Dokumentation in den Containern aus. Fehlt MkDocs, wird eine Installation aus dem Stamm-`requirements-docs.txt` versucht. Das Backend-Image installiert MkDocs nur über `backend/requirements.txt`.
 
 ### Automatische Veröffentlichung (CI/CD)
 

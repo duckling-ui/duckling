@@ -241,6 +241,14 @@ def test_requirements_docs_content():
         assert package in content, f"Required package '{package}' not in requirements-docs.txt"
 
 
+def test_backend_requirements_includes_mkdocs_stack():
+    """Single backend/requirements.txt must include MkDocs + mike for in-app docs builds."""
+    req_path = PROJECT_ROOT / "backend" / "requirements.txt"
+    content = req_path.read_text()
+    for package in ("mike", "mkdocs", "mkdocs-material", "mkdocs-static-i18n"):
+        assert package in content, f"backend/requirements.txt must include {package} for mkdocs.yml"
+
+
 @pytest.mark.skipif(
     not os.environ.get("TEST_MKDOCS_BUILD"),
     reason="Set TEST_MKDOCS_BUILD=1 to run mkdocs build test"

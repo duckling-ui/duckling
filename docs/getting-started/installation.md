@@ -36,16 +36,18 @@ npm install
 
 ### 4. Build Documentation (Optional)
 
-To view documentation within the Duckling UI, build the MkDocs site:
+The backend install already includes MkDocs (same `backend/requirements.txt`). From the **repository root**:
 
 ```bash
-cd ..  # Return to project root
-pip install -r requirements-docs.txt
+cd ..  # project root (where mkdocs.yml lives)
+# Use the backend venv if you created one: source backend/venv/bin/activate
 mkdocs build
 ```
 
+To install **only** MkDocs tooling (no Docling/backend), use the repo root `requirements-docs.txt` instead.
+
 !!! tip "Auto-Build"
-    If MkDocs is installed, the backend will automatically build the documentation when you first open the docs panel in the UI.
+    If MkDocs is installed (via `backend/requirements.txt`), the backend can build the documentation when you use the docs panel in the UI.
 
 ## Environment Configuration
 

@@ -1,6 +1,8 @@
-# Duckling Backend Dependencies
-
-# MkDocs + docs (needed for /api/docs/build when running without Docker)
+# Duckling Backend — single install for API + in-app MkDocs builds (/api/docs/build).
+# From the backend directory: pip install -r requirements.txt
+#
+# MkDocs stack (must match mkdocs.yml plugins; keep versions aligned with repo root requirements-docs.txt)
+mike>=1.1.0
 mkdocs>=1.5.0
 mkdocs-material>=9.5.0
 mkdocs-minify-plugin>=0.8.0
