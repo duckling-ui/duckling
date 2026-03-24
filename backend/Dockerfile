@@ -32,10 +32,6 @@ FROM base AS development
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-# Docs build tooling (needed for /api/docs/build inside the container when docs are mounted)
-COPY requirements-docs.txt .
-RUN pip install -r requirements-docs.txt
-
 COPY . .
 
 # Create directories
@@ -48,13 +44,9 @@ CMD ["python", "duckling.py"]
 # Production stage
 FROM base AS production
 
-# Copy requirements and install
+# Copy requirements and install (includes MkDocs for /api/docs/build)
 COPY requirements.txt .
-RUN pip install -r requirements.txt gunicorn
-
-# Docs build tooling (needed for /api/docs/build inside the container when docs are mounted)
-COPY requirements-docs.txt .
-RUN pip install -r requirements-docs.txt
+RUN pip install -r requirements.txt
 
 # Copy application code
 COPY . .

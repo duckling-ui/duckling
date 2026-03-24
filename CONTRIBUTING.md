@@ -50,6 +50,8 @@ Please read the full [Code of Conduct](CODE_OF_CONDUCT.MD) before contributing.
 
 ### Backend Setup
 
+Use a single requirements file for the API and in-app MkDocs builds (`backend/requirements.txt`). Do not use a separate backend docs requirements file.
+
 ```bash
 cd backend
 python -m venv venv

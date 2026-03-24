@@ -37,7 +37,7 @@ import { convertFromUrl, convertFromUrlsBatch } from "./services/api";
 import type { HistoryEntry, ConversionResult } from "./types";
 
 // App version from package.json
-const APP_VERSION = "0.0.10";
+const APP_VERSION = "0.0.10a";
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -139,18 +139,21 @@ export default function App() {
     [uploadFile, reset],
   );
 
-  const handleHistorySelect = useCallback(async (entry: HistoryEntry) => {
-    setHistoryOpen(false);
-    
-    // Only load if the conversion was completed
-    if (entry.status === "completed" && entry.id) {
-      try {
-        await loadResult(entry.id);
-      } catch (error) {
-        console.error("Failed to load document from history:", error);
+  const handleHistorySelect = useCallback(
+    async (entry: HistoryEntry) => {
+      setHistoryOpen(false);
+
+      // Only load if the conversion was completed
+      if (entry.status === "completed" && entry.id) {
+        try {
+          await loadResult(entry.id);
+        } catch (error) {
+          console.error("Failed to load document from history:", error);
+        }
       }
-    }
-  }, [loadResult]);
+    },
+    [loadResult],
+  );
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -572,10 +575,7 @@ export default function App() {
           setStatsOpen(true);
         }}
       />
-      <StatsPanel
-        isOpen={statsOpen}
-        onClose={() => setStatsOpen(false)}
-      />
+      <StatsPanel isOpen={statsOpen} onClose={() => setStatsOpen(false)} />
       <DocsPanel isOpen={docsOpen} onClose={() => setDocsOpen(false)} />
     </div>
   );

@@ -36,16 +36,18 @@ npm install
 
 ### 4. Compiler la documentation (optionnel)
 
-Pour afficher la documentation dans l'interface Duckling, compilez le site MkDocs :
+L'installation du backend inclut déjà MkDocs (`backend/requirements.txt`). Depuis la **racine du dépôt** :
 
 ```bash
-cd ..  # Retour à la racine du projet
-pip install -r requirements-docs.txt
+cd ..  # racine du projet (où se trouve mkdocs.yml)
+# Avec le venv du backend : source backend/venv/bin/activate
 mkdocs build
 ```
 
+Pour n'installer **que** MkDocs (sans Docling/backend), utilisez `requirements-docs.txt` à la racine.
+
 !!! tip "Compilation automatique"
-    Si MkDocs est installé, le backend compilera automatiquement la documentation lors de la première ouverture du panneau de documentation dans l'interface.
+    Si MkDocs est installé (via `backend/requirements.txt`), le backend peut compiler la documentation depuis le panneau Docs de l'interface.
 
 ## Configuration de l'environnement
 

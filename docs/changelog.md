@@ -5,9 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-**Latest release:** [0.0.10](https://github.com/davidgs/duckling/releases/tag/v0.0.10) (2026-02-24)
+**Latest release:** [0.0.10a](https://github.com/davidgs/duckling/releases/tag/v0.0.10a) (2026-03-23)
 
 ## [Unreleased]
+
+### Planned
+
+- User authentication
+- Cloud storage integration
+- Conversion templates
+- API rate limiting
+- WebSocket for real-time updates
+- Dark/light theme toggle
+- Keyboard shortcuts
+- Accessibility improvements (WCAG 2.1)
+
+## [0.0.10a] - 2026-03-23
+
+### Fixed
+
+- **Backend dependencies**: One `backend/requirements.txt` for API + in-app docs builds; removed duplicate `backend/requirements-docs.txt`.
 
 ### Changed
 
@@ -30,18 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Path traversal: `delete_output_folder` now uses `validate_job_id` and `get_validated_output_dir` from security utils instead of manual checks.
   - Information exposure: Settings API error responses sanitized via `_sanitize_error_for_client` to prevent stack trace or sensitive data leakage.
 
-### Planned
-
-- User authentication
-- Cloud storage integration
-- Conversion templates
-- API rate limiting
-- WebSocket for real-time updates
-- Dark/light theme toggle
-- Keyboard shortcuts
-- Accessibility improvements (WCAG 2.1)
-
-## [0.0.10] - 2026-02-24
+## [0.0.10a] - 2026-02-24
 
 ### Added
 
@@ -305,8 +311,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maximum file size limits
 - Secure filename handling
 
-[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10...HEAD
-[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
+[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10a...HEAD
+[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.10...v0.0.10a
+[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7

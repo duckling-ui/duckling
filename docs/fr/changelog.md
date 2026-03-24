@@ -5,9 +5,26 @@ Toutes les modifications notables de ce projet seront documentées dans ce fichi
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0.html).
 
-**Dernière version :** [0.0.10](https://github.com/davidgs/duckling/releases/tag/v0.0.10) (2026-02-24)
+**Dernière version :** [0.0.10a](https://github.com/davidgs/duckling/releases/tag/v0.0.10a) (2026-03-23)
 
 ## [Non publié]
+
+### Prévu
+
+- Authentification des utilisateurs
+- Intégration du stockage cloud
+- Modèles de conversion
+- Limitation du débit de l'API
+- WebSocket pour les mises à jour en temps réel
+- Bascule thème sombre/clair
+- Raccourcis clavier
+- Améliorations d'accessibilité (WCAG 2.1)
+
+## [0.0.10a] - 2026-03-23
+
+### Corrigé
+
+- **Dépendances backend** : Un seul fichier `backend/requirements.txt` pour l'API et les builds MkDocs in-app ; suppression du doublon `backend/requirements-docs.txt`.
 
 ### Modifié
 
@@ -28,18 +45,7 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
   - Path traversal : `delete_output_folder` utilise maintenant `validate_job_id` et `get_validated_output_dir` des utilitaires de sécurité au lieu de vérifications manuelles.
   - Exposition d'informations : Réponses d'erreur de l'API des paramètres sanitaires via `_sanitize_error_for_client` pour éviter les fuites de stack trace ou de données sensibles.
 
-### Prévu
-
-- Authentification des utilisateurs
-- Intégration du stockage cloud
-- Modèles de conversion
-- Limitation du débit de l'API
-- WebSocket pour les mises à jour en temps réel
-- Bascule thème sombre/clair
-- Raccourcis clavier
-- Améliorations d'accessibilité (WCAG 2.1)
-
-## [0.0.10] - 2026-02-24
+## [0.0.10a] - 2026-02-24
 
 ### Ajouté
 
@@ -303,8 +309,9 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 - Limites de taille maximale des fichiers
 - Gestion sécurisée des noms de fichiers
 
-[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10...HEAD
-[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
+[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10a...HEAD
+[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.10...v0.0.10a
+[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7

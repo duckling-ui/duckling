@@ -330,11 +330,7 @@ To add a new language:
 
 **Note**: The documentation must be built before it can be viewed in the UI. You can either:
 
-1. **Build manually** (recommended for development):
-   ```bash
-   pip install -r requirements-docs.txt
-   mkdocs build
-   ```
+1. **Build manually** (recommended for development): With `backend/requirements.txt` installed, from the repo root run `mkdocs build`. For MkDocs-only (no full backend), use `pip install -r requirements-docs.txt` then `mkdocs build`.
 
 2. **Build from the UI**: Click the "Build Documentation" button in the docs panel if the site hasn't been built yet.
 
@@ -343,8 +339,8 @@ To add a new language:
 ### View Documentation Locally
 
 ```bash
-# Install documentation dependencies
-pip install -r requirements-docs.txt
+# MkDocs is included in backend/requirements.txt — activate that venv, or for docs-only:
+# pip install -r requirements-docs.txt
 
 # Serve documentation with live reload (for editing)
 mkdocs serve

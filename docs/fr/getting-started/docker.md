@@ -103,7 +103,7 @@ Utilisez le script de construction fourni pour une construction d'images facile.
 ```
 
 !!! note "Construction de la documentation"
-    Le script de construction exécute automatiquement `mkdocs build` pour s'assurer que la documentation est disponible dans les conteneurs Docker. Si MkDocs n'est pas installé, il tentera de l'installer depuis `requirements-docs.txt`.
+    Le script exécute `mkdocs build` pour la documentation dans les conteneurs. Si MkDocs est absent, il tente une installation depuis `requirements-docs.txt` à la racine du dépôt. L'image backend installe MkDocs uniquement via `backend/requirements.txt`.
 
 ### Publication automatique (CI/CD)
 
