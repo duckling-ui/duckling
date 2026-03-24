@@ -9,6 +9,10 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 
 ## [Non publié]
 
+### Corrigé
+
+- **Tests frontend** : le test de navigation iframe de `DocsPanel` attend que l’écouteur `message` soit enregistré après la fin du `fetch` mocké et utilise un délai `waitFor` plus long pour garder la CI stable sur des exécuteurs plus lents.
+
 ### Prévu
 
 - Authentification des utilisateurs

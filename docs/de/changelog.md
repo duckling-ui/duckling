@@ -9,6 +9,10 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 
 ## [Unveröffentlicht]
 
+### Behoben
+
+- **Frontend-Tests**: Der Iframe-Navigationstest für `DocsPanel` wartet nach abgeschlossenem gemocktem `fetch` auf die Registrierung des `message`-Listeners und nutzt ein längeres `waitFor`-Timeout, damit die CI auf langsameren Runnern stabil bleibt.
+
 ### Geplant
 
 - Benutzerauthentifizierung

@@ -9,6 +9,10 @@ y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2
 
 ## [Sin publicar]
 
+### Corregido
+
+- **Pruebas del frontend**: La prueba de navegación por iframe de `DocsPanel` espera a que el listener de `message` se registre tras completar el `fetch` simulado y usa un `waitFor` más largo para que la CI sea estable en runners más lentos.
+
 ### Planificado
 
 - Autenticación de usuarios

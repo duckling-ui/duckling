@@ -75,6 +75,13 @@ describe("DocsPanel", () => {
     // Wait for initial docs to load and render a known item.
     await screen.findByText("Changelog");
 
+    // Fetch resolves outside React's `act`; the message listener is registered in a
+    // passive effect. Flush macrotasks so CI does not dispatch before `onMessage`
+    // is attached (local runs often "win" by timing alone).
+    await act(async () => {
+      await new Promise<void>((resolve) => setTimeout(resolve, 0));
+    });
+
     // Simulate navigation inside the iframe to a Getting Started page.
     act(() => {
       window.dispatchEvent(
@@ -89,11 +96,16 @@ describe("DocsPanel", () => {
     });
 
     // The panel should expand "Getting Started" and select "Installation".
-    await waitFor(() => {
-      const installationBtn = screen.getByRole("button", { name: "Installation" });
-      expect(installationBtn).toHaveClass("bg-primary-500/20");
-      expect(installationBtn).toHaveClass("text-primary-400");
-    });
+    await waitFor(
+      () => {
+        const installationBtn = screen.getByRole("button", {
+          name: "Installation",
+        });
+        expect(installationBtn).toHaveClass("bg-primary-500/20");
+        expect(installationBtn).toHaveClass("text-primary-400");
+      },
+      { timeout: 5000 }
+    );
   });
 });
 

@@ -264,6 +264,7 @@ def test_convert_pdf_success(client, sample_pdf):
 
 - Use Vitest and React Testing Library
 - Test component rendering and interactions
+- When a test fires global events (for example `window` `message`) handled by a `useEffect` that depends on async-loaded data, ensure effects have run after the data appears (for example `await act(async () => { await new Promise((r) => setTimeout(r, 0)); })`) so CI does not race ahead of listener registration
 - Mock API calls appropriately
 
 ```typescript

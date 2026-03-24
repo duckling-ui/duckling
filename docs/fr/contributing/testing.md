@@ -272,6 +272,7 @@ describe('conversion flow', () => {
 
 - Utiliser Vitest et React Testing Library
 - Tester le rendu et les interactions des composants
+- Lorsque vous déclenchez des événements globaux (par ex. `window` `message`) gérés par un `useEffect` dépendant de données chargées de façon asynchrone, attendez que les effets s'exécutent après l'apparition des données (par ex. `await act(async () => { await new Promise((r) => setTimeout(r, 0)); })`) pour éviter en CI d'émettre avant l'enregistrement des écouteurs
 - Mocker les appels API de manière appropriée
 - Tester les états d'erreur et de chargement
 - Utiliser `userEvent` pour des interactions réalistes

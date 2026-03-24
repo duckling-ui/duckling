@@ -10,7 +10,7 @@ This repository contains multiple test suites:
   - Includes regression tests for history reload endpoint validation and error handling in `backend/tests/test_api.py`
   - History reconciliation tests in `backend/tests/test_history.py` (`create_entry_from_disk`, `reconcile_from_disk`) and `backend/tests/test_api.py` (`POST /api/history/reconcile`)
 - **Frontend (Vitest)**: UI and hook tests in `frontend/src/tests/`
-  - `frontend/src/tests/components/DocsPanel.test.tsx`: Ensures the in-app docs sidebar stays in sync when navigation happens inside the embedded MkDocs iframe
+  - `frontend/src/tests/components/DocsPanel.test.tsx`: Ensures the in-app docs sidebar stays in sync when navigation happens inside the embedded MkDocs iframe (after docs load, flushes a macrotask so the `window` `message` listener is registered before dispatching; `waitFor` uses an extended timeout for CI)
 
 ## Running tests
 

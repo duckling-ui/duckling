@@ -275,6 +275,8 @@ cd frontend
 npm test
 ```
 
+CI runs the same frontend test command; for Vitest + React components that listen on `window` after async data loads, see **Frontend Tests** in [CONTRIBUTING.md](CONTRIBUTING.md) (effect scheduling / `act`).
+
 ### Project Structure
 
 ```

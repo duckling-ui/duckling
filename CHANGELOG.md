@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Frontend tests**: `DocsPanel` iframe-navigation test waits for the `message` listener effect to attach after mocked `fetch` completes (`act` + `setTimeout(0)`) and uses a longer `waitFor` timeout so CI does not dispatch before the handler is registered (fixes missing "Installation" button assertion on slower runners).
+
 ### Planned
 
 - User authentication
