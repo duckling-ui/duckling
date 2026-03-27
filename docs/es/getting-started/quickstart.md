@@ -60,7 +60,7 @@ Elige tu método preferido:
 Navega a `http://localhost:3000` en tu navegador.
 
 <figure markdown="span">
-  ![Duckling Interface](../assets/screenshots/ui/main-english.png){ loading=lazy }
+  ![Duckling Interface](../../assets/screenshots/ui/main-english.png){ loading=lazy }
   <figcaption>La interfaz principal de Duckling</figcaption>
 </figure>
 
@@ -69,7 +69,7 @@ Navega a `http://localhost:3000` en tu navegador.
 Arrastra y suelta un PDF, documento Word o imagen en la zona de soltar, o haz clic para explorar.
 
 <figure markdown="span">
-  ![Uploading Document](../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
+  ![Uploading Document](../../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
   <figcaption>Indicador de progreso de carga</figcaption>
 </figure>
 
@@ -78,7 +78,7 @@ Arrastra y suelta un PDF, documento Word o imagen en la zona de soltar, o haz cl
 El progreso de conversión se mostrará en tiempo real.
 
 <figure markdown="span">
-  ![Conversión Progress](../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
+  ![Conversión Progress](../../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
   <figcaption>Progreso de conversión en tiempo real</figcaption>
 </figure>
 
@@ -87,7 +87,7 @@ El progreso de conversión se mostrará en tiempo real.
 Una vez completado, elige tu formato de exportación:
 
 <figure markdown="span">
-  ![Conversión Complete](../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
+  ![Conversión Complete](../../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
   <figcaption>Conversión completa con opciones de exportación</figcaption>
 </figure>
 
@@ -130,7 +130,7 @@ Para convertir varios archivos a la vez:
 2. Los archivos se procesarán según la cola de trabajos (ver Características para el paralelismo)
 
 <figure markdown="span">
-  ![Varios archivos](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+  ![Varios archivos](../../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
   <figcaption>Varios archivos seleccionados para subir</figcaption>
 </figure>
 
