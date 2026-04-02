@@ -5,13 +5,9 @@ Toutes les modifications notables de ce projet seront documentées dans ce fichi
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0.html).
 
-**Dernière version :** [0.0.10a](https://github.com/davidgs/duckling/releases/tag/v0.0.10a) (2026-03-23)
+**Dernière version :** [0.0.11](https://github.com/davidgs/duckling/releases/tag/v0.0.11) (2026-03-30)
 
 ## [Non publié]
-
-### Corrigé
-
-- **Tests frontend** : le test de navigation iframe de `DocsPanel` attend que l’écouteur `message` soit enregistré après la fin du `fetch` mocké et utilise un délai `waitFor` plus long pour garder la CI stable sur des exécuteurs plus lents.
 
 ### Prévu
 
@@ -23,6 +19,19 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 - Bascule thème sombre/clair
 - Raccourcis clavier
 - Améliorations d'accessibilité (WCAG 2.1)
+
+## [0.0.11] - 2026-03-30
+
+### Modifié
+
+- **UX de téléversement** : zone unique sans interrupteur « lot » dans la barre ; voir `CHANGELOG.md` à la racine du dépôt.
+- **Dépendances** : suppression du fichier `requirements-docs.txt` à la racine ; **`backend/requirements.txt`** seul pour MkDocs et l’API (voir `CHANGELOG.md` à la racine).
+
+### Corrigé
+
+- **Tests frontend** : le test de navigation iframe de `DocsPanel` attend que l’écouteur `message` soit enregistré après la fin du `fetch` mocké et utilise un délai `waitFor` plus long pour garder la CI stable sur des exécuteurs plus lents.
+- **Docs / CI** : `pymdown-extensions>=10.21.2` évite un plantage Pygments lors de la construction du site (comme `CHANGELOG.md` à la racine).
+- **Python / CI** : `markdown>=3.6` et `mkdocs>=1.6` dans `backend/requirements.txt` pour que pip résolve la pile docs avec pymdown 10.21.2+ (comme `CHANGELOG.md` à la racine).
 
 ## [0.0.10a] - 2026-03-23
 
@@ -313,9 +322,10 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 - Limites de taille maximale des fichiers
 - Gestion sécurisée des noms de fichiers
 
-[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10a...HEAD
+[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.11...HEAD
+[0.0.11]: https://github.com/davidgs/duckling/compare/v0.0.10a...v0.0.11
 [0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.10...v0.0.10a
-[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
+[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7

@@ -17,7 +17,7 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 
 - **Drag-and-Drop Upload**: Simply drag your documents onto the interface
 - **URL-Based Conversion**: Convert documents directly from URLs with automatic image extraction for HTML pages
-- **Batch Processing**: Convert multiple files or URLs at once
+- **Multi-file and folder upload**: Convert multiple files or URLs at once from one drop zone—choose a folder, use **Choose files…**, or drag and drop; unsupported extensions are skipped client-side, and the API rejects a batch if nothing can be converted
 - **Multi-Format Support**: Convert PDFs, Word docs, PowerPoints, Excel files, HTML, Markdown, images, and more
 - **Multiple Export Formats**: Export to Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks, or plain text
 - **Image & Table Extraction**: Extract embedded images and tables with CSV export
@@ -30,6 +30,7 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 - **Content Deduplication**: Same file with identical settings reuses stored output (instant cache hits)
 - **Highly Configurable**: Customize OCR, tables, images, performance, and chunking settings
 - **Beautiful Dark Theme**: Easy on the eyes with a modern, professional design
+- **Accessibility**: Keyboard-friendly slide-overs named with `aria-label`, focus trap and restore, labeled controls and progress, focusable scroll regions for long content, link underlines (not color alone), and docs styling/scripts described in [Accessibility](docs/contributing/accessibility.md)
 
 ## Supported Input Formats
 
@@ -332,7 +333,7 @@ To add a new language:
 
 **Note**: The documentation must be built before it can be viewed in the UI. You can either:
 
-1. **Build manually** (recommended for development): With `backend/requirements.txt` installed, from the repo root run `mkdocs build`. For MkDocs-only (no full backend), use `pip install -r requirements-docs.txt` then `mkdocs build`.
+1. **Build manually** (recommended for development): Install `backend/requirements.txt`, then from the repo root run `mkdocs build`. That file includes the MkDocs stack ( **`pymdown-extensions` 10.21.2+** ) so Pygments does not fail on fenced code without a title.
 
 2. **Build from the UI**: Click the "Build Documentation" button in the docs panel if the site hasn't been built yet.
 
@@ -341,8 +342,7 @@ To add a new language:
 ### View Documentation Locally
 
 ```bash
-# MkDocs is included in backend/requirements.txt — activate that venv, or for docs-only:
-# pip install -r requirements-docs.txt
+# MkDocs is included in backend/requirements.txt — activate that venv.
 
 # Serve documentation with live reload (for editing)
 mkdocs serve

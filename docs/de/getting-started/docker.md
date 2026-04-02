@@ -103,7 +103,7 @@ Verwenden Sie das bereitgestellte Build-Skript für einfaches Image-Building. Da
 ```
 
 !!! note "Dokumentations-Build"
-    Das Skript führt `mkdocs build` für die Dokumentation in den Containern aus. Fehlt MkDocs, wird eine Installation aus dem Stamm-`requirements-docs.txt` versucht. Das Backend-Image installiert MkDocs nur über `backend/requirements.txt`.
+    Das Skript führt `mkdocs build` für die Dokumentation in den Containern aus. Fehlt MkDocs, wird `pip install -r backend/requirements.txt` versucht. Das Backend-Image installiert Abhängigkeiten nur über `backend/requirements.txt`.
 
 ### Automatische Veröffentlichung (CI/CD)
 

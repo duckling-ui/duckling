@@ -5,13 +5,9 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2.0.0.html).
 
-**Última versión:** [0.0.10a](https://github.com/davidgs/duckling/releases/tag/v0.0.10a) (2026-03-23)
+**Última versión:** [0.0.11](https://github.com/davidgs/duckling/releases/tag/v0.0.11) (2026-03-30)
 
 ## [Sin publicar]
-
-### Corregido
-
-- **Pruebas del frontend**: La prueba de navegación por iframe de `DocsPanel` espera a que el listener de `message` se registre tras completar el `fetch` simulado y usa un `waitFor` más largo para que la CI sea estable en runners más lentos.
 
 ### Planificado
 
@@ -23,6 +19,19 @@ y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2
 - Alternancia tema oscuro/claro
 - Atajos de teclado
 - Mejoras de accesibilidad (WCAG 2.1)
+
+## [0.0.11] - 2026-03-30
+
+### Cambiado
+
+- **UX de subida**: Se eliminó el interruptor de lote en la barra; una sola zona admite un archivo, varios, carpetas y URLs multilínea. Ver `CHANGELOG.md` en la raíz del repositorio para más detalles.
+- **Dependencias**: Sin `requirements-docs.txt` en la raíz; usar solo **`backend/requirements.txt`** para MkDocs y la API (ver `CHANGELOG.md` en la raíz).
+
+### Corregido
+
+- **Pruebas del frontend**: La prueba de navegación por iframe de `DocsPanel` espera a que el listener de `message` se registre tras completar el `fetch` simulado y usa un `waitFor` más largo para que la CI sea estable en runners más lentos.
+- **Docs / CI**: `pymdown-extensions>=10.21.2` evita un fallo de Pygments al construir el sitio (igual que `CHANGELOG.md` en la raíz).
+- **Python / CI**: `markdown>=3.6` y `mkdocs>=1.6` en `backend/requirements.txt` para que pip resuelva el stack de documentación con pymdown 10.21.2+ (igual que `CHANGELOG.md` en la raíz).
 
 ## [0.0.10a] - 2026-03-23
 
@@ -313,9 +322,10 @@ y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2
 - Límites de tamaño máximo de archivo
 - Manejo seguro de nombres de archivo
 
-[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10a...HEAD
+[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.11...HEAD
+[0.0.11]: https://github.com/davidgs/duckling/compare/v0.0.10a...v0.0.11
 [0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.10...v0.0.10a
-[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
+[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7

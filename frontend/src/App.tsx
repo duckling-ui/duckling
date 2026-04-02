@@ -33,11 +33,12 @@ import SettingsPanel from "./components/SettingsPanel";
 import HistoryPanel from "./components/HistoryPanel";
 import StatsPanel from "./components/StatsPanel";
 import DocsPanel from "./components/DocsPanel";
+import { ScrollableRegion } from "./components/ScrollableRegion";
 import { convertFromUrl, convertFromUrlsBatch } from "./services/api";
 import type { HistoryEntry, ConversionResult } from "./types";
 
 // App version from package.json
-const APP_VERSION = "0.0.10a";
+const APP_VERSION = "0.0.11";
 
 export default function App() {
   const { t, i18n } = useTranslation();
@@ -45,7 +46,6 @@ export default function App() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
   const [docsOpen, setDocsOpen] = useState(false);
-  const [batchModeEnabled, setBatchModeEnabled] = useState(false);
 
   const {
     state,
@@ -55,6 +55,7 @@ export default function App() {
     progress,
     statusMessage,
     isUploading,
+    isUploadingMultipleFiles,
     uploadFile,
     uploadFiles,
     downloadFormat,
@@ -73,66 +74,45 @@ export default function App() {
     },
   });
 
-  const handleFileAccepted = useCallback(
-    (file: File) => {
-      uploadFile(file);
-    },
-    [uploadFile],
-  );
-
-  const handleFilesAccepted = useCallback(
+  const handleFilesAcceptedUnified = useCallback(
     (files: File[]) => {
       uploadFiles(files);
     },
     [uploadFiles],
   );
 
-  const handleUrlSubmitted = useCallback(
-    async (url: string) => {
-      try {
-        // Use the conversion hook's state management
-        const response = await convertFromUrl(url);
-        // Start polling for status using the job_id
-        if (response.job_id) {
-          // Manually trigger the conversion flow with existing job_id
-          uploadFile(
-            new File([], response.filename || "url-document"),
-            response.job_id,
-          );
-        }
-      } catch (error) {
-        console.error("URL conversion error:", error);
-        // Show error to user
-        reset();
-      }
-    },
-    [uploadFile, reset],
-  );
-
-  const handleUrlsSubmitted = useCallback(
+  /** URL tab: one line uses single-URL API; multiple lines use batch URL API. */
+  const handleUrlsSubmittedUnified = useCallback(
     async (urls: string[]) => {
+      if (urls.length === 0) return;
       try {
-        const response = await convertFromUrlsBatch(urls);
-        // Handle batch response similar to file batch
-        if (response.jobs && response.jobs.length > 0) {
-          // Get valid jobs that are processing
-          const validJobs = response.jobs.filter(
-            (j) => j.status === "processing" && j.job_id,
-          );
-          if (validJobs.length > 0) {
-            // Use the first job to trigger the conversion flow
-            const firstJob = validJobs[0];
+        if (urls.length === 1) {
+          const response = await convertFromUrl(urls[0]);
+          if (response.job_id) {
             uploadFile(
-              new File([], firstJob.filename || "url-document"),
-              firstJob.job_id,
+              new File([], response.filename || "url-document"),
+              response.job_id,
             );
-          } else {
-            // All jobs failed
-            console.error("All URL conversions were rejected");
+          }
+        } else {
+          const response = await convertFromUrlsBatch(urls);
+          if (response.jobs && response.jobs.length > 0) {
+            const validJobs = response.jobs.filter(
+              (j) => j.status === "processing" && j.job_id,
+            );
+            if (validJobs.length > 0) {
+              const firstJob = validJobs[0];
+              uploadFile(
+                new File([], firstJob.filename || "url-document"),
+                firstJob.job_id,
+              );
+            } else {
+              console.error("All URL conversions were rejected");
+            }
           }
         }
       } catch (error) {
-        console.error("Batch URL conversion error:", error);
+        console.error("URL conversion error:", error);
         reset();
       }
     },
@@ -210,37 +190,12 @@ export default function App() {
                 </select>
               </div>
 
-              {/* Batch mode toggle */}
               <button
-                onClick={() => setBatchModeEnabled(!batchModeEnabled)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                  batchModeEnabled
-                    ? "bg-primary-500 text-dark-950"
-                    : "bg-dark-800 text-dark-400 hover:text-dark-200"
-                }`}
-                title={t("batch.toggleTitle")}
-              >
-                <span className="flex items-center gap-1.5">
-                  <svg
-                    className="w-4 h-4"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
-                    />
-                  </svg>
-                  {t("actions.batch")}
-                </span>
-              </button>
-              <button
+                type="button"
                 onClick={() => setStatsOpen(true)}
                 className="p-2.5 hover:bg-dark-800 rounded-lg transition-colors group"
                 title={t("actions.stats")}
+                aria-label={t("actions.stats")}
               >
                 <svg
                   className="w-5 h-5 text-dark-400 group-hover:text-dark-200"
@@ -248,6 +203,7 @@ export default function App() {
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.5"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -257,9 +213,11 @@ export default function App() {
                 </svg>
               </button>
               <button
+                type="button"
                 onClick={() => setDocsOpen(true)}
                 className="p-2.5 hover:bg-dark-800 rounded-lg transition-colors group"
                 title={t("actions.documentation")}
+                aria-label={t("actions.documentation")}
               >
                 <svg
                   className="w-5 h-5 text-dark-400 group-hover:text-dark-200"
@@ -267,6 +225,7 @@ export default function App() {
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.5"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -276,9 +235,11 @@ export default function App() {
                 </svg>
               </button>
               <button
+                type="button"
                 onClick={() => setHistoryOpen(true)}
                 className="p-2.5 hover:bg-dark-800 rounded-lg transition-colors group"
                 title={t("actions.history")}
+                aria-label={t("actions.history")}
               >
                 <svg
                   className="w-5 h-5 text-dark-400 group-hover:text-dark-200"
@@ -286,6 +247,7 @@ export default function App() {
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.5"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -295,9 +257,11 @@ export default function App() {
                 </svg>
               </button>
               <button
+                type="button"
                 onClick={() => setSettingsOpen(true)}
                 className="p-2.5 hover:bg-dark-800 rounded-lg transition-colors group"
                 title={t("actions.settings")}
+                aria-label={t("actions.settings")}
               >
                 <svg
                   className="w-5 h-5 text-dark-400 group-hover:text-dark-200"
@@ -305,6 +269,7 @@ export default function App() {
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.5"
+                  aria-hidden="true"
                 >
                   <path
                     strokeLinecap="round"
@@ -360,12 +325,9 @@ export default function App() {
                   transition={{ delay: 0.3 }}
                 >
                   <DropZone
-                    onFileAccepted={handleFileAccepted}
-                    onFilesAccepted={handleFilesAccepted}
-                    onUrlSubmitted={handleUrlSubmitted}
-                    onUrlsSubmitted={handleUrlsSubmitted}
+                    onFilesAccepted={handleFilesAcceptedUnified}
+                    onUrlsSubmitted={handleUrlsSubmittedUnified}
                     isUploading={isUploading}
-                    multiple={batchModeEnabled}
                   />
                 </motion.div>
 
@@ -426,7 +388,7 @@ export default function App() {
                 <ConversionProgress
                   progress={5}
                   message={
-                    batchModeEnabled
+                    isUploadingMultipleFiles
                       ? t("conversion.uploadingMultiple")
                       : t("conversion.uploadingSingle")
                   }
@@ -443,7 +405,7 @@ export default function App() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
               >
-                {batchMode && batchJobs.length > 0 ? (
+                {batchMode && batchJobs.length > 1 ? (
                   <BatchProgress
                     jobs={batchJobs}
                     progress={progress}
@@ -555,6 +517,7 @@ export default function App() {
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary-400 hover:text-primary-300 transition-colors"
+            aria-label={t("app.doclingLinkAria")}
           >
             Docling
           </a>
@@ -600,26 +563,42 @@ function BatchProgress({
   batchProgress,
   statusMessage,
 }: BatchProgressProps) {
+  const { t } = useTranslation();
+  const progressValue = Math.min(100, Math.max(0, Math.round(progress)));
+
   return (
     <div className="glass rounded-2xl p-8 max-w-2xl mx-auto">
       <div className="text-center mb-6">
         <h3 className="text-xl font-bold text-dark-100 mb-2">
-          Processing Files
+          {t("conversion.processingFilesTitle")}
         </h3>
-        <p className="text-dark-400">{statusMessage}</p>
+        <p className="text-dark-400" aria-live="polite">
+          {statusMessage}
+        </p>
       </div>
 
       {/* Overall progress */}
       <div className="mb-6">
         <div className="flex justify-between text-sm text-dark-400 mb-2">
-          <span>Overall Progress</span>
+          <span>{t("conversion.overallProgress")}</span>
           <span>
-            {batchProgress.completed}/{batchProgress.total} files
+            {t("conversion.filesCount", {
+              completed: batchProgress.completed,
+              total: batchProgress.total,
+            })}
           </span>
         </div>
-        <div className="h-3 bg-dark-700 rounded-full overflow-hidden">
+        <div
+          role="progressbar"
+          aria-valuenow={progressValue}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={t("conversion.overallProgress")}
+          className="h-3 bg-dark-700 rounded-full overflow-hidden"
+        >
           <motion.div
             className="h-full bg-gradient-to-r from-primary-500 to-primary-400"
+            aria-hidden="true"
             initial={{ width: 0 }}
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}
@@ -628,7 +607,10 @@ function BatchProgress({
       </div>
 
       {/* Individual file progress */}
-      <div className="space-y-3 max-h-64 overflow-y-auto">
+      <ScrollableRegion
+        aria-label={t("conversion.batchFileProgressList")}
+        className="space-y-3 max-h-64 overflow-y-auto"
+      >
         {jobs.map((job, index) => (
           <div
             key={index}
@@ -699,7 +681,7 @@ function BatchProgress({
             )}
           </div>
         ))}
-      </div>
+      </ScrollableRegion>
     </div>
   );
 }
@@ -725,6 +707,7 @@ function BatchResults({
   onDownload,
   onNewConversion,
 }: BatchResultsProps) {
+  const { t } = useTranslation();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleSelect = (index: number) => {
@@ -786,7 +769,10 @@ function BatchResults({
           <h3 className="text-lg font-semibold text-dark-100 mb-4">
             Converted Files
           </h3>
-          <div className="space-y-2 max-h-96 overflow-y-auto">
+          <ScrollableRegion
+            aria-label={t("conversion.batchResultsFileList")}
+            className="space-y-2 max-h-96 overflow-y-auto"
+          >
             {jobs.map((job, index) => (
               <button
                 key={index}
@@ -854,7 +840,7 @@ function BatchResults({
                 </div>
               </button>
             ))}
-          </div>
+          </ScrollableRegion>
         </div>
 
         {/* Selected file details */}
@@ -891,13 +877,16 @@ function BatchResults({
 
               {/* Preview */}
               {selectedResult.result?.markdown_preview && (
-                <div className="bg-dark-950 rounded-xl p-4 max-h-64 overflow-y-auto">
+                <ScrollableRegion
+                  aria-label={t("conversion.batchResultsPreview")}
+                  className="bg-dark-950 rounded-xl p-4 max-h-64 overflow-y-auto"
+                >
                   <pre className="text-sm text-dark-300 font-mono whitespace-pre-wrap break-words">
                     {selectedResult.result.markdown_preview.slice(0, 1000)}
                     {selectedResult.result.markdown_preview.length > 1000 &&
                       "..."}
                   </pre>
-                </div>
+                </ScrollableRegion>
               )}
             </>
           ) : (

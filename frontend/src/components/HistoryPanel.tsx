@@ -22,8 +22,10 @@
  * SOFTWARE.
  */
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSlideOver } from "../hooks/useSlideOver";
+import { ScrollableRegion } from "./ScrollableRegion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import {
@@ -49,6 +51,8 @@ export default function HistoryPanel({
   onOpenStats,
 }: HistoryPanelProps) {
   const { t } = useTranslation();
+  const panelRef = useRef<HTMLDivElement>(null);
+  useSlideOver({ isOpen, onClose, panelRef });
   const [searchQuery, setSearchQuery] = useState("");
   const queryClient = useQueryClient();
 
@@ -106,10 +110,15 @@ export default function HistoryPanel({
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-dark-950/80 backdrop-blur-sm z-40"
             onClick={onClose}
+            aria-hidden="true"
           />
 
           {/* Panel */}
           <motion.div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t("historyPanel.title")}
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
@@ -123,13 +132,16 @@ export default function HistoryPanel({
                   {t("historyPanel.title")}
                 </h2>
                 <button
+                  type="button"
                   onClick={onClose}
                   className="p-2 hover:bg-dark-800 rounded-lg transition-colors"
+                  aria-label={t("actions.close")}
                 >
                   <svg
                     className="w-5 h-5 text-dark-400"
                     viewBox="0 0 20 20"
                     fill="currentColor"
+                    aria-hidden="true"
                   >
                     <path
                       fillRule="evenodd"
@@ -146,6 +158,7 @@ export default function HistoryPanel({
                   className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-dark-400"
                   viewBox="0 0 20 20"
                   fill="currentColor"
+                  aria-hidden="true"
                 >
                   <path
                     fillRule="evenodd"
@@ -154,8 +167,9 @@ export default function HistoryPanel({
                   />
                 </svg>
                 <input
-                  type="text"
+                  type="search"
                   placeholder={t("historyPanel.searchPlaceholder")}
+                  aria-label={t("historyPanel.searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 bg-dark-800 border border-dark-700 rounded-lg text-dark-200 text-sm placeholder-dark-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
@@ -204,6 +218,7 @@ export default function HistoryPanel({
                       )}
                     {onOpenStats && (
                       <button
+                        type="button"
                         onClick={onOpenStats}
                         className="text-primary-400 hover:text-primary-300 transition-colors underline"
                       >
@@ -216,7 +231,10 @@ export default function HistoryPanel({
             )}
 
             {/* History list */}
-            <div className="flex-1 overflow-y-auto p-4">
+            <ScrollableRegion
+              aria-label={t("historyPanel.scrollRegion")}
+              className="flex-1 min-h-0 overflow-y-auto p-4"
+            >
               {isLoading ? (
                 <div className="flex items-center justify-center py-12">
                   <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
@@ -263,7 +281,7 @@ export default function HistoryPanel({
                   </p>
                 </div>
               )}
-            </div>
+            </ScrollableRegion>
 
             {/* Footer */}
             {entries && entries.length > 0 && (
@@ -353,6 +371,7 @@ function HistoryItem({
   onDelete,
   isDeleting,
 }: HistoryItemProps) {
+  const { t } = useTranslation();
   const statusColors: Record<string, string> = {
     completed: "bg-primary-500",
     failed: "bg-red-500",
@@ -395,9 +414,15 @@ function HistoryItem({
         {/* Content */}
         <div className="flex-1 min-w-0">
           <button
+            type="button"
             onClick={onSelect}
             className="w-full text-left"
             disabled={entry.status !== "completed"}
+            aria-label={
+              entry.status === "completed"
+                ? `${t("historyPanel.loadEntry")}: ${entry.original_filename}`
+                : `${entry.original_filename} (${entry.status})`
+            }
           >
             <p className="font-medium text-dark-200 truncate">
               {entry.original_filename}
@@ -433,12 +458,14 @@ function HistoryItem({
 
         {/* Delete button */}
         <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation();
             onDelete();
           }}
           disabled={isDeleting}
-          className="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-dark-700 rounded-lg transition-all duration-200"
+          className="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1.5 hover:bg-dark-700 rounded-lg transition-all duration-200"
+          aria-label={`${t("historyPanel.deleteEntry")}: ${entry.original_filename}`}
         >
           {isDeleting ? (
             <div className="w-4 h-4 border-2 border-dark-400 border-t-transparent rounded-full animate-spin" />

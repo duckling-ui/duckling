@@ -5,13 +5,9 @@ Alle bemerkenswerten Änderungen an diesem Projekt werden in dieser Datei dokume
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spec/v2.0.0.html).
 
-**Neueste Version:** [0.0.10a](https://github.com/davidgs/duckling/releases/tag/v0.0.10a) (2026-03-23)
+**Neueste Version:** [0.0.11](https://github.com/davidgs/duckling/releases/tag/v0.0.11) (2026-03-30)
 
 ## [Unveröffentlicht]
-
-### Behoben
-
-- **Frontend-Tests**: Der Iframe-Navigationstest für `DocsPanel` wartet nach abgeschlossenem gemocktem `fetch` auf die Registrierung des `message`-Listeners und nutzt ein längeres `waitFor`-Timeout, damit die CI auf langsameren Runnern stabil bleibt.
 
 ### Geplant
 
@@ -23,6 +19,19 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 - Dunkel-/Hell-Theme-Umschalter
 - Tastaturkürzel
 - Barrierefreiheitsverbesserungen (WCAG 2.1)
+
+## [0.0.11] - 2026-03-30
+
+### Geändert
+
+- **Upload-UX**: Vereinheitlichte Ablagezone ohne separaten Stapel-Schalter in der Kopfzeile; siehe `CHANGELOG.md` im Repository-Root.
+- **Abhängigkeiten**: Keine separate `requirements-docs.txt` im Stamm mehr; nur noch **`backend/requirements.txt`** für MkDocs und API (siehe `CHANGELOG.md` im Repo-Root).
+
+### Behoben
+
+- **Frontend-Tests**: Der Iframe-Navigationstest für `DocsPanel` wartet nach abgeschlossenem gemocktem `fetch` auf die Registrierung des `message`-Listeners und nutzt ein längeres `waitFor`-Timeout, damit die CI auf langsameren Runnern stabil bleibt.
+- **Docs / CI**: `pymdown-extensions>=10.21.2` vermeidet einen Pygments-Absturz beim Site-Build (wie `CHANGELOG.md` im Repo-Root).
+- **Python / CI**: `markdown>=3.6` und `mkdocs>=1.6` in `backend/requirements.txt`, damit pip den Docs-Stack mit pymdown 10.21.2+ auflösen kann (wie `CHANGELOG.md` im Repo-Root).
 
 ## [0.0.10a] - 2026-03-23
 
@@ -313,9 +322,10 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 - Maximale Dateigrößenlimits
 - Sichere Dateinamenbehandlung
 
-[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10a...HEAD
+[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.11...HEAD
+[0.0.11]: https://github.com/davidgs/duckling/compare/v0.0.10a...v0.0.11
 [0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.10...v0.0.10a
-[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
+[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7

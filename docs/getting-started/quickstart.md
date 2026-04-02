@@ -126,13 +126,12 @@ Click the :material-cog: **Settings** button to configure:
 
 To convert multiple files at once:
 
-1. Toggle **Batch Mode** in the header
-2. Drag multiple files onto the drop zone
-3. All files will be processed simultaneously
+1. Drag multiple files onto the drop zone, choose a folder, or use **Choose files…**
+2. All files will be processed according to the job queue (see Features for concurrent limits)
 
 <figure markdown="span">
-  ![Batch Mode](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Batch mode with multiple files</figcaption>
+  ![Multiple files](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+  <figcaption>Multiple files selected for upload</figcaption>
 </figure>
 
 !!! tip "Performance"

@@ -12,7 +12,7 @@ Duckling provides an intuitive web interface for converting documents using IBM'
 
 <div class="grid cards" markdown>
 
--   <a href="user-guide/features/#drag-and-drop" class="card-link" markdown="1">
+-   <a href="user-guide/features/#drag-and-drop" class="card-link" markdown="1" aria-label="User guide: Drag-and-drop upload section">
     :material-cursor-move:{ .lg .middle } __Drag-and-Drop Upload__
 
     ---
@@ -20,7 +20,7 @@ Duckling provides an intuitive web interface for converting documents using IBM'
     Simply drag your documents onto the interface for instant processing
     </a>
 
--   <a href="user-guide/features/#batch-processing" class="card-link" markdown="1">
+-   <a href="user-guide/features/#batch-processing" class="card-link" markdown="1" aria-label="User guide: Batch processing section">
     :material-file-multiple:{ .lg .middle } __Batch Processing__
 
     ---
@@ -28,7 +28,7 @@ Duckling provides an intuitive web interface for converting documents using IBM'
     Convert multiple files at once with parallel processing
     </a>
 
--   <a href="user-guide/formats/" class="card-link" markdown="1">
+-   <a href="user-guide/formats/" class="card-link" markdown="1" aria-label="User guide: Supported document formats">
     :material-format-list-bulleted:{ .lg .middle } __Multi-Format Support__
 
     ---
@@ -36,7 +36,7 @@ Duckling provides an intuitive web interface for converting documents using IBM'
     PDFs, Word docs, PowerPoints, Excel files, HTML, Markdown, images, and more
     </a>
 
--   <a href="user-guide/features/#export-formats" class="card-link" markdown="1">
+-   <a href="user-guide/features/#export-formats" class="card-link" markdown="1" aria-label="User guide: Export formats section">
     :material-export:{ .lg .middle } __Multiple Export Formats__
 
     ---
@@ -44,7 +44,7 @@ Duckling provides an intuitive web interface for converting documents using IBM'
     Export to Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks, or plain text
     </a>
 
--   <a href="user-guide/features/#table-extraction" class="card-link" markdown="1">
+-   <a href="user-guide/features/#table-extraction" class="card-link" markdown="1" aria-label="User guide: Image and table extraction section">
     :material-image-multiple:{ .lg .middle } __Image & Table Extraction__
 
     ---
@@ -52,7 +52,7 @@ Duckling provides an intuitive web interface for converting documents using IBM'
     Extract embedded images and tables with CSV export
     </a>
 
--   <a href="user-guide/features/#rag-chunking" class="card-link" markdown="1">
+-   <a href="user-guide/features/#rag-chunking" class="card-link" markdown="1" aria-label="User guide: RAG chunking section">
     :material-puzzle:{ .lg .middle } __RAG-Ready Chunking__
 
     ---
@@ -60,7 +60,7 @@ Duckling provides an intuitive web interface for converting documents using IBM'
     Generate document chunks optimized for RAG applications
     </a>
 
--   <a href="user-guide/features/#ocr-optical-character-recognition" class="card-link" markdown="1">
+-   <a href="user-guide/features/#ocr-optical-character-recognition" class="card-link" markdown="1" aria-label="User guide: OCR section">
     :material-eye:{ .lg .middle } __Advanced OCR__
 
     ---
@@ -68,7 +68,7 @@ Duckling provides an intuitive web interface for converting documents using IBM'
     Multiple OCR backends with GPU acceleration support
     </a>
 
--   <a href="user-guide/features/#conversion-history" class="card-link" markdown="1">
+-   <a href="user-guide/features/#conversion-history" class="card-link" markdown="1" aria-label="User guide: Conversion history section">
     :material-history:{ .lg .middle } __Conversion History__
 
     ---
@@ -76,7 +76,7 @@ Duckling provides an intuitive web interface for converting documents using IBM'
     Access previously converted documents anytime
     </a>
 
--   <a href="user-guide/features/#statistics-panel" class="card-link" markdown="1">
+-   <a href="user-guide/features/#statistics-panel" class="card-link" markdown="1" aria-label="User guide: Statistics panel section">
     :material-chart-line:{ .lg .middle } __Conversion Statistics__
 
     ---

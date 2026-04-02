@@ -171,14 +171,14 @@ import { DropZone } from '@/components/DropZone';
 
 describe('DropZone', () => {
   it('should render drop zone', () => {
-    render(<DropZone onFileAccepted={vi.fn()} />);
+    render(<DropZone onFilesAccepted={vi.fn()} isUploading={false} />);
 
     expect(screen.getByText(/drag.*drop/i)).toBeInTheDocument();
   });
 
-  it('should call onFileAccepted when file is dropped', async () => {
-    const onFileAccepted = vi.fn();
-    render(<DropZone onFileAccepted={onFileAccepted} />);
+  it('should call onFilesAccepted when file is dropped', async () => {
+    const onFilesAccepted = vi.fn();
+    render(<DropZone onFilesAccepted={onFilesAccepted} isUploading={false} />);
 
     const file = new File(['content'], 'test.pdf', { type: 'application/pdf' });
     const dropzone = screen.getByRole('button');
@@ -187,12 +187,12 @@ describe('DropZone', () => {
       dataTransfer: { files: [file] }
     });
 
-    expect(onFileAccepted).toHaveBeenCalledWith(file);
+    expect(onFilesAccepted).toHaveBeenCalledWith([file]);
   });
 
   it('should reject invalid file types', async () => {
-    const onFileAccepted = vi.fn();
-    render(<DropZone onFileAccepted={onFileAccepted} />);
+    const onFilesAccepted = vi.fn();
+    render(<DropZone onFilesAccepted={onFilesAccepted} isUploading={false} />);
 
     const file = new File(['content'], 'test.exe', { type: 'application/x-msdownload' });
     const dropzone = screen.getByRole('button');
@@ -201,7 +201,7 @@ describe('DropZone', () => {
       dataTransfer: { files: [file] }
     });
 
-    expect(onFileAccepted).not.toHaveBeenCalled();
+    expect(onFilesAccepted).not.toHaveBeenCalled();
   });
 });
 ```

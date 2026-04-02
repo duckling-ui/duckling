@@ -103,7 +103,7 @@ Use the provided build script for easy image building. The script automatically 
 ```
 
 !!! note "Documentation Build"
-    The build script automatically runs `mkdocs build` to ensure documentation is available in the Docker containers. If MkDocs is not installed, it will attempt to install it from the repo root `requirements-docs.txt`. The backend image installs MkDocs via `backend/requirements.txt` only.
+    The build script automatically runs `mkdocs build` to ensure documentation is available in the Docker containers. If MkDocs is not installed, it attempts `pip install -r backend/requirements.txt` before building. The backend image installs dependencies from `backend/requirements.txt` only.
 
 ### Automatic Publishing (CI/CD)
 

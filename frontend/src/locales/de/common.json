@@ -9,10 +9,10 @@
   "app": {
     "name": "Duckling",
     "tagline": "Dokumentkonvertierung",
-    "poweredBy": "Powered by"
+    "poweredBy": "Powered by",
+    "doclingLinkAria": "Docling — Open-Source-Bibliothek zur Dokumentkonvertierung auf GitHub (öffnet in neuem Tab)"
   },
   "actions": {
-    "batch": "Stapel",
     "documentation": "Dokumentation",
     "history": "Verlauf",
     "settings": "Einstellungen",
@@ -33,7 +33,10 @@
     "failedCta": "Erneut versuchen",
     "processingFilesTitle": "Dateien werden verarbeitet",
     "overallProgress": "Gesamtfortschritt",
-    "filesCount": "{{completed}}/{{total}} Dateien"
+    "filesCount": "{{completed}}/{{total}} Dateien",
+    "batchFileProgressList": "Konvertierungsfortschritt pro Datei",
+    "batchResultsFileList": "Liste konvertierter Dateien",
+    "batchResultsPreview": "Markdown-Vorschau"
   },
   "features": {
     "ocr": "OCR",
@@ -58,10 +61,15 @@
     "rebuild": "Neu erstellen",
     "openNewTab": "In neuem Tab öffnen",
     "notBuiltYet": "Dokumentation ist noch nicht erstellt.",
-    "fullAt": "Vollständige Dokumentation unter"
+    "fullAt": "Vollständige Dokumentation unter",
+    "openDocsSiteLink": "Vollständige Dokumentation in neuem Tab öffnen",
+    "openDocsSiteAria": "Erstellte Dokumentationswebsite in neuem Browser-Tab öffnen",
+    "expandAllNav": "Alle Dokumentationsabschnitte aufklappen",
+    "collapseAllNav": "Alle Dokumentationsabschnitte zuklappen"
   },
   "settingsPanel": {
-    "title": "Einstellungen"
+    "title": "Einstellungen",
+    "scrollRegion": "Einstellungsoptionen"
   },
   "settings": {
     "sections": {
@@ -238,10 +246,14 @@
     "noResults": "Keine Ergebnisse gefunden",
     "noHistory": "Noch kein Konvertierungsverlauf",
     "clearAll": "Verlauf löschen",
-    "clearConfirm": "Möchtest du wirklich den gesamten Verlauf löschen?"
+    "clearConfirm": "Möchtest du wirklich den gesamten Verlauf löschen?",
+    "loadEntry": "Diese Konvertierung laden",
+    "deleteEntry": "Aus dem Verlauf entfernen",
+    "scrollRegion": "Liste des Konvertierungsverlaufs"
   },
   "statsPanel": {
     "title": "Statistiken",
+    "scrollRegion": "Statistikdetails",
     "overview": "Übersicht",
     "successRate": "Erfolgsrate",
     "storage": "Speicher",
@@ -297,6 +309,7 @@
   },
   "dropzone": {
     "localFile": "Lokale Datei",
+    "inputModeLabel": "Upload-Quelle",
     "localFiles": "Lokale Dateien",
     "url": "URL",
     "urls": "URLs",
@@ -307,7 +320,8 @@
     "dragAndDropSingle": "Dokument hierher ziehen und ablegen",
     "dragAndDropMultiple": "Dokumente hierher ziehen und ablegen",
     "orClickToBrowse": "oder klicken zum Durchsuchen",
-    "multipleEnabled": "✨ Mehrfach-Upload aktiviert - mehrere Dateien auswählen oder ablegen",
+    "orClickToChooseFolder": "oder klicken, um einen Ordner zu wählen (lädt alle unterstützten Dateien darin hoch)",
+    "unifiedUploadHint": "Sie können eine Datei, mehrere Dateien oder einen ganzen Ordner auf einmal hochladen.",
     "categories": {
       "documents": "Dokumente",
       "web": "Web",
@@ -332,7 +346,15 @@
     "errorEnterUrl": "Bitte eine URL eingeben",
     "errorInvalidUrl": "Bitte eine gültige HTTP- oder HTTPS-URL eingeben",
     "errorEnterAtLeastOneUrl": "Bitte mindestens eine URL eingeben",
-    "errorInvalidUrls": "Ungültige URLs: {{urls}}"
+    "errorInvalidUrls": "Ungültige URLs: {{urls}}",
+    "chooseFiles": "Dateien wählen…",
+    "folderHint": "Klick wählt Ordner; „Dateien wählen…“ für einzelne Dateien. Gemischte Ordner laden Unterstütztes (.docx, .xlsx usw.); altes .doc wird übersprungen.",
+    "filesSkippedSummary": "{{skipped}} nicht unterstützte oder zu große Datei(en) werden übersprungen. {{accepted}} Datei(en) werden konvertiert.",
+    "noSupportedFiles": "In dieser Auswahl gibt es keine unterstützten Dateien zur Konvertierung.",
+    "allSkippedTooLarge": "Alle ausgewählten Dateien überschreiten die maximale Größe (100MB pro Datei).",
+    "pickerSkippedUnsupported": "{{count}} Datei(en) in diesem Ordner wurden übersprungen (vom Dialog nicht unterstützter Typ, z. B. altes Word .doc).",
+    "allFilesUnsupportedByPicker": "Keine Datei in dieser Auswahl hat einen erlaubten Typ. Z. B. .docx und .xlsx sind erlaubt, nicht das alte .doc. Konvertieren Sie .doc ggf. nach .docx.",
+    "tooManyFilesUnexpected": "Es wurden auf einmal zu viele Dateien ausgewählt. Versuchen Sie eine kleinere Auswahl."
   },
   "export": {
     "completeTitle": "Konvertierung abgeschlossen!",
@@ -354,6 +376,8 @@
     "show": "Anzeigen",
     "noPreview": "Keine Vorschau für dieses Format verfügbar",
     "clickShow": "Auf \"Anzeigen\" klicken, um Vorschau zu sehen",
+    "previewContentRegion": "Vorschau des konvertierten Dokuments",
+    "htmlPreviewIframeTitle": "HTML-Vorschau",
     "jsonPreviewTruncated": "Vorschau gekürzt ({{count, number}} Zeichen). Verwenden Sie Herunterladen, um die vollständige Datei zu erhalten.",
     "extractedImagesTitle": "Extrahierte Bilder",
     "noImages": "Keine Bilder aus diesem Dokument extrahiert",
@@ -366,7 +390,13 @@
     "generateChunksNow": "Chunks jetzt generieren",
     "generatingChunks": "Wird generiert...",
     "downloadAllChunks": "Alle Chunks herunterladen (JSON)",
-    "viewFullSize": "Vollständige Größe anzeigen"
+    "viewFullSize": "Vollständige Größe anzeigen",
+    "scrollExportTabs": "Export-Bereichsregisterkarten",
+    "scrollFormatList": "Exportformat-Optionen",
+    "scrollImageGrid": "Extrahierte Bilder",
+    "scrollTablesList": "Extrahierte Tabellen",
+    "scrollChunksList": "RAG-Segmentliste",
+    "scrollTablePreview": "Tabellendatenvorschau"
   },
   "progress": {
     "title": "Dokument wird konvertiert",
@@ -374,7 +404,10 @@
     "analyzing": "Dokumentstruktur wird analysiert",
     "extracting": "Inhalt wird extrahiert",
     "generating": "Ausgabeformate werden generiert",
-    "finalizing": "Wird finalisiert"
+    "finalizing": "Wird finalisiert",
+    "stepStatusComplete": "Abgeschlossen",
+    "stepStatusActive": "Läuft",
+    "stepStatusPending": "Ausstehend"
   }
 }
 

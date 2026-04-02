@@ -17,10 +17,10 @@ Simply drag files onto the drop zone for instant upload. The interface validates
 
 Convert documents directly from URLs without downloading them first:
 
-1. Cliquez sur **URLs** toggle button above the drop zone
-2. Enter a document URL (must be HTTP or HTTPS)
-3. Click **Convert** or press Enter
-4. The document is downloaded et converted automatically
+1. Cliquez sur l’onglet **URLs** au-dessus de la zone de dépôt
+2. Collez une URL par ligne (une ligne = un document ; plusieurs lignes = traitement par lot)
+3. Cliquez sur **Convert All**
+4. Les documents sont téléchargés et convertis automatiquement
 
 Supported URL features:
 
@@ -48,28 +48,27 @@ Supported URL features:
     - ✅ `https://example.com/blog/article` (HTML pages work too!)
     - ❌ `https://example.com/view/document` (JavaScript-rendered content may not work)
 
-### Traitement par lots
+### Plusieurs fichiers et dossiers
 
-Activer batch mode to upload et convert multiple files at once:
+Téléversez et convertissez plusieurs fichiers (ou tout un dossier) depuis la même zone, sans activer un mode séparé :
 
-1. Click **Mode lot** toggle dans l'en-tête
-2. Glissez plusieurs fichiers dans la zone de dépôt, or switch to URL mode et enter multiple URLs (one per line)
-3. Monitor individual progress for each file
-4. Télécharger results separately or together
+1. Glissez-déposez des fichiers, choisissez un dossier ou utilisez **Choisir des fichiers…**
+2. Passez à l’onglet **URLs** et collez une URL par ligne pour le web
+3. Suivez la progression (un seul job : vue habituelle ; plusieurs jobs : résumé multi-fichiers)
+4. Téléchargez les résultats séparément ou ensemble à la fin du lot
 
 <figure markdown="span">
-  ![Mode lot](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Mode lot avec plusieurs fichiers selected</figcaption>
+  ![Plusieurs fichiers](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+  <figcaption>Plusieurs fichiers sélectionnés pour le téléversement</figcaption>
 </figure>
 
-#### Batch URL Mode
+#### Plusieurs URLs
 
-In batch mode, the URL input changes to a multi-line textarea:
+Le champ URL est toujours une zone de texte multiligne :
 
-1. Enable **Mode lot** dans l'en-tête
-2. Switch to **URLs** input mode
-3. Paste multiple URLs, one per line
-4. Click **Convert All**
+1. Passez à l’onglet **URLs**
+2. Collez une URL par ligne
+3. Cliquez sur **Convert All**
 
 !!! info "Concurrent Traitement"
     The job queue processes up to 2 documents simultaneously to prevent memory exhaustion.

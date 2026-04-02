@@ -32,6 +32,14 @@ This section covers everything you need to know to contribute effectively.
 
     [:octicons-arrow-right-24: Testing Guide](testing.md)
 
+-   :material-accessible:{ .lg .middle } __Accessibility__
+
+    ---
+
+    UI semantics, focus, and documentation checks
+
+    [:octicons-arrow-right-24: Accessibility](accessibility.md)
+
 -   :material-handshake:{ .lg .middle } __Code of Conduct__
 
     ---

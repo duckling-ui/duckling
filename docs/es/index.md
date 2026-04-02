@@ -12,7 +12,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
 
 <div class="grid cards" markdown>
 
--   <a href="user-guide/features/#drag-and-drop" class="card-link" markdown="1">
+-   <a href="user-guide/features/#drag-and-drop" class="card-link" markdown="1" aria-label="Guía de usuario: sección de carga por arrastrar y soltar">
     :material-cursor-move:{ .lg .middle } __Carga por arrastrar y soltar__
 
     ---
@@ -20,7 +20,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Simplemente arrastra tus documentos a la interfaz para procesamiento instantáneo
     </a>
 
--   <a href="user-guide/features/#batch-processing" class="card-link" markdown="1">
+-   <a href="user-guide/features/#batch-processing" class="card-link" markdown="1" aria-label="Guía de usuario: sección de procesamiento por lotes">
     :material-file-multiple:{ .lg .middle } __Procesamiento por lotes__
 
     ---
@@ -28,7 +28,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Convierte múltiples archivos a la vez con procesamiento paralelo
     </a>
 
--   <a href="user-guide/formats/" class="card-link" markdown="1">
+-   <a href="user-guide/formats/" class="card-link" markdown="1" aria-label="Guía de usuario: formatos de documento admitidos">
     :material-format-list-bulleted:{ .lg .middle } __Soporte multi-formato__
 
     ---
@@ -36,7 +36,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     PDFs, documentos Word, PowerPoints, archivos Excel, HTML, Markdown, imágenes y más
     </a>
 
--   <a href="user-guide/features/#export-formats" class="card-link" markdown="1">
+-   <a href="user-guide/features/#export-formats" class="card-link" markdown="1" aria-label="Guía de usuario: sección de formatos de exportación">
     :material-export:{ .lg .middle } __Múltiples formatos de exportación__
 
     ---
@@ -44,7 +44,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Exporta a Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks o texto plano
     </a>
 
--   <a href="user-guide/features/#table-extraction" class="card-link" markdown="1">
+-   <a href="user-guide/features/#table-extraction" class="card-link" markdown="1" aria-label="Guía de usuario: sección de extracción de imágenes y tablas">
     :material-image-multiple:{ .lg .middle } __Extracción de imágenes y tablas__
 
     ---
@@ -52,7 +52,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Extrae imágenes y tablas incrustadas con exportación CSV
     </a>
 
--   <a href="user-guide/features/#rag-chunking" class="card-link" markdown="1">
+-   <a href="user-guide/features/#rag-chunking" class="card-link" markdown="1" aria-label="Guía de usuario: sección de fragmentación RAG">
     :material-puzzle:{ .lg .middle } __Fragmentación lista para RAG__
 
     ---
@@ -60,7 +60,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Genera fragmentos de documentos optimizados para aplicaciones RAG
     </a>
 
--   <a href="user-guide/features/#ocr-optical-character-recognition" class="card-link" markdown="1">
+-   <a href="user-guide/features/#ocr-optical-character-recognition" class="card-link" markdown="1" aria-label="Guía de usuario: sección de OCR">
     :material-eye:{ .lg .middle } __OCR avanzado__
 
     ---
@@ -68,7 +68,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Múltiples backends OCR con soporte de aceleración GPU
     </a>
 
--   <a href="user-guide/features/#conversion-history" class="card-link" markdown="1">
+-   <a href="user-guide/features/#conversion-history" class="card-link" markdown="1" aria-label="Guía de usuario: sección de historial de conversiones">
     :material-history:{ .lg .middle } __Historial de conversiones__
 
     ---
@@ -76,7 +76,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Accede a documentos previamente convertidos en cualquier momento
     </a>
 
--   <a href="user-guide/features/#statistics-panel" class="card-link" markdown="1">
+-   <a href="user-guide/features/#statistics-panel" class="card-link" markdown="1" aria-label="Guía de usuario: sección de estadísticas de conversión">
     :material-chart-line:{ .lg .middle } __Estadísticas de conversión__
 
     ---

@@ -49,8 +49,12 @@ Content-Type: multipart/form-data
 
 | Name | Type | Required | Description |
 |------|------|----------|-------------|
-| `files` | Fichier[] | Yes | Documents to convert |
+| `files` | Fichier[] | Yes | Documents à convertir (répéter le champ `files` pour chaque partie). Les dossiers dans l’interface utilisent la même forme : une partie multipart par fichier après expansion par le navigateur. |
 | `settings` | JSON string | No | Conversion settings override |
+
+**Types :** chaque fichier doit avoir une extension autorisée par le serveur (`ALLOWED_EXTENSIONS`). Les fichiers non pris en charge apparaissent avec `"status": "rejected"`. Si **toutes** les parties sont rejetées, l’API renvoie **400** avec `error` et la liste `jobs`.
+
+**Taille :** l’intégralité du corps multipart doit respecter `MAX_CONTENT_LENGTH` (souvent 100 Mo pour toute la requête). Les gros dossiers peuvent être envoyés en plusieurs lots.
 
 ### Example Request
 
@@ -87,6 +91,24 @@ curl -X POST http://localhost:5001/api/convert/batch \
   ],
   "total": 3,
   "message": "Started 3 conversions"
+}
+```
+
+### Réponse (400 Bad Request)
+
+Lorsqu’aucune conversion ne démarre (par ex. tous les types sont refusés) :
+
+```json
+{
+  "error": "No supported files to convert",
+  "jobs": [
+    {
+      "filename": "readme.exe",
+      "status": "rejected",
+      "error": "File type not allowed"
+    }
+  ],
+  "total": 1
 }
 ```
 

@@ -35,10 +35,10 @@ if [[ -x "$MKDOCS_BIN" ]]; then
   echo "Using MkDocs from: $MKDOCS_BIN"
 else
   echo "MkDocs venv not found at $VENV_DIR"
-  echo "Creating venv and installing docs dependencies from requirements-docs.txt..."
+  echo "Creating venv and installing dependencies from backend/requirements.txt..."
   python3 -m venv "$VENV_DIR"
   "$PYTHON_BIN" -m pip install --upgrade pip
-  "$PYTHON_BIN" -m pip install -r requirements-docs.txt
+  "$PYTHON_BIN" -m pip install -r "$ROOT_DIR/backend/requirements.txt"
 fi
 
 # Update version in mkdocs.yml from package.json or GitHub

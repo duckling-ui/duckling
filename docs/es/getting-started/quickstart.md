@@ -122,17 +122,16 @@ Haz clic en :material-cog: **Configuración** botón para configurar:
 | Extraer | `true` | Extraer imágenes incrustadas |
 | Escala | `1.0` | Escala de salida de imagen |
 
-## Procesamiento por lotes
+## Varios archivos a la vez
 
 Para convertir varios archivos a la vez:
 
-1. Activar **Modo por lotes** en el encabezado
-2. Arrastra varios archivos a la zona de soltar
-3. Todos los archivos se procesarán simultáneamente
+1. Arrastra varios archivos a la zona, elige una carpeta o usa **Elegir archivos…**
+2. Los archivos se procesarán según la cola de trabajos (ver Características para el paralelismo)
 
 <figure markdown="span">
-  ![Modo por lotes](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Modo por lotes con varios archivos</figcaption>
+  ![Varios archivos](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+  <figcaption>Varios archivos seleccionados para subir</figcaption>
 </figure>
 
 !!! tip "Rendimiento"

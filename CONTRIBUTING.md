@@ -8,6 +8,8 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
 
 Please read the full [Code of Conduct](CODE_OF_CONDUCT.MD) before contributing.
 
+For UI and documentation accessibility expectations (ARIA patterns, MkDocs checks), see [docs/contributing/accessibility.md](docs/contributing/accessibility.md).
+
 ## How to Contribute
 
 ### Reporting Bugs
@@ -34,7 +36,7 @@ Please read the full [Code of Conduct](CODE_OF_CONDUCT.MD) before contributing.
 2. **Create a feature branch**: `git checkout -b feature/your-feature-name`
 3. **Make your changes**
 4. **Write/update tests**
-5. **Run tests**: Ensure all tests pass
+5. **Run tests**: Ensure all tests pass (including frontend upload helpers in `frontend/src/tests/utils/` and batch conversion cases in `backend/tests/test_api.py` when changing conversion or file-type rules)
 6. **Commit with clear messages**: Follow conventional commits (see [Commit Messages](#commit-messages))
 7. **Sign off all commits with DCO**: Every commit MUST include a `Signed-off-by:` line (see [DCO Sign-off](#dco-sign-off))
 8. **Push to your fork**
@@ -50,7 +52,7 @@ Please read the full [Code of Conduct](CODE_OF_CONDUCT.MD) before contributing.
 
 ### Backend Setup
 
-Use a single requirements file for the API and in-app MkDocs builds (`backend/requirements.txt`). Do not use a separate backend docs requirements file.
+Use **only** `backend/requirements.txt` for the API, CI doc builds, and in-app MkDocs builds. It pins **`pymdown-extensions` ≥10.21.2** so `mkdocs build` does not crash on Python 3.13 / current Pygments when code fences have no title.
 
 ```bash
 cd backend
@@ -270,13 +272,13 @@ def test_convert_pdf_success(client, sample_pdf):
 ```typescript
 it('should upload file on drop', async () => {
   const onUpload = vi.fn();
-  render(<DropZone onFileAccepted={onUpload} />);
+  render(<DropZone onFilesAccepted={onUpload} isUploading={false} />);
 
   // Simulate file drop
   const file = new File(['content'], 'test.pdf', { type: 'application/pdf' });
   fireEvent.drop(screen.getByRole('button'), { dataTransfer: { files: [file] } });
 
-  expect(onUpload).toHaveBeenCalledWith(file);
+  expect(onUpload).toHaveBeenCalledWith([file]);
 });
 ```
 

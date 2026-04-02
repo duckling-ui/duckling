@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useSlideOver } from "../hooks/useSlideOver";
 import "./DocsPanel.css";
 
 interface DocFile {
@@ -48,6 +49,7 @@ const ChevronIcon = ({ isExpanded }: { isExpanded: boolean }) => (
     fill="none"
     stroke="currentColor"
     strokeWidth="2"
+    aria-hidden="true"
   >
     <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
   </svg>
@@ -55,6 +57,8 @@ const ChevronIcon = ({ isExpanded }: { isExpanded: boolean }) => (
 
 export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
   const { t, i18n } = useTranslation();
+  const panelRef = useRef<HTMLDivElement>(null);
+  useSlideOver({ isOpen, onClose, panelRef });
   const [docs, setDocs] = useState<DocFile[]>([]);
   const [selectedDoc, setSelectedDoc] = useState<string | null>(null);
   const [selectedPath, setSelectedPath] = useState<string>("");
@@ -286,9 +290,14 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
             exit={{ opacity: 0 }}
             onClick={onClose}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            aria-hidden="true"
           />
 
           <motion.div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t("docsPanel.title")}
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -327,8 +336,9 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                   href={`/api/docs/site/${docsLocale}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 hover:bg-dark-800 rounded-lg transition-colors text-dark-400 hover:text-dark-100"
+                  className="p-2 hover:bg-dark-800 rounded-lg transition-colors text-dark-400 hover:text-dark-100 underline-offset-2 hover:underline"
                   title={t("docsPanel.openNewTab")}
+                  aria-label={t("docsPanel.openNewTab")}
                 >
                   <svg
                     className="w-5 h-5"
@@ -336,6 +346,7 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -345,8 +356,10 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                   </svg>
                 </a>
                 <button
+                  type="button"
                   onClick={onClose}
                   className="p-2 hover:bg-dark-800 rounded-lg transition-colors"
+                  aria-label={t("actions.close")}
                 >
                   <svg
                     className="w-5 h-5 text-dark-400"
@@ -354,6 +367,7 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -376,9 +390,11 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                   </h3>
                   <div className="flex items-center gap-1">
                     <button
+                      type="button"
                       onClick={expandAll}
                       className="p-1 hover:bg-dark-800 rounded text-dark-500 hover:text-dark-300 transition-colors"
-                      title="Expand all"
+                      title={t("docsPanel.expandAllNav")}
+                      aria-label={t("docsPanel.expandAllNav")}
                     >
                       <svg
                         className="w-3.5 h-3.5"
@@ -395,9 +411,11 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                       </svg>
                     </button>
                     <button
+                      type="button"
                       onClick={collapseAll}
                       className="p-1 hover:bg-dark-800 rounded text-dark-500 hover:text-dark-300 transition-colors"
-                      title="Collapse all"
+                      title={t("docsPanel.collapseAllNav")}
+                      aria-label={t("docsPanel.collapseAllNav")}
                     >
                       <svg
                         className="w-3.5 h-3.5"
@@ -417,7 +435,11 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                 </div>
 
                 {/* Navigation items */}
-                <nav className="flex-1 overflow-y-auto p-2">
+                <nav
+                  className="flex-1 overflow-y-auto p-2 min-h-0"
+                  aria-label={t("docsPanel.navigation")}
+                  tabIndex={0}
+                >
                   {groupedDocs.map((section) => (
                     <div key={section.name} className="mb-1">
                       {/* Section header */}
@@ -522,6 +544,7 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                         {t("docsPanel.notBuiltBody")}
                       </p>
                       <button
+                        type="button"
                         onClick={handleBuildDocs}
                         disabled={building}
                         className="px-4 py-2 bg-primary-500 hover:bg-primary-600 disabled:bg-primary-500/50 text-white rounded-lg transition-colors flex items-center gap-2 mx-auto"
@@ -569,7 +592,7 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
                   <iframe
                     src={getDocUrl()}
                     className="w-full h-full border-0"
-                    title="Documentation"
+                    title={`${t("docsPanel.title")} — ${t("docsPanel.subtitle")}`}
                   />
                 )}
               </div>
@@ -577,19 +600,21 @@ export default function DocsPanel({ isOpen, onClose }: DocsPanelProps) {
 
             {/* Footer */}
             <div className="border-t border-dark-700 p-4 flex items-center justify-between">
-              <p className="text-sm text-dark-500">
+              <p className="text-sm text-dark-400">
                 {t("docsPanel.fullAt")}{" "}
                 <a
                   href={`/api/docs/site/${docsLocale}/`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-primary-400 hover:text-primary-300"
+                  className="text-primary-400 hover:text-primary-300 underline underline-offset-2"
+                  aria-label={t("docsPanel.openDocsSiteAria")}
                 >
-                  /api/docs/site/{docsLocale}/
+                  {t("docsPanel.openDocsSiteLink")}
                 </a>
               </p>
               {siteBuilt && (
                 <button
+                  type="button"
                   onClick={handleBuildDocs}
                   disabled={building}
                   className="text-sm text-dark-400 hover:text-dark-200 flex items-center gap-1 disabled:opacity-50"

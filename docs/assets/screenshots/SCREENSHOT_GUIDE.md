@@ -44,8 +44,8 @@ All screenshots listed below should be captured for each locale and stored in th
 | `ui/dropzone-empty.png` | Empty dropzone ready for upload | Initial state, no file selected |
 | `ui/dropzone-hover.png` | Dropzone with file hovering | Show drag-over highlight effect |
 | `ui/dropzone-uploading.png` | File upload in progress | Show progress indicator |
-| `ui/dropzone-batch.png` | Batch mode enabled | Multiple files selected |
-| `ui/header.png` | Application header | Show logo, batch toggle, settings button, language selector |
+| `ui/dropzone-batch.png` | Multi-file upload | Multiple files selected (same default drop zone) |
+| `ui/header.png` | Application header | Show logo, settings button, language selector |
 | `ui/history-panel.png` | Conversion history panel | Show list of previous conversions |
 | `ui/history-search.png` | History with search active | Show search results |
 | `ui/main.png` | Main interface overview | Full application view with default language |
@@ -116,7 +116,7 @@ Have these ready for capturing different states:
 - A PDF with images and tables (for full feature demo)
 - A scanned document (for OCR demo)
 - A markdown file (for format conversion)
-- Multiple small files (for batch mode)
+- Multiple small files (multi-file upload state)
 
 ### Step 3: Capture Sequence
 

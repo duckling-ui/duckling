@@ -22,9 +22,12 @@
  * SOFTWARE.
  */
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { useRef, useId } from "react";
 import { useAllSettings } from "../hooks/useSettings";
 import { useTranslation } from "react-i18next";
+import { useSlideOver } from "../hooks/useSlideOver";
+import { ScrollableRegion } from "./ScrollableRegion";
 
 interface SettingsPanelProps {
   isOpen: boolean;
@@ -33,6 +36,8 @@ interface SettingsPanelProps {
 
 export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
   const { t } = useTranslation();
+  const panelRef = useRef<HTMLDivElement>(null);
+  useSlideOver({ isOpen, onClose, panelRef });
   const {
     ocr,
     tables,
@@ -56,29 +61,37 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-dark-950/80 backdrop-blur-sm z-40"
             onClick={onClose}
+            aria-hidden="true"
           />
 
           {/* Panel */}
           <motion.div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t("settingsPanel.title")}
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full max-w-lg bg-dark-900 border-l border-dark-700 z-50 overflow-y-auto"
+            className="fixed right-0 top-0 h-full w-full max-w-lg bg-dark-900 border-l border-dark-700 z-50 flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="sticky top-0 bg-dark-900/95 backdrop-blur-sm border-b border-dark-700 p-6 flex items-center justify-between">
+            <div className="shrink-0 bg-dark-900/95 backdrop-blur-sm border-b border-dark-700 p-6 flex items-center justify-between">
               <h2 className="text-xl font-bold text-dark-100">
                 {t("settingsPanel.title")}
               </h2>
               <button
+                type="button"
                 onClick={onClose}
                 className="p-2 hover:bg-dark-800 rounded-lg transition-colors"
+                aria-label={t("actions.close")}
               >
                 <svg
                   className="w-5 h-5 text-dark-400"
                   viewBox="0 0 20 20"
                   fill="currentColor"
+                  aria-hidden="true"
                 >
                   <path
                     fillRule="evenodd"
@@ -90,11 +103,14 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
             </div>
 
             {isLoading ? (
-              <div className="p-6 flex items-center justify-center">
+              <div className="flex-1 flex items-center justify-center p-6 min-h-0">
                 <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
               </div>
             ) : (
-              <div className="p-6 space-y-6">
+              <ScrollableRegion
+                aria-label={t("settingsPanel.scrollRegion")}
+                className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6"
+              >
                 {/* OCR Settings */}
                 <SettingsSection title={t("settings.sections.ocr")} icon="eye">
                   <ToggleSetting
@@ -799,7 +815,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     {t("settings.actions.resetDefaults")}
                   </button>
                 </div>
-              </div>
+              </ScrollableRegion>
             )}
           </motion.div>
         </>
@@ -905,6 +921,11 @@ function ToggleSetting({
   onChange,
   disabled,
 }: ToggleSettingProps) {
+  const baseId = useId();
+  const labelId = `${baseId}-label`;
+  const descId = `${baseId}-desc`;
+  const reduceMotion = useReducedMotion();
+
   return (
     <div
       className={`flex items-start justify-between gap-4 ${
@@ -912,22 +933,36 @@ function ToggleSetting({
       }`}
     >
       <div className="flex-1">
-        <p className="text-sm font-medium text-dark-200">{label}</p>
-        <p className="text-xs text-dark-400 mt-0.5">{description}</p>
+        <p id={labelId} className="text-sm font-medium text-dark-200">
+          {label}
+        </p>
+        <p id={descId} className="text-xs text-dark-400 mt-0.5">
+          {description}
+        </p>
       </div>
       <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        aria-labelledby={labelId}
+        aria-describedby={descId}
         onClick={() => onChange(!checked)}
         disabled={disabled}
         className={`
-          relative w-11 h-6 rounded-full transition-colors duration-200
+          relative w-11 h-6 shrink-0 rounded-full transition-colors duration-200
           ${checked ? "bg-primary-500" : "bg-dark-600"}
           ${disabled ? "cursor-not-allowed" : "cursor-pointer"}
         `}
       >
         <motion.div
           className="absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm"
+          aria-hidden="true"
           animate={{ left: checked ? "24px" : "4px" }}
-          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+          transition={
+            reduceMotion
+              ? { duration: 0 }
+              : { type: "spring", stiffness: 500, damping: 30 }
+          }
         />
       </button>
     </div>
@@ -952,16 +987,31 @@ function SelectSetting({
   onChange,
   disabled,
 }: SelectSettingProps) {
+  const id = useId();
+  const labelId = `${id}-label`;
+  const descId = `${id}-desc`;
+  const controlId = `${id}-control`;
+
   return (
     <div className={`${disabled ? "opacity-50" : ""}`}>
       <div className="mb-2">
-        <p className="text-sm font-medium text-dark-200">{label}</p>
-        <p className="text-xs text-dark-400 mt-0.5">{description}</p>
+        <label
+          id={labelId}
+          htmlFor={controlId}
+          className="text-sm font-medium text-dark-200 block"
+        >
+          {label}
+        </label>
+        <p id={descId} className="text-xs text-dark-400 mt-0.5">
+          {description}
+        </p>
       </div>
       <select
+        id={controlId}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
+        aria-describedby={descId}
         className="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-lg text-dark-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:cursor-not-allowed"
       >
         {options.map((option) => (
@@ -996,18 +1046,37 @@ function SliderSetting({
   onChange,
   disabled,
 }: SliderSettingProps) {
+  const id = useId();
+  const labelId = `${id}-label`;
+  const descId = `${id}-desc`;
+  const controlId = `${id}-control`;
+  const valueId = `${id}-value`;
+
   return (
     <div className={`${disabled ? "opacity-50" : ""}`}>
-      <div className="mb-2 flex items-center justify-between">
+      <div className="mb-2 flex items-center justify-between gap-2">
         <div>
-          <p className="text-sm font-medium text-dark-200">{label}</p>
-          <p className="text-xs text-dark-400 mt-0.5">{description}</p>
+          <label
+            id={labelId}
+            htmlFor={controlId}
+            className="text-sm font-medium text-dark-200 block"
+          >
+            {label}
+          </label>
+          <p id={descId} className="text-xs text-dark-400 mt-0.5">
+            {description}
+          </p>
         </div>
-        <span className="text-sm font-mono text-primary-400">
+        <span
+          id={valueId}
+          className="text-sm font-mono text-primary-400 shrink-0"
+          aria-live="polite"
+        >
           {value.toFixed(2)}
         </span>
       </div>
       <input
+        id={controlId}
         type="range"
         value={value}
         min={min}
@@ -1015,6 +1084,7 @@ function SliderSetting({
         step={step}
         onChange={(e) => onChange(parseFloat(e.target.value))}
         disabled={disabled}
+        aria-describedby={`${descId} ${valueId}`}
         className="w-full h-2 bg-dark-600 rounded-lg appearance-none cursor-pointer accent-primary-500 disabled:cursor-not-allowed"
       />
       <div className="flex justify-between text-xs text-dark-500 mt-1">
@@ -1045,19 +1115,34 @@ function NumberSetting({
   onChange,
   disabled,
 }: NumberSettingProps) {
+  const id = useId();
+  const labelId = `${id}-label`;
+  const descId = `${id}-desc`;
+  const controlId = `${id}-control`;
+
   return (
     <div className={`${disabled ? "opacity-50" : ""}`}>
       <div className="mb-2">
-        <p className="text-sm font-medium text-dark-200">{label}</p>
-        <p className="text-xs text-dark-400 mt-0.5">{description}</p>
+        <label
+          id={labelId}
+          htmlFor={controlId}
+          className="text-sm font-medium text-dark-200 block"
+        >
+          {label}
+        </label>
+        <p id={descId} className="text-xs text-dark-400 mt-0.5">
+          {description}
+        </p>
       </div>
       <input
+        id={controlId}
         type="number"
         value={value}
         min={min}
         max={max}
         onChange={(e) => onChange(parseInt(e.target.value) || 0)}
         disabled={disabled}
+        aria-describedby={descId}
         className="w-full px-3 py-2 bg-dark-700 border border-dark-600 rounded-lg text-dark-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:cursor-not-allowed"
       />
     </div>

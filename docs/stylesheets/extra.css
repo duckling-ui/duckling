@@ -10,7 +10,43 @@
 
 [data-md-color-scheme="slate"] {
   --md-default-bg-color: #1a1a2e;
-  --md-default-fg-color--light: rgba(255, 255, 255, 0.7);
+  /* Stronger body / secondary text contrast on dark background (WCAG) */
+  --md-default-fg-color--light: rgba(255, 255, 255, 0.86);
+}
+
+/* Content links: not identifiable by color alone */
+.md-typeset a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+  font-weight: 500;
+}
+
+.md-typeset a:hover,
+.md-typeset a:focus-visible {
+  text-decoration-thickness: 2px;
+}
+
+/* Sidebar: supplement color change with underline on interaction */
+.md-nav__link:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
+}
+
+.md-nav__link--active {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.12em;
+}
+
+/* Scrollable code / wide tables: keyboard focus for scroll (skip admonitions) */
+.md-typeset div.highlight {
+  overflow-x: auto;
+}
+
+.md-typeset div.highlight:focus {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
 }
 
 /* Card grid styling */
@@ -38,12 +74,15 @@
 /* Clickable card links - whole tile is interactive */
 .grid.cards .card-link {
   display: block;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-color: var(--md-primary-fg-color);
+  text-underline-offset: 0.18em;
   color: inherit;
   cursor: pointer;
 }
 .grid.cards .card-link:hover {
   color: inherit;
+  text-decoration-thickness: 2px;
 }
 
 /* Code block styling */

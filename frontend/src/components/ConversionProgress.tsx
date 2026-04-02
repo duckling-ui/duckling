@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
 interface ConversionProgressProps {
@@ -37,11 +37,13 @@ export default function ConversionProgress({
   filename,
 }: ConversionProgressProps) {
   const { t } = useTranslation();
+  const reduceMotion = useReducedMotion();
+  const progressValue = Math.min(100, Math.max(0, Math.round(progress)));
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+      animate={reduceMotion ? false : { opacity: 1, y: 0 }}
       className="w-full max-w-xl mx-auto"
     >
       <div className="glass rounded-2xl p-8">
@@ -50,8 +52,12 @@ export default function ConversionProgress({
           <div className="relative">
             <motion.div
               className="w-12 h-12 rounded-full bg-primary-500/20 flex items-center justify-center"
-              animate={{ scale: [1, 1.1, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
+              animate={
+                reduceMotion ? undefined : { scale: [1, 1.1, 1] }
+              }
+              transition={
+                reduceMotion ? undefined : { duration: 2, repeat: Infinity }
+              }
             >
               <svg
                 className="w-6 h-6 text-primary-400 animate-spin-slow"
@@ -59,6 +65,7 @@ export default function ConversionProgress({
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -67,12 +74,14 @@ export default function ConversionProgress({
                 />
               </svg>
             </motion.div>
-            {/* Pulsing ring */}
-            <motion.div
-              className="absolute inset-0 rounded-full border-2 border-primary-500/30"
-              animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
+            {!reduceMotion && (
+              <motion.div
+                className="absolute inset-0 rounded-full border-2 border-primary-500/30"
+                animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                aria-hidden="true"
+              />
+            )}
           </div>
           <div className="flex-1">
             <h3 className="text-lg font-semibold text-dark-100">
@@ -88,24 +97,42 @@ export default function ConversionProgress({
 
         {/* Progress bar */}
         <div className="mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-dark-300">{message}</span>
-            <span className="text-sm font-mono text-primary-400">
+          <div className="flex justify-between items-center mb-2 gap-2">
+            <p
+              className="text-sm text-dark-300"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {message}
+            </p>
+            <span className="text-sm font-mono text-primary-400 shrink-0">
               {progress}%
             </span>
           </div>
-          <div className="h-2 bg-dark-800 rounded-full overflow-hidden">
+          <div
+            role="progressbar"
+            aria-valuenow={progressValue}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label={t("progress.title")}
+            className="h-2 bg-dark-800 rounded-full overflow-hidden"
+          >
             <motion.div
               className="h-full progress-bar rounded-full"
+              aria-hidden="true"
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
+              transition={
+                reduceMotion
+                  ? { duration: 0 }
+                  : { duration: 0.5, ease: "easeOut" }
+              }
             />
           </div>
         </div>
 
         {/* Status steps */}
-        <div className="space-y-2">
+        <div className="space-y-2" role="list">
           <StatusStep
             label={t("progress.uploadComplete")}
             isComplete={progress >= 10}
@@ -144,8 +171,16 @@ interface StatusStepProps {
 }
 
 function StatusStep({ label, isComplete, isActive }: StatusStepProps) {
+  const { t } = useTranslation();
+  const reduceMotion = useReducedMotion();
+  const statusText = isComplete
+    ? t("progress.stepStatusComplete")
+    : isActive
+      ? t("progress.stepStatusActive")
+      : t("progress.stepStatusPending");
+
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-3" role="listitem">
       <div
         className={`
           w-5 h-5 rounded-full flex items-center justify-center transition-all duration-300
@@ -153,16 +188,18 @@ function StatusStep({ label, isComplete, isActive }: StatusStepProps) {
             isComplete
               ? "bg-primary-500"
               : isActive
-              ? "bg-primary-500/30 ring-2 ring-primary-500/50"
-              : "bg-dark-700"
+                ? "bg-primary-500/30 ring-2 ring-primary-500/50"
+                : "bg-dark-700"
           }
         `}
+        aria-hidden="true"
       >
         {isComplete ? (
           <svg
             className="w-3 h-3 text-dark-950"
             viewBox="0 0 12 12"
             fill="none"
+            aria-hidden="true"
           >
             <path
               d="M2 6l3 3 5-6"
@@ -175,8 +212,10 @@ function StatusStep({ label, isComplete, isActive }: StatusStepProps) {
         ) : isActive ? (
           <motion.div
             className="w-2 h-2 rounded-full bg-primary-400"
-            animate={{ scale: [1, 1.3, 1] }}
-            transition={{ duration: 1, repeat: Infinity }}
+            animate={reduceMotion ? undefined : { scale: [1, 1.3, 1] }}
+            transition={
+              reduceMotion ? undefined : { duration: 1, repeat: Infinity }
+            }
           />
         ) : null}
       </div>
@@ -187,12 +226,13 @@ function StatusStep({ label, isComplete, isActive }: StatusStepProps) {
             isComplete
               ? "text-dark-200"
               : isActive
-              ? "text-primary-400"
-              : "text-dark-500"
+                ? "text-primary-400"
+                : "text-dark-500"
           }
         `}
       >
         {label}
+        <span className="sr-only"> — {statusText}</span>
       </span>
     </div>
   );

@@ -26,12 +26,12 @@ jobs:
         with:
           python-version: '3.13'
           cache: 'pip'
-          cache-dependency-path: requirements-docs.txt
+          cache-dependency-path: backend/requirements.txt
 
       - name: Install docs dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements-docs.txt
+          pip install -r backend/requirements.txt
 
       - name: Inject PostHog API key
         run: |
@@ -52,7 +52,7 @@ jobs:
 
       - name: Deploy docs with mike
         run: |
-          VERSION=$(python scripts/get_version.py 2>/dev/null || echo "0.0.10a")
+          VERSION=$(python scripts/get_version.py 2>/dev/null || echo "0.0.11")
           mike deploy --push --update-aliases --alias-type redirect "$VERSION" latest
           mike set-default --push latest
 

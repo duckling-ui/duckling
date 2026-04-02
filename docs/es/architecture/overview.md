@@ -98,6 +98,8 @@ sequenceDiagram
 | 9 | **Update Job Status & History** - Mark complete, store metadata |
 | 10 | **Results Available** - Ready for download |
 
+**Carpeta (UI):** el navegador expande un directorio elegido o arrastrado a archivos; el frontend filtra por extensión y tamaño y envía los admitidos como `POST /api/convert/batch` con partes `files` repetidas. El backend rechaza las partes no admitidas; si ninguna puede convertirse, la API responde **400**.
+
 ## Job Queue System
 
 To prevent memory exhaustion when processing multiple documents:

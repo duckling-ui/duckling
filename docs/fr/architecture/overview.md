@@ -98,6 +98,8 @@ sequenceDiagram
 | 9 | **Update Job Status & History** - Mark complete, store metadata |
 | 10 | **Results Available** - Ready for download |
 
+**Dossier (UI) :** le navigateur développe un dossier choisi ou glissé en liste de fichiers ; le frontend filtre par extension et taille, puis envoie les fichiers pris en charge via `POST /api/convert/batch` avec des parties `files` répétées. Le backend rejette les parties non prises en charge ; si aucune conversion n’est possible, l’API répond **400**.
+
 ## Job Queue System
 
 To prevent memory exhaustion when processing multiple documents:

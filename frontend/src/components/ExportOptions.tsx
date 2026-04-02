@@ -26,6 +26,7 @@ import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { marked } from "marked";
 import { useTranslation } from "react-i18next";
+import { ScrollableRegion } from "./ScrollableRegion";
 import {
   getExtractedImages,
   getExtractedTables,
@@ -404,7 +405,10 @@ export default function ExportOptions({
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+      <ScrollableRegion
+        aria-label={t("export.scrollExportTabs")}
+        className="flex gap-2 mb-6 overflow-x-auto pb-2"
+      >
         {tabs.map((tab) => (
           <button
             key={tab.id}
@@ -430,7 +434,7 @@ export default function ExportOptions({
             )}
           </button>
         ))}
-      </div>
+      </ScrollableRegion>
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Left panel - content based on tab */}
@@ -440,7 +444,10 @@ export default function ExportOptions({
               <h3 className="text-lg font-semibold text-dark-100 mb-4">
                 {t("export.exportFormatTitle")}
               </h3>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
+              <ScrollableRegion
+                aria-label={t("export.scrollFormatList")}
+                className="space-y-2 max-h-96 overflow-y-auto"
+              >
                 {formatsAvailable.map((format) => {
                   const info = FORMAT_INFO[format];
                   if (!info) return null;
@@ -498,7 +505,7 @@ export default function ExportOptions({
                     </motion.button>
                   );
                 })}
-              </div>
+              </ScrollableRegion>
 
               {/* Download button */}
               <motion.button
@@ -538,7 +545,10 @@ export default function ExportOptions({
                   {t("export.noImages")}
                 </div>
               ) : (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[500px] overflow-y-auto">
+                <ScrollableRegion
+                  aria-label={t("export.scrollImageGrid")}
+                  className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-h-[500px] overflow-y-auto"
+                >
                   {images.map((image) => (
                     <motion.div
                       key={image.id}
@@ -630,7 +640,7 @@ export default function ExportOptions({
                       </div>
                     </motion.div>
                   ))}
-                </div>
+                </ScrollableRegion>
               )}
             </>
           )}
@@ -649,7 +659,10 @@ export default function ExportOptions({
                   {t("export.noTables")}
                 </div>
               ) : (
-                <div className="space-y-3 max-h-96 overflow-y-auto">
+                <ScrollableRegion
+                  aria-label={t("export.scrollTablesList")}
+                  className="space-y-3 max-h-96 overflow-y-auto"
+                >
                   {tables.map((table) => (
                     <div
                       key={table.id}
@@ -704,7 +717,10 @@ export default function ExportOptions({
                       </div>
                       {/* Table preview */}
                       {table.rows.length > 0 && (
-                        <div className="overflow-x-auto">
+                        <ScrollableRegion
+                          aria-label={t("export.scrollTablePreview")}
+                          className="overflow-x-auto"
+                        >
                           <table className="w-full text-xs">
                             <tbody>
                               {table.rows.slice(0, 3).map((row, i) => (
@@ -739,11 +755,11 @@ export default function ExportOptions({
                               )}
                             </tbody>
                           </table>
-                        </div>
+                        </ScrollableRegion>
                       )}
                     </div>
                   ))}
-                </div>
+                </ScrollableRegion>
               )}
             </>
           )}
@@ -784,7 +800,10 @@ export default function ExportOptions({
                   </button>
                 </div>
               ) : (
-                <div className="space-y-3 max-h-96 overflow-y-auto">
+                <ScrollableRegion
+                  aria-label={t("export.scrollChunksList")}
+                  className="space-y-3 max-h-96 overflow-y-auto"
+                >
                   {chunks.map((chunk) => (
                     <div
                       key={chunk.id}
@@ -805,7 +824,7 @@ export default function ExportOptions({
                       </p>
                     </div>
                   ))}
-                </div>
+                </ScrollableRegion>
               )}
               {chunks.length > 0 && (
                 <motion.button
@@ -899,14 +918,17 @@ export default function ExportOptions({
                     <div className="w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
                   </div>
                 ) : currentPreviewContent ? (
-                  <div className="bg-dark-950 rounded-xl p-4 max-h-[500px] overflow-y-auto">
+                  <ScrollableRegion
+                    aria-label={t("export.previewContentRegion")}
+                    className="bg-dark-950 rounded-xl p-4 max-h-[500px] overflow-y-auto"
+                  >
                     {/* Rendered HTML view - use iframe to isolate styles */}
                     {selectedFormat === "html" && previewMode === "rendered" ? (
                       <iframe
                         srcDoc={currentPreviewContent}
                         className="w-full min-h-[400px] rounded-lg border border-dark-700 bg-white"
                         sandbox="allow-same-origin"
-                        title="HTML Preview"
+                        title={t("export.htmlPreviewIframeTitle")}
                       />
                     ) : /* Rendered Markdown view */
                     selectedFormat === "markdown" &&
@@ -914,7 +936,7 @@ export default function ExportOptions({
                       <div
                         className="prose prose-invert prose-sm max-w-none
                           prose-headings:text-dark-100 prose-p:text-dark-300
-                          prose-a:text-primary-400 prose-strong:text-dark-200
+                          prose-a:text-primary-400 prose-a:underline prose-a:underline-offset-2 prose-strong:text-dark-200
                           prose-code:text-primary-300 prose-code:bg-dark-800 prose-code:px-1 prose-code:rounded
                           prose-pre:bg-dark-900 prose-pre:border prose-pre:border-dark-700"
                         dangerouslySetInnerHTML={{
@@ -930,7 +952,7 @@ export default function ExportOptions({
                         {currentPreviewContent}
                       </pre>
                     )}
-                  </div>
+                  </ScrollableRegion>
                 ) : (
                   <div className="bg-dark-950 rounded-xl p-8 text-center">
                     <p className="text-dark-500">{t("export.noPreview")}</p>

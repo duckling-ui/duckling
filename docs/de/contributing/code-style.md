@@ -205,7 +205,7 @@ type(scope): description
 feat(upload): add drag-and-drop file upload
 
 Implemented drag-and-drop functionality using react-dropzone.
-Supports multiple file selection in batch mode.
+Supports multiple file selection and folder upload in the default drop zone.
 
 Closes #123
 

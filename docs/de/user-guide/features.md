@@ -17,10 +17,10 @@ Simply drag files onto the drop zone for instant upload. The interface validates
 
 Convert documents directly from URLs without downloading them first:
 
-1. Klicken Sie auf **URLs** toggle button above the drop zone
-2. Enter a document URL (must be HTTP or HTTPS)
-3. Click **Convert** or press Enter
-4. The document is downloaded und converted automatically
+1. Klicken Sie auf die Registerkarte **URLs** über der Ablagezone
+2. Fügen Sie eine URL pro Zeile ein (eine Zeile = ein Dokument; mehrere Zeilen starten einen Stapel)
+3. Klicken Sie auf **Convert All**
+4. Die Dokumente werden heruntergeladen und konvertiert
 
 Supported URL features:
 
@@ -48,28 +48,27 @@ Supported URL features:
     - ✅ `https://example.com/blog/article` (HTML pages work too!)
     - ❌ `https://example.com/view/document` (JavaScript-rendered content may not work)
 
-### Stapelverarbeitung
+### Mehrere Dateien und Ordner
 
-Aktivieren batch mode to upload und convert multiple files at once:
+Laden Sie mehr als eine Datei (oder einen ganzen Ordner) über dieselbe Ablagezone hoch—ohne einen separaten Modus:
 
-1. Click **Stapelmodus** toggle in der Kopfzeile
-2. Ziehen Sie mehrere Dateien in die Ablagezone, or switch to URL mode und enter multiple URLs (one per line)
-3. Monitor individual progress for each file
-4. Herunterladen results separately or together
+1. Dateien ziehen, Ordner wählen oder **Dateien wählen…** für einzelne Dateien nutzen
+2. Zur Registerkarte **URLs** wechseln und eine URL pro Zeile einfügen
+3. Fortschritt beobachten (ein Job: Standardansicht; mehrere Jobs: Stapelübersicht)
+4. Ergebnisse nach abgeschlossener Stapelkonvertierung einzeln oder gesamt herunterladen
 
 <figure markdown="span">
-  ![Stapelmodus](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Stapelmodus mit mehreren Dateien selected</figcaption>
+  ![Mehrere Dateien](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+  <figcaption>Mehrere Dateien zum Upload ausgewählt</figcaption>
 </figure>
 
-#### Batch URL Modus
+#### Mehrere URLs
 
-In batch mode, the URL input changes to a multi-line textarea:
+Das URL-Feld ist immer ein mehrzeiliges Textfeld:
 
-1. Enable **Stapelmodus** in der Kopfzeile
-2. Switch to **URLs** input mode
-3. Paste multiple URLs, one per line
-4. Click **Convert All**
+1. Zur Registerkarte **URLs** wechseln
+2. Eine URL pro Zeile einfügen
+3. Auf **Convert All** klicken
 
 !!! info "Concurrent Verarbeitung"
     The job queue processes up to 2 documents simultaneously to prevent memory exhaustion.

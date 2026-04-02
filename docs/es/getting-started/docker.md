@@ -103,7 +103,7 @@ Usa el script de construcción proporcionado para una fácil construcción de im
 ```
 
 !!! note "Construcción de documentación"
-    El script ejecuta `mkdocs build` para la documentación en los contenedores. Si MkDocs no está instalado, intentará instalarlo desde `requirements-docs.txt` en la raíz del repositorio. La imagen del backend instala MkDocs solo con `backend/requirements.txt`.
+    El script ejecuta `mkdocs build` para la documentación en los contenedores. Si MkDocs no está instalado, intenta `pip install -r backend/requirements.txt` antes de compilar. La imagen del backend instala dependencias solo desde `backend/requirements.txt`.
 
 ### Publicación automática (CI/CD)
 

@@ -98,6 +98,8 @@ sequenceDiagram
 | 9 | **Update Job Status & History** - Mark complete, store metadata |
 | 10 | **Results Available** - Ready for download |
 
+**Folder upload (UI):** The browser expands a chosen or dragged directory into a list of files; the frontend filters by allowed extension and size, then sends supported files as `POST /api/convert/batch` with repeated `files` parts (same as multi-file batch). The backend rejects unsupported parts individually; if no part can be converted, the API responds with **400**.
+
 ## Job Queue System
 
 To prevent memory exhaustion when processing multiple documents:

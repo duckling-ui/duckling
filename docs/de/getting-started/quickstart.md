@@ -122,17 +122,16 @@ Klicken Sie auf :material-cog: **Einstellungen** Schaltfläche zum Konfigurieren
 | Extrahieren | `true` | Eingebettete Bilder extrahieren |
 | Skalierung | `1.0` | Bildausgabeskalierung |
 
-## Stapelverarbeitung
+## Mehrere Dateien auf einmal
 
 Um mehrere Dateien gleichzeitig zu konvertieren:
 
-1. Aktivieren **Stapelmodus** in der Kopfzeile
-2. Ziehen Sie mehrere Dateien in die Ablagezone
-3. Alle Dateien werden gleichzeitig verarbeitet
+1. Ziehen Sie mehrere Dateien in die Zone, wählen Sie einen Ordner oder nutzen Sie **Dateien wählen…**
+2. Die Dateien werden über die Job-Warteschlange verarbeitet (siehe Features zu parallelen Limits)
 
 <figure markdown="span">
-  ![Stapelmodus](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Stapelmodus mit mehreren Dateien</figcaption>
+  ![Mehrere Dateien](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+  <figcaption>Mehrere Dateien zum Upload ausgewählt</figcaption>
 </figure>
 
 !!! tip "Leistung"

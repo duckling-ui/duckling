@@ -5,13 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-**Latest release:** [0.0.10a](https://github.com/davidgs/duckling/releases/tag/v0.0.10a) (2026-03-23)
+**Latest release:** [0.0.11](https://github.com/davidgs/duckling/releases/tag/v0.0.11) (2026-03-30)
 
 ## [Unreleased]
-
-### Fixed
-
-- **Frontend tests**: `DocsPanel` iframe-navigation test waits for the `message` listener to attach after mocked `fetch` completes and uses a longer `waitFor` timeout so CI stays green on slower runners.
 
 ### Planned
 
@@ -23,6 +19,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dark/light theme toggle
 - Keyboard shortcuts
 - Accessibility improvements (WCAG 2.1)
+
+## [0.0.11] - 2026-03-30
+
+### Changed
+
+- **Accessibility**: Contributing docs add [Accessibility](contributing/accessibility.md) and MkDocs nav entry; built docs use link underlines, higher-contrast secondary text in `stylesheets/extra.css`, and `javascripts/scrollable-focus.js` for keyboard-scrollable code/tables, search dialog naming, and unique scrollable regions. See root `CHANGELOG.md` for web UI changes.
+- **Upload UX**: Toolbar batch toggle removed; one drop zone supports single file, multiple files, folders, and multi-line URLs. See root `CHANGELOG.md` for full technical notes.
+- **Dependencies**: No separate root docs requirements file; use **`backend/requirements.txt`** for MkDocs and the API (see root `CHANGELOG.md`).
+
+### Fixed
+
+- **Docs**: Localized home pages add `aria-label` on feature card links (`card-link`). `javascripts/scrollable-focus.js` names the Material search dialog, uniquely labels code toolbars and scrollable code/table regions, and hooks `document$` for instant navigation.
+- **Frontend tests**: `DocsPanel` iframe-navigation test waits for the `message` listener to attach after mocked `fetch` completes and uses a longer `waitFor` timeout so CI stays green on slower runners.
+- **Docs / CI**: `pymdown-extensions>=10.21.2` avoids a Pygments + highlight crash when building the site (same as root `CHANGELOG.md`).
+- **Python / CI**: `markdown>=3.6` and `mkdocs>=1.6` in `backend/requirements.txt` so pip can resolve the doc stack with pymdown 10.21.2+ (same as root `CHANGELOG.md`).
 
 ## [0.0.10a] - 2026-03-23
 
@@ -315,9 +326,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maximum file size limits
 - Secure filename handling
 
-[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10a...HEAD
+[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.11...HEAD
+[0.0.11]: https://github.com/davidgs/duckling/compare/v0.0.10a...v0.0.11
 [0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.10...v0.0.10a
-[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
+[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7

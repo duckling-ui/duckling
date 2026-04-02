@@ -22,64 +22,26 @@
  * SOFTWARE.
  */
 
-import { useCallback, useState } from "react";
-import { useDropzone, FileRejection } from "react-dropzone";
+import {
+  useCallback,
+  useState,
+  useRef,
+  type ChangeEvent,
+  type InputHTMLAttributes,
+  type KeyboardEvent,
+} from "react";
+import { useDropzone, FileRejection, ErrorCode } from "react-dropzone";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { DROPZONE_ACCEPT } from "../utils/supportedUploadFormats";
+import { filterSupportedFiles, MAX_UPLOAD_BYTES } from "../utils/fileFilter";
 
 interface DropZoneProps {
-  onFileAccepted: (file: File) => void;
-  onFilesAccepted?: (files: File[]) => void;
-  onUrlSubmitted?: (url: string) => void;
+  onFilesAccepted: (files: File[]) => void;
   onUrlsSubmitted?: (urls: string[]) => void;
   isUploading: boolean;
   disabled?: boolean;
-  multiple?: boolean;
 }
-
-// Supported file extensions (include both lowercase and uppercase variants)
-const ACCEPTED_EXTENSIONS = {
-  "application/pdf": [".pdf", ".PDF"],
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
-    ".docx",
-    ".DOCX",
-  ],
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation": [
-    ".pptx",
-    ".PPTX",
-  ],
-  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
-    ".xlsx",
-    ".XLSX",
-  ],
-  "text/html": [".html", ".htm", ".HTML", ".HTM"],
-  "text/markdown": [".md", ".markdown", ".MD", ".MARKDOWN"],
-  "text/csv": [".csv", ".CSV"],
-  "image/*": [
-    ".png",
-    ".jpg",
-    ".jpeg",
-    ".tiff",
-    ".tif",
-    ".gif",
-    ".webp",
-    ".bmp",
-    ".PNG",
-    ".JPG",
-    ".JPEG",
-    ".TIFF",
-    ".TIF",
-    ".GIF",
-    ".WEBP",
-    ".BMP",
-  ],
-  "audio/*": [".wav", ".mp3", ".WAV", ".MP3"],
-  "text/vtt": [".vtt", ".VTT"],
-  "application/xml": [".xml", ".XML"],
-  "text/plain": [".txt", ".asciidoc", ".adoc", ".TXT", ".ASCIIDOC", ".ADOC"],
-};
-
-const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
 const FORMAT_CATEGORIES = [
   {
@@ -99,62 +61,129 @@ const FORMAT_CATEGORIES = [
 // URL validation regex
 const URL_REGEX = /^https?:\/\/[^\s/$.?#].[^\s]*$/i;
 
+/** Folder picker + multi-file drop zone always accepts multiple files. */
+const FILE_DROPZONE_MULTIPLE = true;
+
 export default function DropZone({
-  onFileAccepted,
   onFilesAccepted,
-  onUrlSubmitted,
   onUrlsSubmitted,
   isUploading,
   disabled,
-  multiple = false,
 }: DropZoneProps) {
   const { t } = useTranslation();
   const [error, setError] = useState<string | null>(null);
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
+  const filesOnlyInputRef = useRef<HTMLInputElement>(null);
   const [inputMode, setInputMode] = useState<"file" | "url">("file");
-  const [urlInput, setUrlInput] = useState("");
   const [urlsInput, setUrlsInput] = useState("");
+
+  const onInputModeTabsKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLDivElement>) => {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      e.preventDefault();
+      setInputMode((m) => (m === "file" ? "url" : "file"));
+    },
+    [],
+  );
+
+  const processBatchFileList = useCallback(
+    (
+      rawFiles: File[],
+      opts?: {
+        /** Files react-dropzone rejected (e.g. wrong type) while others in the same folder were accepted */
+        pickerSkippedCount?: number;
+      },
+    ) => {
+      setError(null);
+      setInfoMessage(null);
+      const pickerSkipped = opts?.pickerSkippedCount ?? 0;
+      const { accepted, skipped } = filterSupportedFiles(rawFiles);
+
+      const infoParts: string[] = [];
+      if (pickerSkipped > 0) {
+        infoParts.push(
+          t("dropzone.pickerSkippedUnsupported", { count: pickerSkipped }),
+        );
+      }
+      if (skipped.length > 0 && accepted.length > 0) {
+        infoParts.push(
+          t("dropzone.filesSkippedSummary", {
+            skipped: skipped.length,
+            accepted: accepted.length,
+          }),
+        );
+      }
+      if (infoParts.length > 0) {
+        setInfoMessage(infoParts.join(" "));
+      }
+
+      if (accepted.length === 0) {
+        const onlyLarge =
+          skipped.length > 0 &&
+          skipped.every((s) => s.reason === "too_large");
+        setError(
+          onlyLarge
+            ? t("dropzone.allSkippedTooLarge")
+            : t("dropzone.noSupportedFiles"),
+        );
+        return;
+      }
+      onFilesAccepted(accepted);
+    },
+    [onFilesAccepted, t],
+  );
 
   const onDrop = useCallback(
     (acceptedFiles: File[], rejectedFiles: FileRejection[]) => {
       setError(null);
+      setInfoMessage(null);
 
-      if (rejectedFiles.length > 0) {
-        const rejection = rejectedFiles[0];
-        const errorMessage = rejection.errors.map((e) => e.message).join(", ");
-        setError(errorMessage);
+      const allTooManyNoAccepts =
+        acceptedFiles.length === 0 &&
+        rejectedFiles.length > 0 &&
+        rejectedFiles.every((r) =>
+          r.errors.some((e) => e.code === ErrorCode.TooManyFiles),
+        );
+      if (allTooManyNoAccepts) {
+        setError(t("dropzone.tooManyFilesUnexpected"));
         return;
       }
 
       if (acceptedFiles.length > 0) {
-        if (multiple && onFilesAccepted) {
-          onFilesAccepted(acceptedFiles);
-        } else {
-          onFileAccepted(acceptedFiles[0]);
-        }
+        processBatchFileList(acceptedFiles, {
+          pickerSkippedCount: rejectedFiles.length,
+        });
+        return;
+      }
+
+      if (rejectedFiles.length > 0) {
+        const anyInvalidType = rejectedFiles.some((r) =>
+          r.errors.some((e) => e.code === ErrorCode.FileInvalidType),
+        );
+        setError(
+          anyInvalidType
+            ? t("dropzone.allFilesUnsupportedByPicker")
+            : rejectedFiles[0].errors.map((e) => e.message).join(", "),
+        );
       }
     },
-    [onFileAccepted, onFilesAccepted, multiple],
+    [processBatchFileList, t],
   );
 
-  const handleUrlSubmit = useCallback(() => {
-    setError(null);
-    const url = urlInput.trim();
+  const handleNativeMultiFileInputChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const list = e.target.files ? Array.from(e.target.files) : [];
+      e.target.value = "";
+      if (list.length === 0) return;
+      processBatchFileList(list);
+    },
+    [processBatchFileList],
+  );
 
-    if (!url) {
-      setError(t("dropzone.errorEnterUrl"));
-      return;
-    }
-
-    if (!URL_REGEX.test(url)) {
-      setError(t("dropzone.errorInvalidUrl"));
-      return;
-    }
-
-    if (onUrlSubmitted) {
-      onUrlSubmitted(url);
-      setUrlInput("");
-    }
-  }, [urlInput, onUrlSubmitted, t]);
+  const directoryInputProps: InputHTMLAttributes<HTMLInputElement> = {
+    webkitdirectory: "",
+    directory: "",
+  } as InputHTMLAttributes<HTMLInputElement>;
 
   const handleUrlsSubmit = useCallback(() => {
     setError(null);
@@ -186,16 +215,6 @@ export default function DropZone({
     }
   }, [urlsInput, onUrlsSubmitted, t]);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === "Enter" && !e.shiftKey && !multiple) {
-        e.preventDefault();
-        handleUrlSubmit();
-      }
-    },
-    [handleUrlSubmit, multiple],
-  );
-
   const {
     getRootProps,
     getInputProps,
@@ -204,9 +223,9 @@ export default function DropZone({
     isDragReject,
   } = useDropzone({
     onDrop,
-    accept: ACCEPTED_EXTENSIONS,
-    maxSize: MAX_FILE_SIZE,
-    multiple,
+    accept: DROPZONE_ACCEPT,
+    maxSize: MAX_UPLOAD_BYTES,
+    multiple: FILE_DROPZONE_MULTIPLE,
     disabled: disabled || isUploading || inputMode === "url",
   });
 
@@ -214,8 +233,19 @@ export default function DropZone({
     <div className="w-full">
       {/* Mode Toggle */}
       <div className="flex justify-center mb-3">
-        <div className="inline-flex rounded-lg bg-dark-800 p-1">
+        <div
+          role="tablist"
+          aria-label={t("dropzone.inputModeLabel")}
+          className="inline-flex rounded-lg bg-dark-800 p-1"
+          onKeyDown={onInputModeTabsKeyDown}
+        >
           <button
+            type="button"
+            role="tab"
+            id="dropzone-tab-files"
+            aria-selected={inputMode === "file"}
+            aria-controls="dropzone-panel-files"
+            tabIndex={inputMode === "file" ? 0 : -1}
             onClick={() => setInputMode("file")}
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
               inputMode === "file"
@@ -231,6 +261,7 @@ export default function DropZone({
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -238,10 +269,16 @@ export default function DropZone({
                   d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                 />
               </svg>
-              {multiple ? t("dropzone.localFiles") : t("dropzone.localFile")}
+              {t("dropzone.localFiles")}
             </span>
           </button>
           <button
+            type="button"
+            role="tab"
+            id="dropzone-tab-urls"
+            aria-selected={inputMode === "url"}
+            aria-controls="dropzone-panel-urls"
+            tabIndex={inputMode === "url" ? 0 : -1}
             onClick={() => setInputMode("url")}
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
               inputMode === "url"
@@ -257,6 +294,7 @@ export default function DropZone({
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
+                aria-hidden="true"
               >
                 <path
                   strokeLinecap="round"
@@ -264,14 +302,18 @@ export default function DropZone({
                   d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
                 />
               </svg>
-              {multiple ? t("dropzone.urls") : t("dropzone.url")}
+              {t("dropzone.urls")}
             </span>
           </button>
         </div>
       </div>
 
-      {inputMode === "file" ? (
-        /* File Drop Zone */
+      <div
+        id="dropzone-panel-files"
+        role="tabpanel"
+        aria-labelledby="dropzone-tab-files"
+        hidden={inputMode !== "file"}
+      >
         <div {...getRootProps()}>
           <motion.div
             className={`
@@ -289,7 +331,15 @@ export default function DropZone({
             whileHover={!disabled && !isUploading ? { scale: 1.01 } : undefined}
             whileTap={!disabled && !isUploading ? { scale: 0.99 } : undefined}
           >
-            <input {...getInputProps()} />
+            <input {...getInputProps(directoryInputProps)} />
+            <input
+              ref={filesOnlyInputRef}
+              type="file"
+              className="hidden"
+              multiple
+              onChange={handleNativeMultiFileInputChange}
+              disabled={disabled || isUploading}
+            />
 
             {/* Background gradient effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary-500/5 via-transparent to-primary-500/5 pointer-events-none" />
@@ -355,9 +405,7 @@ export default function DropZone({
                     <p className="text-lg font-medium text-primary-400">
                       {isDragReject
                         ? t("dropzone.fileTypeNotSupported")
-                        : multiple
-                          ? t("dropzone.dropHereMultiple")
-                          : t("dropzone.dropHereSingle")}
+                        : t("dropzone.dropHereMultiple")}
                     </p>
                   </motion.div>
                 ) : (
@@ -383,13 +431,23 @@ export default function DropZone({
                       </svg>
                     </div>
                     <p className="text-lg font-medium text-dark-200 mb-1.5">
-                      {multiple
-                        ? t("dropzone.dragAndDropMultiple")
-                        : t("dropzone.dragAndDropSingle")}
+                      {t("dropzone.dragAndDropMultiple")}
                     </p>
                     <p className="text-sm text-dark-400 mb-3">
-                      {t("dropzone.orClickToBrowse")}
+                      {t("dropzone.orClickToChooseFolder")}
                     </p>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        filesOnlyInputRef.current?.click();
+                      }}
+                      disabled={disabled || isUploading}
+                      className="mb-3 px-4 py-2 text-sm font-medium rounded-lg border border-dark-600 text-dark-200 hover:border-primary-500 hover:text-primary-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {t("dropzone.chooseFiles")}
+                    </button>
 
                     {/* Format categories */}
                     <div className="flex flex-wrap justify-center gap-2 max-w-lg">
@@ -415,11 +473,12 @@ export default function DropZone({
                       ))}
                     </div>
 
-                    {multiple && (
-                      <p className="mt-4 text-xs text-primary-400">
-                        {t("dropzone.multipleEnabled")}
-                      </p>
-                    )}
+                    <p className="mt-4 text-xs text-primary-400">
+                      {t("dropzone.unifiedUploadHint")}
+                    </p>
+                    <p className="mt-2 text-xs text-dark-500 max-w-md mx-auto">
+                      {t("dropzone.folderHint")}
+                    </p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -440,8 +499,15 @@ export default function DropZone({
             )}
           </motion.div>
         </div>
-      ) : (
-        /* URL Input */
+      </div>
+
+      <div
+        id="dropzone-panel-urls"
+        role="tabpanel"
+        aria-labelledby="dropzone-tab-urls"
+        hidden={inputMode !== "url"}
+      >
+        {/* URL Input */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -464,148 +530,79 @@ export default function DropZone({
             </div>
 
             <h3 className="text-lg font-medium text-dark-200 mb-1.5">
-              {multiple
-                ? t("dropzone.enterUrlTitleMultiple")
-                : t("dropzone.enterUrlTitleSingle")}
+              {t("dropzone.enterUrlTitleMultiple")}
             </h3>
             <p className="text-sm text-dark-400 mb-4">
-              {multiple
-                ? t("dropzone.enterUrlBodyMultiple")
-                : t("dropzone.enterUrlBodySingle")}
+              {t("dropzone.enterUrlBodyMultiple")}
             </p>
 
-            {multiple ? (
-              /* Multiple URLs textarea */
-              <div className="w-full max-w-xl">
-                <textarea
-                  value={urlsInput}
-                  onChange={(e) => setUrlsInput(e.target.value)}
-                  placeholder={t("dropzone.multipleUrlsPlaceholder")}
-                  className="w-full h-40 px-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-dark-100 placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 resize-none font-mono text-sm"
-                  disabled={isUploading}
-                />
-                <div className="flex items-center justify-between mt-3">
-                  <span className="text-xs text-dark-500">
-                    {t("dropzone.urlsEntered", {
-                      count: urlsInput.trim().split("\n").filter(Boolean)
-                        .length,
-                    })}
-                  </span>
-                  <button
-                    onClick={handleUrlsSubmit}
-                    disabled={isUploading || !urlsInput.trim()}
-                    className="px-6 py-2 bg-primary-500 hover:bg-primary-600 disabled:bg-primary-500/50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors flex items-center gap-2"
-                  >
-                    {isUploading ? (
-                      <>
-                        <svg
-                          className="animate-spin w-4 h-4"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                            fill="none"
-                          />
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                          />
-                        </svg>
-                        {t("dropzone.processing")}
-                      </>
-                    ) : (
-                      <>
-                        <svg
-                          className="w-4 h-4"
-                          viewBox="0 0 24 24"
-                          fill="none"
+            <div className="w-full max-w-xl">
+              <textarea
+                value={urlsInput}
+                onChange={(e) => setUrlsInput(e.target.value)}
+                placeholder={t("dropzone.multipleUrlsPlaceholder")}
+                className="w-full h-40 px-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-dark-100 placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 resize-none font-mono text-sm"
+                disabled={isUploading}
+              />
+              <div className="flex items-center justify-between mt-3">
+                <span className="text-xs text-dark-500">
+                  {t("dropzone.urlsEntered", {
+                    count: urlsInput.trim().split("\n").filter(Boolean).length,
+                  })}
+                </span>
+                <button
+                  onClick={handleUrlsSubmit}
+                  disabled={
+                    isUploading ||
+                    !urlsInput.trim() ||
+                    !onUrlsSubmitted
+                  }
+                  className="px-6 py-2 bg-primary-500 hover:bg-primary-600 disabled:bg-primary-500/50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors flex items-center gap-2"
+                >
+                  {isUploading ? (
+                    <>
+                      <svg
+                        className="animate-spin w-4 h-4"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
                           stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                          />
-                        </svg>
-                        {t("dropzone.convertAll")}
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              /* Single URL input */
-              <div className="w-full max-w-xl">
-                <div className="flex gap-2">
-                  <input
-                    type="url"
-                    value={urlInput}
-                    onChange={(e) => setUrlInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder={t("dropzone.singleUrlPlaceholder")}
-                    className="flex-1 px-4 py-3 bg-dark-800 border border-dark-600 rounded-lg text-dark-100 placeholder-dark-500 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500"
-                    disabled={isUploading}
-                  />
-                  <button
-                    onClick={handleUrlSubmit}
-                    disabled={isUploading || !urlInput.trim()}
-                    className="px-6 py-3 bg-primary-500 hover:bg-primary-600 disabled:bg-primary-500/50 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors flex items-center gap-2"
-                  >
-                    {isUploading ? (
-                      <>
-                        <svg
-                          className="animate-spin w-4 h-4"
-                          viewBox="0 0 24 24"
-                        >
-                          <circle
-                            className="opacity-25"
-                            cx="12"
-                            cy="12"
-                            r="10"
-                            stroke="currentColor"
-                            strokeWidth="4"
-                            fill="none"
-                          />
-                          <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-                          />
-                        </svg>
-                        {t("dropzone.loading")}
-                      </>
-                    ) : (
-                      <>
-                        <svg
-                          className="w-4 h-4"
-                          viewBox="0 0 24 24"
+                          strokeWidth="4"
                           fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                          />
-                        </svg>
-                        {t("dropzone.convert")}
-                      </>
-                    )}
-                  </button>
-                </div>
-                <p className="mt-2 text-xs text-dark-500">
-                  {t("dropzone.pressEnter")}
-                </p>
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        />
+                      </svg>
+                      {t("dropzone.processing")}
+                    </>
+                  ) : (
+                    <>
+                      <svg
+                        className="w-4 h-4"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+                        />
+                      </svg>
+                      {t("dropzone.convertAll")}
+                    </>
+                  )}
+                </button>
               </div>
-            )}
+            </div>
 
             {/* Supported formats hint */}
             <div className="mt-6 text-xs text-dark-500">
@@ -613,7 +610,7 @@ export default function DropZone({
             </div>
           </div>
         </motion.div>
-      )}
+      </div>
 
       {/* Error message */}
       <AnimatePresence>
@@ -625,6 +622,19 @@ export default function DropZone({
             className="mt-3 p-3 bg-red-500/10 border border-red-500/30 rounded-lg"
           >
             <p className="text-sm text-red-400">{error}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {infoMessage && !error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="mt-3 p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg"
+          >
+            <p className="text-sm text-primary-300">{infoMessage}</p>
           </motion.div>
         )}
       </AnimatePresence>
