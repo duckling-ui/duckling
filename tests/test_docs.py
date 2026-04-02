@@ -225,27 +225,18 @@ def test_docs_assets_exist():
         assert asset_path.exists(), f"Required asset not found: {asset}"
 
 
-def test_requirements_docs_exists():
-    """Test that requirements-docs.txt exists."""
-    req_path = PROJECT_ROOT / "requirements-docs.txt"
-    assert req_path.exists(), "requirements-docs.txt not found"
-
-
-def test_requirements_docs_content():
-    """Test that requirements-docs.txt contains required packages."""
-    req_path = PROJECT_ROOT / "requirements-docs.txt"
-    content = req_path.read_text()
-
-    required_packages = ["mike", "mkdocs", "mkdocs-material"]
-    for package in required_packages:
-        assert package in content, f"Required package '{package}' not in requirements-docs.txt"
-
-
 def test_backend_requirements_includes_mkdocs_stack():
-    """Single backend/requirements.txt must include MkDocs + mike for in-app docs builds."""
+    """backend/requirements.txt is the only Python requirements file; it must include the MkDocs stack."""
     req_path = PROJECT_ROOT / "backend" / "requirements.txt"
     content = req_path.read_text()
-    for package in ("mike", "mkdocs", "mkdocs-material", "mkdocs-static-i18n"):
+    for package in (
+        "mike",
+        "mkdocs",
+        "mkdocs-material",
+        "mkdocs-minify",
+        "mkdocs-static-i18n",
+        "pymdown-extensions",
+    ):
         assert package in content, f"backend/requirements.txt must include {package} for mkdocs.yml"
 
 
