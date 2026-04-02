@@ -52,7 +52,7 @@ For UI and documentation accessibility expectations (ARIA patterns, MkDocs check
 
 ### Backend Setup
 
-Use a single requirements file for the API and in-app MkDocs builds (`backend/requirements.txt`). Do not use a separate backend docs requirements file.
+Use **only** `backend/requirements.txt` for the API, CI doc builds, and in-app MkDocs builds. It pins **`pymdown-extensions` ≥10.21.2** so `mkdocs build` does not crash on Python 3.13 / current Pygments when code fences have no title.
 
 ```bash
 cd backend

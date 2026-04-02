@@ -44,7 +44,7 @@ cd ..  # Projektstamm (mkdocs.yml liegt hier)
 mkdocs build
 ```
 
-Nur MkDocs ohne vollständiges Backend: `requirements-docs.txt` im Stamm verwenden.
+Die Dokumentation nutzt dieselbe **`backend/requirements.txt`** wie die API (MkDocs-Pakete stehen oben in der Datei).
 
 !!! tip "Auto-Build"
     Ist MkDocs installiert (über `backend/requirements.txt`), kann das Backend die Dokumentation über das Docs-Panel in der UI bauen.

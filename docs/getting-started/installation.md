@@ -44,7 +44,7 @@ cd ..  # project root (where mkdocs.yml lives)
 mkdocs build
 ```
 
-To install **only** MkDocs tooling (no Docling/backend), use the repo root `requirements-docs.txt` instead.
+Documentation builds use the same **`backend/requirements.txt`** as the API (MkDocs plugins are listed at the top of that file).
 
 !!! tip "Auto-Build"
     If MkDocs is installed (via `backend/requirements.txt`), the backend can build the documentation when you use the docs panel in the UI.

@@ -44,7 +44,7 @@ cd ..  # racine du projet (où se trouve mkdocs.yml)
 mkdocs build
 ```
 
-Pour n'installer **que** MkDocs (sans Docling/backend), utilisez `requirements-docs.txt` à la racine.
+La documentation utilise le même fichier **`backend/requirements.txt`** que l'API (la pile MkDocs est en tête de ce fichier).
 
 !!! tip "Compilation automatique"
     Si MkDocs est installé (via `backend/requirements.txt`), le backend peut compiler la documentation depuis le panneau Docs de l'interface.

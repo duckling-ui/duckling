@@ -44,7 +44,7 @@ cd ..  # raíz del proyecto (donde está mkdocs.yml)
 mkdocs build
 ```
 
-Para instalar **solo** MkDocs (sin Docling/backend), usa `requirements-docs.txt` en la raíz.
+La documentación se construye con el mismo **`backend/requirements.txt`** que la API (el stack de MkDocs está al inicio de ese archivo).
 
 !!! tip "Compilación automática"
     Si MkDocs está instalado (vía `backend/requirements.txt`), el backend puede compilar la documentación desde el panel de documentación en la interfaz.
