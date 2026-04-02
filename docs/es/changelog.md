@@ -25,10 +25,12 @@ y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2
 ### Cambiado
 
 - **UX de subida**: Se eliminó el interruptor de lote en la barra; una sola zona admite un archivo, varios, carpetas y URLs multilínea. Ver `CHANGELOG.md` en la raíz del repositorio para más detalles.
+- **Dependencias**: Sin `requirements-docs.txt` en la raíz; usar solo **`backend/requirements.txt`** para MkDocs y la API (ver `CHANGELOG.md` en la raíz).
 
 ### Corregido
 
 - **Pruebas del frontend**: La prueba de navegación por iframe de `DocsPanel` espera a que el listener de `message` se registre tras completar el `fetch` simulado y usa un `waitFor` más largo para que la CI sea estable en runners más lentos.
+- **Docs / CI**: `pymdown-extensions>=10.21.2` evita un fallo de Pygments al construir el sitio (igual que `CHANGELOG.md` en la raíz).
 
 ## [0.0.10a] - 2026-03-23
 

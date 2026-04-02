@@ -25,10 +25,12 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 ### Modifié
 
 - **UX de téléversement** : zone unique sans interrupteur « lot » dans la barre ; voir `CHANGELOG.md` à la racine du dépôt.
+- **Dépendances** : suppression du fichier `requirements-docs.txt` à la racine ; **`backend/requirements.txt`** seul pour MkDocs et l’API (voir `CHANGELOG.md` à la racine).
 
 ### Corrigé
 
 - **Tests frontend** : le test de navigation iframe de `DocsPanel` attend que l’écouteur `message` soit enregistré après la fin du `fetch` mocké et utilise un délai `waitFor` plus long pour garder la CI stable sur des exécuteurs plus lents.
+- **Docs / CI** : `pymdown-extensions>=10.21.2` évite un plantage Pygments lors de la construction du site (comme `CHANGELOG.md` à la racine).
 
 ## [0.0.10a] - 2026-03-23
 

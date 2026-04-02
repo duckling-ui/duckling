@@ -26,11 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Accessibility**: Contributing docs add [Accessibility](contributing/accessibility.md) and MkDocs nav entry; built docs use link underlines, higher-contrast secondary text in `stylesheets/extra.css`, and `javascripts/scrollable-focus.js` for keyboard-scrollable code/tables, search dialog naming, and unique scrollable regions. See root `CHANGELOG.md` for web UI changes.
 - **Upload UX**: Toolbar batch toggle removed; one drop zone supports single file, multiple files, folders, and multi-line URLs. See root `CHANGELOG.md` for full technical notes.
+- **Dependencies**: No separate root docs requirements file; use **`backend/requirements.txt`** for MkDocs and the API (see root `CHANGELOG.md`).
 
 ### Fixed
 
 - **Docs**: Localized home pages add `aria-label` on feature card links (`card-link`). `javascripts/scrollable-focus.js` names the Material search dialog, uniquely labels code toolbars and scrollable code/table regions, and hooks `document$` for instant navigation.
 - **Frontend tests**: `DocsPanel` iframe-navigation test waits for the `message` listener to attach after mocked `fetch` completes and uses a longer `waitFor` timeout so CI stays green on slower runners.
+- **Docs / CI**: `pymdown-extensions>=10.21.2` avoids a Pygments + highlight crash when building the site (same as root `CHANGELOG.md`).
 
 ## [0.0.10a] - 2026-03-23
 
