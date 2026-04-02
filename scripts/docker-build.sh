@@ -127,10 +127,10 @@ if [ "$SKIP_DOCS" = false ]; then
             fi
             cp site/sitemap.xml site/en/sitemap.xml
         fi
-    elif [ -f "requirements-docs.txt" ]; then
-        # Try to install mkdocs and build
+    elif [ -f "backend/requirements.txt" ]; then
+        # Try to install mkdocs (full backend stack) and build
         echo "MkDocs not found, attempting to install..."
-        pip install -q -r requirements-docs.txt 2>/dev/null || {
+        pip install -q -r backend/requirements.txt 2>/dev/null || {
             echo -e "${YELLOW}⚠ Could not install MkDocs. Checking for existing site...${NC}"
         }
 
@@ -145,7 +145,7 @@ if [ "$SKIP_DOCS" = false ]; then
         echo -e "${GREEN}✓ Documentation site ready${NC}"
     else
         echo -e "${YELLOW}⚠ Documentation site not found. Docs may not work in Docker.${NC}"
-        echo "  Run 'mkdocs build' manually or install mkdocs: pip install -r requirements-docs.txt"
+        echo "  Run 'mkdocs build' manually or install deps: pip install -r backend/requirements.txt"
     fi
     echo ""
 fi
