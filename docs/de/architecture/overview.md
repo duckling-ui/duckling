@@ -98,6 +98,8 @@ sequenceDiagram
 | 9 | **Update Job Status & History** - Mark complete, store metadata |
 | 10 | **Results Available** - Ready for download |
 
+**Ordner-Upload (UI):** Der Browser expandiert einen gewählten oder gezogenen Ordner zu Dateien; das Frontend filtert nach Extension und Größe und sendet unterstützte Dateien als `POST /api/convert/batch` mit wiederholten `files`-Teilen. Der Server lehnt nicht unterstützte Teile pro Datei ab; wenn nichts konvertiert werden kann, antwortet die API mit **400**.
+
 ## Job Queue System
 
 To prevent memory exhaustion when processing multiple documents:

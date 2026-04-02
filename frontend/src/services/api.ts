@@ -97,12 +97,21 @@ export const uploadAndConvertBatch = async (
     formData.append('settings', JSON.stringify(settings));
   }
 
-  const response = await api.post('/convert/batch', formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return response.data;
+  try {
+    const response = await api.post('/convert/batch', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (err) {
+    if (axios.isAxiosError(err) && err.response?.status === 400) {
+      const data = err.response.data as { error?: string } | undefined;
+      const msg = data?.error ?? 'No supported files to convert';
+      throw new Error(msg);
+    }
+    throw err;
+  }
 };
 
 // URL conversion

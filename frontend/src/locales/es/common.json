@@ -9,10 +9,10 @@
   "app": {
     "name": "Duckling",
     "tagline": "Conversión de documentos",
-    "poweredBy": "Impulsado por"
+    "poweredBy": "Impulsado por",
+    "doclingLinkAria": "Docling — biblioteca de conversión de documentos de código abierto en GitHub (se abre en una pestaña nueva)"
   },
   "actions": {
-    "batch": "Lote",
     "documentation": "Documentación",
     "history": "Historial",
     "settings": "Configuración",
@@ -23,9 +23,6 @@
     "headline": "Convierte cualquier documento",
     "subheadline": "Transforma PDFs, documentos de Word, presentaciones, imágenes y más en formatos estructurados listos para el procesamiento con IA."
   },
-  "batch": {
-    "toggleTitle": "Alternar modo lote para subir varios archivos"
-  },
   "conversion": {
     "uploadingSingle": "Subiendo archivo...",
     "uploadingMultiple": "Subiendo archivos...",
@@ -33,7 +30,10 @@
     "failedCta": "Intentar de nuevo",
     "processingFilesTitle": "Procesando archivos",
     "overallProgress": "Progreso general",
-    "filesCount": "{{completed}}/{{total}} archivos"
+    "filesCount": "{{completed}}/{{total}} archivos",
+    "batchFileProgressList": "Progreso de conversión por archivo",
+    "batchResultsFileList": "Lista de archivos convertidos",
+    "batchResultsPreview": "Vista previa Markdown"
   },
   "features": {
     "ocr": "OCR",
@@ -58,10 +58,15 @@
     "rebuild": "Regenerar",
     "openNewTab": "Abrir en una pestaña nueva",
     "notBuiltYet": "La documentación aún no se ha generado.",
-    "fullAt": "Documentación completa en"
+    "fullAt": "Documentación completa en",
+    "openDocsSiteLink": "Abrir sitio completo de documentación en pestaña nueva",
+    "openDocsSiteAria": "Abrir el sitio de documentación generado en una pestaña nueva del navegador",
+    "expandAllNav": "Expandir todas las secciones de documentación",
+    "collapseAllNav": "Contraer todas las secciones de documentación"
   },
   "settingsPanel": {
-    "title": "Configuración"
+    "title": "Configuración",
+    "scrollRegion": "Opciones de configuración"
   },
   "settings": {
     "sections": {
@@ -238,10 +243,14 @@
     "noResults": "No se encontraron resultados",
     "noHistory": "Aún no hay historial de conversiones",
     "clearAll": "Borrar todo el historial",
-    "clearConfirm": "¿Seguro que quieres borrar todo el historial?"
+    "clearConfirm": "¿Seguro que quieres borrar todo el historial?",
+    "loadEntry": "Cargar esta conversión",
+    "deleteEntry": "Eliminar del historial",
+    "scrollRegion": "Lista del historial de conversiones"
   },
   "statsPanel": {
     "title": "Estadísticas",
+    "scrollRegion": "Detalles de estadísticas",
     "overview": "Resumen",
     "successRate": "Tasa de éxito",
     "storage": "Almacenamiento",
@@ -297,6 +306,7 @@
   },
   "dropzone": {
     "localFile": "Archivo local",
+    "inputModeLabel": "Origen de la subida",
     "localFiles": "Archivos locales",
     "url": "URL",
     "urls": "URLs",
@@ -307,7 +317,8 @@
     "dragAndDropSingle": "Arrastra y suelta tu documento aquí",
     "dragAndDropMultiple": "Arrastra y suelta tus documentos aquí",
     "orClickToBrowse": "o haz clic para buscar",
-    "multipleEnabled": "✨ Subida múltiple habilitada: selecciona o suelta varios archivos",
+    "orClickToChooseFolder": "o haz clic para elegir una carpeta (sube todos los archivos admitidos que contiene)",
+    "unifiedUploadHint": "Puedes subir un archivo, varios o una carpeta completa de una vez.",
     "categories": {
       "documents": "Documentos",
       "web": "Web",
@@ -332,7 +343,15 @@
     "errorEnterUrl": "Introduce una URL",
     "errorInvalidUrl": "Introduce una URL HTTP o HTTPS válida",
     "errorEnterAtLeastOneUrl": "Introduce al menos una URL",
-    "errorInvalidUrls": "URLs inválidas: {{urls}}"
+    "errorInvalidUrls": "URLs inválidas: {{urls}}",
+    "chooseFiles": "Elegir archivos…",
+    "folderHint": "El clic elige carpeta; «Elegir archivos…» archivos sueltos. Carpetas mixtas suben lo admitido (.docx, .xlsx, etc.); el .doc antiguo se omite.",
+    "filesSkippedSummary": "Omitiendo {{skipped}} archivo(s) no admitidos o demasiado grandes. Convirtiendo {{accepted}} archivo(s).",
+    "noSupportedFiles": "No hay archivos admitidos para convertir en esta selección.",
+    "allSkippedTooLarge": "Todos los archivos superan el tamaño máximo (100MB por archivo).",
+    "pickerSkippedUnsupported": "{{count}} archivo(s) de esta carpeta se omitieron (tipo no permitido en el selector, p. ej. Word .doc antiguo).",
+    "allFilesUnsupportedByPicker": "Ningún archivo de esta selección es un tipo permitido. Por ejemplo se admiten .docx y .xlsx, no el .doc clásico. Convierte .doc a .docx si hace falta.",
+    "tooManyFilesUnexpected": "Se seleccionaron demasiados archivos a la vez. Prueba con un conjunto más pequeño."
   },
   "export": {
     "completeTitle": "¡Conversión completa!",
@@ -354,6 +373,8 @@
     "show": "Mostrar",
     "noPreview": "No hay vista previa disponible para este formato",
     "clickShow": "Haz clic en \"Mostrar\" para ver la vista previa",
+    "previewContentRegion": "Vista previa del documento convertido",
+    "htmlPreviewIframeTitle": "Vista previa HTML",
     "jsonPreviewTruncated": "Vista previa truncada ({{count, number}} caracteres). Usa Descargar para obtener el archivo completo.",
     "extractedImagesTitle": "Imágenes extraídas",
     "noImages": "No se extrajeron imágenes de este documento",
@@ -366,7 +387,13 @@
     "generateChunksNow": "Generar fragmentos ahora",
     "generatingChunks": "Generando...",
     "downloadAllChunks": "Descargar todos los fragmentos (JSON)",
-    "viewFullSize": "Ver tamaño completo"
+    "viewFullSize": "Ver tamaño completo",
+    "scrollExportTabs": "Pestañas de sección de exportación",
+    "scrollFormatList": "Opciones de formato de exportación",
+    "scrollImageGrid": "Imágenes extraídas",
+    "scrollTablesList": "Tablas extraídas",
+    "scrollChunksList": "Lista de fragmentos RAG",
+    "scrollTablePreview": "Vista previa de datos de tabla"
   },
   "progress": {
     "title": "Convirtiendo documento",
@@ -374,7 +401,10 @@
     "analyzing": "Analizando la estructura del documento",
     "extracting": "Extrayendo contenido",
     "generating": "Generando formatos de salida",
-    "finalizing": "Finalizando"
+    "finalizing": "Finalizando",
+    "stepStatusComplete": "Completo",
+    "stepStatusActive": "En curso",
+    "stepStatusPending": "Pendiente"
   }
 }
 

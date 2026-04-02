@@ -377,11 +377,10 @@ export interface BatchConversionResponse {
 // Component Props Types
 
 export interface DropZoneProps {
-  onFileAccepted: (file: File) => void;
-  onFilesAccepted?: (files: File[]) => void;
+  onFilesAccepted: (files: File[]) => void;
+  onUrlsSubmitted?: (urls: string[]) => void;
   isUploading: boolean;
   disabled?: boolean;
-  multiple?: boolean;
 }
 
 export interface ConversionProgressProps {

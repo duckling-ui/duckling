@@ -9,10 +9,10 @@
   "app": {
     "name": "Duckling",
     "tagline": "Document Conversion",
-    "poweredBy": "Powered by"
+    "poweredBy": "Powered by",
+    "doclingLinkAria": "Docling — open-source document conversion library on GitHub (opens in a new tab)"
   },
   "actions": {
-    "batch": "Batch",
     "documentation": "Documentation",
     "history": "History",
     "settings": "Settings",
@@ -23,9 +23,6 @@
     "headline": "Convert Any Document",
     "subheadline": "Transform PDFs, Word documents, presentations, images, and more into structured formats ready for AI processing."
   },
-  "batch": {
-    "toggleTitle": "Toggle batch mode for multiple file uploads"
-  },
   "conversion": {
     "uploadingSingle": "Uploading file...",
     "uploadingMultiple": "Uploading files...",
@@ -33,7 +30,10 @@
     "failedCta": "Try Again",
     "processingFilesTitle": "Processing Files",
     "overallProgress": "Overall Progress",
-    "filesCount": "{{completed}}/{{total}} files"
+    "filesCount": "{{completed}}/{{total}} files",
+    "batchFileProgressList": "Per-file conversion progress",
+    "batchResultsFileList": "Converted files list",
+    "batchResultsPreview": "Markdown preview"
   },
   "features": {
     "ocr": "OCR",
@@ -58,10 +58,15 @@
     "rebuild": "Rebuild",
     "openNewTab": "Open in new tab",
     "notBuiltYet": "Documentation not built yet.",
-    "fullAt": "Full documentation at"
+    "fullAt": "Full documentation at",
+    "openDocsSiteLink": "Open full documentation site in new tab",
+    "openDocsSiteAria": "Open built documentation site in a new browser tab",
+    "expandAllNav": "Expand all documentation sections",
+    "collapseAllNav": "Collapse all documentation sections"
   },
   "settingsPanel": {
-    "title": "Settings"
+    "title": "Settings",
+    "scrollRegion": "Settings options"
   },
   "settings": {
     "sections": {
@@ -238,10 +243,14 @@
     "noResults": "No results found",
     "noHistory": "No conversion history yet",
     "clearAll": "Clear All History",
-    "clearConfirm": "Are you sure you want to clear all history?"
+    "clearConfirm": "Are you sure you want to clear all history?",
+    "loadEntry": "Load this conversion",
+    "deleteEntry": "Delete from history",
+    "scrollRegion": "Conversion history list"
   },
   "statsPanel": {
     "title": "Statistics",
+    "scrollRegion": "Statistics details",
     "overview": "Overview",
     "successRate": "Success rate",
     "storage": "Storage",
@@ -297,6 +306,7 @@
   },
   "dropzone": {
     "localFile": "Local File",
+    "inputModeLabel": "Upload source",
     "localFiles": "Local Files",
     "url": "URL",
     "urls": "URLs",
@@ -307,7 +317,8 @@
     "dragAndDropSingle": "Drag and drop your document here",
     "dragAndDropMultiple": "Drag and drop your documents here",
     "orClickToBrowse": "or click to browse",
-    "multipleEnabled": "✨ Multiple file upload enabled - select or drop multiple files",
+    "orClickToChooseFolder": "or click to choose a folder (uploads all supported files inside it)",
+    "unifiedUploadHint": "You can upload one file, many files, or an entire folder at once.",
     "categories": {
       "documents": "Documents",
       "web": "Web",
@@ -332,7 +343,15 @@
     "errorEnterUrl": "Please enter a URL",
     "errorInvalidUrl": "Please enter a valid HTTP or HTTPS URL",
     "errorEnterAtLeastOneUrl": "Please enter at least one URL",
-    "errorInvalidUrls": "Invalid URLs: {{urls}}"
+    "errorInvalidUrls": "Invalid URLs: {{urls}}",
+    "chooseFiles": "Choose files…",
+    "folderHint": "The main click targets a folder. “Choose files…” picks loose files. Mixed folders still upload supported types (.docx, .xlsx, etc.); legacy .doc is skipped. Drag-and-drop works too.",
+    "filesSkippedSummary": "Skipping {{skipped}} unsupported or oversize file(s). Converting {{accepted}} file(s).",
+    "noSupportedFiles": "No supported files to convert in this selection.",
+    "allSkippedTooLarge": "All selected files exceed the maximum size (100MB per file).",
+    "pickerSkippedUnsupported": "{{count}} file(s) in this folder were skipped (not an allowed type in the file picker, e.g. legacy Word .doc).",
+    "allFilesUnsupportedByPicker": "No files in this selection are allowed types. Supported examples include .docx and .xlsx—not legacy .doc. Convert .doc files to .docx if needed.",
+    "tooManyFilesUnexpected": "Too many files were selected at once. Try a smaller set."
   },
   "export": {
     "completeTitle": "Conversion Complete!",
@@ -354,6 +373,8 @@
     "show": "Show",
     "noPreview": "No preview available for this format",
     "clickShow": "Click \"Show\" to view preview",
+    "previewContentRegion": "Converted document preview",
+    "htmlPreviewIframeTitle": "HTML preview",
     "jsonPreviewTruncated": "Preview truncated ({{count, number}} chars). Use Download to get the full file.",
     "extractedImagesTitle": "Extracted Images",
     "noImages": "No images extracted from this document",
@@ -366,7 +387,13 @@
     "generateChunksNow": "Generate Chunks Now",
     "generatingChunks": "Generating...",
     "downloadAllChunks": "Download All Chunks (JSON)",
-    "viewFullSize": "View full size"
+    "viewFullSize": "View full size",
+    "scrollExportTabs": "Export section tabs",
+    "scrollFormatList": "Export format choices",
+    "scrollImageGrid": "Extracted images",
+    "scrollTablesList": "Extracted tables",
+    "scrollChunksList": "RAG chunks list",
+    "scrollTablePreview": "Table data preview"
   },
   "progress": {
     "title": "Converting Document",
@@ -374,7 +401,10 @@
     "analyzing": "Analyzing document structure",
     "extracting": "Extracting content",
     "generating": "Generating output formats",
-    "finalizing": "Finalizing"
+    "finalizing": "Finalizing",
+    "stepStatusComplete": "Complete",
+    "stepStatusActive": "In progress",
+    "stepStatusPending": "Pending"
   }
 }
 

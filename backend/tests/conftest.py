@@ -38,6 +38,22 @@ os.environ["DUCKLING_DATABASE_URL"] = "sqlite:///:memory:"
 from config import TestingConfig
 from duckling import create_app
 from models.database import init_db
+from services.converter import converter_service
+
+
+def _noop_start_conversion(job, on_complete=None):
+    """Do not queue Docling work during tests (avoids worker threads + native code segfaults)."""
+    return None
+
+
+@pytest.fixture(autouse=True)
+def _stub_converter_start_conversion(monkeypatch):
+    """Real conversions spawn threads that race pytest and can segfault; API tests only need HTTP behavior."""
+    monkeypatch.setattr(
+        converter_service,
+        "start_conversion",
+        _noop_start_conversion,
+    )
 
 
 @pytest.fixture(scope="session")

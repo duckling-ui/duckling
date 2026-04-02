@@ -17,7 +17,7 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 
 - **Drag-and-Drop Upload**: Simply drag your documents onto the interface
 - **URL-Based Conversion**: Convert documents directly from URLs with automatic image extraction for HTML pages
-- **Batch Processing**: Convert multiple files or URLs at once
+- **Multi-file and folder upload**: Convert multiple files or URLs at once from one drop zone—choose a folder, use **Choose files…**, or drag and drop; unsupported extensions are skipped client-side, and the API rejects a batch if nothing can be converted
 - **Multi-Format Support**: Convert PDFs, Word docs, PowerPoints, Excel files, HTML, Markdown, images, and more
 - **Multiple Export Formats**: Export to Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks, or plain text
 - **Image & Table Extraction**: Extract embedded images and tables with CSV export
@@ -30,6 +30,7 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 - **Content Deduplication**: Same file with identical settings reuses stored output (instant cache hits)
 - **Highly Configurable**: Customize OCR, tables, images, performance, and chunking settings
 - **Beautiful Dark Theme**: Easy on the eyes with a modern, professional design
+- **Accessibility**: Keyboard-friendly slide-overs named with `aria-label`, focus trap and restore, labeled controls and progress, focusable scroll regions for long content, link underlines (not color alone), and docs styling/scripts described in [Accessibility](docs/contributing/accessibility.md)
 
 ## Supported Input Formats
 

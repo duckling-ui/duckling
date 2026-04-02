@@ -294,6 +294,7 @@ nav:
       - Development Setup: contributing/development.md
       - Code Style: contributing/code-style.md
       - Testing: contributing/testing.md
+      - Accessibility: contributing/accessibility.md
       - Code of Conduct: contributing/code-of-conduct.md
   - Changelog: changelog.md
 
@@ -301,7 +302,7 @@ nav:
 extra:
   version:
     provider: mike
-    default: 0.0.10a
+    default: 0.0.11
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/davidgs/duckling
@@ -329,4 +330,5 @@ extra_javascript:
   - javascripts/mathjax.js
   - javascripts/language-selector.js
   - javascripts/section-footer-nav.js
+  - javascripts/scrollable-focus.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js

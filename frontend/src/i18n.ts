@@ -69,7 +69,22 @@ void i18n
     },
   });
 
+function applyDocumentLanguage(lng: string) {
+  if (typeof document === 'undefined') return;
+  const map: Record<string, string> = {
+    en: 'en',
+    es: 'es',
+    fr: 'fr',
+    de: 'de',
+  };
+  const tag = map[lng] ?? lng.split('-')[0] ?? 'en';
+  document.documentElement.lang = tag;
+}
+
+applyDocumentLanguage(i18n.language);
+
 i18n.on('languageChanged', (lng) => {
+  applyDocumentLanguage(lng);
   try {
     const storage = typeof window !== 'undefined' ? window.localStorage : undefined;
     if (

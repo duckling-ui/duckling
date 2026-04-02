@@ -126,6 +126,45 @@ class TestConvertEndpoint:
         response = client.get("/api/convert/nonexistent-id/status")
         assert response.status_code == 404
 
+    def test_convert_batch_mixed_valid_and_invalid(self, client, sample_markdown_content):
+        """Batch with at least one supported file returns 202; unsupported entries are rejected."""
+        data = {
+            "files": [
+                (io.BytesIO(sample_markdown_content), "ok.md"),
+                (io.BytesIO(b"x"), "bad.exe"),
+            ],
+        }
+        response = client.post(
+            "/api/convert/batch",
+            data=data,
+            content_type="multipart/form-data",
+        )
+        assert response.status_code == 202
+        result = json.loads(response.data)
+        assert len(result["jobs"]) == 2
+        by_name = {j["filename"]: j["status"] for j in result["jobs"]}
+        assert by_name["ok.md"] == "processing"
+        assert by_name["bad.exe"] == "rejected"
+
+    def test_convert_batch_all_rejected_returns_400(self, client):
+        """When every file is unsupported, API returns 400 with job details."""
+        data = {
+            "files": [
+                (io.BytesIO(b"x"), "a.exe"),
+                (io.BytesIO(b"y"), "b.xyz"),
+            ],
+        }
+        response = client.post(
+            "/api/convert/batch",
+            data=data,
+            content_type="multipart/form-data",
+        )
+        assert response.status_code == 400
+        result = json.loads(response.data)
+        assert result.get("error")
+        assert len(result.get("jobs", [])) == 2
+        assert all(j["status"] == "rejected" for j in result["jobs"])
+
 
 class TestSettingsEndpoint:
     """Tests for settings endpoints."""

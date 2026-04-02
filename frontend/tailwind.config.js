@@ -49,8 +49,8 @@ export default {
           100: '#f1f5f9',
           200: '#e2e8f0',
           300: '#cbd5e1',
-          400: '#94a3b8',
-          500: '#64748b',
+          400: '#aab6c4',
+          500: '#8b98ae',
           600: '#475569',
           700: '#334155',
           800: '#1e293b',
@@ -102,9 +102,11 @@ export default {
               marginTop: '2.5rem',
             },
             'a': {
-              textDecoration: 'none',
+              textDecoration: 'underline',
+              textUnderlineOffset: '0.15em',
+              textDecorationThickness: '1px',
               '&:hover': {
-                textDecoration: 'underline',
+                textDecorationThickness: '2px',
               },
             },
             'code': {

@@ -32,18 +32,18 @@ The main upload area where you drag und drop documents for conversion.
       <figcaption>Fortschrittsanzeige beim Hochladen</figcaption>
     </figure>
 
-=== "Stapelmodus"
+=== "Mehrere Dateien"
 
     <figure markdown="span">
-      ![Stapelmodus](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-      <figcaption>Multiple files in batch mode</figcaption>
+      ![Mehrere Dateien](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+      <figcaption>Mehrere Dateien zum Upload ausgewählt</figcaption>
     </figure>
 
 ### Header
 
 <figure markdown="span">
   ![Header](../assets/screenshots/ui/header.png){ loading=lazy }
-  <figcaption>Application header with batch toggle und settings button</figcaption>
+  <figcaption>Kopfzeile mit Einstellungen und Sprachwahl</figcaption>
 </figure>
 
 ### History Panel

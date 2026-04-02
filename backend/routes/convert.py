@@ -943,10 +943,20 @@ def upload_and_convert_batch():
             "status": "processing"
         })
 
+    processing_jobs = [j for j in jobs if j.get("status") == "processing"]
+    if not processing_jobs:
+        if not jobs:
+            raise BadRequest("No valid files to convert")
+        return jsonify({
+            "error": "No supported files to convert",
+            "jobs": jobs,
+            "total": len(jobs),
+        }), 400
+
     return jsonify({
         "jobs": jobs,
         "total": len(jobs),
-        "message": f"Started {len([j for j in jobs if j.get('status') == 'processing'])} conversions"
+        "message": f"Started {len(processing_jobs)} conversions"
     }), 202
 
 

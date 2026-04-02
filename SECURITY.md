@@ -4,6 +4,7 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 0.0.11  | :white_check_mark:                |
 | 0.0.10a  | :white_check_mark:                |
 | 0.0.9  | :white_check_mark:                |
 | 0.0.8  | :white_check_mark:                |
@@ -18,6 +19,12 @@
 
 Last audit: March 3, 2026
 
+### Product surface notes
+
+- **2026-03-30**: The web UI upload flow was unified (removed a separate toolbar control for “batch” uploads). Conversion requests still use the same REST endpoints and server-side type/size checks; this was a client presentation change.
+- **2026-03-30**: Accessibility updates: in-app dialogs use explicit accessible names; scrollable areas are keyboard-focusable where needed; export HTML preview remains sandboxed/trusted-content as documented. Published docs gain underlined content links and focusable code/table scroll wrappers via `docs/javascripts/scrollable-focus.js`.
+- **2026-03-30**: Export HTML preview and embedded docs iframe use labeled regions / titles for assistive tech; preview content remains trusted, sanitized server-side output only (see XSS row below).
+
 ### Vulnerability Status
 
 | Category | Status | Notes |
@@ -29,6 +36,7 @@ Last audit: March 3, 2026
 | SQL injection | ✅ Protected | Using SQLAlchemy ORM with parameterized queries |
 | XSS (Cross-Site Scripting) | ⚠️ Mitigated | Uses dangerouslySetInnerHTML for trusted docs only |
 | CORS | ✅ Configured | Restricted to localhost origins in development |
+| Batch / folder uploads | ✅ Validated | Same extension and size rules as single uploads; unsupported parts are rejected; empty batches return 400. Whole-request limit remains `MAX_CONTENT_LENGTH`—very large folders may require multiple requests. |
 
 ### Frontend Security Updates (January 2026)
 

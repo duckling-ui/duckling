@@ -5,13 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-**Latest release:** [0.0.10a](https://github.com/davidgs/duckling/releases/tag/v0.0.10a) (2026-03-23)
+**Latest release:** [0.0.11](https://github.com/davidgs/duckling/releases/tag/v0.0.11) (2026-03-30)
 
 ## [Unreleased]
-
-### Fixed
-
-- **Frontend tests**: `DocsPanel` iframe-navigation test waits for the `message` listener effect to attach after mocked `fetch` completes (`act` + `setTimeout(0)`) and uses a longer `waitFor` timeout so CI does not dispatch before the handler is registered (fixes missing "Installation" button assertion on slower runners).
 
 ### Planned
 
@@ -23,6 +19,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dark/light theme toggle
 - Keyboard shortcuts
 - Accessibility improvements (WCAG 2.1)
+
+## [0.0.11] - 2026-03-30
+
+### Fixed
+
+- **Docs accessibility (MkDocs Material)**: `scrollable-focus.js` names the **search overlay** dialog (`.md-search[role="dialog"]`), labels each **code copy toolbar** `nav.md-code__nav` uniquely, and gives each scrollable **code/table** `role="region"` a **distinct** `aria-label` (plus `document$` re-run after instant navigation). Homepage feature cards (`card-link`) include translated **`aria-label`** on anchors in all locales.
+
+### Changed
+
+- **Accessibility**: Settings toggles expose `role="switch"` and labels; selects/sliders/number fields use `<label>` + `aria-describedby`; header and panel icon controls have `aria-label`; slide-overs (`SettingsPanel`, `HistoryPanel`, `StatsPanel`, `DocsPanel`) use `role="dialog"` with explicit `aria-label`, focus trap, Escape to close, and focus restore via [`useSlideOver`](frontend/src/hooks/useSlideOver.tsx); `ConversionProgress` and in-app `BatchProgress` use `role="progressbar"` and live status text; `DropZone` uses a tab pattern for Local files vs URLs; `document.documentElement.lang` follows the active locale; reduced-motion users get shorter/no spin animations; export preview and docs iframe have clearer accessible names; scrollable panels use [`ScrollableRegion`](frontend/src/components/ScrollableRegion.tsx) (`tabIndex={0}`) for keyboard scrolling; footer / prose links use underlines (not color alone); slightly higher-contrast `dark` text tokens in Tailwind; MkDocs [`extra.css`](docs/stylesheets/extra.css) improves secondary-text contrast, underlines content links, and [`scrollable-focus.js`](docs/javascripts/scrollable-focus.js) makes code/table scroll areas focusable (`i18n`, `index.css`, `mkdocs.yml` Contributing nav, [docs/contributing/accessibility.md](docs/contributing/accessibility.md)).
+- **Upload UX**: The toolbar **Batch** toggle is removed. The drop zone always supports one file, multiple files, or a folder (same filtering and `/api/convert` vs `/api/convert/batch` behavior as before). The uploading subtitle uses hook state (`isUploadingMultipleFiles`). During processing, `ConversionProgress` is shown for a single active job (including a one-file batch) and `BatchProgress` only when more than one job is running. The URL tab is always a multi-line field; one non-empty line uses the single-URL API and multiple lines use batch URLs (`App`, `DropZone`, `useConversion`, i18n).
+
+### Added
+
+- **Folder upload (batch mode)**: Choose a folder or drag a directory onto the drop zone; files are filtered to supported extensions (and 100MB per-file limit) before calling `POST /api/convert/batch`. Plain text uploads align with the backend by allowing the `txt` extension in `Config.ALLOWED_EXTENSIONS`.
+- **Batch API**: Returns **400** with an `error` and per-file `jobs` when every uploaded part is unsupported, so clients do not receive 202 with zero active conversions. Documented multipart body size limits for large folders.
+
+### Fixed
+
+- **Drop zone (batch)**: If a folder contains both allowed and disallowed types (e.g. `.docx` and legacy `.doc`), the app now uploads the allowed files and reports how many were skipped, instead of failing the whole selection with the picker’s long MIME list (`DropZone`, i18n).
+- **Drop zone (batch)**: The main file input now uses `webkitdirectory` so macOS/Windows folder pickers **select the folder for upload** instead of drilling into it; **Choose files…** opens a normal multi-file picker for loose files (`DropZone`, i18n).
+- **Drop zone**: If the library reports an unexpected “too many files” rejection with no accepted files, the UI shows a generic message instead of referring to a batch toggle (`DropZone`, i18n).
+- **Backend tests**: Autouse pytest fixture stubs `converter_service.start_conversion` so `/api/convert` and `/api/convert/batch` tests do not queue real Docling work on background threads (avoids segmentation faults from native conversion code and threaded DB use after the HTTP assertion returns).
+- **Frontend tests**: `DocsPanel` iframe-navigation test waits for the `message` listener effect to attach after mocked `fetch` completes (`act` + `setTimeout(0)`) and uses a longer `waitFor` timeout so CI does not dispatch before the handler is registered (fixes missing "Installation" button assertion on slower runners).
 
 ## [0.0.10a] - 2026-03-23
 
@@ -534,9 +554,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maximum file size limits (100MB default)
 - Secure filename handling
 
-[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.10a...HEAD
+[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.11...HEAD
+[0.0.11]: https://github.com/davidgs/duckling/compare/v0.0.10a...v0.0.11
 [0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.10...v0.0.10a
-[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
+[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7

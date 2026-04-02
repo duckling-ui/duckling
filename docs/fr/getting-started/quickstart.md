@@ -122,17 +122,16 @@ Cliquez sur :material-cog: **Paramètres** bouton pour configurer :
 | Extraire | `true` | Extraire les images intégrées |
 | Échelle | `1.0` | Échelle de sortie des images |
 
-## Traitement par lots
+## Plusieurs fichiers à la fois
 
 Pour convertir plusieurs fichiers à la fois :
 
-1. Activer **Mode lot** dans l'en-tête
-2. Glissez plusieurs fichiers dans la zone de dépôt
-3. Tous les fichiers seront traités simultanément
+1. Glissez plusieurs fichiers dans la zone, choisissez un dossier ou utilisez **Choisir des fichiers…**
+2. Les fichiers sont traités via la file de tâches (voir Fonctionnalités pour les limites de parallélisme)
 
 <figure markdown="span">
-  ![Mode lot](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Mode lot avec plusieurs fichiers</figcaption>
+  ![Plusieurs fichiers](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+  <figcaption>Plusieurs fichiers sélectionnés pour le téléversement</figcaption>
 </figure>
 
 !!! tip "Performances"

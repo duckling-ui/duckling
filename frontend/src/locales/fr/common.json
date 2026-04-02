@@ -9,10 +9,10 @@
   "app": {
     "name": "Duckling",
     "tagline": "Conversion de documents",
-    "poweredBy": "Propulsé par"
+    "poweredBy": "Propulsé par",
+    "doclingLinkAria": "Docling — bibliothèque open source de conversion de documents sur GitHub (s’ouvre dans un nouvel onglet)"
   },
   "actions": {
-    "batch": "Lot",
     "documentation": "Documentation",
     "history": "Historique",
     "settings": "Paramètres",
@@ -23,9 +23,6 @@
     "headline": "Convertissez n'importe quel document",
     "subheadline": "Transformez des PDF, documents Word, présentations, images et plus en formats structurés prêts pour l'IA."
   },
-  "batch": {
-    "toggleTitle": "Activer le mode lot pour téléverser plusieurs fichiers"
-  },
   "conversion": {
     "uploadingSingle": "Téléversement du fichier…",
     "uploadingMultiple": "Téléversement des fichiers…",
@@ -33,7 +30,10 @@
     "failedCta": "Réessayer",
     "processingFilesTitle": "Traitement des fichiers",
     "overallProgress": "Progression globale",
-    "filesCount": "{{completed}}/{{total}} fichiers"
+    "filesCount": "{{completed}}/{{total}} fichiers",
+    "batchFileProgressList": "Progression de conversion par fichier",
+    "batchResultsFileList": "Liste des fichiers convertis",
+    "batchResultsPreview": "Aperçu Markdown"
   },
   "features": {
     "ocr": "OCR",
@@ -58,10 +58,15 @@
     "rebuild": "Reconstruire",
     "openNewTab": "Ouvrir dans un nouvel onglet",
     "notBuiltYet": "La documentation n'est pas encore générée.",
-    "fullAt": "Documentation complète sur"
+    "fullAt": "Documentation complète sur",
+    "openDocsSiteLink": "Ouvrir le site de documentation complet dans un nouvel onglet",
+    "openDocsSiteAria": "Ouvrir le site de documentation généré dans un nouvel onglet du navigateur",
+    "expandAllNav": "Développer toutes les sections de documentation",
+    "collapseAllNav": "Réduire toutes les sections de documentation"
   },
   "settingsPanel": {
-    "title": "Paramètres"
+    "title": "Paramètres",
+    "scrollRegion": "Options des paramètres"
   },
   "settings": {
     "sections": {
@@ -238,10 +243,14 @@
     "noResults": "Aucun résultat",
     "noHistory": "Aucun historique pour le moment",
     "clearAll": "Effacer tout l'historique",
-    "clearConfirm": "Voulez-vous vraiment effacer tout l'historique ?"
+    "clearConfirm": "Voulez-vous vraiment effacer tout l'historique ?",
+    "loadEntry": "Charger cette conversion",
+    "deleteEntry": "Supprimer de l'historique",
+    "scrollRegion": "Liste de l'historique des conversions"
   },
   "statsPanel": {
     "title": "Statistiques",
+    "scrollRegion": "Détails des statistiques",
     "overview": "Aperçu",
     "successRate": "Taux de réussite",
     "storage": "Stockage",
@@ -297,6 +306,7 @@
   },
   "dropzone": {
     "localFile": "Fichier local",
+    "inputModeLabel": "Source du téléversement",
     "localFiles": "Fichiers locaux",
     "url": "URL",
     "urls": "URLs",
@@ -307,7 +317,8 @@
     "dragAndDropSingle": "Glissez-déposez votre document ici",
     "dragAndDropMultiple": "Glissez-déposez vos documents ici",
     "orClickToBrowse": "ou cliquez pour parcourir",
-    "multipleEnabled": "✨ Téléversement multiple activé - sélectionnez ou déposez plusieurs fichiers",
+    "orClickToChooseFolder": "ou cliquez pour choisir un dossier (envoie tous les fichiers pris en charge qu’il contient)",
+    "unifiedUploadHint": "Vous pouvez téléverser un fichier, plusieurs fichiers ou un dossier entier en une fois.",
     "categories": {
       "documents": "Documents",
       "web": "Web",
@@ -332,7 +343,15 @@
     "errorEnterUrl": "Veuillez entrer une URL",
     "errorInvalidUrl": "Veuillez entrer une URL HTTP ou HTTPS valide",
     "errorEnterAtLeastOneUrl": "Veuillez entrer au moins une URL",
-    "errorInvalidUrls": "URLs invalides : {{urls}}"
+    "errorInvalidUrls": "URLs invalides : {{urls}}",
+    "chooseFiles": "Choisir des fichiers…",
+    "folderHint": "Le clic choisit un dossier ; « Choisir des fichiers… » pour des fichiers isolés. Les dossiers mixtes envoient les types pris en charge (.docx, .xlsx, etc.) ; l’ancien .doc est ignoré.",
+    "filesSkippedSummary": "Ignorer {{skipped}} fichier(s) non pris en charge ou trop volumineux. Conversion de {{accepted}} fichier(s).",
+    "noSupportedFiles": "Aucun fichier pris en charge à convertir dans cette sélection.",
+    "allSkippedTooLarge": "Tous les fichiers dépassent la taille maximale (100 Mo par fichier).",
+    "pickerSkippedUnsupported": "{{count}} fichier(s) de ce dossier ont été ignorés (type non autorisé par le sélecteur, ex. ancien Word .doc).",
+    "allFilesUnsupportedByPicker": "Aucun fichier de cette sélection n’est d’un type autorisé. Par ex. .docx et .xlsx sont pris en charge, pas l’ancien .doc. Convertissez le .doc en .docx si besoin.",
+    "tooManyFilesUnexpected": "Trop de fichiers ont été sélectionnés en une fois. Essayez un ensemble plus petit."
   },
   "export": {
     "completeTitle": "Conversion terminée !",
@@ -354,6 +373,8 @@
     "show": "Afficher",
     "noPreview": "Aucun aperçu disponible pour ce format",
     "clickShow": "Cliquez sur \"Afficher\" pour voir l'aperçu",
+    "previewContentRegion": "Aperçu du document converti",
+    "htmlPreviewIframeTitle": "Aperçu HTML",
     "jsonPreviewTruncated": "Aperçu tronqué ({{count, number}} caractères). Utilisez Télécharger pour obtenir le fichier complet.",
     "extractedImagesTitle": "Images extraites",
     "noImages": "Aucune image extraite de ce document",
@@ -366,7 +387,13 @@
     "generateChunksNow": "Générer les segments maintenant",
     "generatingChunks": "Génération...",
     "downloadAllChunks": "Télécharger tous les segments (JSON)",
-    "viewFullSize": "Voir en taille réelle"
+    "viewFullSize": "Voir en taille réelle",
+    "scrollExportTabs": "Onglets de section d’export",
+    "scrollFormatList": "Choix de format d’export",
+    "scrollImageGrid": "Images extraites",
+    "scrollTablesList": "Tableaux extraits",
+    "scrollChunksList": "Liste des segments RAG",
+    "scrollTablePreview": "Aperçu des données du tableau"
   },
   "progress": {
     "title": "Conversion du document",
@@ -374,6 +401,9 @@
     "analyzing": "Analyse de la structure du document",
     "extracting": "Extraction du contenu",
     "generating": "Génération des formats de sortie",
-    "finalizing": "Finalisation"
+    "finalizing": "Finalisation",
+    "stepStatusComplete": "Terminé",
+    "stepStatusActive": "En cours",
+    "stepStatusPending": "En attente"
   }
 }

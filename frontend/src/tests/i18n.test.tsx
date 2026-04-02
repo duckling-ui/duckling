@@ -48,6 +48,12 @@ describe('i18n', () => {
     });
 
     expect(screen.getByText('Documentación')).toBeInTheDocument();
+    expect(document.documentElement.lang).toBe('es');
+
+    await act(async () => {
+      await i18n.changeLanguage('en');
+    });
+    expect(document.documentElement.lang).toBe('en');
   });
 });
 

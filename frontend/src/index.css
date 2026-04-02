@@ -52,6 +52,17 @@
   color: inherit;
 }
 
+/* Inline links: not identifiable by color alone (WCAG 1.4.1) */
+footer a {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-color: rgba(45, 212, 191, 0.9);
+}
+
+footer a:hover {
+  text-decoration-thickness: 2px;
+}
+
 /* Base styles */
 body {
   @apply bg-dark-950 text-dark-100 font-sans antialiased;
@@ -69,6 +80,13 @@ pre, code {
 /* Focus styles */
 *:focus-visible {
   @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-dark-900;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-spin,
+  .animate-spin-slow {
+    animation: none !important;
+  }
 }
 
 /* Custom utilities */

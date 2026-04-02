@@ -38,8 +38,8 @@ Duckling provides a comprehensive interface for document conversion with advance
 
 ## Quick Tips
 
-!!! tip "Batch Processing"
-    Toggle batch mode to convert multiple files simultaneously. The system processes up to 2 files in parallel to balance speed and memory usage.
+!!! tip "Multiple files"
+    Drag in several files, pick a folder, or use **Choose files…**—the same drop zone handles single and multi-file uploads. The job queue processes up to 2 conversions in parallel to balance speed and memory.
 
 !!! tip "OCR Selection"
     - **EasyOCR**: Best for multi-language documents with GPU support

@@ -33,6 +33,7 @@ import {
   downloadExport,
   getExportContent,
 } from '../services/api';
+import { filterSupportedFiles } from '../utils/fileFilter';
 import type {
   ConversionJob,
   ConversionStatus,
@@ -111,6 +112,19 @@ export function useConversion(options: UseConversionOptions = {}) {
       return uploadAndConvertBatch(files, settings);
     },
     onSuccess: (data) => {
+      const processingJobs = data.jobs.filter((j) => j.status === 'processing');
+      if (processingJobs.length === 0) {
+        const allRejected =
+          data.jobs.length > 0 && data.jobs.every((j) => j.status === 'rejected');
+        const msg = allRejected
+          ? 'No supported files to convert.'
+          : 'No conversions were started.';
+        setError(msg);
+        setState('error');
+        onError?.(msg);
+        return;
+      }
+
       // Initialize batch job statuses
       const initialStatuses: BatchJobStatus[] = data.jobs.map((job) => ({
         job,
@@ -120,9 +134,9 @@ export function useConversion(options: UseConversionOptions = {}) {
       }));
 
       setBatchJobs(initialStatuses);
-      setBatchProgress({ completed: 0, total: data.jobs.filter(j => j.status !== 'rejected').length });
+      setBatchProgress({ completed: 0, total: processingJobs.length });
       setState('processing');
-      setStatusMessage(`Processing ${data.jobs.length} files...`);
+      setStatusMessage(`Processing ${processingJobs.length} files...`);
 
       // Start polling for each job
       startBatchPolling(initialStatuses);
@@ -328,9 +342,23 @@ export function useConversion(options: UseConversionOptions = {}) {
     (files: File[], settings?: Partial<ConversionSettings>) => {
       if (files.length === 0) return;
 
-      if (files.length === 1) {
-        // Single file, use regular upload
-        uploadFile(files[0], undefined, settings);
+      const { accepted, skipped } = filterSupportedFiles(files);
+
+      if (accepted.length === 0) {
+        const onlyLarge =
+          skipped.length > 0 &&
+          skipped.every((s) => s.reason === 'too_large');
+        const msg = onlyLarge
+          ? 'All selected files exceed the maximum size (100MB per file).'
+          : 'No supported files to convert.';
+        setError(msg);
+        setState('error');
+        onError?.(msg);
+        return;
+      }
+
+      if (accepted.length === 1 && files.length === 1) {
+        uploadFile(accepted[0], undefined, settings);
         return;
       }
 
@@ -339,10 +367,10 @@ export function useConversion(options: UseConversionOptions = {}) {
       setError(null);
       setResult(null);
       setBatchJobs([]);
-      setStatusMessage(`Uploading ${files.length} files...`);
-      batchUploadMutation.mutate({ files, settings });
+      setStatusMessage(`Uploading ${accepted.length} files...`);
+      batchUploadMutation.mutate({ files: accepted, settings });
     },
-    [uploadFile, batchUploadMutation]
+    [uploadFile, batchUploadMutation, onError]
   );
 
   // Download export
@@ -438,6 +466,8 @@ export function useConversion(options: UseConversionOptions = {}) {
     progress,
     statusMessage,
     isUploading: uploadMutation.isPending || batchUploadMutation.isPending,
+    /** True while POST /convert/batch is in flight (false during single-file POST /convert). */
+    isUploadingMultipleFiles: batchUploadMutation.isPending,
     uploadFile,
     uploadFiles,
     downloadFormat,

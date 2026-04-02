@@ -81,7 +81,7 @@ class Config:
         "pdf", "docx", "pptx", "xlsx", "html", "htm",
         "md", "markdown", "MD", "csv", "png", "jpg", "jpeg",
         "tiff", "tif", "gif", "webp", "bmp",
-        "wav", "mp3", "vtt", "xml", "json", "asciidoc", "adoc"
+        "wav", "mp3", "vtt", "xml", "json", "txt", "asciidoc", "adoc"
     }
 
     # Database

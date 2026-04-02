@@ -32,18 +32,18 @@ The main upload area where you drag et drop documents for conversion.
       <figcaption>Indicateur de progression du téléchargement</figcaption>
     </figure>
 
-=== "Mode lot"
+=== "Plusieurs fichiers"
 
     <figure markdown="span">
-      ![Mode lot](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-      <figcaption>Multiple files in batch mode</figcaption>
+      ![Plusieurs fichiers](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+      <figcaption>Plusieurs fichiers sélectionnés pour le téléversement</figcaption>
     </figure>
 
 ### Header
 
 <figure markdown="span">
   ![Header](../assets/screenshots/ui/header.png){ loading=lazy }
-  <figcaption>Application header with batch toggle et settings button</figcaption>
+  <figcaption>En-tête avec paramètres et langue</figcaption>
 </figure>
 
 ### History Panel

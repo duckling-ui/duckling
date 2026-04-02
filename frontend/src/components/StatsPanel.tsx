@@ -22,7 +22,10 @@
  * SOFTWARE.
  */
 
+import { useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSlideOver } from "../hooks/useSlideOver";
+import { ScrollableRegion } from "./ScrollableRegion";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import {
@@ -174,6 +177,8 @@ function BreakdownSection({
 
 export default function StatsPanel({ isOpen, onClose }: StatsPanelProps) {
   const { t } = useTranslation();
+  const panelRef = useRef<HTMLDivElement>(null);
+  useSlideOver({ isOpen, onClose, panelRef });
   const queryClient = useQueryClient();
 
   const statsQuery = useQuery({
@@ -196,30 +201,38 @@ export default function StatsPanel({ isOpen, onClose }: StatsPanelProps) {
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-dark-950/80 backdrop-blur-sm z-40"
             onClick={onClose}
+            aria-hidden="true"
           />
 
           <motion.div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t("statsPanel.title")}
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full max-w-xl bg-dark-900 border-l border-dark-700 z-50 overflow-y-auto"
+            className="fixed right-0 top-0 h-full w-full max-w-xl bg-dark-900 border-l border-dark-700 z-50 flex flex-col overflow-hidden"
           >
-            <div className="sticky top-0 bg-dark-900/95 backdrop-blur-sm border-b border-dark-700 p-6 flex items-center justify-between">
+            <div className="shrink-0 bg-dark-900/95 backdrop-blur-sm border-b border-dark-700 p-6 flex items-center justify-between">
               <h2 className="text-xl font-bold text-dark-100">
                 {t("statsPanel.title")}
               </h2>
               <div className="flex items-center gap-2">
                 <button
+                  type="button"
                   onClick={handleRefresh}
                   disabled={statsQuery.isLoading}
                   className="p-2 hover:bg-dark-800 rounded-lg transition-colors disabled:opacity-50"
                   title={t("statsPanel.refresh")}
+                  aria-label={t("statsPanel.refresh")}
                 >
                   <svg
                     className={`w-5 h-5 text-dark-400 ${statsQuery.isLoading ? "animate-spin" : ""}`}
                     viewBox="0 0 20 20"
                     fill="currentColor"
+                    aria-hidden="true"
                   >
                     <path
                       fillRule="evenodd"
@@ -229,13 +242,16 @@ export default function StatsPanel({ isOpen, onClose }: StatsPanelProps) {
                   </svg>
                 </button>
                 <button
+                  type="button"
                   onClick={onClose}
                   className="p-2 hover:bg-dark-800 rounded-lg transition-colors"
+                  aria-label={t("actions.close")}
                 >
                   <svg
                     className="w-5 h-5 text-dark-400"
                     viewBox="0 0 20 20"
                     fill="currentColor"
+                    aria-hidden="true"
                   >
                     <path
                       fillRule="evenodd"
@@ -247,6 +263,10 @@ export default function StatsPanel({ isOpen, onClose }: StatsPanelProps) {
               </div>
             </div>
 
+            <ScrollableRegion
+              aria-label={t("statsPanel.scrollRegion")}
+              className="flex-1 min-h-0 overflow-y-auto"
+            >
             {statsQuery.isLoading ? (
               <div className="p-12 flex items-center justify-center">
                 <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
@@ -700,6 +720,7 @@ export default function StatsPanel({ isOpen, onClose }: StatsPanelProps) {
                 )}
               </div>
             ) : null}
+            </ScrollableRegion>
           </motion.div>
         </>
       )}
