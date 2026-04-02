@@ -24,6 +24,7 @@ Last audit: March 3, 2026
 - **2026-03-30**: The web UI upload flow was unified (removed a separate toolbar control for “batch” uploads). Conversion requests still use the same REST endpoints and server-side type/size checks; this was a client presentation change.
 - **2026-03-30**: Accessibility updates: in-app dialogs use explicit accessible names; scrollable areas are keyboard-focusable where needed; export HTML preview remains sandboxed/trusted-content as documented. Published docs gain underlined content links and focusable code/table scroll wrappers via `docs/javascripts/scrollable-focus.js`.
 - **2026-03-30**: Export HTML preview and embedded docs iframe use labeled regions / titles for assistive tech; preview content remains trusted, sanitized server-side output only (see XSS row below).
+- **2026-03-30**: `backend/requirements.txt` pins `pymdown-extensions>=10.21.2` (with `markdown>=3.6` and `mkdocs>=1.6` so pip can resolve that stack) so `mkdocs build` does not fail on Pygments HTML formatting for code fences without a title (CI/docs supply-chain consistency, not an application exploit).
 
 ### Vulnerability Status
 

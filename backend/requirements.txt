@@ -3,7 +3,8 @@
 #
 # MkDocs stack (must match mkdocs.yml plugins)
 mike>=1.1.0
-mkdocs>=1.5.0
+# mkdocs-material 9.5+ requires mkdocs 1.6; keeps pip from backtracking to mkdocs 1.5.x
+mkdocs>=1.6,<2
 mkdocs-material>=9.5.0
 mkdocs-minify-plugin>=0.8.0
 mkdocs-static-i18n>=1.3.0
@@ -20,4 +21,5 @@ pytest==7.4.3
 pytest-cov==4.1.0
 werkzeug==3.1.6
 gunicorn==23.0.0
-markdown==3.5.1
+# pymdown-extensions 10.21.2+ requires markdown>=3.6 (was 3.5.1; conflict broke pip on CI)
+markdown>=3.6,<4

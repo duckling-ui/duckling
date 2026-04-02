@@ -25,10 +25,13 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 ### Geändert
 
 - **Upload-UX**: Vereinheitlichte Ablagezone ohne separaten Stapel-Schalter in der Kopfzeile; siehe `CHANGELOG.md` im Repository-Root.
+- **Abhängigkeiten**: Keine separate `requirements-docs.txt` im Stamm mehr; nur noch **`backend/requirements.txt`** für MkDocs und API (siehe `CHANGELOG.md` im Repo-Root).
 
 ### Behoben
 
 - **Frontend-Tests**: Der Iframe-Navigationstest für `DocsPanel` wartet nach abgeschlossenem gemocktem `fetch` auf die Registrierung des `message`-Listeners und nutzt ein längeres `waitFor`-Timeout, damit die CI auf langsameren Runnern stabil bleibt.
+- **Docs / CI**: `pymdown-extensions>=10.21.2` vermeidet einen Pygments-Absturz beim Site-Build (wie `CHANGELOG.md` im Repo-Root).
+- **Python / CI**: `markdown>=3.6` und `mkdocs>=1.6` in `backend/requirements.txt`, damit pip den Docs-Stack mit pymdown 10.21.2+ auflösen kann (wie `CHANGELOG.md` im Repo-Root).
 
 ## [0.0.10a] - 2026-03-23
 
