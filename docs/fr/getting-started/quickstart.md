@@ -60,7 +60,7 @@ Choisissez votre méthode préférée :
 Accédez à `http://localhost:3000` dans votre navigateur.
 
 <figure markdown="span">
-  ![Duckling Interface](../assets/screenshots/ui/main-english.png){ loading=lazy }
+  ![Duckling Interface](../../assets/screenshots/ui/main-english.png){ loading=lazy }
   <figcaption>L'interface principale de Duckling</figcaption>
 </figure>
 
@@ -69,7 +69,7 @@ Accédez à `http://localhost:3000` dans votre navigateur.
 Glissez-déposez un PDF, document Word ou image dans la zone de dépôt, ou cliquez pour parcourir.
 
 <figure markdown="span">
-  ![Uploading Document](../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
+  ![Uploading Document](../../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
   <figcaption>Indicateur de progression du téléchargement</figcaption>
 </figure>
 
@@ -78,7 +78,7 @@ Glissez-déposez un PDF, document Word ou image dans la zone de dépôt, ou cliq
 La progression de la conversion sera affichée en temps réel.
 
 <figure markdown="span">
-  ![Conversion Progress](../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
+  ![Conversion Progress](../../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
   <figcaption>Progression de conversion en temps réel</figcaption>
 </figure>
 
@@ -87,7 +87,7 @@ La progression de la conversion sera affichée en temps réel.
 Une fois terminé, choisissez votre format d'exportation :
 
 <figure markdown="span">
-  ![Conversion Complete](../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
+  ![Conversion Complete](../../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
   <figcaption>Conversion terminée avec options d'export</figcaption>
 </figure>
 
@@ -130,7 +130,7 @@ Pour convertir plusieurs fichiers à la fois :
 2. Les fichiers sont traités via la file de tâches (voir Fonctionnalités pour les limites de parallélisme)
 
 <figure markdown="span">
-  ![Plusieurs fichiers](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+  ![Plusieurs fichiers](../../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
   <figcaption>Plusieurs fichiers sélectionnés pour le téléversement</figcaption>
 </figure>
 

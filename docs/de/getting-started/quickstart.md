@@ -60,7 +60,7 @@ Wählen Sie Ihre bevorzugte Methodee:
 Navigieren Sie zu `http://localhost:3000` in Ihrem Browser.
 
 <figure markdown="span">
-  ![Duckling Interface](../assets/screenshots/ui/main-english.png){ loading=lazy }
+  ![Duckling Interface](../../assets/screenshots/ui/main-english.png){ loading=lazy }
   <figcaption>Die Hauptoberfläche von Duckling</figcaption>
 </figure>
 
@@ -69,7 +69,7 @@ Navigieren Sie zu `http://localhost:3000` in Ihrem Browser.
 Ziehen Sie eine PDF-, Word-Datei oder ein Bild in die Ablagezone oder klicken Sie zum Durchsuchen.
 
 <figure markdown="span">
-  ![Uploading Document](../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
+  ![Uploading Document](../../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
   <figcaption>Fortschrittsanzeige beim Hochladen</figcaption>
 </figure>
 
@@ -78,7 +78,7 @@ Ziehen Sie eine PDF-, Word-Datei oder ein Bild in die Ablagezone oder klicken Si
 Der Konvertierungsfortschritt wird in Echtzeit angezeigt.
 
 <figure markdown="span">
-  ![Konvertierung Progress](../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
+  ![Konvertierung Progress](../../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
   <figcaption>Echtzeit-Konvertierungsfortschritt</figcaption>
 </figure>
 
@@ -87,7 +87,7 @@ Der Konvertierungsfortschritt wird in Echtzeit angezeigt.
 Wählen Sie nach Abschluss Ihr Exportformat:
 
 <figure markdown="span">
-  ![Konvertierung Complete](../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
+  ![Konvertierung Complete](../../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
   <figcaption>Konvertierung abgeschlossen mit Exportoptionen</figcaption>
 </figure>
 
@@ -130,7 +130,7 @@ Um mehrere Dateien gleichzeitig zu konvertieren:
 2. Die Dateien werden über die Job-Warteschlange verarbeitet (siehe Features zu parallelen Limits)
 
 <figure markdown="span">
-  ![Mehrere Dateien](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+  ![Mehrere Dateien](../../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
   <figcaption>Mehrere Dateien zum Upload ausgewählt</figcaption>
 </figure>
 

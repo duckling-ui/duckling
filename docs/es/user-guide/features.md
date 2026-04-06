@@ -9,7 +9,7 @@ Duckling provides a comprehensive set of features for document conversion.
 Simply drag files onto the drop zone for instant upload. The interface validates file types y shows upload progress.
 
 <figure markdown="span">
-  ![Dropzone Empty](../assets/screenshots/ui/dropzone-empty.png){ loading=lazy }
+  ![Dropzone Empty](../../assets/screenshots/ui/dropzone-empty.png){ loading=lazy }
   <figcaption>The dropzone ready to receive files</figcaption>
 </figure>
 
@@ -58,7 +58,7 @@ Sube y convierte más de un archivo (o una carpeta entera) desde la misma zona d
 4. Descarga los resultados por separado o juntos al terminar un lote
 
 <figure markdown="span">
-  ![Varios archivos](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+  ![Varios archivos](../../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
   <figcaption>Varios archivos seleccionados para subir</figcaption>
 </figure>
 
@@ -96,7 +96,7 @@ Duckling can automatically install OCR backends when you select them:
 4. Click to automatically install via pip
 
 <figure markdown="span">
-  ![Configuración OCR](../assets/screenshots/settings/settings-ocr.png){ loading=lazy }
+  ![Configuración OCR](../../assets/screenshots/settings/settings-ocr.png){ loading=lazy }
   <figcaption>OCR settings with backend selection</figcaption>
 </figure>
 
@@ -108,7 +108,7 @@ Duckling can automatically install OCR backends when you select them:
       - Windows: Descargar from [GitHub releases](https://github.com/UB-Mannheim/tesseract/wiki)
 
 <figure markdown="span">
-  ![Tesseract Install Notice](../assets/screenshots/settings/settings-ocr-tesseract.png){ loading=lazy }
+  ![Tesseract Install Notice](../../assets/screenshots/settings/settings-ocr-tesseract.png){ loading=lazy }
   <figcaption>Tesseract requires manual system installation</figcaption>
 </figure>
 
@@ -187,12 +187,12 @@ After conversion, extracted images are displayed in a visual gallery:
 - **Descargar**: Descargar individual images directly from the gallery or lightbox
 
 <figure markdown="span">
-  ![Image Gallery](../assets/screenshots/features/images-gallery.png){ loading=lazy }
+  ![Image Gallery](../../assets/screenshots/features/images-gallery.png){ loading=lazy }
   <figcaption>Extraered images displayed as thumbnails</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Image Lightbox](../assets/screenshots/features/images-lightbox.png){ loading=lazy }
+  ![Image Lightbox](../../assets/screenshots/features/images-lightbox.png){ loading=lazy }
   <figcaption>Full-size image view with navigation</figcaption>
 </figure>
 
@@ -222,7 +222,7 @@ Enable enrichments in the **Configuración** panel under **Document Enrichment**
 4. Configuración are saved automatically
 
 <figure markdown="span">
-  ![Enrichment Configuración](../assets/screenshots/settings/settings-enrichment.png){ loading=lazy }
+  ![Enrichment Configuración](../../assets/screenshots/settings/settings-enrichment.png){ loading=lazy }
   <figcaption>Document Enrichment settings panel</figcaption>
 </figure>
 
@@ -230,7 +230,7 @@ Enable enrichments in the **Configuración** panel under **Document Enrichment**
     Enrichment features, especially **Picture Descripción** y **Formula Enrichment**, can significantly increase processing time as they require additional AI model inference. A warning is displayed when these features are enabled.
 
 <figure markdown="span">
-  ![Enrichment Warning](../assets/screenshots/settings/settings-enrichment-warning.png){ loading=lazy }
+  ![Enrichment Warning](../../assets/screenshots/settings/settings-enrichment-warning.png){ loading=lazy }
   <figcaption>Warning displayed when slow features are enabled</figcaption>
 </figure>
 
@@ -341,7 +341,7 @@ Generate document chunks optimized for Retrieval-Augmented Generation.
 | **RAG Chunks** | `.chunks.json` | Chunks for RAG applications |
 
 <figure markdown="span">
-  ![Export Formatos](../assets/screenshots/export/export-formats.png){ loading=lazy }
+  ![Export Formatos](../../assets/screenshots/export/export-formats.png){ loading=lazy }
   <figcaption>Available export formats with selection</figcaption>
 </figure>
 
@@ -360,7 +360,7 @@ The export panel shows a live preview of your converted content that updates as 
 For HTML y Markdown formats, toggle between rendered y raw views:
 
 <figure markdown="span">
-  ![Preview Activar](../assets/screenshots/export/preview-toggle.png){ loading=lazy }
+  ![Preview Activar](../../assets/screenshots/export/preview-toggle.png){ loading=lazy }
   <figcaption>Activar between Rendered y Raw preview modes</figcaption>
 </figure>
 
@@ -370,7 +370,7 @@ For HTML y Markdown formats, toggle between rendered y raw views:
     - **Markdown**: Renders headers, bold/italic text, code blocks, y links
     - Best for reviewing the final visual appearance
 
-    ![Markdown Rendered](../assets/screenshots/export/preview-markdown-rendered.png){ loading=lazy }
+    ![Markdown Rendered](../../assets/screenshots/export/preview-markdown-rendered.png){ loading=lazy }
 
 === "Raw Modo"
 
@@ -379,7 +379,7 @@ For HTML y Markdown formats, toggle between rendered y raw views:
     - Markdown: View markdown syntax (# headers, **bold**, etc.)
     - Useful for copying content or debugging formatting issues
 
-    ![Markdown Raw](../assets/screenshots/export/preview-markdown-raw.png){ loading=lazy }
+    ![Markdown Raw](../../assets/screenshots/export/preview-markdown-raw.png){ loading=lazy }
 
 #### Other Formatos
 
@@ -388,7 +388,7 @@ For HTML y Markdown formats, toggle between rendered y raw views:
 - **DocTags/Tokens**: Raw format display
 
 <figure markdown="span">
-  ![JSON Preview](../assets/screenshots/export/preview-json.png){ loading=lazy }
+  ![JSON Preview](../../assets/screenshots/export/preview-json.png){ loading=lazy }
   <figcaption>Pretty-printed JSON output</figcaption>
 </figure>
 
