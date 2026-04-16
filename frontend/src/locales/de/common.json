@@ -401,6 +401,9 @@
   "progress": {
     "title": "Dokument wird konvertiert",
     "uploadComplete": "Upload abgeschlossen",
+    "urlFetching": "URL-Inhalt wird abgerufen",
+    "urlAnalyzingPage": "Webseitenstruktur wird analysiert",
+    "urlExtractingAssets": "Seiteninhalt und Bilder werden extrahiert",
     "analyzing": "Dokumentstruktur wird analysiert",
     "extracting": "Inhalt wird extrahiert",
     "generating": "Ausgabeformate werden generiert",

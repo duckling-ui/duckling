@@ -398,6 +398,9 @@
   "progress": {
     "title": "Conversion du document",
     "uploadComplete": "Téléversement terminé",
+    "urlFetching": "Récupération du contenu de l’URL",
+    "urlAnalyzingPage": "Analyse de la structure de la page web",
+    "urlExtractingAssets": "Extraction du contenu et des images de la page",
     "analyzing": "Analyse de la structure du document",
     "extracting": "Extraction du contenu",
     "generating": "Génération des formats de sortie",
