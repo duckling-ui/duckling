@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Documentation
 
-### Documentation
-
 - **UI localization**: Batch results header and counters in `frontend/src/App.tsx` now use i18n keys (`conversion.batchCompleteTitle`, `batchSucceeded`, `batchFailed`, `convertedFilesTitle`) so the “Batch Conversion Complete” view is translated in `en`/`de`/`fr`/`es`.
 - **Language switcher (MkDocs)**: `docs/javascripts/language-selector.js` rewrites Material language dropdown `href`s to absolute paths so switching locale keeps the same page (and hash). Locale detection now works even when dropdown links are malformed (for example `..fr/`) or rendered without `hreflang`; works for standalone `mkdocs serve` and in-app docs under `/api/docs/site/<lang>/...`.
 - **Deployment (de/fr/es)**: [index](docs/de/deployment/index.md), [production](docs/de/deployment/production.md), [scaling](docs/de/deployment/scaling.md), and [security](docs/de/deployment/security.md) fully translated (mirrored under `fr/deployment/` and `es/deployment/`); Mermaid labels localized; German deployment index overview and checklist corrected.
