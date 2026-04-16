@@ -269,7 +269,7 @@ Indicateurs clés :
 
 ## Déploiement Kubernetes
 
-### Deployment
+### Ressource Kubernetes : Deployment
 
 ```yaml
 apiVersion: apps/v1
