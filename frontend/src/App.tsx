@@ -34,7 +34,6 @@ import HistoryPanel from "./components/HistoryPanel";
 import StatsPanel from "./components/StatsPanel";
 import DocsPanel from "./components/DocsPanel";
 import { ScrollableRegion } from "./components/ScrollableRegion";
-import { convertFromUrl, convertFromUrlsBatch } from "./services/api";
 import type { HistoryEntry, ConversionResult } from "./types";
 
 // App version from package.json
@@ -54,10 +53,11 @@ export default function App() {
     error,
     progress,
     statusMessage,
+    conversionSource,
     isUploading,
     isUploadingMultipleFiles,
-    uploadFile,
     uploadFiles,
+    startUrlConversion,
     downloadFormat,
     reset,
     loadResult,
@@ -81,42 +81,12 @@ export default function App() {
     [uploadFiles],
   );
 
-  /** URL tab: one line uses single-URL API; multiple lines use batch URL API. */
+  /** URL tab: hand off URL conversion to useConversion state machine. */
   const handleUrlsSubmittedUnified = useCallback(
-    async (urls: string[]) => {
-      if (urls.length === 0) return;
-      try {
-        if (urls.length === 1) {
-          const response = await convertFromUrl(urls[0]);
-          if (response.job_id) {
-            uploadFile(
-              new File([], response.filename || "url-document"),
-              response.job_id,
-            );
-          }
-        } else {
-          const response = await convertFromUrlsBatch(urls);
-          if (response.jobs && response.jobs.length > 0) {
-            const validJobs = response.jobs.filter(
-              (j) => j.status === "processing" && j.job_id,
-            );
-            if (validJobs.length > 0) {
-              const firstJob = validJobs[0];
-              uploadFile(
-                new File([], firstJob.filename || "url-document"),
-                firstJob.job_id,
-              );
-            } else {
-              console.error("All URL conversions were rejected");
-            }
-          }
-        }
-      } catch (error) {
-        console.error("URL conversion error:", error);
-        reset();
-      }
+    (urls: string[]) => {
+      startUrlConversion(urls);
     },
-    [uploadFile, reset],
+    [startUrlConversion],
   );
 
   const handleHistorySelect = useCallback(
@@ -377,35 +347,15 @@ export default function App() {
               </motion.div>
             )}
 
-            {/* Uploading state */}
-            {state === "uploading" && (
+            {/* In-progress state (uploading + processing share one view to avoid visual reset) */}
+            {(state === "uploading" || state === "processing") && (
               <motion.div
-                key="uploading"
+                key="in-progress"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
               >
-                <ConversionProgress
-                  progress={5}
-                  message={
-                    isUploadingMultipleFiles
-                      ? t("conversion.uploadingMultiple")
-                      : t("conversion.uploadingSingle")
-                  }
-                  filename={currentJob?.filename}
-                />
-              </motion.div>
-            )}
-
-            {/* Processing state */}
-            {state === "processing" && (
-              <motion.div
-                key="processing"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-              >
-                {batchMode && batchJobs.length > 1 ? (
+                {state === "processing" && batchMode && batchJobs.length > 1 ? (
                   <BatchProgress
                     jobs={batchJobs}
                     progress={progress}
@@ -414,9 +364,17 @@ export default function App() {
                   />
                 ) : (
                   <ConversionProgress
-                    progress={progress}
-                    message={statusMessage}
+                    progress={state === "uploading" ? 5 : progress}
+                    message={
+                      state === "uploading"
+                        ? statusMessage ||
+                          (isUploadingMultipleFiles
+                            ? t("conversion.uploadingMultiple")
+                            : t("conversion.uploadingSingle"))
+                        : statusMessage
+                    }
                     filename={currentJob?.filename}
+                    source={conversionSource}
                   />
                 )}
               </motion.div>
@@ -749,15 +707,18 @@ function BatchResults({
           </svg>
         </motion.div>
         <h2 className="text-2xl font-bold text-dark-100 mb-2">
-          Batch Conversion Complete!
+          {t("conversion.batchCompleteTitle")}
         </h2>
         <p className="text-dark-400">
           <span className="text-green-400">
-            {successfulJobs.length} succeeded
+            {t("conversion.batchSucceeded", { count: successfulJobs.length })}
           </span>
           {failedJobs.length > 0 && (
             <>
-              , <span className="text-red-400">{failedJobs.length} failed</span>
+              {", "}
+              <span className="text-red-400">
+                {t("conversion.batchFailed", { count: failedJobs.length })}
+              </span>
             </>
           )}
         </p>
@@ -767,7 +728,7 @@ function BatchResults({
         {/* File list */}
         <div className="glass rounded-2xl p-4">
           <h3 className="text-lg font-semibold text-dark-100 mb-4">
-            Converted Files
+            {t("conversion.convertedFilesTitle")}
           </h3>
           <ScrollableRegion
             aria-label={t("conversion.batchResultsFileList")}
