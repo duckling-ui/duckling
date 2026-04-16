@@ -13,7 +13,7 @@ Choisissez votre méthode préférée :
     **Option 1 : Images préconstruites (la plus rapide)**
     ```bash
     # Télécharger le fichier compose
-    curl -O https://raw.githubusercontent.com/duckling-uidavidgs/duckling/main/docker-compose.prebuilt.yml
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml
 
     # Démarrer Duckling
     docker-compose -f docker-compose.prebuilt.yml up -d
