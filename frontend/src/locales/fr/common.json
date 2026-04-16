@@ -33,7 +33,11 @@
     "filesCount": "{{completed}}/{{total}} fichiers",
     "batchFileProgressList": "Progression de conversion par fichier",
     "batchResultsFileList": "Liste des fichiers convertis",
-    "batchResultsPreview": "Aperçu Markdown"
+    "batchResultsPreview": "Aperçu Markdown",
+    "batchCompleteTitle": "Conversion par lot terminée !",
+    "batchSucceeded": "{{count}} réussies",
+    "batchFailed": "{{count}} échouées",
+    "convertedFilesTitle": "Fichiers convertis"
   },
   "features": {
     "ocr": "OCR",
@@ -364,6 +368,43 @@
     "tabTables": "Tableaux",
     "tabChunks": "Segments RAG",
     "exportFormatTitle": "Format d'export",
+    "formats": {
+      "markdown": {
+        "name": "Markdown",
+        "description": "Texte formaté avec titres, listes et liens",
+        "icon": "M"
+      },
+      "html": {
+        "name": "HTML",
+        "description": "Format prêt pour le web avec un style complet",
+        "icon": "</>"
+      },
+      "json": {
+        "name": "JSON",
+        "description": "Données structurées avec une hiérarchie de document",
+        "icon": "{}"
+      },
+      "doctags": {
+        "name": "DocTags",
+        "description": "Tokens de document étiquetés pour le traitement par IA",
+        "icon": "#"
+      },
+      "text": {
+        "name": "Texte brut",
+        "description": "Texte simple sans mise en forme",
+        "icon": "Aa"
+      },
+      "document_tokens": {
+        "name": "Tokens du document",
+        "description": "Représentation du document au niveau des tokens",
+        "icon": "[]"
+      },
+      "chunks": {
+        "name": "Chunks RAG",
+        "description": "Segments du document pour les applications RAG",
+        "icon": "◫"
+      }
+    },
     "download": "Télécharger",
     "convertAnother": "Convertir un autre document",
     "previewTitle": "Aperçu",
