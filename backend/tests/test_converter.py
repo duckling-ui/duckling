@@ -166,6 +166,20 @@ class TestConverterService:
         })
         assert getattr(opts, "lang", None) == []
 
+    def test_relativize_cached_artifact_path_keeps_subdirectories(self):
+        """Cached artifact metadata should preserve nested folders like images/."""
+        output_base = Path("/tmp/outputs/job-123")
+        artifact = "/tmp/outputs/job-123/images/image_2.png"
+        relative = ConverterService._relativize_cached_artifact_path(artifact, output_base)
+        assert relative == "images/image_2.png"
+
+    def test_relativize_cached_artifact_path_falls_back_to_filename(self):
+        """Paths outside job output root should fall back to filename only."""
+        output_base = Path("/tmp/outputs/job-123")
+        artifact = "/tmp/other/place/image_2.png"
+        relative = ConverterService._relativize_cached_artifact_path(artifact, output_base)
+        assert relative == "image_2.png"
+
 
 class TestConversionStatus:
     """Tests for ConversionStatus enum."""

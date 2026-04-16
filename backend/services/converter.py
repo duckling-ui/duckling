@@ -544,6 +544,22 @@ class ConverterService:
         ConverterService._job_queue.put((job, on_complete))
         job.message = f"Queued for processing (position: {ConverterService._job_queue.qsize()})"
 
+    @staticmethod
+    def _relativize_cached_artifact_path(path_value: str, output_base_path: Path) -> str:
+        """
+        Store artifact paths relative to the job output root.
+
+        During content-store moves we still have absolute paths that point at the
+        original job directory. Paths must be made relative to `output_base_path`
+        (not the content-store destination) so nested folders like `images/` and
+        `tables/` are preserved in metadata.
+        """
+        artifact_path = Path(path_value)
+        try:
+            return str(artifact_path.relative_to(output_base_path))
+        except ValueError:
+            return artifact_path.name
+
     def _extract_images(self, doc, output_base: Path, job: ConversionJob) -> List[Dict]:
         """Extract images from the document."""
         images = []
@@ -1005,19 +1021,17 @@ class ConverterService:
                         for img in (job.extracted_images or []):
                             img_copy = dict(img)
                             if img_copy.get("path"):
-                                try:
-                                    img_copy["path"] = str(Path(img_copy["path"]).relative_to(content_store_path))
-                                except ValueError:
-                                    img_copy["path"] = Path(img_copy["path"]).name
+                                img_copy["path"] = self._relativize_cached_artifact_path(
+                                    img_copy["path"], output_base_path
+                                )
                             meta["extracted_images"].append(img_copy)
                         for tbl in (job.extracted_tables or []):
                             tbl_copy = dict(tbl)
                             for key in ("csv_path", "image_path"):
                                 if tbl_copy.get(key):
-                                    try:
-                                        tbl_copy[key] = str(Path(tbl_copy[key]).relative_to(content_store_path))
-                                    except ValueError:
-                                        tbl_copy[key] = Path(tbl_copy[key]).name
+                                    tbl_copy[key] = self._relativize_cached_artifact_path(
+                                        tbl_copy[key], output_base_path
+                                    )
                             meta["extracted_tables"].append(tbl_copy)
                         save_metadata(content_hash, meta)
                     output_base_path.symlink_to(content_store_path)
