@@ -22,7 +22,7 @@ Wählen Sie Ihre bevorzugte Methodee:
     **Option 2: Lokal erstellen**
     ```bash
     # Clone and start
-    git clone https://github.com/davidgs/duckling.git
+    git clone https://github.com/duckling-ui/duckling.git
     cd duckling
     docker-compose up --build
     ```

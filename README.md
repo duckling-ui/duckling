@@ -1,6 +1,6 @@
 # Duckling
 
-[![Tests](https://github.com/davidgs/duckling/actions/workflows/test.yml/badge.svg)](https://github.com/davidgs/duckling/actions/workflows/test.yml)
+[![Tests](https://github.com/duckling-ui/duckling/actions/workflows/test.yml/badge.svg)](https://github.com/duckling-ui/duckling/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Node.js 22+](https://img.shields.io/badge/node.js-22+-green.svg)](https://nodejs.org/)
@@ -71,7 +71,7 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/davidgs/duckling.git
+   git clone https://github.com/duckling-ui/duckling.git
    cd duckling
    ```
 

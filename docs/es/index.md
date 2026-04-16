@@ -99,7 +99,7 @@ Comienza en minutos:
 
     **O construir localmente:**
     ```bash
-    git clone https://github.com/davidgs/duckling.git
+    git clone https://github.com/duckling-ui/duckling.git
     cd duckling
     docker-compose up --build
     ```
@@ -108,7 +108,7 @@ Comienza en minutos:
 
     ```bash
     # Clonar el repositorio
-    git clone https://github.com/davidgs/duckling.git
+    git clone https://github.com/duckling-ui/duckling.git
     cd duckling
 
     # Configuración del backend

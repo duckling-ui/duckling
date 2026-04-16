@@ -4,7 +4,7 @@ Deploy Duckling using Docker for quick setup and isolation.
 
 !!! success "TL;DR - One Command Start"
     ```bash
-    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
     ```
     Then open `http://localhost:3000` 🎉
 
@@ -19,7 +19,7 @@ Deploy Duckling using Docker for quick setup and isolation.
 
 ```bash
 # Clone the repository
-git clone https://github.com/davidgs/duckling.git
+git clone https://github.com/duckling-ui/duckling.git
 cd duckling
 
 # Build and start (development mode)
@@ -33,7 +33,7 @@ docker-compose up -d --build
 
 ```bash
 # Download docker-compose.prebuilt.yml
-curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml
+curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml
 
 # Start with pre-built images
 docker-compose -f docker-compose.prebuilt.yml up -d
@@ -107,7 +107,7 @@ Use the provided build script for easy image building. The script automatically 
 
 ### Automatic Publishing (CI/CD)
 
-When a pull request is merged to `main`, the [Publish Docker Images](https://github.com/davidgs/duckling/actions/workflows/publish-docker.yml) workflow automatically:
+When a pull request is merged to `main`, the [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) workflow automatically:
 
 1. Builds multi-platform images (linux/amd64, linux/arm64)
 2. Pushes to **Docker Hub** as `{DOCKERHUB_USERNAME}/duckling-backend` and `{DOCKERHUB_USERNAME}/duckling-frontend`
