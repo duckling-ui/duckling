@@ -9,7 +9,7 @@ site_url: https://duckling-ui.org/
 
 # Repository
 repo_name: davidgs/duckling
-repo_url: https://github.com/davidgs/duckling
+repo_url: https://github.com/duckling-ui/duckling
 edit_uri: edit/main/docs/
 
 # Copyright
@@ -305,7 +305,7 @@ extra:
     default: 0.0.11
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/davidgs/duckling
+      link: https://github.com/duckling-ui/duckling
       name: Duckling on GitHub
   generator: false
   # analytics omitted — PostHog used in docs/overrides/main.html

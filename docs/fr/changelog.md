@@ -5,7 +5,7 @@ Toutes les modifications notables de ce projet seront documentées dans ce fichi
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0.html).
 
-**Dernière version :** [0.0.11](https://github.com/davidgs/duckling/releases/tag/v0.0.11) (2026-03-30)
+**Dernière version :** [0.0.11](https://github.com/duckling-ui/duckling/releases/tag/v0.0.11) (2026-03-30)
 
 ## [Non publié]
 
@@ -322,14 +322,14 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 - Limites de taille maximale des fichiers
 - Gestion sécurisée des noms de fichiers
 
-[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.11...HEAD
-[0.0.11]: https://github.com/davidgs/duckling/compare/v0.0.10a...v0.0.11
-[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.10...v0.0.10a
-[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
-[0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
-[0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
-[0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7
-[0.0.6]: https://github.com/davidgs/duckling/compare/v0.0.5...v0.0.6
-[0.0.5]: https://github.com/davidgs/duckling/compare/v0.0.4...v0.0.5
-[0.0.4]: https://github.com/davidgs/duckling/compare/v0.0.3...v0.0.4
-[0.0.3]: https://github.com/davidgs/duckling/releases/tag/v0.0.3
+[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.11...HEAD
+[0.0.11]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.11
+[0.0.10a]: https://github.com/duckling-ui/duckling/compare/v0.0.10...v0.0.10a
+[0.0.10]: https://github.com/duckling-ui/duckling/compare/v0.0.9...v0.0.10
+[0.0.9]: https://github.com/duckling-ui/duckling/compare/v0.0.8...v0.0.9
+[0.0.8]: https://github.com/duckling-ui/duckling/compare/v0.0.7...v0.0.8
+[0.0.7]: https://github.com/duckling-ui/duckling/compare/v0.0.6...v0.0.7
+[0.0.6]: https://github.com/duckling-ui/duckling/compare/v0.0.5...v0.0.6
+[0.0.5]: https://github.com/duckling-ui/duckling/compare/v0.0.4...v0.0.5
+[0.0.4]: https://github.com/duckling-ui/duckling/compare/v0.0.3...v0.0.4
+[0.0.3]: https://github.com/duckling-ui/duckling/releases/tag/v0.0.3

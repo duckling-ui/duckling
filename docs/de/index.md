@@ -99,7 +99,7 @@ Die deutsche Dokumentation ist in Arbeit. Einige Seiten können vorläufig oder 
 
     ```bash
     # Repository klonen
-    git clone https://github.com/davidgs/duckling.git
+    git clone https://github.com/duckling-ui/duckling.git
     cd duckling
 
     # Backend-Einrichtung

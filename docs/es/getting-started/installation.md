@@ -14,7 +14,7 @@ Esta guía cubre la configuración de Duckling para desarrollo local.
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/davidgs/duckling.git
+git clone https://github.com/duckling-ui/duckling.git
 cd duckling
 ```
 

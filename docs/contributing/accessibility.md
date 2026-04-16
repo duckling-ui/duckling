@@ -4,12 +4,12 @@
 
 - Prefer native controls or correct ARIA roles (e.g. `role="switch"` + `aria-checked` for toggles, `role="progressbar"` with `aria-valuenow` / min / max for progress).
 - Icon-only buttons need an accessible name (`aria-label`), not only `title`.
-- Slide-over panels that trap focus use [`useSlideOver`](https://github.com/davidgs/duckling/blob/main/frontend/src/hooks/useSlideOver.tsx) semantics: `role="dialog"`, `aria-modal="true"`, Escape to close, Tab wrap, restore focus on close.
+- Slide-over panels that trap focus use [`useSlideOver`](https://github.com/duckling-ui/duckling/blob/main/frontend/src/hooks/useSlideOver.tsx) semantics: `role="dialog"`, `aria-modal="true"`, Escape to close, Tab wrap, restore focus on close.
 - Associate form fields with `<label htmlFor>` and `aria-describedby` for help text.
 - Keep `document.documentElement.lang` in sync with the active locale (see `frontend/src/i18n.ts`).
 - Respect `prefers-reduced-motion` where animations are decorative (see `frontend/src/index.css` and `useReducedMotion` in Framer Motion where used).
 - Modal `role="dialog"` nodes should have a computed accessible name (`aria-label` with the same string as the visible title is used on slide-overs).
-- Long scrollable areas use [`ScrollableRegion`](https://github.com/davidgs/duckling/blob/main/frontend/src/components/ScrollableRegion.tsx) (`tabIndex={0}`, `role="region"`, `aria-label`) so keyboard users can focus the container and scroll.
+- Long scrollable areas use [`ScrollableRegion`](https://github.com/duckling-ui/duckling/blob/main/frontend/src/components/ScrollableRegion.tsx) (`tabIndex={0}`, `role="region"`, `aria-label`) so keyboard users can focus the container and scroll.
 
 ## Documentation (MkDocs Material)
 
