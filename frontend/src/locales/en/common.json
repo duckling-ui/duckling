@@ -33,7 +33,11 @@
     "filesCount": "{{completed}}/{{total}} files",
     "batchFileProgressList": "Per-file conversion progress",
     "batchResultsFileList": "Converted files list",
-    "batchResultsPreview": "Markdown preview"
+    "batchResultsPreview": "Markdown preview",
+    "batchCompleteTitle": "Batch Conversion Complete!",
+    "batchSucceeded": "{{count}} succeeded",
+    "batchFailed": "{{count}} failed",
+    "convertedFilesTitle": "Converted Files"
   },
   "features": {
     "ocr": "OCR",
@@ -364,6 +368,43 @@
     "tabTables": "Tables",
     "tabChunks": "RAG Chunks",
     "exportFormatTitle": "Export Format",
+    "formats": {
+      "markdown": {
+        "name": "Markdown",
+        "description": "Formatted text with headers, lists, and links",
+        "icon": "M"
+      },
+      "html": {
+        "name": "HTML",
+        "description": "Web-ready format with full styling",
+        "icon": "</>"
+      },
+      "json": {
+        "name": "JSON",
+        "description": "Structured data with document hierarchy",
+        "icon": "{}"
+      },
+      "doctags": {
+        "name": "DocTags",
+        "description": "Tagged document tokens for AI processing",
+        "icon": "#"
+      },
+      "text": {
+        "name": "Plain Text",
+        "description": "Simple text without formatting",
+        "icon": "Aa"
+      },
+      "document_tokens": {
+        "name": "Document Tokens",
+        "description": "Token-level document representation",
+        "icon": "[]"
+      },
+      "chunks": {
+        "name": "RAG Chunks",
+        "description": "Document chunks for RAG applications",
+        "icon": "◫"
+      }
+    },
     "download": "Download",
     "convertAnother": "Convert Another Document",
     "previewTitle": "Preview",
@@ -407,5 +448,3 @@
     "stepStatusPending": "Pending"
   }
 }
-
-

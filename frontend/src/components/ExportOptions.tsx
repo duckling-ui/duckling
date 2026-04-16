@@ -60,42 +60,42 @@ type PreviewMode = "rendered" | "raw";
 
 const FORMAT_INFO: Record<
   string,
-  { name: string; icon: string; description: string }
+  { nameKey: string; icon: string; descriptionKey: string }
 > = {
   markdown: {
-    name: "Markdown",
+    nameKey: "export.formats.markdown.name",
     icon: "M",
-    description: "Formatted text with headers, lists, and links",
+    descriptionKey: "export.formats.markdown.description",
   },
   html: {
-    name: "HTML",
+    nameKey: "export.formats.html.name",
     icon: "</>",
-    description: "Web-ready format with full styling",
+    descriptionKey: "export.formats.html.description",
   },
   json: {
-    name: "JSON",
+    nameKey: "export.formats.json.name",
     icon: "{}",
-    description: "Structured data with document hierarchy",
+    descriptionKey: "export.formats.json.description",
   },
   doctags: {
-    name: "DocTags",
+    nameKey: "export.formats.doctags.name",
     icon: "#",
-    description: "Tagged document tokens for AI processing",
+    descriptionKey: "export.formats.doctags.description",
   },
   text: {
-    name: "Plain Text",
+    nameKey: "export.formats.text.name",
     icon: "Aa",
-    description: "Simple text without formatting",
+    descriptionKey: "export.formats.text.description",
   },
   document_tokens: {
-    name: "Document Tokens",
+    nameKey: "export.formats.document_tokens.name",
     icon: "[]",
-    description: "Token-level document representation",
+    descriptionKey: "export.formats.document_tokens.description",
   },
   chunks: {
-    name: "RAG Chunks",
+    nameKey: "export.formats.chunks.name",
     icon: "◫",
-    description: "Document chunks for RAG applications",
+    descriptionKey: "export.formats.chunks.description",
   },
 };
 
@@ -482,10 +482,10 @@ export default function ExportOptions({
                         </div>
                         <div className="flex-1">
                           <p className="font-medium text-dark-100">
-                            {info.name}
+                            {t(info.nameKey)}
                           </p>
                           <p className="text-sm text-dark-400">
-                            {info.description}
+                            {t(info.descriptionKey)}
                           </p>
                         </div>
                         {selectedFormat === format && (
@@ -526,7 +526,9 @@ export default function ExportOptions({
                   />
                 </svg>
                 {t("export.download")}{" "}
-                {FORMAT_INFO[selectedFormat]?.name || selectedFormat}
+                {FORMAT_INFO[selectedFormat]
+                  ? t(FORMAT_INFO[selectedFormat]!.nameKey)
+                  : selectedFormat}
               </motion.button>
             </>
           )}
@@ -867,7 +869,9 @@ export default function ExportOptions({
                 {t("export.previewTitle")}
               </h3>
               <span className="text-xs text-dark-500 bg-dark-800 px-2 py-1 rounded">
-                {FORMAT_INFO[selectedFormat]?.name || selectedFormat}
+                {FORMAT_INFO[selectedFormat]
+                  ? t(FORMAT_INFO[selectedFormat]!.nameKey)
+                  : selectedFormat}
               </span>
             </div>
             <div className="flex items-center gap-2">
