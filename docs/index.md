@@ -94,12 +94,12 @@ Get started in minutes:
 
     **One-command start with pre-built images:**
     ```bash
-    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
     ```
 
     **Or build locally:**
     ```bash
-    git clone https://github.com/davidgs/duckling.git
+    git clone https://github.com/duckling-ui/duckling.git
     cd duckling
     docker-compose up --build
     ```
@@ -108,7 +108,7 @@ Get started in minutes:
 
     ```bash
     # Clone the repository
-    git clone https://github.com/davidgs/duckling.git
+    git clone https://github.com/duckling-ui/duckling.git
     cd duckling
 
     # Backend setup

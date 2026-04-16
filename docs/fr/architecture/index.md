@@ -8,10 +8,10 @@ Duckling is a full-stack web application with a clear separation between fronten
 
 ```mermaid
 graph LR
-    A[Browser] --> B[React Frontend]
-    B --> C[Flask Backend]
-    C --> D[Docling Engine]
-    D --> E[(Storage)]
+    A[Navigateur] --> B[Frontend React]
+    B --> C[Backend Flask]
+    C --> D[Moteur Docling]
+    D --> E[(Stockage)]
 
     style A fill:#3b82f6,color:#fff
     style B fill:#1e3a5f,color:#fff

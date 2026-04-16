@@ -33,22 +33,129 @@
     'de': '🇩🇪'
   };
 
+  /** Locales that use a first-segment prefix on the standalone site (mkdocs-static-i18n). */
+  const PREFIX_LOCALES = ['es', 'fr', 'de'];
+
+  /** In-app docs panel (Duckling UI) serves the built site under this path prefix. */
+  const INAPP_DOCS_RE = /^(\/api\/docs\/site\/)(en|es|fr|de)(\/.*)?$/;
+
+  function ensureMkdocsDirUrl(path) {
+    if (!path || path === '/' || path.endsWith('/') || /\.[a-z0-9]+$/i.test(path)) {
+      return path;
+    }
+    return path + '/';
+  }
+
+  /**
+   * Parse pathname into locale + logical doc path (shared across languages).
+   * Supports standalone MkDocs (/es/..., /...) and in-app /api/docs/site/<lang>/...
+   */
+  function parsePathContext(pathname) {
+    var raw = (pathname || '/').split(/[?#]/)[0];
+    var app = raw.match(INAPP_DOCS_RE);
+    if (app) {
+      var tail = app[3];
+      var rest = !tail || tail === '/' ? '/' : tail;
+      return { kind: 'inapp', base: app[1], locale: app[2], rest: rest };
+    }
+    var loc = raw.match(/^\/(es|fr|de)(\/.*)?$/);
+    if (loc) {
+      var tail2 = loc[2];
+      var rest2 = !tail2 || tail2 === '/' ? '/' : tail2;
+      return { kind: 'standalone', locale: loc[1], rest: rest2 };
+    }
+    var restEn = raw && raw !== '' ? raw : '/';
+    return { kind: 'standalone', locale: 'en', rest: restEn };
+  }
+
+  /**
+   * Absolute path on this host for the same page in another language.
+   */
+  function hrefForPathContext(ctx, targetLang, hash) {
+    var h = hash && hash.length > 1 ? hash : '';
+    var rest = ctx.rest || '/';
+    if (rest.charAt(0) !== '/') {
+      rest = '/' + rest;
+    }
+    if (ctx.kind === 'inapp') {
+      var mid = ctx.base + targetLang;
+      var tailPart = rest === '/' ? '/' : rest;
+      return ensureMkdocsDirUrl(mid + tailPart) + h;
+    }
+    if (targetLang === 'en') {
+      return ensureMkdocsDirUrl(rest) + h;
+    }
+    var out = '/' + targetLang + (rest === '/' ? '/' : rest);
+    return ensureMkdocsDirUrl(out) + h;
+  }
+
+  /**
+   * Determine locale for a language menu anchor, even when Material emits broken relative hrefs.
+   */
+  function getAnchorLanguage(anchor) {
+    if (!anchor) {
+      return null;
+    }
+    var explicit = anchor.getAttribute('hreflang') ||
+      anchor.getAttribute('lang') ||
+      anchor.getAttribute('data-md-value');
+    if (explicit && Object.prototype.hasOwnProperty.call(languageFlags, explicit)) {
+      return explicit;
+    }
+
+    var rawHref = anchor.getAttribute('href') || '';
+    if (!rawHref) {
+      return null;
+    }
+    var normalizedHref = rawHref.split(/[?#]/)[0];
+
+    try {
+      normalizedHref = new URL(rawHref, window.location.origin).pathname;
+    } catch (e) {
+      // Keep raw href fallback for partial/broken relative paths.
+    }
+
+    var match = normalizedHref.match(/\/(en|es|fr|de)(?:\/|$)/);
+    if (!match) {
+      match = normalizedHref.match(/(?:^|[./])(en|es|fr|de)\/?$/);
+    }
+    return match ? match[1] : null;
+  }
+
+  /**
+   * mkdocs-static-i18n + Material can emit broken relative hrefs like "../../../../../..es/" (missing slash
+   * before the locale). Rewrite language dropdown links so switching locale keeps the same page (and hash).
+   */
+  function fixLanguageSwitcherHrefs() {
+    var pathname = window.location.pathname;
+    var ctx = parsePathContext(pathname);
+    var hash = window.location.hash || '';
+
+    document.querySelectorAll('a.md-select__link').forEach(function(anchor) {
+      var lang = getAnchorLanguage(anchor);
+      if (!lang || !Object.prototype.hasOwnProperty.call(languageFlags, lang)) {
+        return;
+      }
+      anchor.setAttribute('hreflang', lang);
+      anchor.setAttribute('href', hrefForPathContext(ctx, lang, hash));
+    });
+  }
+
   /**
    * Detect the current language from the URL path
    */
   function detectCurrentLanguage() {
-    const path = window.location.pathname;
-    
-    // Check for language prefix in path (e.g., /es/, /fr/, /de/)
-    if (path.includes('/es/')) {
-      return 'es';
-    } else if (path.includes('/fr/')) {
-      return 'fr';
-    } else if (path.includes('/de/')) {
-      return 'de';
+    var path = window.location.pathname;
+    var app = path.match(INAPP_DOCS_RE);
+    if (app) {
+      return app[2];
     }
-    
-    // Default to English if no language prefix found
+    for (var i = 0; i < PREFIX_LOCALES.length; i++) {
+      var code = PREFIX_LOCALES[i];
+      if (path === '/' + code || path.startsWith('/' + code + '/')) {
+        return code;
+      }
+    }
     return 'en';
   }
 
@@ -158,10 +265,14 @@
    * Initialize and set up observers
    */
   function init() {
+    fixLanguageSwitcherHrefs();
+    updateLanguageSelectorIcon();
+
     // Try multiple times to catch Material's rendering
     const attempts = [100, 300, 500, 1000, 2000];
     attempts.forEach(delay => {
       setTimeout(() => {
+        fixLanguageSwitcherHrefs();
         updateLanguageSelectorIcon();
       }, delay);
     });
@@ -194,7 +305,10 @@
         }
       });
       if (shouldUpdate) {
-        setTimeout(updateLanguageSelectorIcon, 150);
+        setTimeout(function() {
+          fixLanguageSwitcherHrefs();
+          updateLanguageSelectorIcon();
+        }, 150);
       }
     });
     
@@ -223,23 +337,35 @@
       const url = location.href;
       if (url !== lastUrl) {
         lastUrl = url;
-        setTimeout(updateLanguageSelectorIcon, 150);
+        setTimeout(function() {
+          fixLanguageSwitcherHrefs();
+          updateLanguageSelectorIcon();
+        }, 150);
       }
     }, 500);
     
     // Also watch for hash changes
     window.addEventListener('hashchange', function() {
-      setTimeout(updateLanguageSelectorIcon, 150);
+      setTimeout(function() {
+        fixLanguageSwitcherHrefs();
+        updateLanguageSelectorIcon();
+      }, 150);
     });
     
     // Watch for popstate (browser back/forward)
     window.addEventListener('popstate', function() {
-      setTimeout(updateLanguageSelectorIcon, 150);
+      setTimeout(function() {
+        fixLanguageSwitcherHrefs();
+        updateLanguageSelectorIcon();
+      }, 150);
     });
     
     // Watch for Material's instant navigation events
     document.addEventListener('navigation', function() {
-      setTimeout(updateLanguageSelectorIcon, 200);
+      setTimeout(function() {
+        fixLanguageSwitcherHrefs();
+        updateLanguageSelectorIcon();
+      }, 200);
     });
   }
 

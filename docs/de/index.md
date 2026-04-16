@@ -20,7 +20,7 @@ Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konv
     Ziehen Sie Ihre Dokumente einfach auf die Oberfläche für sofortige Verarbeitung
     </a>
 
--   <a href="user-guide/features/#batch-processing" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt Stapelverarbeitung">
+-   <a href="user-guide/features/#mehrere-dateien-und-ordner" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt Stapelverarbeitung">
     :material-file-multiple:{ .lg .middle } __Stapelverarbeitung__
 
     ---
@@ -36,7 +36,7 @@ Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konv
     PDFs, Word-Dokumente, PowerPoints, Excel-Dateien, HTML, Markdown, Bilder und mehr
     </a>
 
--   <a href="user-guide/features/#export-formats" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt Exportformate">
+-   <a href="user-guide/features/#exportformate" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt Exportformate">
     :material-export:{ .lg .middle } __Mehrere Exportformate__
 
     ---
@@ -44,7 +44,7 @@ Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konv
     Exportieren Sie nach Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks oder Klartext
     </a>
 
--   <a href="user-guide/features/#table-extraction" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt Bild- und Tabellenextraktion">
+-   <a href="user-guide/features/#tabellenextraktion" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt Bild- und Tabellenextraktion">
     :material-image-multiple:{ .lg .middle } __Bild- und Tabellenextraktion__
 
     ---
@@ -52,7 +52,7 @@ Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konv
     Extrahieren Sie eingebettete Bilder und Tabellen mit CSV-Export
     </a>
 
--   <a href="user-guide/features/#rag-chunking" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt RAG-Chunking">
+-   <a href="user-guide/features/#rag-segmentierung" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt RAG-Chunking">
     :material-puzzle:{ .lg .middle } __RAG-optimiertes Chunking__
 
     ---
@@ -60,7 +60,7 @@ Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konv
     Generieren Sie Dokument-Segmente, die für RAG-Anwendungen optimiert sind
     </a>
 
--   <a href="user-guide/features/#ocr-optical-character-recognition" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt OCR">
+-   <a href="user-guide/features/#ocr-optische-zeichenerkennung" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt OCR">
     :material-eye:{ .lg .middle } __Erweiterte OCR__
 
     ---
@@ -68,7 +68,7 @@ Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konv
     Mehrere OCR-Backends mit GPU-Beschleunigungsunterstützung
     </a>
 
--   <a href="user-guide/features/#conversion-history" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt Konvertierungsverlauf">
+-   <a href="user-guide/features/#konvertierungsverlauf" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt Konvertierungsverlauf">
     :material-history:{ .lg .middle } __Konvertierungsverlauf__
 
     ---
@@ -76,7 +76,7 @@ Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konv
     Greifen Sie jederzeit auf zuvor konvertierte Dokumente zu
     </a>
 
--   <a href="user-guide/features/#statistics-panel" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt Konvertierungsstatistiken">
+-   <a href="user-guide/features/#statistik-panel" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt Konvertierungsstatistiken">
     :material-chart-line:{ .lg .middle } __Konvertierungsstatistiken__
 
     ---
@@ -89,33 +89,7 @@ Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konv
 
 ## Schnellstart
 
-Siehe **Getting Started**, um Duckling mit Docker oder lokal in der Entwicklung zu installieren und auszuführen.
-
-## Übersetzungsstatus
-
-Die deutsche Dokumentation ist in Arbeit. Einige Seiten können vorläufig oder nur teilweise übersetzt sein.
-
-
-
-    ```bash
-    # Repository klonen
-    git clone https://github.com/davidgs/duckling.git
-    cd duckling
-
-    # Backend-Einrichtung
-    cd backend
-    python -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    python duckling.py
-
-    # Frontend-Einrichtung (neues Terminal)
-    cd frontend
-    npm install
-    npm run dev
-    ```
-
-Greifen Sie auf die Anwendung unter `http://localhost:3000` zu
+Siehe **[Erste Schritte](getting-started/index.md)**, um Duckling mit Docker oder in der lokalen Entwicklung zu installieren und auszuführen. Eine kompakte Anleitung steht im **[Schnellstart](getting-started/quickstart.md)**.
 
 ## Unterstützte Formate
 
@@ -150,10 +124,10 @@ Greifen Sie auf die Anwendung unter `http://localhost:3000` zu
 
 ```mermaid
 graph LR
-    A[Browser] --> B[React Frontend]
-    B --> C[Flask Backend]
-    C --> D[Docling Engine]
-    D --> E[(Storage)]
+    A[Browser] --> B[React-Frontend]
+    B --> C[Flask-Backend]
+    C --> D[Docling-Engine]
+    D --> E[(Speicher)]
 
     style A fill:#3b82f6,color:#fff
     style B fill:#1e3a5f,color:#fff
@@ -166,10 +140,15 @@ graph LR
 
 - **[Erste Schritte](getting-started/index.md)** - Installations- und Schnellstartanleitung
 - **[Benutzerhandbuch](user-guide/index.md)** - Funktionen und Konfigurationsoptionen
+- **[Docling-Dokumentation](docling/index.md)** - Ausgewählte upstream-Dokumentation zu Docling
 - **[API-Referenz](api/index.md)** - Vollständige API-Dokumentation
 - **[Architektur](architecture/index.md)** - Systemdesign und Komponenten
 - **[Bereitstellung](deployment/index.md)** - Produktionsbereitstellungsanleitung
-- **[Mitwirken](contributing/index.md)** - Wie man beiträgt## Danksagungen- [Docling](https://github.com/docling-project/docling) von IBM für die leistungsstarke Dokumentkonvertierungs-Engine
+- **[Mitwirken](contributing/index.md)** - Wie man beiträgt
+
+## Danksagungen
+
+- [Docling](https://github.com/docling-project/docling) von IBM für die leistungsstarke Dokumentkonvertierungs-Engine
 - [React](https://react.dev/) für das Frontend-Framework
 - [Flask](https://flask.palletsprojects.com/) für das Backend-Framework
 - [Tailwind CSS](https://tailwindcss.com/) für das Styling

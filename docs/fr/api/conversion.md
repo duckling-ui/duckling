@@ -1,22 +1,22 @@
-# Conversion API
+# API de conversion
 
-Endpoints for uploading et converting documents.
+Points de terminaison pour téléverser et convertir des documents.
 
-## Upload et Convert Single Document
+## Téléverser et convertir un document unique
 
 ```http
 POST /api/convert
 Content-Type: multipart/form-data
 ```
 
-### Parameters
+### Paramètres
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `file` | Fichier | Yes | Document to convert |
-| `settings` | JSON string | No | Conversion settings override |
+| Nom | Type | Obligatoire | Description |
+|------|------|-------------|-------------|
+| `file` | Fichier | Oui | Document à convertir |
+| `settings` | Chaîne JSON | Non | Surcharge des paramètres de conversion |
 
-### Example Request
+### Exemple de requête
 
 ```bash
 curl -X POST http://localhost:5001/api/convert \
@@ -38,25 +38,25 @@ curl -X POST http://localhost:5001/api/convert \
 
 ---
 
-## Batch Convert Multiple Documents
+## Conversion par lot de plusieurs documents
 
 ```http
 POST /api/convert/batch
 Content-Type: multipart/form-data
 ```
 
-### Parameters
+### Paramètres
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `files` | Fichier[] | Yes | Documents à convertir (répéter le champ `files` pour chaque partie). Les dossiers dans l’interface utilisent la même forme : une partie multipart par fichier après expansion par le navigateur. |
-| `settings` | JSON string | No | Conversion settings override |
+| Nom | Type | Obligatoire | Description |
+|------|------|-------------|-------------|
+| `files` | Fichier[] | Oui | Documents à convertir (répétez le champ `files` pour chaque partie). Les téléversements de dossiers depuis l’interface envoient la même forme : une partie multipart par fichier après que le navigateur ait développé le répertoire. |
+| `settings` | Chaîne JSON | Non | Surcharge des paramètres de conversion |
 
-**Types :** chaque fichier doit avoir une extension autorisée par le serveur (`ALLOWED_EXTENSIONS`). Les fichiers non pris en charge apparaissent avec `"status": "rejected"`. Si **toutes** les parties sont rejetées, l’API renvoie **400** avec `error` et la liste `jobs`.
+**Types pris en charge :** Chaque nom de fichier doit avoir une extension autorisée par le serveur (voir `ALLOWED_EXTENSIONS` en déploiement). Les parties non prises en charge ne sont pas converties ; elles apparaissent dans la réponse avec `"status": "rejected"`. Si **toutes** les parties sont non prises en charge (ou ne donnent aucune conversion), l’API renvoie **400** avec un message `error` et la liste `jobs` par fichier.
 
-**Taille :** l’intégralité du corps multipart doit respecter `MAX_CONTENT_LENGTH` (souvent 100 Mo pour toute la requête). Les gros dossiers peuvent être envoyés en plusieurs lots.
+**Taille de la requête :** L’ensemble du corps multipart doit respecter `MAX_CONTENT_LENGTH` (100 Mo par défaut pour toute la requête), et non par fichier. Les gros dossiers peuvent nécessiter plusieurs requêtes par lot.
 
-### Example Request
+### Exemple de requête
 
 ```bash
 curl -X POST http://localhost:5001/api/convert/batch \
@@ -96,7 +96,7 @@ curl -X POST http://localhost:5001/api/convert/batch \
 
 ### Réponse (400 Bad Request)
 
-Lorsqu’aucune conversion ne démarre (par ex. tous les types sont refusés) :
+Renvoyée lorsqu’aucune tâche de conversion n’est démarrée (par exemple, si chaque fichier a une extension interdite) :
 
 ```json
 {
@@ -114,21 +114,21 @@ Lorsqu’aucune conversion ne démarre (par ex. tous les types sont refusés) :
 
 ---
 
-## Convert Document from URL
+## Convertir un document à partir d’une URL
 
 ```http
 POST /api/convert/url
 Content-Type: application/json
 ```
 
-### Parameters
+### Paramètres
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `url` | string | Yes | URL of the document to convert |
-| `settings` | object | No | Conversion settings override |
+| Nom | Type | Obligatoire | Description |
+|------|------|-------------|-------------|
+| `url` | chaîne | Oui | URL du document à convertir |
+| `settings` | objet | Non | Surcharge des paramètres de conversion |
 
-### Example Request
+### Exemple de requête
 
 ```bash
 curl -X POST http://localhost:5001/api/convert/url \
@@ -154,21 +154,21 @@ curl -X POST http://localhost:5001/api/convert/url \
 
 ---
 
-## Batch Convert Documents from URLs
+## Conversion par lot de documents à partir d’URL
 
 ```http
 POST /api/convert/url/batch
 Content-Type: application/json
 ```
 
-### Parameters
+### Paramètres
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `urls` | string[] | Yes | Array of URLs to convert |
-| `settings` | object | No | Conversion settings override |
+| Nom | Type | Obligatoire | Description |
+|------|------|-------------|-------------|
+| `urls` | chaîne[] | Oui | Tableau d’URL à convertir |
+| `settings` | objet | Non | Surcharge des paramètres de conversion |
 
-### Example Request
+### Exemple de requête
 
 ```bash
 curl -X POST http://localhost:5001/api/convert/url/batch \
@@ -214,13 +214,13 @@ curl -X POST http://localhost:5001/api/convert/url/batch \
 
 ---
 
-## Get Conversion Status
+## Obtenir l’état d’une conversion
 
 ```http
 GET /api/convert/{job_id}/status
 ```
 
-### Réponse (Traitement)
+### Réponse (en cours)
 
 ```json
 {
@@ -231,7 +231,7 @@ GET /api/convert/{job_id}/status
 }
 ```
 
-### Réponse (Completed)
+### Réponse (terminée)
 
 ```json
 {
@@ -244,11 +244,11 @@ GET /api/convert/{job_id}/status
   "images_count": 3,
   "tables_count": 2,
   "chunks_count": 0,
-  "preview": "# Document Title\n\nFirst paragraph..."
+  "preview": "# Titre du document\n\nPremier paragraphe…"
 }
 ```
 
-### Réponse (Failed)
+### Réponse (échec)
 
 ```json
 {
@@ -262,7 +262,7 @@ GET /api/convert/{job_id}/status
 
 ---
 
-## Get Conversion Result
+## Obtenir le résultat d’une conversion
 
 ```http
 GET /api/convert/{job_id}/result
@@ -277,7 +277,7 @@ GET /api/convert/{job_id}/result
   "confidence": 0.92,
   "formats_available": ["markdown", "html", "json", "text", "doctags", "document_tokens"],
   "result": {
-    "markdown_preview": "# Document Title\n\nContent preview...",
+    "markdown_preview": "# Titre du document\n\nAperçu du contenu…",
     "formats_available": ["markdown", "html", "json", "text", "doctags"],
     "page_count": 5,
     "images_count": 3,
@@ -294,7 +294,7 @@ GET /api/convert/{job_id}/result
 
 ---
 
-## Get Extraireed Images
+## Obtenir les images extraites
 
 ```http
 GET /api/convert/{job_id}/images
@@ -310,7 +310,7 @@ GET /api/convert/{job_id}/images
       "id": 1,
       "filename": "image_1.png",
       "path": "/outputs/job_id/images/image_1.png",
-      "caption": "Figure 1: Architecture diagram",
+      "caption": "Figure 1 : schéma d’architecture",
       "label": "figure"
     },
     {
@@ -327,17 +327,17 @@ GET /api/convert/{job_id}/images
 
 ---
 
-## Télécharger Extraireed Image
+## Télécharger une image extraite
 
 ```http
 GET /api/convert/{job_id}/images/{image_id}
 ```
 
-**Réponse**: Binary image file (PNG)
+**Réponse :** fichier image binaire (PNG)
 
 ---
 
-## Get Extraireed Tables
+## Obtenir les tableaux extraits
 
 ```http
 GET /api/convert/{job_id}/tables
@@ -352,9 +352,9 @@ GET /api/convert/{job_id}/tables
     {
       "id": 1,
       "label": "table",
-      "caption": "Table 1: Sales Data",
+      "caption": "Tableau 1 : données de ventes",
       "rows": [
-        ["Product", "Q1", "Q2", "Q3", "Q4"],
+        ["Produit", "T1", "T2", "T3", "T4"],
         ["Widget A", "100", "150", "200", "175"]
       ],
       "csv_path": "/outputs/job_id/tables/table_1.csv",
@@ -367,27 +367,27 @@ GET /api/convert/{job_id}/tables
 
 ---
 
-## Télécharger Table as CSV
+## Télécharger un tableau au format CSV
 
 ```http
 GET /api/convert/{job_id}/tables/{table_id}/csv
 ```
 
-**Réponse**: CSV file
+**Réponse :** fichier CSV
 
 ---
 
-## Télécharger Table as Image
+## Télécharger un tableau en image
 
 ```http
 GET /api/convert/{job_id}/tables/{table_id}/image
 ```
 
-**Réponse**: Binary image file (PNG)
+**Réponse :** fichier image binaire (PNG)
 
 ---
 
-## Get Document Chunks
+## Obtenir les fragments (chunks) du document
 
 ```http
 GET /api/convert/{job_id}/chunks
@@ -401,7 +401,7 @@ GET /api/convert/{job_id}/chunks
   "chunks": [
     {
       "id": 1,
-      "text": "This is the first chunk of text from the document...",
+      "text": "Premier extrait de texte du document…",
       "meta": {
         "headings": ["Introduction"],
         "page": 1
@@ -409,9 +409,9 @@ GET /api/convert/{job_id}/chunks
     },
     {
       "id": 2,
-      "text": "Second chunk continues the content...",
+      "text": "Le deuxième extrait poursuit le contenu…",
       "meta": {
-        "headings": ["Introduction", "Background"],
+        "headings": ["Introduction", "Contexte"],
         "page": 1
       }
     }
@@ -422,7 +422,7 @@ GET /api/convert/{job_id}/chunks
 
 ---
 
-## Export Document
+## Exporter le document
 
 ```http
 GET /api/export/{job_id}/{format}
@@ -438,11 +438,11 @@ GET /api/export/{job_id}/{format}
 - `document_tokens`
 - `chunks`
 
-**Réponse**: Fichier download with appropriate MIME type
+**Réponse :** téléchargement de fichier avec le type MIME approprié
 
 ---
 
-## Delete Job
+## Supprimer une tâche
 
 ```http
 DELETE /api/convert/{job_id}
@@ -456,4 +456,3 @@ DELETE /api/convert/{job_id}
   "job_id": "550e8400-e29b-41d4-a716-446655440000"
 }
 ```
-

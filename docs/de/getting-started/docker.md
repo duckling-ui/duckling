@@ -1,12 +1,12 @@
 # Docker-Bereitstellung
 
-Stellen Sie Duckling mit Docker für schnelle Einrichtung und Isolation bereit.
+Stellen Sie Duckling mit Docker für schnelles Setup und Isolation bereit.
 
-!!! success "TL;DR - Ein-Befehl-Start"
+!!! success "Kurz gefasst – Start mit einem Befehl"
     ```bash
-    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
     ```
-    Dann öffnen Sie `http://localhost:3000` 🎉
+    Öffnen Sie anschließend `http://localhost:3000` 🎉
 
 ## Voraussetzungen
 
@@ -15,40 +15,40 @@ Stellen Sie Duckling mit Docker für schnelle Einrichtung und Isolation bereit.
 
 ## Schnellstart
 
-### Option 1: Build Locally
+### Option 1: Lokal bauen
 
 ```bash
-# Clone the repository
-git clone https://github.com/davidgs/duckling.git
+# Repository klonen
+git clone https://github.com/duckling-ui/duckling.git
 cd duckling
 
-# Build and start (development mode)
+# Bauen und starten (Entwicklungsmodus)
 docker-compose up --build
 
-# Or run in background
+# Oder im Hintergrund ausführen
 docker-compose up -d --build
 ```
 
-### Option 2: Use Pre-built Images
+### Option 2: Vorgefertigte Images nutzen
 
 ```bash
-# Download docker-compose.prebuilt.yml
-curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml
+# docker-compose.prebuilt.yml herunterladen
+curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml
 
-# Start with pre-built images
+# Mit vorgefertigten Images starten
 docker-compose -f docker-compose.prebuilt.yml up -d
 ```
 
-Greifen Sie auf die Anwendung unter zu `http://localhost:3000`
+Die Anwendung erreichen Sie unter `http://localhost:3000`
 
-## Docker Compose-Dateien
+## Docker-Compose-Dateien
 
-Duckling provides several Docker Compose configurations:
+Duckling stellt mehrere Docker-Compose-Konfigurationen bereit:
 
 | Datei | Zweck |
-|------|---------|
-| `docker-compose.yml` | Entwicklung mit lokalen Builds |
-| `docker-compose.prod.yml` | Produktionsüberschreibungen |
+|-------|--------|
+| `docker-compose.yml` | Entwicklung mit lokalem Build |
+| `docker-compose.prod.yml` | Produktions-Overrides |
 | `docker-compose.prebuilt.yml` | Vorgefertigte Images aus der Registry |
 
 ### Entwicklung
@@ -63,71 +63,71 @@ docker-compose up --build
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
-### Pre-built Images
+### Vorgefertigte Images
 
 ```bash
-# Using default registry (davidgs)
+# Standard-Registry (davidgs)
 docker-compose -f docker-compose.prebuilt.yml up -d
 
-# Using custom registry
+# Eigene Registry
 DOCKER_REGISTRY=ghcr.io/yourusername docker-compose -f docker-compose.prebuilt.yml up -d
 
-# Using specific version
+# Bestimmte Version
 VERSION=1.0.0 docker-compose -f docker-compose.prebuilt.yml up -d
 ```
 
-## Docker-Images erstellen
+## Docker-Images bauen
 
 ### Build-Skript
 
-Verwenden Sie das bereitgestellte Build-Skript für einfaches Image-Building. Das Skript erstellt automatisch die MkDocs-Dokumentation vor dem Erstellen der Docker-Images:
+Nutzen Sie das mitgelieferte Build-Skript zum einfachen Erstellen von Images. Das Skript baut die MkDocs-Dokumentation automatisch, bevor die Docker-Images gebaut werden:
 
 ```bash
-# Build images locally (includes documentation build)
+# Images lokal bauen (inkl. Dokumentations-Build)
 ./scripts/docker-build.sh
 
-# Build and push to Docker Hub
+# Bauen und nach Docker Hub pushen
 ./scripts/docker-build.sh --push
 
-# Build with specific version
+# Mit bestimmter Version bauen
 ./scripts/docker-build.sh --version 1.0.0
 
-# Build for multiple platforms (requires buildx)
+# Für mehrere Plattformen (erfordert buildx)
 ./scripts/docker-build.sh --multi-platform --push
 
-# Push to custom registry
+# Zu eigener Registry pushen
 ./scripts/docker-build.sh --push --registry ghcr.io/yourusername
 
-# Skip documentation build (use existing site/)
+# Dokumentations-Build überspringen (vorhandenes site/ nutzen)
 ./scripts/docker-build.sh --skip-docs
 ```
 
 !!! note "Dokumentations-Build"
-    Das Skript führt `mkdocs build` für die Dokumentation in den Containern aus. Fehlt MkDocs, wird `pip install -r backend/requirements.txt` versucht. Das Backend-Image installiert Abhängigkeiten nur über `backend/requirements.txt`.
+    Das Build-Skript führt automatisch `mkdocs build` aus, damit die Dokumentation in den Docker-Containern verfügbar ist. Ist MkDocs nicht installiert, versucht es `pip install -r backend/requirements.txt` vor dem Build. Das Backend-Image installiert Abhängigkeiten nur aus `backend/requirements.txt`.
 
-### Automatische Veröffentlichung (CI/CD)
+### Automatisches Veröffentlichen (CI/CD)
 
-Wenn ein Pull Request in `main`, the [Publish Docker Images](https://github.com/davidgs/duckling/actions/workflows/publish-docker.yml) workflow automatically:
+Wenn ein Pull Request in `main` gemergt wird, läuft der [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml)-GitHub-Actions-Workflow automatisch. Er:
 
-1. Erstellt Multi-Platform-Images (linux/amd64, linux/arm64)
+1. Baut Multiplattform-Images (linux/amd64, linux/arm64)
 2. Pusht zu **Docker Hub** als `{DOCKERHUB_USERNAME}/duckling-backend` und `{DOCKERHUB_USERNAME}/duckling-frontend`
 3. Pusht zu **GitHub Container Registry** als `ghcr.io/{owner}/duckling-backend` und `ghcr.io/{owner}/duckling-frontend`
 
-Images werden mit der Version aus getaggt `frontend/package.json` und `latest`.
+Images werden mit der Version aus `frontend/package.json` und `latest` getaggt.
 
-**Erforderliche Repository-Geheimnisse** (Einstellungen → Geheimniss und variables → Actions):
+**Erforderliche Repository-Geheimnisse** (Einstellungen → Secrets and variables → Actions):
 
 | Geheimnis | Beschreibung |
-|--------|-------------|
-| `DOCKERHUB_USERNAME` | Docker Hub-Benutzername |
-| `DOCKERHUB_TOKEN` | Docker Hub-Zugriffstoken (oder Passwort) |
+|-----------|--------------|
+| `DOCKERHUB_USERNAME` | Docker-Hub-Benutzername |
+| `DOCKERHUB_TOKEN` | Docker-Hub-Zugangstoken (oder Passwort) |
 
-GHCR-Authentifizierung verwendet `GITHUB_TOKEN`, das GitHub Actions automatisch bereitstellt.
+Die GHCR-Authentifizierung nutzt `GITHUB_TOKEN`, das GitHub Actions automatisch bereitstellt.
 
 ### Manueller Build
 
 ```bash
-# Backend (production target)
+# Backend (Production-Target)
 cd backend
 docker build --target production -t duckling-backend:latest .
 
@@ -138,23 +138,23 @@ docker build --target production -t duckling-frontend:latest .
 
 ## Umgebungsvariablen
 
-Erstellen Sie eine `.env` Datei im Projektstamm:
+Legen Sie eine `.env`-Datei im Stammverzeichnis des Projekts an:
 
 ```env
-# Security (required for production)
+# Sicherheit (in Produktion erforderlich)
 SECRET_KEY=your-very-secure-random-key-at-least-32-chars
 
-# Flask configuration
+# Flask-Konfiguration
 FLASK_ENV=production
 DEBUG=False
 
-# Optional: Custom registry for pre-built images
+# Optional: Eigene Registry für vorgefertigte Images
 DOCKER_REGISTRY=davidgs
 VERSION=latest
 ```
 
 !!! warning "Sicherheit"
-    Setzenzen Sie immer einen starken `SECRET_KEY` in der Produktion. Erzeugen Sie einen mit:
+    Setzen Sie in Produktion immer einen starken `SECRET_KEY`. Erzeugen Sie einen mit:
     ```bash
     python -c "import secrets; print(secrets.token_hex(32))"
     ```
@@ -164,52 +164,52 @@ VERSION=latest
 ### Status anzeigen
 
 ```bash
-# Container status
+# Container-Status
 docker-compose ps
 
-# Resource usage
+# Ressourcennutzung
 docker stats
 ```
 
-### Protokolle anzeigen
+### Logs anzeigen
 
 ```bash
-# All services
+# Alle Dienste
 docker-compose logs -f
 
-# Specific service
+# Bestimmter Dienst
 docker-compose logs -f backend
 
-# Last 100 lines
+# Letzte 100 Zeilen
 docker-compose logs --tail=100 backend
 ```
 
 ### Dienste stoppen
 
 ```bash
-# Stop containers
+# Container stoppen
 docker-compose down
 
-# Stop and remove volumes
+# Stoppen und Volumes entfernen
 docker-compose down -v
 
-# Stop and remove images
+# Stoppen und Images entfernen
 docker-compose down --rmi all
 ```
 
 ### Dienste neu starten
 
 ```bash
-# Restart all
+# Alle neu starten
 docker-compose restart
 
-# Restart specific service
+# Bestimmten Dienst neu starten
 docker-compose restart backend
 ```
 
 ## GPU-Unterstützung
 
-Für GPU-beschleunigtes OCR mit NVIDIA-GPUs:
+Für GPU-beschleunigte OCR mit NVIDIA-GPUs:
 
 ```yaml
 # docker-compose.gpu.yml
@@ -228,7 +228,7 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
 ```
 
-Run with:
+Ausführen mit:
 
 ```bash
 docker-compose -f docker-compose.yml -f docker-compose.gpu.yml up
@@ -239,7 +239,7 @@ docker-compose -f docker-compose.yml -f docker-compose.gpu.yml up
 
 ## Persistenter Speicher
 
-### Stundard (Bind Mounts)
+### Standard (Bind-Mounts)
 
 ```yaml
 volumes:
@@ -247,7 +247,7 @@ volumes:
   - ./outputs:/app/outputs
 ```
 
-### Benannte Volumes (empfohlen für Produktion)
+### Benannte Volumes (in Produktion empfohlen)
 
 ```yaml
 services:
@@ -266,28 +266,28 @@ volumes:
 ### Daten sichern
 
 ```bash
-# Backup volumes
+# Volumes sichern
 docker run --rm -v duckling-outputs:/data -v $(pwd):/backup alpine tar cvf /backup/outputs-backup.tar /data
 
-# Restore volumes
+# Volumes wiederherstellen
 docker run --rm -v duckling-outputs:/data -v $(pwd):/backup alpine tar xvf /backup/outputs-backup.tar -C /
 ```
 
-## Health-Checks
+## Health Checks
 
-Beide Container enthalten Health-Checks:
+Beide Container enthalten Health Checks:
 
 ```bash
-# Check backend health
+# Backend-Gesundheit prüfen
 curl http://localhost:5001/api/health
-# Response: {"status": "healthy", "service": "duckling-backend"}
+# Antwort: {"status": "healthy", "service": "duckling-backend"}
 
-# Check frontend (returns HTML)
+# Frontend prüfen (liefert HTML)
 curl -I http://localhost:3000
-# Response: HTTP/1.1 200 OK
+# Antwort: HTTP/1.1 200 OK
 ```
 
-Docker Compose wartet auf Health-Checks:
+Docker Compose wartet auf Health Checks:
 
 ```yaml
 frontend:
@@ -322,7 +322,7 @@ services:
 
 ## Netzwerk
 
-Dienste kommunizieren über ein Bridge-Netzwerk:
+Die Dienste kommunizieren über ein Bridge-Netzwerk:
 
 ```yaml
 networks:
@@ -341,60 +341,60 @@ Browser → Frontend (nginx:3000) → Backend (flask:5001)
 ### Container startet nicht
 
 ```bash
-# Check logs
+# Logs prüfen
 docker-compose logs backend
 
-# Check container status
+# Container-Status prüfen
 docker-compose ps
 
-# Inspect container
+# Container inspizieren
 docker inspect duckling-backend
 ```
 
 ### Portkonflikte
 
-Ports ändern in `docker-compose.yml`:
+Ports in `docker-compose.yml` ändern:
 
 ```yaml
 services:
   backend:
     ports:
-      - "5002:5001"  # Change external port
+      - "5002:5001"  # Externen Port ändern
   frontend:
     ports:
-      - "8080:3000"  # Change external port
+      - "8080:3000"  # Externen Port ändern
 ```
 
 ### Build-Fehler
 
 ```bash
-# Clean build cache
+# Build-Cache leeren
 docker builder prune
 
-# Rebuild without cache
+# Ohne Cache neu bauen
 docker-compose build --no-cache
 ```
 
 ### Speicherprobleme
 
 ```bash
-# Check memory usage
+# Speichernutzung prüfen
 docker stats
 
-# Increase Docker memory limit (Docker Desktop)
-# Settings → Resources → Memory
+# Docker-Speicherlimit erhöhen (Docker Desktop)
+# Einstellungen → Resources → Memory
 ```
 
 ### Netzwerkprobleme
 
 ```bash
-# List networks
+# Netzwerke auflisten
 docker network ls
 
-# Inspect network
+# Netzwerk inspizieren
 docker network inspect duckling_duckling-network
 
-# Recreate network
+# Netzwerk neu erstellen
 docker-compose down
 docker network prune
 docker-compose up
@@ -402,6 +402,7 @@ docker-compose up
 
 ## Nächste Schritte
 
-- [Produktion Bereitstellung](../deployment/production.md) - Produktion-ready setup
-- [Skalierung](../deployment/scaling.md) - Skalierung for high traffic
-- [Sicherheit](../deployment/security.md) - Sicherheit best practices
+- [Produktionsbereitstellung](../deployment/production.md) – Setup für Produktion
+- [Skalierung](../deployment/scaling.md) – Für hohen Traffic skalieren
+- [Sicherheit](../deployment/security.md) – Sicherheits-Best Practices
+

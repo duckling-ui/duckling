@@ -13,7 +13,7 @@ Choose your preferred method:
     **Option 1: Pre-built Images (Fastest)**
     ```bash
     # Download the compose file
-    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml
 
     # Start Duckling
     docker-compose -f docker-compose.prebuilt.yml up -d
@@ -22,7 +22,7 @@ Choose your preferred method:
     **Option 2: Build Locally**
     ```bash
     # Clone and start
-    git clone https://github.com/davidgs/duckling.git
+    git clone https://github.com/duckling-ui/duckling.git
     cd duckling
     docker-compose up --build
     ```
@@ -68,26 +68,16 @@ Navigate to `http://localhost:3000` in your browser.
 
 Drag and drop a PDF, Word document, or image onto the drop zone, or click to browse.
 
-<figure markdown="span">
-  ![Uploading Document](../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
-  <figcaption>Upload progress indicator</figcaption>
-</figure>
-
 ### 3. Watch the Progress
 
 The conversion progress will be displayed in real-time.
-
-<figure markdown="span">
-  ![Conversion Progress](../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
-  <figcaption>Real-time conversion progress</figcaption>
-</figure>
 
 ### 4. Download Results
 
 Once complete, choose your export format:
 
 <figure markdown="span">
-  ![Conversion Complete](../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
+  ![Conversion Complete](../assets/screenshots/features/conversion-complete.png){ loading=lazy }
   <figcaption>Conversion complete with export options</figcaption>
 </figure>
 
@@ -126,13 +116,11 @@ Click the :material-cog: **Settings** button to configure:
 
 To convert multiple files at once:
 
-1. Drag multiple files onto the drop zone, choose a folder, or use **Choose files…**
-2. All files will be processed according to the job queue (see Features for concurrent limits)
+1. **Drag and drop** multiple files **or a whole folder** onto the drop zone. The browser expands a folder into its files; Duckling queues every supported document (unsupported types are skipped).
+2. **Click** the drop zone to open a **folder** picker and upload all supported files inside that folder at once.
+3. Use **Choose files…** when you want to pick **individual files** only (not folder mode).
 
-<figure markdown="span">
-  ![Multiple files](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Multiple files selected for upload</figcaption>
-</figure>
+All queued files are processed according to the job queue (see [Features](../user-guide/features.md) for concurrent limits).
 
 !!! tip "Performance"
     Batch processing uses a job queue with a maximum of 2 concurrent conversions to prevent memory exhaustion.

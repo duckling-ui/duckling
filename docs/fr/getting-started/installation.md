@@ -1,6 +1,6 @@
 # Installation
 
-Ce guide couvre la configuration de Duckling pour le développement local.
+Ce guide explique comment configurer Duckling pour le développement local.
 
 ## Prérequis
 
@@ -9,12 +9,12 @@ Ce guide couvre la configuration de Duckling pour le développement local.
 - npm ou yarn
 - Git
 
-## Installation étape par étape
+## Installation pas à pas
 
 ### 1. Cloner le dépôt
 
 ```bash
-git clone https://github.com/davidgs/duckling.git
+git clone https://github.com/duckling-ui/duckling.git
 cd duckling
 ```
 
@@ -34,24 +34,24 @@ cd ../frontend
 npm install
 ```
 
-### 4. Compiler la documentation (optionnel)
+### 4. Construire la documentation (facultatif)
 
-L'installation du backend inclut déjà MkDocs (`backend/requirements.txt`). Depuis la **racine du dépôt** :
+L’installation du backend inclut déjà MkDocs (même `backend/requirements.txt`). Depuis la **racine du dépôt** :
 
 ```bash
 cd ..  # racine du projet (où se trouve mkdocs.yml)
-# Avec le venv du backend : source backend/venv/bin/activate
+# Utiliser le venv du backend si vous l’avez créé : source backend/venv/bin/activate
 mkdocs build
 ```
 
-La documentation utilise le même fichier **`backend/requirements.txt`** que l'API (la pile MkDocs est en tête de ce fichier).
+Les builds de documentation utilisent le même fichier **`backend/requirements.txt`** que l’API (les plugins MkDocs sont listés en haut de ce fichier).
 
-!!! tip "Compilation automatique"
-    Si MkDocs est installé (via `backend/requirements.txt`), le backend peut compiler la documentation depuis le panneau Docs de l'interface.
+!!! tip "Construction automatique"
+    Si MkDocs est installé (via `backend/requirements.txt`), le backend peut construire la documentation lorsque vous utilisez le panneau documentation dans l’interface.
 
-## Configuration de l'environnement
+## Configuration de l’environnement
 
-### Variables d'environnement du backend
+### Variables d’environnement du backend
 
 Créez un fichier `.env` dans le répertoire `backend` :
 
@@ -66,9 +66,9 @@ MAX_CONTENT_LENGTH=104857600  # 100MB
 ```
 
 !!! warning "Sécurité en production"
-    En production, définissez toujours une `SECRET_KEY` robuste et `DEBUG=False`.
+    En production, définissez toujours une `SECRET_KEY` forte et `DEBUG=False`.
 
-## Vérifier l'installation
+## Vérifier l’installation
 
 ### Vérifier le backend
 
@@ -101,42 +101,43 @@ Vous devriez voir :
 
 ## Dépannage
 
-### Problèmes de version Python
+### Problèmes de version de Python
 
-En cas de problèmes de version Python :
+En cas de problème de version de Python :
 
 ```bash
 # Vérifier la version de Python
 python --version
 
-# Utiliser une version spécifique de Python
+# Utiliser une version précise de Python
 python3.13 -m venv venv
 ```
 
-### Problèmes de version Node.js
+### Problèmes de version de Node.js
 
 ```bash
 # Vérifier la version de Node
 node --version
 
-# Utiliser nvm pour changer de version
+# Changer de version avec nvm
 nvm install 18
 nvm use 18
 ```
 
-### Échecs d'installation des dépendances
+### Échecs d’installation des dépendances
 
 ```bash
-# Backend - mettre à jour pip
+# Backend – mettre pip à jour
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Frontend - vider le cache
+# Frontend – vider le cache
 rm -rf node_modules package-lock.json
 npm install
 ```
 
-## Prochaines étapes
+## Étapes suivantes
 
-- [Démarrage rapide](quickstart.md) - Apprendre les bases
-- [Configuration](../user-guide/configuration.md) - Personnaliser les paramètres
+- [Démarrage rapide](quickstart.md) – Apprendre les bases
+- [Configuration](../user-guide/configuration.md) – Personnaliser les paramètres
+

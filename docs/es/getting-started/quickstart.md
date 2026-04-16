@@ -1,28 +1,28 @@
 # Inicio rápido
 
-Comienza con Duckling en 5 minutos.
+Póngase en marcha con Duckling en 5 minutos.
 
 ## Iniciar la aplicación
 
-Elige tu método preferido:
+Elija su método preferido:
 
 === "Docker (recomendado)"
 
-    ¡La forma más rápida de empezar - sin dependencias que instalar!
+    La forma más rápida de empezar: ¡no hay dependencias que instalar!
 
-    **Opción 1: Imágenes preconstruidas (más rápido)**
+    **Opción 1: Imágenes precompiladas (la más rápida)**
     ```bash
-    # Download the compose file
-    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml
+    # Descargar el archivo compose
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml
 
-    # Start Duckling
+    # Iniciar Duckling
     docker-compose -f docker-compose.prebuilt.yml up -d
     ```
 
-    **Opción 2: Construir localmente**
+    **Opción 2: Compilar localmente**
     ```bash
-    # Clone and start
-    git clone https://github.com/davidgs/duckling.git
+    # Clonar el repositorio e iniciar
+    git clone https://github.com/duckling-ui/duckling.git
     cd duckling
     docker-compose up --build
     ```
@@ -30,7 +30,7 @@ Elige tu método preferido:
     La interfaz estará disponible en `http://localhost:3000`
 
     !!! tip "Primera ejecución"
-        El primer inicio puede tardar unos minutos mientras Docker descarga/construye las imágenes.
+        El primer arranque puede tardar unos minutos mientras Docker descarga o construye las imágenes.
 
 === "Configuración manual"
 
@@ -53,111 +53,99 @@ Elige tu método preferido:
 
     La interfaz estará disponible en `http://localhost:3000`
 
-## Tu primera conversión
+## Su primera conversión
 
 ### 1. Abrir la aplicación
 
-Navega a `http://localhost:3000` en tu navegador.
+Abra `http://localhost:3000` en el navegador.
 
 <figure markdown="span">
-  ![Duckling Interface](../../assets/screenshots/ui/main-english.png){ loading=lazy }
+  ![Interfaz de Duckling](../../assets/screenshots/ui/main-spanish.png){ loading=lazy }
   <figcaption>La interfaz principal de Duckling</figcaption>
 </figure>
 
 ### 2. Subir un documento
 
-Arrastra y suelta un PDF, documento Word o imagen en la zona de soltar, o haz clic para explorar.
-
-<figure markdown="span">
-  ![Uploading Document](../../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
-  <figcaption>Indicador de progreso de carga</figcaption>
-</figure>
+Arrastre y suelte un PDF, un documento Word o una imagen en la zona de depósito, o haga clic para examinar.
 
 ### 3. Ver el progreso
 
-El progreso de conversión se mostrará en tiempo real.
-
-<figure markdown="span">
-  ![Conversión Progress](../../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
-  <figcaption>Progreso de conversión en tiempo real</figcaption>
-</figure>
+El progreso de la conversión se muestra en tiempo real.
 
 ### 4. Descargar resultados
 
-Una vez completado, elige tu formato de exportación:
+Cuando termine, elija el formato de exportación:
 
 <figure markdown="span">
-  ![Conversión Complete](../../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
-  <figcaption>Conversión completa con opciones de exportación</figcaption>
+  ![Conversión completada](../../assets/screenshots/features/conversion-complete.png){ loading=lazy }
+  <figcaption>Conversión completada con opciones de exportación</figcaption>
 </figure>
 
-- **Markdown** - Ideal para documentación
-- **HTML** - Salida lista para web
-- **JSON** - Estructura completa del documento
-- **Texto plano** - Extracción de texto simple
+- **Markdown** – Ideal para documentación
+- **HTML** – Salida lista para la web
+- **JSON** – Estructura completa del documento
+- **Texto plano** – Extracción de texto sencilla
 
 ## Configuración básica
 
-Haz clic en :material-cog: **Configuración** botón para configurar:
+Pulse el botón :material-cog: **Ajustes** para configurar:
 
-### Configuración OCR
+### Ajustes de OCR
 
-| Configuración | Predeterminado | Descripción |
-|---------|---------|-------------|
-| Habilitado | `true` | Habilitar OCR para documentos escaneados |
-| Backend | `easyocr` | Motor OCR a utilizar |
+| Ajuste | Predeterminado | Descripción |
+|--------|----------------|-------------|
+| Activado | `true` | Activar OCR para documentos escaneados |
+| Motor | `easyocr` | Motor OCR a usar |
 | Idioma | `en` | Idioma principal |
 
-### Configuración de tablas
+### Ajustes de tablas
 
-| Configuración | Predeterminado | Descripción |
-|---------|---------|-------------|
-| Habilitado | `true` | Extraer tablas de documentos |
-| Modo | `preciso` | Nivel de precisión de detección |
+| Ajuste | Predeterminado | Descripción |
+|--------|----------------|-------------|
+| Activado | `true` | Extraer tablas de los documentos |
+| Modo | `accurate` | Nivel de precisión de detección |
 
-### Configuración de imágenes
+### Ajustes de imágenes
 
-| Configuración | Predeterminado | Descripción |
-|---------|---------|-------------|
+| Ajuste | Predeterminado | Descripción |
+|--------|----------------|-------------|
 | Extraer | `true` | Extraer imágenes incrustadas |
-| Escala | `1.0` | Escala de salida de imagen |
+| Escala | `1.0` | Escala de salida de imágenes |
 
-## Varios archivos a la vez
+## Procesamiento por lotes
 
 Para convertir varios archivos a la vez:
 
-1. Arrastra varios archivos a la zona, elige una carpeta o usa **Elegir archivos…**
-2. Los archivos se procesarán según la cola de trabajos (ver Características para el paralelismo)
+1. **Arrastre y suelte** varios archivos **o una carpeta entera** en la zona de depósito. El navegador expande una carpeta en sus archivos; Duckling encola cada documento admitido (los tipos no admitidos se omiten).
+2. **Haga clic** en la zona de depósito para abrir un selector de **carpeta** y subir de una vez todos los archivos admitidos dentro de esa carpeta.
+3. Use **Elegir archivos…** cuando quiera seleccionar **solo archivos** (no el modo carpeta).
 
-<figure markdown="span">
-  ![Varios archivos](../../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Varios archivos seleccionados para subir</figcaption>
-</figure>
+Todos los archivos en cola se procesan según la cola de trabajos (consulte [Funciones](../user-guide/features.md) para los límites de concurrencia).
 
 !!! tip "Rendimiento"
-    El procesamiento por lotes usa una cola de trabajos con un máximo de 2 conversiones simultáneas para evitar el agotamiento de memoria.
+    El procesamiento por lotes usa una cola de trabajos con un máximo de 2 conversiones simultáneas para evitar agotar la memoria.
 
 ## Usar la API
 
-Para acceso programático, usa la API REST:
+Para acceso programático, use la API REST:
 
 ```bash
-# Upload and convert a document
+# Subir y convertir un documento
 curl -X POST http://localhost:5001/api/convert \
   -F "file=@document.pdf"
 
-# Response
+# Respuesta
 {
   "job_id": "550e8400-e29b-41d4-a716-446655440000",
   "status": "processing"
 }
 ```
 
-Consulta la [Referencia de la API](../api/index.md) para documentación completa.
+Consulte la [referencia de la API](../api/index.md) para la documentación completa.
 
 ## Próximos pasos
 
-- [Características](../user-guide/features.md) - Explorar todas las capacidades
-- [Configuración](../user-guide/configuration.md) - Configuración avanzada
-- [Referencia de la API](../api/index.md) - Integrar con tus aplicaciones
+- [Funciones](../user-guide/features.md) – Explorar todas las capacidades
+- [Configuración](../user-guide/configuration.md) – Ajustes avanzados
+- [Referencia de la API](../api/index.md) – Integrar con sus aplicaciones
 

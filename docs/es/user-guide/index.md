@@ -1,10 +1,10 @@
 # Guía del usuario
 
-Learn how to use Duckling effectively.
+Cómo sacar partido a Duckling.
 
 ## Resumen
 
-Duckling provides a comprehensive interface for document conversion with advanced features like OCR, table extraction, y RAG chunking.
+Duckling ofrece una interfaz completa para convertir documentos, con funciones avanzadas como OCR, extracción de tablas y fragmentación para RAG.
 
 ## Secciones
 
@@ -14,39 +14,39 @@ Duckling provides a comprehensive interface for document conversion with advance
 
     ---
 
-    Explore all the capabilities of Duckling
+    Panorama de lo que permite Duckling
 
-    [:octicons-arrow-right-24: View Características](features.md)
+    [:octicons-arrow-right-24: Características](features.md)
 
 -   :material-file-document:{ .lg .middle } __Formatos compatibles__
 
     ---
 
-    Input y output format reference
+    Referencia de formatos de entrada y salida
 
-    [:octicons-arrow-right-24: Format Guide](formats.md)
+    [:octicons-arrow-right-24: Formatos](formats.md)
 
 -   :material-cog:{ .lg .middle } __Configuración__
 
     ---
 
-    Customize OCR, tables, images, y performance settings
+    Ajustar OCR, tablas, imágenes y rendimiento
 
-    [:octicons-arrow-right-24: Configuración Guide](configuration.md)
+    [:octicons-arrow-right-24: Configuración](configuration.md)
 
 </div>
 
-## Quick Tips
+## Consejos rápidos
 
 !!! tip "Varios archivos"
-    Arrastra varios archivos, elige carpeta o usa **Elegir archivos…**—la misma zona sirve para uno o muchos. La cola procesa hasta 2 conversiones en paralelo para equilibrar velocidad y memoria.
+    Arrastra varios archivos, elige una carpeta o usa **Elegir archivos…** — la misma zona sirve para uno o muchos. La cola procesa hasta 2 conversiones en paralelo.
 
-!!! tip "OCR Selection"
-    - **EasyOCR**: Best for multi-language documents with GPU support
-    - **Tesseract**: Reliable for simple documents
-    - **macOS Vision**: Fastest on Mac with Apple Silicon
-    - **RapidOCR**: Lightweight y fast
+!!! tip "Elección de OCR"
+    - **EasyOCR**: adecuado para documentos multilingües con GPU
+    - **Tesseract**: fiable en documentos sencillos
+    - **macOS Vision**: muy rápido en Mac con Apple Silicon
+    - **RapidOCR**: ligero y rápido
 
-!!! tip "RAG Chunking"
-    Enable chunking in settings to generate document chunks optimized for retrieval-augmented generation. Chunks include metadata like headings y page numbers.
+!!! tip "Fragmentación RAG"
+    Activa la fragmentación en la configuración para generar trozos de documento optimizados para RAG. Los fragmentos incluyen metadatos como encabezados y números de página.
 

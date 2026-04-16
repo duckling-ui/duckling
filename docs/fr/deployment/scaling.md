@@ -1,18 +1,18 @@
-# Mise à l'échelle
+# Montée en charge
 
-Guide for scaling Duckling for high-traffic deployments.
+Guide pour faire évoluer Duckling dans des déploiements à fort trafic.
 
-## Architecture for Échelle
+## Architecture à l’échelle
 
 ```mermaid
 graph LR
-    LB[Load Balancer]
+    LB[Équilibreur de charge]
 
     LB --> B1[Backend 1]
     LB --> B2[Backend 2]
     LB --> B3[Backend 3]
 
-    B1 --> Redis[(Redis Queue)]
+    B1 --> Redis[(File d’attente Redis)]
     B2 --> Redis
     B3 --> Redis
 
@@ -20,7 +20,7 @@ graph LR
     B2 --> PG
     B3 --> PG
 
-    B1 --> S3[(S3 Storage)]
+    B1 --> S3[(Stockage S3)]
     B2 --> S3
     B3 --> S3
 
@@ -30,29 +30,29 @@ graph LR
     style S3 fill:#22c55e,color:#fff
 ```
 
-## Horizontal Mise à l'échelle
+## Mise à l’échelle horizontale
 
-For high-traffic deployments:
+Pour les déploiements à fort trafic :
 
-1. **Load Balancer**: Use nginx, HAProxy, or cloud LB
-2. **Multiple Backend Instances**: Run multiple Gunicorn processes
-3. **Shared Storage**: Use NFS or object storage for uploads/outputs
-4. **Database**: Consider PostgreSQL for history (instead of SQLite)
+1. **Équilibreur de charge** : utiliser nginx, HAProxy ou un LB cloud
+2. **Plusieurs instances backend** : exécuter plusieurs processus Gunicorn
+3. **Stockage partagé** : NFS ou stockage objet pour les envois et sorties
+4. **Base de données** : envisager PostgreSQL pour l’historique (à la place de SQLite)
 
 ---
 
-## Resource Requirements
+## Besoins en ressources
 
-| Déploiement | CPU | RAM | Storage |
+| Déploiement | CPU | RAM | Stockage |
 |------------|-----|-----|---------|
-| Développement | 2 cores | 4GB | 10GB |
-| Small (< 100 docs/day) | 4 cores | 8GB | 50GB |
-| Moyen (< 1000 docs/day) | 8 cores | 16GB | 200GB |
-| Large (> 1000 docs/day) | 16+ cores | 32GB+ | 500GB+ |
+| Développement | 2 cœurs | 4 Go | 10 Go |
+| Petit (< 100 docs/jour) | 4 cœurs | 8 Go | 50 Go |
+| Moyen (< 1000 docs/jour) | 8 cœurs | 16 Go | 200 Go |
+| Grand (> 1000 docs/jour) | 16+ cœurs | 32 Go+ | 500 Go+ |
 
 ---
 
-## Load Balancing with Nginx
+## Répartition de charge avec Nginx
 
 ```nginx
 upstream docling_backends {
@@ -72,7 +72,7 @@ server {
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
 
-        # Sticky sessions for job polling
+        # Sessions persistantes pour l’interrogation des jobs
         ip_hash;
     }
 }
@@ -80,9 +80,9 @@ server {
 
 ---
 
-## Redis Job Queue
+## File d’attente de jobs Redis
 
-For production with multiple workers, replace the threading-based queue with Redis:
+En production avec plusieurs workers, remplacer la file basée sur les threads par Redis :
 
 ### Installation
 
@@ -113,12 +113,12 @@ celery.conf.update(
 )
 ```
 
-### Task Definition
+### Définition de tâche
 
 ```python
 @celery.task(bind=True)
 def convert_document(self, job_id: str, file_path: str, settings: dict):
-    """Convert a document asynchronously."""
+    """Convertir un document de façon asynchrone."""
     try:
         result = converter_service.convert(file_path, settings)
         return {'job_id': job_id, 'status': 'completed', 'result': result}
@@ -126,7 +126,7 @@ def convert_document(self, job_id: str, file_path: str, settings: dict):
         self.retry(exc=e, countdown=60, max_retries=3)
 ```
 
-### Running Workers
+### Exécution des workers
 
 ```bash
 celery -A celery_config worker --loglevel=info --concurrency=4
@@ -134,9 +134,9 @@ celery -A celery_config worker --loglevel=info --concurrency=4
 
 ---
 
-## PostgreSQL Migration
+## Migration PostgreSQL
 
-For multi-instance deployments, migrate from SQLite to PostgreSQL:
+Pour les déploiements multi-instances, migrer de SQLite vers PostgreSQL :
 
 ### Configuration
 
@@ -148,7 +148,7 @@ DATABASE_URL = os.environ.get(
 )
 ```
 
-### Migration Script
+### Script de migration
 
 ```python
 # migrate_to_postgres.py
@@ -159,15 +159,15 @@ def migrate():
     sqlite_conn = sqlite3.connect('history.db')
     pg_conn = psycopg2.connect(DATABASE_URL)
 
-    # Copy data from SQLite to PostgreSQL
+    # Copier les données de SQLite vers PostgreSQL
     # ...
 ```
 
 ---
 
-## Object Storage (S3)
+## Stockage objet (S3)
 
-Use S3 or compatible storage for uploads et outputs:
+Utiliser S3 ou un stockage compatible pour les envois et les sorties :
 
 ### Configuration
 
@@ -184,7 +184,7 @@ s3 = boto3.client(
 BUCKET_NAME = 'duckling-files'
 ```
 
-### Fichier Operations
+### Opérations sur les fichiers
 
 ```python
 def upload_to_s3(file_path: str, key: str):
@@ -196,11 +196,11 @@ def download_from_s3(key: str, file_path: str):
 
 ---
 
-## GPU Acceleration
+## Accélération GPU
 
-For high-volume OCR processing:
+Pour un volume OCR élevé :
 
-### Docker with GPU
+### Docker avec GPU
 
 ```yaml
 # docker-compose.gpu.yml
@@ -218,7 +218,7 @@ services:
       - NVIDIA_VISIBLE_DEVICES=all
 ```
 
-### Kubernetes with GPU
+### Kubernetes avec GPU
 
 ```yaml
 apiVersion: apps/v1
@@ -237,39 +237,39 @@ spec:
 
 ---
 
-## Monitoring
+## Supervision
 
-### Prometheus Metrics
+### Métriques Prometheus
 
 ```python
 from prometheus_flask_exporter import PrometheusMetrics
 
 metrics = PrometheusMetrics(app)
 
-# Custom metrics
+# Métriques personnalisées
 conversion_counter = metrics.counter(
     'conversions_total',
-    'Total conversions',
+    'Total des conversions',
     labels={'status': lambda: 'success'}
 )
 ```
 
-### Grafana Dashboard
+### Tableau de bord Grafana
 
-Key metrics to monitor:
+Indicateurs clés :
 
-- Conversion rate (documents/minute)
-- Queue depth
-- Traitement time (p50, p95, p99)
-- Error rate
-- Memory usage
-- CPU utilization
+- Débit de conversion (documents/minute)
+- Profondeur de file
+- Temps de traitement (p50, p95, p99)
+- Taux d’erreur
+- Utilisation mémoire
+- Utilisation CPU
 
 ---
 
-## Kubernetes Déploiement
+## Déploiement Kubernetes
 
-### Déploiement
+### Deployment
 
 ```yaml
 apiVersion: apps/v1

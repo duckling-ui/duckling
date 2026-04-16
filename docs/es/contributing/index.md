@@ -1,10 +1,10 @@
 # Contribuir
 
-¡Gracias por tu interés en contribuir a Duckling!
+¡Gracias por su interés en contribuir a Duckling!
 
-## Resumen
+## Descripción general
 
-Esta sección cubre todo lo que necesitas saber para contribuir de manera efectiva.
+Esta sección cubre todo lo que necesita para contribuir de forma eficaz.
 
 <div class="grid cards" markdown>
 
@@ -12,7 +12,7 @@ Esta sección cubre todo lo que necesitas saber para contribuir de manera efecti
 
     ---
 
-    Configura tu entorno de desarrollo
+    Configure su entorno de desarrollo
 
     [:octicons-arrow-right-24: Guía de configuración](development.md)
 
@@ -20,7 +20,7 @@ Esta sección cubre todo lo que necesitas saber para contribuir de manera efecti
 
     ---
 
-    Estándares y convenciones de codificación
+    Normas y convenciones de codificación
 
     [:octicons-arrow-right-24: Guía de estilo](code-style.md)
 
@@ -32,11 +32,19 @@ Esta sección cubre todo lo que necesitas saber para contribuir de manera efecti
 
     [:octicons-arrow-right-24: Guía de pruebas](testing.md)
 
+-   :material-accessible:{ .lg .middle } __Accesibilidad__
+
+    ---
+
+    Semántica de la interfaz, foco y comprobaciones en la documentación
+
+    [:octicons-arrow-right-24: Accesibilidad](accessibility.md)
+
 -   :material-handshake:{ .lg .middle } __Código de conducta__
 
     ---
 
-    Directrices y estándares de la comunidad
+    Pautas y normas de la comunidad
 
     [:octicons-arrow-right-24: Código de conducta](code-of-conduct.md)
 
@@ -44,52 +52,52 @@ Esta sección cubre todo lo que necesitas saber para contribuir de manera efecti
 
 ## Código de conducta
 
-Al participar en este proyecto, aceptas cumplir nuestro [Código de conducta](code-of-conduct.md), basado en el Contributor Covenant 3.0. Estamos comprometidos a proporcionar un entorno acogedor e inclusivo para todos.
+Al participar en este proyecto, acepta cumplir nuestro [código de conducta](code-of-conduct.md), basado en el Contributor Covenant 3.0. Nos comprometemos a ofrecer un entorno acogedor e inclusivo para todas las personas.
 
 ## Cómo contribuir
 
-### Reportar errores
+### Informar de errores
 
-1. **Revisa los issues existentes** para evitar duplicados
-2. **Crea un nuevo issue** con:
+1. **Revise los issues existentes** para evitar duplicados
+2. **Cree un issue nuevo** con:
    - Título claro y descriptivo
    - Pasos para reproducir
-   - Comportamiento esperado vs. actual
+   - Comportamiento esperado frente al real
    - Detalles del entorno (SO, navegador, versiones)
    - Capturas de pantalla si aplica
 
-### Sugerir funciones
+### Sugerir funcionalidades
 
-1. **Revisa los issues existentes** para sugerencias similares
-2. **Crea una solicitud de función** con:
-   - Descripción clara de la función
+1. **Revise los issues** en busca de sugerencias similares
+2. **Cree una solicitud de función** con:
+   - Descripción clara de la funcionalidad
    - Caso de uso y beneficios
    - Posible enfoque de implementación
 
-### Pull Requests
+### Pull requests
 
-1. **Bifurca el repositorio**
-2. **Crea una rama de función**: `git checkout -b feature/tu-nombre-de-funcion`
-3. **Realiza tus cambios**
-4. **Escribe/actualiza pruebas**
-5. **Ejecuta las pruebas**: Asegúrate de que todas pasen
-6. **Commits con mensajes claros**: Sigue conventional commits (ver [Estilo de código](code-style.md#commit-messages))
-7. **Firma todos los commits con DCO**: Cada commit DEBE incluir una línea `Signed-off-by:` (ver [Estilo de código](code-style.md#dco-sign-off))
-8. **Haz push a tu bifurcación**
-9. **Crea un Pull Request**
+1. **Haga un fork del repositorio**
+2. **Cree una rama de función**: `git checkout -b feature/nombre-de-su-funcionalidad`
+3. **Realice sus cambios**
+4. **Escriba o actualice las pruebas**
+5. **Ejecute las pruebas**: deben pasar todas
+6. **Mensajes de commit claros**: commits convencionales (véase [Estilo de código](code-style.md#commit-messages))
+7. **Firme todos los commits con DCO**: cada commit DEBE incluir una línea `Signed-off-by:` (véase [Estilo de código](code-style.md#dco-sign-off))
+8. **Empuje a su fork**
+9. **Abra un pull request**
 
 ## Proceso de revisión
 
-1. Todos los PRs requieren al menos una aprobación
+1. Todos los PR requieren al menos una aprobación
 2. Las comprobaciones de CI deben pasar
 3. La cobertura de código no debe disminuir
 4. La documentación debe actualizarse si es necesario
 
 ## Reconocimiento
 
-Los contribuidores serán reconocidos en:
+Las personas contribuyentes aparecerán en:
 
 - CHANGELOG.md por contribuciones significativas
-- Sección de contribuidores en README.md
+- La sección de colaboradores del README.md
 
 ¡Gracias por contribuir a Duckling!

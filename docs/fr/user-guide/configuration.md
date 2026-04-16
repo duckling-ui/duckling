@@ -1,10 +1,10 @@
-# Configuration Guide
+# Guide de configuration
 
-Complete reference for all Duckling configuration options.
+Référence complète de toutes les options de configuration de Duckling.
 
 ## Variables d'environnement
 
-Créez un `.env` file in the `backend` directory:
+Créez un fichier `.env` dans le répertoire `backend` :
 
 ```env
 # Flask Configuration
@@ -19,7 +19,7 @@ MAX_CONTENT_LENGTH=104857600   # Max upload size in bytes (100MB default)
 DATABASE_URL=sqlite:///history.db
 ```
 
-### Production Environment
+### Environnement de production
 
 ```env
 FLASK_ENV=production
@@ -28,32 +28,32 @@ DEBUG=False
 MAX_CONTENT_LENGTH=209715200   # 200MB for production
 ```
 
-!!! danger "Sécurité Warning"
-    Never use the default `SECRET_KEY` en production. Generate a secure retom key.
+!!! danger "Avertissement de sécurité"
+    N'utilisez jamais la `SECRET_KEY` par défaut en production. Générez une clé aléatoire sécurisée.
 
 ---
 
 ## Paramètres OCR
 
-OCR (Optical Character Recognition) extracts text from images et scanned documents.
+L'OCR (reconnaissance optique de caractères) extrait le texte des images et des documents numérisés.
 
-### Configuration Options
+### Options de configuration
 
-| Paramètre | Type | Par défaut | Description |
-|---------|------|---------|-------------|
-| `enabled` | boolean | `true` | Enable/disable OCR processing |
+| Paramètre | Type | Défaut | Description |
+|-----------|------|--------|-------------|
+| `enabled` | boolean | `true` | Activer ou désactiver l'OCR |
 | `backend` | string | `"easyocr"` | Moteur OCR à utiliser |
-| `language` | string | `"en"` | Langue principale for recognition |
-| `force_full_page_ocr` | boolean | `false` | OCR entire page vs detected regions |
-| `use_gpu` | boolean | `false` | Enable GPU acceleration (EasyOCR only) |
-| `confidence_threshold` | float | `0.5` | Minimum confidence for results (0-1) |
-| `bitmap_area_threshold` | float | `0.05` | Min area ratio for bitmap OCR (0-1) |
+| `language` | string | `"en"` | Langue principale de reconnaissance |
+| `force_full_page_ocr` | boolean | `false` | OCR sur toute la page ou zones détectées |
+| `use_gpu` | boolean | `false` | Accélération GPU (EasyOCR uniquement) |
+| `confidence_threshold` | float | `0.5` | Confiance minimale des résultats (0–1) |
+| `bitmap_area_threshold` | float | `0.05` | Ratio de surface minimal pour l'OCR bitmap (0–1) |
 
-### OCR Backends
+### Moteurs OCR
 
 === "EasyOCR"
 
-    Best for multi-language documents with accuracy requirements.
+    Idéal pour les documents multilingues exigeant la précision.
 
     ```json
     {
@@ -65,13 +65,13 @@ OCR (Optical Character Recognition) extracts text from images et scanned documen
     }
     ```
 
-    - **Support GPU**: Yes (CUDA)
-    - **Langues**: 80+
-    - **Note**: May have initialization issues on some systems
+    - **GPU** : oui (CUDA)
+    - **Langues** : 80+
+    - **Remarque** : des problèmes d'initialisation peuvent survenir sur certains systèmes
 
 === "Tesseract"
 
-    Classic, reliable OCR engine for simple documents.
+    Moteur OCR classique et fiable pour des documents simples.
 
     ```json
     {
@@ -82,13 +82,13 @@ OCR (Optical Character Recognition) extracts text from images et scanned documen
     }
     ```
 
-    - **Support GPU**: No
-    - **Langues**: 100+
-    - **Requires**: Tesseract installed on system
+    - **GPU** : non
+    - **Langues** : 100+
+    - **Prérequis** : Tesseract installé sur le système
 
 === "macOS Vision"
 
-    Native macOS OCR using Apple's Vision framework.
+    OCR macOS native via le framework Vision d'Apple.
 
     ```json
     {
@@ -99,13 +99,13 @@ OCR (Optical Character Recognition) extracts text from images et scanned documen
     }
     ```
 
-    - **Support GPU**: Uses Apple Neural Moteur
-    - **Requires**: macOS 10.15+
-    - **Langue codes**: Duckling accepts short codes like `en`, `de`, `fr` et will normalize them to Vision locale tags (for example `en-US`) during conversion.
+    - **GPU** : utilise l'Apple Neural Engine
+    - **Prérequis** : macOS 10.15+
+    - **Codes langue** : Duckling accepte les codes courts (`en`, `de`, `fr`, etc.) et les normalise en balises de locale Vision (par ex. `en-US`) pendant la conversion.
 
 === "RapidOCR"
 
-    Fast, lightweight OCR using ONNX runtime.
+    OCR rapide et léger avec ONNX Runtime.
 
     ```json
     {
@@ -116,41 +116,41 @@ OCR (Optical Character Recognition) extracts text from images et scanned documen
     }
     ```
 
-    - **Support GPU**: No
-    - **Langues**: Limited
+    - **GPU** : non
+    - **Langues** : limité
 
-### Supported Langues
+### Langues prises en charge
 
 | Code | Langue | Code | Langue |
-|------|----------|------|----------|
-| `en` | English | `ja` | Japanese |
-| `de` | German | `zh` | Chinese (Simplified) |
-| `fr` | French | `zh-tw` | Chinese (Traditional) |
-| `es` | Spanish | `ko` | Korean |
-| `it` | Italian | `ar` | Arabic |
-| `pt` | Portuguese | `hi` | Hindi |
-| `nl` | Dutch | `th` | Thai |
-| `pl` | Polish | `vi` | Vietnamese |
-| `ru` | Russian | `tr` | Turkish |
+|------|--------|------|--------|
+| `en` | Anglais | `ja` | Japonais |
+| `de` | Allemand | `zh` | Chinois (simplifié) |
+| `fr` | Français | `zh-tw` | Chinois (traditionnel) |
+| `es` | Espagnol | `ko` | Coréen |
+| `it` | Italien | `ar` | Arabe |
+| `pt` | Portugais | `hi` | Hindi |
+| `nl` | Néerlandais | `th` | Thaï |
+| `pl` | Polonais | `vi` | Vietnamien |
+| `ru` | Russe | `tr` | Turc |
 
 ---
 
 ## Paramètres des tableaux
 
-Configure how tables are detected et extracted from documents.
+Configurez la détection et l'extraction des tableaux dans les documents.
 
-### Configuration Options
+### Options de configuration
 
-| Paramètre | Type | Par défaut | Description |
-|---------|------|---------|-------------|
-| `enabled` | boolean | `true` | Enable table detection |
-| `structure_extraction` | boolean | `true` | Preserve table structure |
-| `mode` | string | `"précis"` | Detection mode |
-| `do_cell_matching` | boolean | `true` | Match cell content to structure |
+| Paramètre | Type | Défaut | Description |
+|-----------|------|--------|-------------|
+| `enabled` | boolean | `true` | Activer la détection de tableaux |
+| `structure_extraction` | boolean | `true` | Conserver la structure du tableau |
+| `mode` | string | `"accurate"` | Mode de détection |
+| `do_cell_matching` | boolean | `true` | Associer le contenu des cellules à la structure |
 
-### Detection Modes
+### Modes de détection
 
-=== "Accurate Mode"
+=== "Mode précis"
 
     ```json
     {
@@ -162,12 +162,12 @@ Configure how tables are detected et extracted from documents.
     }
     ```
 
-    - Élevéer precision table detection
-    - Better cell boundary recognition
-    - Slower processing
-    - Recommended for complex tables
+    - Détection de tableaux plus précise
+    - Meilleure reconnaissance des limites de cellules
+    - Traitement plus lent
+    - Recommandé pour les tableaux complexes
 
-=== "Fast Mode"
+=== "Mode rapide"
 
     ```json
     {
@@ -179,30 +179,30 @@ Configure how tables are detected et extracted from documents.
     }
     ```
 
-    - Faster processing
-    - Good for simple tables
-    - May miss complex structures
+    - Traitement plus rapide
+    - Adapté aux tableaux simples
+    - Peut manquer des structures complexes
 
 ---
 
 ## Paramètres des images
 
-Configure image extraction et processing.
+Configurez l'extraction et le traitement des images.
 
-### Configuration Options
+### Options de configuration
 
-| Paramètre | Type | Par défaut | Description |
-|---------|------|---------|-------------|
+| Paramètre | Type | Défaut | Description |
+|-----------|------|--------|-------------|
 | `extract` | boolean | `true` | Extraire les images intégrées |
-| `classify` | boolean | `true` | Classify et tag images |
-| `generate_page_images` | boolean | `false` | Create images of each page |
-| `generate_picture_images` | boolean | `true` | Extraire pictures as files |
-| `generate_table_images` | boolean | `true` | Extraire tables as images |
-| `images_scale` | float | `1.0` | Échelle factor for images (0.1-4.0) |
+| `classify` | boolean | `true` | Classifier et étiqueter les images |
+| `generate_page_images` | boolean | `false` | Créer une image par page |
+| `generate_picture_images` | boolean | `true` | Extraire les illustrations en fichiers |
+| `generate_table_images` | boolean | `true` | Extraire les tableaux sous forme d'images |
+| `images_scale` | float | `1.0` | Facteur d'échelle des images (0,1 à 4,0) |
 
-### Example Configurations
+### Exemples de configuration
 
-=== "Élevé Quality"
+=== "Haute qualité"
 
     ```json
     {
@@ -217,7 +217,7 @@ Configure image extraction et processing.
     }
     ```
 
-=== "Minimal (Text Only)"
+=== "Minimal (texte uniquement)"
 
     ```json
     {
@@ -233,30 +233,30 @@ Configure image extraction et processing.
 
 ---
 
-## Performances Paramètres
+## Paramètres de performances
 
-Optimize processing speed et resource usage.
+Optimisez la vitesse de traitement et l'utilisation des ressources.
 
-### Configuration Options
+### Options de configuration
 
-| Paramètre | Type | Par défaut | Description |
-|---------|------|---------|-------------|
-| `device` | string | `"auto"` | Traitement device |
-| `num_threads` | int | `4` | CPU threads (1-32) |
-| `document_timeout` | int/null | `null` | Max processing time in seconds |
+| Paramètre | Type | Défaut | Description |
+|-----------|------|--------|-------------|
+| `device` | string | `"auto"` | Périphérique de traitement |
+| `num_threads` | int | `4` | Fils CPU (1–32) |
+| `document_timeout` | int/null | `null` | Durée maximale de traitement en secondes |
 
-### Device Options
+### Options des périphériques
 
-| Device | Description | Idéal pour |
-|--------|-------------|----------|
-| `auto` | Automatically select best device | General use |
-| `cpu` | Force CPU processing | Servers without GPU |
-| `cuda` | NVIDIA GPU acceleration | Linux/Windows with NVIDIA GPU |
-| `mps` | Apple Metal Performances Shaders | macOS with Apple Silicon |
+| Périphérique | Description | Idéal pour |
+|---------------|-------------|------------|
+| `auto` | Choisit automatiquement le meilleur périphérique | Usage général |
+| `cpu` | Force le traitement CPU | Serveurs sans GPU |
+| `cuda` | Accélération GPU NVIDIA | Linux/Windows avec GPU NVIDIA |
+| `mps` | Apple Metal Performance Shaders | macOS avec Apple Silicon |
 
-### Example Configurations
+### Exemples de configuration
 
-=== "Élevé Performances (GPU)"
+=== "Hautes performances (GPU)"
 
     ```json
     {
@@ -268,7 +268,7 @@ Optimize processing speed et resource usage.
     }
     ```
 
-=== "Resource-Constrained"
+=== "Ressources limitées"
 
     ```json
     {
@@ -294,21 +294,21 @@ Optimize processing speed et resource usage.
 
 ---
 
-## Chunking Paramètres
+## Paramètres de découpage (chunking)
 
-Configure document chunking for RAG applications.
+Configurez le découpage de document pour les applications RAG.
 
-### Configuration Options
+### Options de configuration
 
-| Paramètre | Type | Par défaut | Description |
-|---------|------|---------|-------------|
-| `enabled` | boolean | `false` | Enable document chunking |
-| `max_tokens` | int | `512` | Maximum tokens per chunk |
-| `merge_peers` | boolean | `true` | Merge undersized chunks |
+| Paramètre | Type | Défaut | Description |
+|-----------|------|--------|-------------|
+| `enabled` | boolean | `false` | Activer le découpage |
+| `max_tokens` | int | `512` | Nombre maximal de jetons par segment |
+| `merge_peers` | boolean | `true` | Fusionner les petits segments |
 
-### Example Configurations
+### Exemples de configuration
 
-=== "RAG-Optimized"
+=== "Optimisé RAG"
 
     ```json
     {
@@ -320,7 +320,7 @@ Configure document chunking for RAG applications.
     }
     ```
 
-=== "Large Context Windows"
+=== "Grandes fenêtres de contexte"
 
     ```json
     {
@@ -334,17 +334,17 @@ Configure document chunking for RAG applications.
 
 ---
 
-## Output Paramètres
+## Paramètres de sortie
 
-Configure default output format.
+Définissez le format de sortie par défaut.
 
-| Paramètre | Type | Par défaut | Description |
-|---------|------|---------|-------------|
-| `default_format` | string | `"markdown"` | Par défaut export format |
+| Paramètre | Type | Défaut | Description |
+|-----------|------|--------|-------------|
+| `default_format` | string | `"markdown"` | Format d'export par défaut |
 
 ---
 
-## Complete Configuration Example
+## Exemple de configuration complet
 
 ```json
 {
@@ -389,15 +389,15 @@ Configure default output format.
 
 ---
 
-## Configuration via API
+## Configuration via l'API
 
-### Get Current Paramètres
+### Obtenir les paramètres actuels
 
 ```bash
 curl http://localhost:5001/api/settings
 ```
 
-### Update Paramètres
+### Mettre à jour les paramètres
 
 ```bash
 curl -X PUT http://localhost:5001/api/settings \
@@ -408,7 +408,7 @@ curl -X PUT http://localhost:5001/api/settings \
   }'
 ```
 
-### Reset to Par défauts
+### Réinitialiser aux valeurs par défaut
 
 ```bash
 curl -X POST http://localhost:5001/api/settings/reset
@@ -418,23 +418,22 @@ curl -X POST http://localhost:5001/api/settings/reset
 
 ## Dépannage
 
-### OCR Not Working
+### L'OCR ne fonctionne pas
 
-1. **EasyOCR initialization error**: Switch to `ocrmac` (macOS) or `tesseract`
-2. **GPU errors**: Définir `use_gpu: false`
-3. **Faible confidence results**: Faibleer `confidence_threshold`
+1. **Erreur d'initialisation EasyOCR** : passez à `ocrmac` (macOS) ou `tesseract`
+2. **Erreurs GPU** : définissez `use_gpu: false`
+3. **Résultats peu confiants** : baissez `confidence_threshold`
 
-### Slow Traitement
+### Traitement lent
 
-1. Reduce `images_scale` to `0.5`
-2. Use `mode: "fast"` for tables
-3. Disable `generate_page_images`
-4. Increase `num_threads`
+1. Réduisez `images_scale` à `0,5`
+2. Utilisez `mode: "fast"` pour les tableaux
+3. Désactivez `generate_page_images`
+4. Augmentez `num_threads`
 
 ### Problèmes de mémoire
 
-1. Enable `document_timeout` (e.g., 120 seconds)
-2. Process fewer files in batch
-3. Reduce `images_scale`
-4. Disable chunking if not needed
-
+1. Activez `document_timeout` (par ex. 120 secondes)
+2. Traitez moins de fichiers par lot
+3. Réduisez `images_scale`
+4. Désactivez le chunking si inutile

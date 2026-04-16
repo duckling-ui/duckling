@@ -1,181 +1,181 @@
 # Komponenten
 
-Detailed component documentation for Duckling.
+Ausführliche Komponentendokumentation für Duckling.
 
-## Frontend Architektur
+## Frontend-Architektur
 
-### Technology Stack
+### Technologie-Stack
 
-- **React 18** - UI framework with functional components und hooks
-- **TypeScript** - Type-safe JavaScript
-- **Tailwind CSS** - Utility-first CSS framework
-- **Framer Motion** - Animation library
-- **React Query** - Server state management
-- **Axios** - HTTP client
-- **Vite** - Build tool und dev server
+- **React 18** – UI-Framework mit Funktionskomponenten und Hooks
+- **TypeScript** – Typsicheres JavaScript
+- **Tailwind CSS** – Utility-first-CSS-Framework
+- **Framer Motion** – Animationsbibliothek
+- **React Query** – Server-State-Verwaltung
+- **Axios** – HTTP-Client
+- **Vite** – Build-Tool und Entwicklungsserver
 
-### Component Structure
+### Komponentenstruktur
 
 ```mermaid
 graph TD
     App[App.tsx]
 
-    App --> Header
-    App --> Main
-    App --> Panels
+    App --> Header[Kopfzeile]
+    App --> Main[Hauptbereich]
+    App --> Panels[Seitenbereiche]
 
-    Main --> DropZone
-    Main --> Progress
-    Main --> Export
+    Main --> DropZone[Ablegezone]
+    Main --> Progress[Fortschritt]
+    Main --> Export[Export]
 
-    Panels --> Settings
-    Panels --> History
-    Panels --> Docs
+    Panels --> Settings[Einstellungen]
+    Panels --> History[Verlauf]
+    Panels --> Docs[Dokumentation]
 
     style App fill:#3b82f6,color:#fff
     style Main fill:#14b8a6,color:#fff
     style Panels fill:#8b5cf6,color:#fff
 ```
 
-### Component Dateis
+### Komponentendateien
 
-| Path | Beschreibung |
+| Pfad | Beschreibung |
 |------|-------------|
-| `src/App.tsx` | Main application component |
-| `src/main.tsx` | Application entry point |
-| `src/index.css` | Global styles |
-| `src/components/DropZone.tsx` | Datei upload with drag-und-drop |
-| `src/components/KonvertierungProgress.tsx` | Progress display |
-| `src/components/ExportOptions.tsx` | Herunterladen und preview results |
-| `src/components/EinstellungenPanel.tsx` | Konfiguration panel |
-| `src/components/HistoryPanel.tsx` | Konvertierung history |
-| `src/components/DocsPanel.tsx` | Dokumentation viewer |
-| `src/hooks/useKonvertierung.ts` | Konvertierung state und actions |
-| `src/hooks/useEinstellungen.ts` | Einstellungen state management |
-| `src/services/api.ts` | API client functions |
-| `src/types/index.ts` | TypeScript interfaces |
+| `src/App.tsx` | Hauptanwendungskomponente |
+| `src/main.tsx` | Einstiegspunkt der Anwendung |
+| `src/index.css` | Globale Styles |
+| `src/components/DropZone.tsx` | Datei-Upload mit Drag-and-Drop |
+| `src/components/ConversionProgress.tsx` | Fortschrittsanzeige |
+| `src/components/ExportOptions.tsx` | Ergebnisse herunterladen und in der Vorschau anzeigen |
+| `src/components/SettingsPanel.tsx` | Konfigurationsbereich |
+| `src/components/HistoryPanel.tsx` | Konvertierungsverlauf |
+| `src/components/DocsPanel.tsx` | Dokumentationsansicht |
+| `src/hooks/useConversion.ts` | Zustand und Aktionen der Konvertierung |
+| `src/hooks/useSettings.ts` | Zustandsverwaltung für Einstellungen |
+| `src/services/api.ts` | API-Client-Funktionen |
+| `src/types/index.ts` | TypeScript-Schnittstellen |
 
-### State Management
+### Zustandsverwaltung
 
-The application uses a combination of:
+Die Anwendung kombiniert:
 
-1. **Local State** - Component-level state with `useState`
-2. **React Query** - Server state caching und synchronization
-3. **Custom Hooks** - Encapsulated business logic
+1. **Lokalen Zustand** – Komponentenzustand mit `useState`
+2. **React Query** – Caching und Synchronisation des Serverzustands
+3. **Eigene Hooks** – Gekapselte Geschäftslogik
 
-### Key Hooks
+### Wichtige Hooks
 
-#### `useKonvertierung`
+#### `useConversion`
 
-Manages the document conversion workflow:
+Verwaltet den Ablauf der Dokumentkonvertierung:
 
-- Datei upload (single und batch)
-- Status polling
-- Result retrieval
-- Herunterladen hundling
+- Datei-Upload (einzeln und Batch)
+- Statusabfrage
+- Abruf der Ergebnisse
+- Download-Handling
 
-#### `useEinstellungen`
+#### `useSettings`
 
-Manages application settings:
+Verwaltet Anwendungseinstellungen:
 
-- OCR, table, image, performance, chunking settings
-- Einstellungen persistence via API
-- Einstellungen validation
+- OCR-, Tabellen-, Bild-, Leistungs- und Chunking-Einstellungen
+- Persistenz der Einstellungen über die API
+- Validierung der Einstellungen
 
 ---
 
-## Backend Architektur
+## Backend-Architektur
 
-### Technology Stack
+### Technologie-Stack
 
-- **Flask** - Web framework
-- **SQLAlchemy** - ORM for database operations
-- **SQLite** - Embedded database for history
-- **Docling** - Document conversion engine
-- **Threading** - Async job processing
+- **Flask** – Web-Framework
+- **SQLAlchemy** – ORM für Datenbankzugriffe
+- **SQLite** – Eingebettete Datenbank für den Verlauf
+- **Docling** – Dokumentkonvertierungs-Engine
+- **Threading** – Asynchrone Job-Verarbeitung
 
-### Module Structure
+### Modulstruktur
 
-| Path | Beschreibung |
+| Pfad | Beschreibung |
 |------|-------------|
-| `backend/duckling.py` | Flask application factory |
-| `backend/config.py` | Konfiguration und defaults |
-| `backend/models/database.py` | SQLAlchemy models |
-| `backend/routes/convert.py` | Konvertierung endpoints |
-| `backend/routes/settings.py` | Einstellungen endpoints |
-| `backend/routes/history.py` | History endpoints |
-| `backend/services/converter.py` | Docling integration |
-| `backend/services/file_manager.py` | Datei operations |
-| `backend/services/history.py` | History CRUD |
-| `backend/tests/` | Test suite |
+| `backend/duckling.py` | Flask-Anwendungsfabrik |
+| `backend/config.py` | Konfiguration und Standardwerte |
+| `backend/models/database.py` | SQLAlchemy-Modelle |
+| `backend/routes/convert.py` | Konvertierungs-Endpunkte |
+| `backend/routes/settings.py` | Einstellungs-Endpunkte |
+| `backend/routes/history.py` | Verlaufs-Endpunkte |
+| `backend/services/converter.py` | Docling-Integration |
+| `backend/services/file_manager.py` | Dateioperationen |
+| `backend/services/history.py` | Verlauf CRUD |
+| `backend/tests/` | Testsuite |
 
-### Services
+### Dienste
 
 #### ConverterService
 
-Hundles document conversion using Docling:
+Übernimmt die Dokumentkonvertierung mit Docling:
 
 ```python
 class ConverterService:
     def convert(self, file_path: str, settings: dict) -> ConversionResult:
-        """Convert a document with the given settings."""
+        """Dokument mit den angegebenen Einstellungen konvertieren."""
         pass
 
     def get_status(self, job_id: str) -> JobStatus:
-        """Get the status of a conversion job."""
+        """Status eines Konvertierungsjobs abrufen."""
         pass
 ```
 
-#### DateiManager
+#### FileManager
 
-Manages file uploads und outputs:
+Verwaltet Uploads und Ausgaben:
 
 ```python
 class FileManager:
     def save_upload(self, file) -> str:
-        """Save uploaded file and return path."""
+        """Hochgeladene Datei speichern und Pfad zurückgeben."""
         pass
 
     def get_output_path(self, job_id: str) -> str:
-        """Get output directory for a job."""
+        """Ausgabeverzeichnis für einen Job abrufen."""
         pass
 ```
 
 #### HistoryService
 
-CRUD operations for conversion history:
+CRUD für den Konvertierungsverlauf:
 
 ```python
 class HistoryService:
     def create(self, job_id: str, filename: str) -> Conversion:
-        """Create a new history entry."""
+        """Neuen Verlaufseintrag erstellen."""
         pass
 
     def update(self, job_id: str, **kwargs) -> Conversion:
-        """Update an existing entry."""
+        """Vorhandenen Eintrag aktualisieren."""
         pass
 
     def get_stats(self) -> dict:
-        """Get conversion statistics."""
+        """Konvertierungsstatistiken abrufen."""
         pass
 ```
 
 ---
 
-## OCR Integration
+## OCR-Integration
 
-Docling supports multiple OCR backends:
+Docling unterstützt mehrere OCR-Backends:
 
 ```mermaid
 graph LR
-    Input[Document] --> OCR{OCR Backend}
+    Input[Dokument] --> OCR{OCR-Backend}
 
     OCR --> Easy[EasyOCR]
     OCR --> Tess[Tesseract]
     OCR --> Mac[OcrMac]
     OCR --> Rapid[RapidOCR]
 
-    Easy --> Out[Text Output]
+    Easy --> Out[Textausgabe]
     Tess --> Out
     Mac --> Out
     Rapid --> Out
@@ -188,48 +188,47 @@ graph LR
 
 | Backend | Beschreibung | GPU-Unterstützung |
 |---------|-------------|-------------|
-| **EasyOCR** | General-purpose, multi-language | Yes |
-| **Tesseract** | Classic OCR engine | No |
-| **OcrMac** | macOS Vision framework | No |
-| **RapidOCR** | Fast ONNX-based | No |
+| **EasyOCR** | Allgemein, mehrsprachig | Ja |
+| **Tesseract** | Klassische OCR-Engine | Nein |
+| **OcrMac** | macOS Vision-Framework | Nein |
+| **RapidOCR** | Schnell, ONNX-basiert | Nein |
 
-The backend automatically falls back to non-OCR processing if OCR initialization fails.
+Das Backend fällt automatisch auf Verarbeitung ohne OCR zurück, wenn die OCR-Initialisierung fehlschlägt.
 
 ---
 
-## Stapelverarbeitung
+## Batch-Verarbeitung
 
 ```mermaid
 sequenceDiagram
-    participant U as User
+    participant U as Benutzer
     participant F as Frontend
-    participant Q as Queue
-    participant W as Workers
+    participant Q as Warteschlange
+    participant W as Worker
 
-    U->>F: Upload 5 Files
-    F->>Q: Queue 5 Jobs
+    U->>F: 5 Dateien hochladen
+    F->>Q: 5 Jobs einreihen
 
-    par Process 2 at a time
+    par 2 parallel verarbeiten
         Q->>W: Job 1
         Q->>W: Job 2
     end
 
-    W-->>Q: Job 1 Done
+    W-->>Q: Job 1 fertig
     Q->>W: Job 3
-    W-->>Q: Job 2 Done
+    W-->>Q: Job 2 fertig
     Q->>W: Job 4
 
-    Note over Q,W: Max 2 concurrent
+    Note over Q,W: Max. 2 parallel
 
-    F->>F: Show progress per file
+    F->>F: Fortschritt pro Datei anzeigen
 ```
 
-| Step | Beschreibung |
+| Schritt | Beschreibung |
 |------|-------------|
-| 1 | Frontend sends POST /convert/batch with multiple files |
-| 2 | Backend saves each file, creates jobs, queues all |
-| 3 | Backend returns 202 with array of job IDs |
-| 4 | Frontend polls status for each job simultaneously |
-| 5 | Backend processes max 2 jobs at a time, queues rest |
-| 6 | Frontend displays per-file progress |
-
+| 1 | Frontend sendet POST /convert/batch mit mehreren Dateien |
+| 2 | Backend speichert jede Datei, erstellt Jobs und reiht alle ein |
+| 3 | Backend antwortet mit 202 und einem Array von Job-IDs |
+| 4 | Frontend fragt den Status für jeden Job parallel ab |
+| 5 | Backend verarbeitet maximal 2 Jobs gleichzeitig, der Rest wartet |
+| 6 | Frontend zeigt den Fortschritt pro Datei |

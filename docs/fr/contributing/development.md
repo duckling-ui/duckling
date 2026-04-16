@@ -1,4 +1,4 @@
-# Configuration du développement
+# Configuration de l’environnement de développement
 
 Configurez votre environnement de développement pour contribuer à Duckling.
 
@@ -13,7 +13,7 @@ Configurez votre environnement de développement pour contribuer à Duckling.
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+source venv/bin/activate  # Windows : venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
@@ -34,7 +34,7 @@ source venv/bin/activate
 python duckling.py
 ```
 
-Le backend s'exécute sur : `http://localhost:5001`
+Le backend écoute sur : `http://localhost:5001`
 
 ### Frontend
 
@@ -43,17 +43,17 @@ cd frontend
 npm run dev
 ```
 
-Le frontend s'exécute sur : `http://localhost:3000`
+Le frontend écoute sur : `http://localhost:3000`
 
 ## Structure du projet
 
 ```
 duckling/
 ├── backend/
-│   ├── duckling.py         # Point d'entrée de l'application Flask
+│   ├── duckling.py         # Point d’entrée Flask
 │   ├── config.py           # Configuration
 │   ├── models/             # Modèles de base de données
-│   ├── routes/             # Endpoints API
+│   ├── routes/             # Points de terminaison API
 │   ├── services/           # Logique métier
 │   └── tests/              # Tests backend
 ├── frontend/
@@ -66,11 +66,11 @@ duckling/
 └── docs/                   # Documentation
 ```
 
-## Configuration de l'IDE
+## Configuration de l’IDE
 
 ### VS Code
 
-Extensions recommandées :
+Extensions recommandées :
 
 - Python
 - Pylance
@@ -80,7 +80,7 @@ Extensions recommandées :
 
 ### Paramètres
 
-`.vscode/settings.json` :
+`.vscode/settings.json` :
 
 ```json
 {
@@ -93,9 +93,9 @@ Extensions recommandées :
 }
 ```
 
-## Variables d'environnement
+## Variables d’environnement
 
-Créez des fichiers `.env` pour le développement local :
+Créez des fichiers `.env` pour le développement local :
 
 ### Backend (.env)
 
@@ -113,16 +113,16 @@ VITE_API_URL=http://localhost:5001/api
 
 ## Rechargement à chaud
 
-Les deux serveurs prennent en charge le rechargement à chaud :
+Les deux serveurs prennent en charge le rechargement à chaud :
 
-- **Backend** : Le mode debug Flask recharge automatiquement lors des changements de fichiers
-- **Frontend** : Vite HMR met à jour les composants sans rechargement de page
+- **Backend** : le mode debug Flask recharge automatiquement lors des modifications de fichiers
+- **Frontend** : le HMR de Vite met à jour les composants sans recharger la page
 
 ## Débogage
 
 ### Backend (VS Code)
 
-`.vscode/launch.json` :
+`.vscode/launch.json` :
 
 ```json
 {
@@ -147,7 +147,7 @@ Les deux serveurs prennent en charge le rechargement à chaud :
 
 ### Frontend
 
-Utilisez les DevTools du navigateur avec l'extension React Developer Tools.
+Utilisez les outils de développement du navigateur avec l’extension React Developer Tools.
 
 ## Tâches courantes
 
@@ -170,12 +170,12 @@ cd frontend
 npm run generate-types  # Si disponible
 ```
 
-### Compiler pour la production
+### Build de production
 
 ```bash
 # Frontend
 cd frontend
 npm run build
 
-# Backend (pas de compilation nécessaire)
+# Backend (aucun build nécessaire)
 ```

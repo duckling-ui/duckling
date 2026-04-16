@@ -1,34 +1,36 @@
-# German Screenshots (Deutsch)
+# Screenshots (Deutsch)
 
-This directory contains screenshots for the German locale documentation.
+Dieses Verzeichnis enthält Screenshots für die deutschsprachige Dokumentation.
 
-## Directory Structure
+## Verzeichnisstruktur
 
-Organize screenshots into subdirectories:
+Screenshots in Unterordnern ablegen:
 
-- `ui/` - Main interface screenshots (dropzone, header, history)
-- `settings/` - Settings panel screenshots
-- `export/` - Export options and preview screenshots
-- `features/` - Feature-specific screenshots (images, tables, chunks, etc.)
+- `ui/` — Oberfläche (Ablagezone, Kopfzeile, Verlauf)
+- `settings/` — Einstellungen
+- `export/` — Export und Vorschau
+- `features/` — Funktionen (Bilder, Tabellen, Segmente usw.)
 
-## Usage in Documentation
+## Verwendung in der Dokumentation
 
-Reference screenshots from markdown files using relative paths:
+In Markdown relative Pfade verwenden:
 
 ```markdown
-![Description](images/ui/dropzone-empty.png)
+![Beschreibung](images/ui/dropzone-empty.png)
 ```
 
-For files in the `de/` directory, use:
+Aus Dateien unter `de/`:
+
 ```markdown
-![Description](images/ui/dropzone-empty.png)
+![Beschreibung](images/ui/dropzone-empty.png)
 ```
 
-For files in subdirectories, adjust the path accordingly:
+In Unterverzeichnissen den Pfad anpassen:
+
 ```markdown
-![Description](../images/ui/dropzone-empty.png)
+![Beschreibung](../images/ui/dropzone-empty.png)
 ```
 
-**Important**: Ensure the UI language is set to Deutsch before capturing screenshots.
+**Wichtig:** Vor den Aufnahmen die Oberfläche auf **Deutsch** stellen.
 
-See [SCREENSHOT_GUIDE.md](../../assets/screenshots/SCREENSHOT_GUIDE.md) for complete capture instructions.
+Anleitung: [SCREENSHOT_GUIDE.md](../../assets/screenshots/SCREENSHOT_GUIDE.md).

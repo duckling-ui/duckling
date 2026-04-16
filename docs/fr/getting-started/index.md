@@ -1,16 +1,22 @@
-# Bien démarrer
+# Premiers pas
 
-Cette section couvre l’installation et l’exécution de Duckling.
+Bienvenue sur Duckling ! Cette section vous aide à démarrer rapidement.
 
-## Contenu
+!!! tip "Démarrage le plus rapide"
+    **Avec Docker ?** Une seule commande suffit :
+    ```bash
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
+    ```
+    Ouvrez ensuite [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
-- Installation
-- Démarrage rapide
-- Docker
+## Prérequis
 
+=== "Docker (recommandé)"
 
+    - **Docker 20.10+**
+    - **Docker Compose 2.0+**
 
-    C'est tout ! Python ou Node.js ne sont pas requis.
+    C’est tout ! Pas besoin de Python ni de Node.js.
 
 === "Développement local"
 
@@ -19,17 +25,17 @@ Cette section couvre l’installation et l’exécution de Duckling.
     - **npm ou yarn**
     - **Git**
 
-## Options d'installation
+## Options d’installation
 
-Choisissez la méthode d'installation qui vous convient le mieux :
+Choisissez la méthode qui vous convient le mieux :
 
 <div class="grid cards" markdown>
 
--   :material-docker:{ .lg .middle } __Docker (Recommandé)__
+-   :material-docker:{ .lg .middle } __Docker (recommandé)__
 
     ---
 
-    Le moyen le plus rapide de démarrer. Déploiement en une commande avec images pré-construites.
+    Le moyen le plus rapide de commencer. Déploiement en une commande avec des images préconstruites.
 
     [:octicons-arrow-right-24: Guide Docker](docker.md)
 
@@ -37,7 +43,7 @@ Choisissez la méthode d'installation qui vous convient le mieux :
 
     ---
 
-    Démarrez en 5 minutes avec l'essentiel
+    Démarrer en 5 minutes avec l’essentiel
 
     [:octicons-arrow-right-24: Démarrage rapide](quickstart.md)
 
@@ -45,12 +51,17 @@ Choisissez la méthode d'installation qui vous convient le mieux :
 
     ---
 
-    Configurez un environnement de développement local pour la personnalisation et la contribution
+    Configurer un environnement de développement local pour personnaliser et contribuer
 
-    [:octicons-arrow-right-24: Guide d'installation](installation.md)
+    [:octicons-arrow-right-24: Guide d’installation](installation.md)
 
 </div>
 
-## Prochaines étapesAprès l'installation, explorez :1. **[Fonctionnalités](../user-guide/features.md)** - Découvrez toutes les capacités
-2. **[Configuration](../user-guide/configuration.md)** - Personnalisez les paramètres selon vos besoins
-3. **[Référence API](../api/index.md)** - Intégrez avec vos applications
+## Et après ?
+
+Après l’installation, explorez :
+
+1. **[Fonctionnalités](../user-guide/features.md)** – Découvrir toutes les capacités
+2. **[Configuration](../user-guide/configuration.md)** – Adapter les paramètres à vos besoins
+3. **[Référence API](../api/index.md)** – Intégrer à vos applications
+

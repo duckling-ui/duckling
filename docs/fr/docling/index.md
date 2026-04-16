@@ -14,3 +14,11 @@ Cette section inclut une **sélection** de la documentation officielle de Doclin
 - [Architecture](architecture.md)
 - [DoclingDocument](docling-document.md)
 
+## Mettre à jour ces pages
+
+Pour rafraîchir le contenu depuis l’amont :
+
+```bash
+python3 scripts/sync_docling_docs.py
+```
+

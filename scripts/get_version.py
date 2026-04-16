@@ -60,7 +60,7 @@ def get_version_from_package_json() -> Optional[str]:
 
 def get_version_from_github() -> Optional[str]:
     """Get latest release version from GitHub API."""
-    repo = "davidgs/duckling"
+    repo = "duckling-ui/duckling"
     api_url = f"https://api.github.com/repos/{repo}/releases/latest"
 
     if urllib is None:

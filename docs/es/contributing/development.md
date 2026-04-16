@@ -1,6 +1,6 @@
-# Configuración de desarrollo
+# Configuración del entorno de desarrollo
 
-Configura tu entorno de desarrollo para contribuir a Duckling.
+Configure su entorno de desarrollo para contribuir a Duckling.
 
 ## Requisitos previos
 
@@ -34,7 +34,7 @@ source venv/bin/activate
 python duckling.py
 ```
 
-El backend se ejecuta en: `http://localhost:5001`
+El backend escucha en: `http://localhost:5001`
 
 ### Frontend
 
@@ -43,17 +43,17 @@ cd frontend
 npm run dev
 ```
 
-El frontend se ejecuta en: `http://localhost:3000`
+El frontend escucha en: `http://localhost:3000`
 
 ## Estructura del proyecto
 
 ```
 duckling/
 ├── backend/
-│   ├── duckling.py         # Punto de entrada de la aplicación Flask
+│   ├── duckling.py         # Entrada de la aplicación Flask
 │   ├── config.py           # Configuración
 │   ├── models/             # Modelos de base de datos
-│   ├── routes/             # Endpoints de API
+│   ├── routes/             # Endpoints de la API
 │   ├── services/           # Lógica de negocio
 │   └── tests/              # Pruebas del backend
 ├── frontend/
@@ -78,7 +78,7 @@ Extensiones recomendadas:
 - Prettier
 - Tailwind CSS IntelliSense
 
-### Configuración
+### Ajustes
 
 `.vscode/settings.json`:
 
@@ -95,7 +95,7 @@ Extensiones recomendadas:
 
 ## Variables de entorno
 
-Crea archivos `.env` para desarrollo local:
+Cree archivos `.env` para el desarrollo local:
 
 ### Backend (.env)
 
@@ -115,8 +115,8 @@ VITE_API_URL=http://localhost:5001/api
 
 Ambos servidores admiten recarga en caliente:
 
-- **Backend**: El modo debug de Flask recarga automáticamente al cambiar archivos
-- **Frontend**: Vite HMR actualiza componentes sin recargar la página
+- **Backend**: el modo de depuración de Flask recarga automáticamente al cambiar archivos
+- **Frontend**: el HMR de Vite actualiza componentes sin recargar la página
 
 ## Depuración
 
@@ -147,9 +147,9 @@ Ambos servidores admiten recarga en caliente:
 
 ### Frontend
 
-Usa las DevTools del navegador con la extensión React Developer Tools.
+Use las herramientas de desarrollo del navegador con la extensión React Developer Tools.
 
-## Tareas comunes
+## Tareas habituales
 
 ### Actualizar dependencias
 
@@ -170,7 +170,7 @@ cd frontend
 npm run generate-types  # Si está disponible
 ```
 
-### Compilar para producción
+### Compilación de producción
 
 ```bash
 # Frontend

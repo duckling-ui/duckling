@@ -270,7 +270,7 @@ TRANSLATIONS = {
     "Or run in background": {"de": "Oder im Hintergrund ausführen", "es": "O ejecutar en segundo plano", "fr": "Ou exécuter en arrière-plan"},
     "Download": {"de": "Herunterladen", "es": "Descargar", "fr": "Télécharger"},
     "Start with pre-built images": {"de": "Mit vorgefertigten Images starten", "es": "Iniciar con imágenes preconstruidas", "fr": "Démarrer avec les images préconstruites"},
-    "Using default registry (davidgs)": {"de": "Standard-Registry verwenden (davidgs)", "es": "Usando registro predeterminado (davidgs)", "fr": "Utilisation du registre par défaut (davidgs)"},
+    "Using default registry (duckling-ui)": {"de": "Standard-Registry verwenden (duckling-ui)", "es": "Usando registro predeterminado (duckling-ui)", "fr": "Utilisation du registre par défaut (duckling-ui)"},
     "Using custom registry": {"de": "Benutzerdefinierte Registry verwenden", "es": "Usando registro personalizado", "fr": "Utilisation d'un registre personnalisé"},
     "Using specific version": {"de": "Bestimmte Version verwenden", "es": "Usando versión específica", "fr": "Utilisation d'une version spécifique"},
     "Build images locally (includes documentation build)": {"de": "Images lokal erstellen (inkl. Dokumentations-Build)", "es": "Construir imágenes localmente (incluye construcción de documentación)", "fr": "Construire les images localement (inclut la construction de la documentation)"},

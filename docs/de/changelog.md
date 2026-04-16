@@ -5,9 +5,24 @@ Alle bemerkenswerten Änderungen an diesem Projekt werden in dieser Datei dokume
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spec/v2.0.0.html).
 
-**Neueste Version:** [0.0.11](https://github.com/davidgs/duckling/releases/tag/v0.0.11) (2026-03-30)
+**Neueste Version:** [0.0.11](https://github.com/duckling-ui/duckling/releases/tag/v0.0.11) (2026-03-30)
 
 ## [Unveröffentlicht]
+
+### Dokumentation
+
+- **Bereitstellung**: [deployment/index.md](deployment/index.md), [deployment/production.md](deployment/production.md), [deployment/scaling.md](deployment/scaling.md) und [deployment/security.md](deployment/security.md) vollständig übersetzt (Mermaid-Beschriftungen lokalisiert); Deployment-Startseite: vollständige Übersicht und bereinigte Checkliste.
+- **Erste Schritte**: [index.md](getting-started/index.md), [installation.md](getting-started/installation.md), [quickstart.md](getting-started/quickstart.md) und [docker.md](getting-started/docker.md) vollständig übersetzt; analog `fr`/`es`; englische [docker.md](../getting-started/docker.md) CI/CD-Formulierung präzisiert.
+- **Benutzerhandbuch**: [Unterstützte Formate](user-guide/formats.md) und [Screenshot-Galerie](user-guide/screenshots.md) vollständig übersetzt; entsprechende Seiten in `fr`/`es`.
+- **Schnellstart**: Abschnitt „Mehrere Dateien auf einmal“ in [getting-started/quickstart.md](getting-started/quickstart.md) beschreibt Ordner per Drag-and-drop, Klick auf die Zone zur Ordnerauswahl und **Dateien wählen…** für mehrere Einzeldateien; analog in `fr`/`es`.
+- **Französisch / Englisch**: Die französische Seite `fr/user-guide/features.md` ist vollständig übersetzt (Überschriften für die Seitenleisten-TOC); doppelter „Statistics Panel“-Abschnitt in der englischen [user-guide/features.md](../user-guide/features.md) entfernt.
+- **Startseiten**: [index.md](index.md) verlinkt die Docling-Dokumentation wie die englische Homepage; `fr`/`es` Kacheln auf der Startseite zeigen auf sprachspezifische Anker auf der Features-Seite; französische Startseite mit Dokumentationsliste, Schnellstart-Links und Danksagungen; spanische Startseite verlinkt `es/changelog.md`.
+- **Benutzerhandbuch**: [Features](user-guide/features.md) und [Konfiguration](user-guide/configuration.md) vollständig übersetzt; ebenfalls `fr`/`es` Features und `fr`/`es` Konfiguration.
+- **Architektur / Einstieg Benutzerhandbuch**: [architecture/index.md](architecture/index.md) und [user-guide/index.md](user-guide/index.md) durchgängig auf Deutsch (inkl. Technologie-Tabelle); Titel **Benutzerhandbuch** auf der Benutzerhandbuch-Startseite korrigiert.
+- **API**: [api/index.md](api/index.md), [api/conversion.md](api/conversion.md), [api/settings.md](api/settings.md) und [api/history.md](api/history.md) vollständig übersetzt; Entsprechendes unter `fr/api/` und `es/api/`.
+- **Architektur (Detailseiten)**: [architecture/overview.md](architecture/overview.md), [architecture/components.md](architecture/components.md) und [architecture/diagrams.md](architecture/diagrams.md) vollständig übersetzt; Entsprechendes unter `fr/architecture/` und `es/architecture/`.
+- **Mitwirken**: Alle Seiten unter [contributing/](contributing/index.md) übersetzt; stabile Anker `{#commit-messages}` und `{#dco-sign-off}` in [contributing/code-style.md](contributing/code-style.md).
+- **Docling / Screenshots**: [docling/index.md](docling/index.md) um Abschnitt „Seiten aktualisieren“ ergänzt; [images/README.md](images/README.md) für Screenshots vollständig auf Deutsch.
 
 ### Geplant
 
@@ -322,14 +337,14 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 - Maximale Dateigrößenlimits
 - Sichere Dateinamenbehandlung
 
-[Unreleased]: https://github.com/davidgs/duckling/compare/v0.0.11...HEAD
-[0.0.11]: https://github.com/davidgs/duckling/compare/v0.0.10a...v0.0.11
-[0.0.10a]: https://github.com/davidgs/duckling/compare/v0.0.10...v0.0.10a
-[0.0.10]: https://github.com/davidgs/duckling/compare/v0.0.9...v0.0.10
-[0.0.9]: https://github.com/davidgs/duckling/compare/v0.0.8...v0.0.9
-[0.0.8]: https://github.com/davidgs/duckling/compare/v0.0.7...v0.0.8
-[0.0.7]: https://github.com/davidgs/duckling/compare/v0.0.6...v0.0.7
-[0.0.6]: https://github.com/davidgs/duckling/compare/v0.0.5...v0.0.6
-[0.0.5]: https://github.com/davidgs/duckling/compare/v0.0.4...v0.0.5
-[0.0.4]: https://github.com/davidgs/duckling/compare/v0.0.3...v0.0.4
-[0.0.3]: https://github.com/davidgs/duckling/releases/tag/v0.0.3
+[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.11...HEAD
+[0.0.11]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.11
+[0.0.10a]: https://github.com/duckling-ui/duckling/compare/v0.0.10...v0.0.10a
+[0.0.10]: https://github.com/duckling-ui/duckling/compare/v0.0.9...v0.0.10
+[0.0.9]: https://github.com/duckling-ui/duckling/compare/v0.0.8...v0.0.9
+[0.0.8]: https://github.com/duckling-ui/duckling/compare/v0.0.7...v0.0.8
+[0.0.7]: https://github.com/duckling-ui/duckling/compare/v0.0.6...v0.0.7
+[0.0.6]: https://github.com/duckling-ui/duckling/compare/v0.0.5...v0.0.6
+[0.0.5]: https://github.com/duckling-ui/duckling/compare/v0.0.4...v0.0.5
+[0.0.4]: https://github.com/duckling-ui/duckling/compare/v0.0.3...v0.0.4
+[0.0.3]: https://github.com/duckling-ui/duckling/releases/tag/v0.0.3

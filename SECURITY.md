@@ -21,6 +21,11 @@ Last audit: March 3, 2026
 
 ### Product surface notes
 
+- **2026-04-08**: Documentation only: the Quick Start guide clarifies folder drag-and-drop and folder vs **Choose files…** selection; upload endpoints and server-side validation are unchanged.
+- **2026-04-08**: Documentation only: French **Features** page translation and removal of a duplicate statistics subsection in English features; no application or API change.
+- **2026-04-08**: Documentation only: German and Spanish **Features**, German/French/Spanish **Configuration**, and localized home page updates (feature-card anchors, Docling link on `de`, changelog link on `es`); no application or API change.
+- **2026-04-08**: Documentation only: Full localization sweep for `docs/de/`, `docs/fr/`, and `docs/es/` (API, architecture, deployment, getting started, contributing, user-guide formats/screenshots, docling index stubs, images README); stable heading anchors on localized contributing code-style pages; no application or API change.
+- **2026-04-08**: Documentation only: `docs/javascripts/language-selector.js` rewrites MkDocs language dropdown URLs client-side (same-page locale switch; no change to auth or data handling).
 - **2026-03-30**: The web UI upload flow was unified (removed a separate toolbar control for “batch” uploads). Conversion requests still use the same REST endpoints and server-side type/size checks; this was a client presentation change.
 - **2026-03-30**: Accessibility updates: in-app dialogs use explicit accessible names; scrollable areas are keyboard-focusable where needed; export HTML preview remains sandboxed/trusted-content as documented. Published docs gain underlined content links and focusable code/table scroll wrappers via `docs/javascripts/scrollable-focus.js`.
 - **2026-03-30**: Export HTML preview and embedded docs iframe use labeled regions / titles for assistive tech; preview content remains trusted, sanitized server-side output only (see XSS row below).

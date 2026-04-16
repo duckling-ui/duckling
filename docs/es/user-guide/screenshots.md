@@ -1,35 +1,35 @@
-# Capturas de pantalla Gallery
+# Galería de capturas
 
-This page provides a visual tour of the Duckling interface. All screenshots are captured in dark mode.
+Esta página ofrece un recorrido visual por la interfaz de Duckling. Todas las capturas están en modo oscuro.
 
-!!! note "Screenshot Status"
-    Some screenshots may show placeholders. See the [Screenshot Guide](../../assets/screenshots/SCREENSHOT_GUIDE.md) for capturing instructions.
+!!! note "Estado de las capturas"
+    Algunas imágenes pueden mostrar marcadores de posición. Consulte la [guía de capturas](../../assets/screenshots/SCREENSHOT_GUIDE.md) para instrucciones de captura.
 
-## Main Interface
+## Interfaz principal
 
-### Dropzone
+### Zona de carga
 
-The main upload area where you drag y drop documents for conversion.
+Área principal donde arrastra y suelta documentos para convertirlos.
 
-=== "Empty State"
+=== "Estado vacío"
 
     <figure markdown="span">
-      ![Dropzone Empty](../../assets/screenshots/ui/dropzone-empty.png){ loading=lazy }
-      <figcaption>Ready to receive files</figcaption>
+      ![Zona vacía](../../assets/screenshots/ui/dropzone-empty.png){ loading=lazy }
+      <figcaption>Lista para recibir archivos</figcaption>
     </figure>
 
-=== "Drag Hover"
+=== "Arrastrar (hover)"
 
     <figure markdown="span">
-      ![Dropzone Hover](../../assets/screenshots/ui/dropzone-hover.svg){ loading=lazy }
-      <figcaption>Visual feedback when dragging files</figcaption>
+      ![Zona al arrastrar](../../assets/screenshots/ui/dropzone-hover.svg){ loading=lazy }
+      <figcaption>Retroalimentación visual al arrastrar archivos</figcaption>
     </figure>
 
-=== "Uploading"
+=== "Subiendo"
 
     <figure markdown="span">
-      ![Dropzone Uploading](../../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
-      <figcaption>Indicador de progreso de carga</figcaption>
+      ![Subida en curso](../../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
+      <figcaption>Indicador de progreso de la subida</figcaption>
     </figure>
 
 === "Varios archivos"
@@ -39,241 +39,240 @@ The main upload area where you drag y drop documents for conversion.
       <figcaption>Varios archivos seleccionados para subir</figcaption>
     </figure>
 
-### Header
+### Barra superior
 
 <figure markdown="span">
-  ![Header](../../assets/screenshots/ui/header.png){ loading=lazy }
-  <figcaption>Encabezado con ajustes e idioma</figcaption>
+  ![Barra superior](../../assets/screenshots/ui/header.png){ loading=lazy }
+  <figcaption>Barra de la aplicación con ajustes e idioma</figcaption>
 </figure>
 
-### History Panel
+### Panel del historial
 
-=== "History List"
+=== "Lista del historial"
 
     <figure markdown="span">
-      ![History Panel](../../assets/screenshots/ui/history-panel.png){ loading=lazy }
-      <figcaption>List of previous conversions</figcaption>
+      ![Panel de historial](../../assets/screenshots/ui/history-panel.png){ loading=lazy }
+      <figcaption>Lista de conversiones anteriores</figcaption>
     </figure>
 
-=== "Search"
+=== "Búsqueda"
 
     <figure markdown="span">
-      ![History Search](../../assets/screenshots/ui/history-search.png){ loading=lazy }
-      <figcaption>Searching conversion history</figcaption>
+      ![Búsqueda en historial](../../assets/screenshots/ui/history-search.png){ loading=lazy }
+      <figcaption>Búsqueda en el historial de conversiones</figcaption>
     </figure>
 
 ---
 
-## Configuración Panel
+## Panel de ajustes
 
-### Configuración OCR
+### Ajustes de OCR
 
 === "Resumen"
 
     <figure markdown="span">
-      ![Configuración OCR](../../assets/screenshots/settings/settings-ocr.png){ loading=lazy }
-      <figcaption>OCR configuration options</figcaption>
+      ![Ajustes OCR](../../assets/screenshots/settings/settings-ocr-es.png){ loading=lazy }
+      <figcaption>Opciones de configuración OCR</figcaption>
     </figure>
 
-=== "Install Backend"
+=== "Instalar backend"
 
     <figure markdown="span">
-      ![OCR Install](../../assets/screenshots/settings/settings-ocr-install.svg){ loading=lazy }
-      <figcaption>One-click backend installation</figcaption>
+      ![Instalación OCR](../../assets/screenshots/settings/settings-ocr-install-es.png){ loading=lazy }
+      <figcaption>Instalación del backend con un clic</figcaption>
     </figure>
 
-=== "Tesseract Notice"
+=== "Aviso de Tesseract"
 
     <figure markdown="span">
-      ![Tesseract](../../assets/screenshots/settings/settings-ocr-tesseract.png){ loading=lazy }
-      <figcaption>Manual installation instructions for Tesseract</figcaption>
+      ![Tesseract](../../assets/screenshots/settings/settings-ocr-install-es.png){ loading=lazy }
+      <figcaption>Instrucciones de instalación manual de Tesseract</figcaption>
     </figure>
 
-### Configuración de tablas
+### Ajustes de tablas
 
 <figure markdown="span">
-  ![Configuración de tablas](../../assets/screenshots/settings/settings-tables.svg){ loading=lazy }
-  <figcaption>Table extraction configuration</figcaption>
+  ![Ajustes de tablas](../../assets/screenshots/settings/settings-tables.svg){ loading=lazy }
+  <figcaption>Configuración de extracción de tablas</figcaption>
 </figure>
 
-### Configuración de imágenes
+### Ajustes de imágenes
 
 <figure markdown="span">
-  ![Configuración de imágenes](../../assets/screenshots/settings/settings-images.svg){ loading=lazy }
-  <figcaption>Image extraction options</figcaption>
+  ![Ajustes de imágenes](../../assets/screenshots/settings/settings-images.svg){ loading=lazy }
+  <figcaption>Opciones de extracción de imágenes</figcaption>
 </figure>
 
-### Enrichment Configuración
+### Ajustes de enriquecimiento
 
-=== "All Options"
+=== "Todas las opciones"
 
     <figure markdown="span">
-      ![Enrichment Configuración](../../assets/screenshots/settings/settings-enrichment.png){ loading=lazy }
-      <figcaption>Document enrichment options: code, formula, picture classification, y description</figcaption>
+      ![Ajustes de enriquecimiento](../../assets/screenshots/settings/settings-enrichment.png){ loading=lazy }
+      <figcaption>Enriquecimiento del documento: código, fórmulas, clasificación de imágenes y descripción</figcaption>
     </figure>
 
-=== "Warning Message"
+=== "Mensaje de advertencia"
 
     <figure markdown="span">
-      ![Enrichment Warning](../../assets/screenshots/settings/settings-enrichment-warning.png){ loading=lazy }
-      <figcaption>Warning displayed when slow enrichment features are enabled</figcaption>
+      ![Advertencia de enriquecimiento](../../assets/screenshots/settings/settings-enrichment-warning.png){ loading=lazy }
+      <figcaption>Advertencia cuando están activas funciones de enriquecimiento lentas</figcaption>
     </figure>
 
-### Rendimiento Configuración
+### Ajustes de rendimiento
 
 <figure markdown="span">
-  ![Rendimiento Configuración](../../assets/screenshots/settings/settings-performance.svg){ loading=lazy }
-  <figcaption>Procesyo performance configuration</figcaption>
+  ![Ajustes de rendimiento](../../assets/screenshots/settings/settings-performance.svg){ loading=lazy }
+  <figcaption>Configuración del rendimiento de procesamiento</figcaption>
 </figure>
 
-### Chunking Configuración
+### Ajustes de fragmentación (chunking)
 
 <figure markdown="span">
-  ![Chunking Configuración](../../assets/screenshots/settings/settings-chunking.svg){ loading=lazy }
-  <figcaption>RAG chunking configuration</figcaption>
+  ![Ajustes de chunking](../../assets/screenshots/settings/settings-chunking.svg){ loading=lazy }
+  <figcaption>Configuración de fragmentos para RAG</figcaption>
 </figure>
 
-### Output Configuración
+### Ajustes de salida
 
 <figure markdown="span">
-  ![Output Configuración](../../assets/screenshots/settings/settings-output.svg){ loading=lazy }
-  <figcaption>Predeterminado output format selection</figcaption>
+  ![Ajustes de salida](../../assets/screenshots/settings/settings-output.svg){ loading=lazy }
+  <figcaption>Selección del formato de salida predeterminado</figcaption>
 </figure>
 
 ---
 
-## Export Options
+## Opciones de exportación
 
-### Format Selection
+### Selección de formato
 
-=== "All Formatos"
+=== "Todos los formatos"
 
     <figure markdown="span">
-      ![Export Formatos](../../assets/screenshots/export/export-formats.png){ loading=lazy }
-      <figcaption>Available export formats</figcaption>
+      ![Formatos de exportación](../../assets/screenshots/export/export-formats.png){ loading=lazy }
+      <figcaption>Formatos de exportación disponibles</figcaption>
     </figure>
 
-=== "Selected Format"
+=== "Formato seleccionado"
 
     <figure markdown="span">
-      ![Format Selected](../../assets/screenshots/export/export-format-selected.png){ loading=lazy }
-      <figcaption>Format selected with checkmark</figcaption>
+      ![Formato seleccionado](../../assets/screenshots/export/export-format-selected.png){ loading=lazy }
+      <figcaption>Formato seleccionado con marca de verificación</figcaption>
     </figure>
 
-### Preview Modos
+### Modos de vista previa
 
-=== "Rendered/Raw Activar"
+=== "Alternar renderizado / sin formato"
 
     <figure markdown="span">
-      ![Preview Activar](../../assets/screenshots/export/preview-toggle.png){ loading=lazy }
-      <figcaption>Activar between rendered y raw views</figcaption>
+      ![Alternar vista previa](../../assets/screenshots/export/preview-toggle.png){ loading=lazy }
+      <figcaption>Alternar entre vista renderizada y código fuente</figcaption>
     </figure>
 
-=== "Markdown Rendered"
+=== "Markdown renderizado"
 
     <figure markdown="span">
-      ![Markdown Rendered](../../assets/screenshots/export/preview-markdown-rendered.png){ loading=lazy }
-      <figcaption>Rendered markdown with formatting</figcaption>
+      ![Markdown renderizado](../../assets/screenshots/export/preview-markdown-rendered.png){ loading=lazy }
+      <figcaption>Markdown renderizado con formato</figcaption>
     </figure>
 
-=== "Markdown Raw"
+=== "Markdown sin formato"
 
     <figure markdown="span">
-      ![Markdown Raw](../../assets/screenshots/export/preview-markdown-raw.png){ loading=lazy }
-      <figcaption>Raw markdown source</figcaption>
+      ![Markdown sin formato](../../assets/screenshots/export/preview-markdown-raw.png){ loading=lazy }
+      <figcaption>Fuente Markdown sin renderizar</figcaption>
     </figure>
 
-=== "HTML Rendered"
+=== "HTML renderizado"
 
     <figure markdown="span">
-      ![HTML Rendered](../../assets/screenshots/export/preview-html-rendered.png){ loading=lazy }
-      <figcaption>Rendered HTML with styling</figcaption>
+      ![HTML renderizado](../../assets/screenshots/export/preview-html-rendered.png){ loading=lazy }
+      <figcaption>HTML renderizado con estilos</figcaption>
     </figure>
 
-=== "HTML Raw"
+=== "HTML sin formato"
 
     <figure markdown="span">
-      ![HTML Raw](../../assets/screenshots/export/preview-html-raw.png){ loading=lazy }
-      <figcaption>Raw HTML source code</figcaption>
+      ![HTML sin formato](../../assets/screenshots/export/preview-html-raw.png){ loading=lazy }
+      <figcaption>Código fuente HTML sin renderizar</figcaption>
     </figure>
 
 === "JSON"
 
     <figure markdown="span">
-      ![JSON Preview](../../assets/screenshots/export/preview-json.png){ loading=lazy }
-      <figcaption>Pretty-printed JSON output</figcaption>
+      ![Vista previa JSON](../../assets/screenshots/export/preview-json.png){ loading=lazy }
+      <figcaption>Salida JSON con formato legible</figcaption>
     </figure>
 
 ---
 
-## Características in Action
+## Funciones en acción
 
-### Conversión Status
+### Estado de la conversión
 
-=== "In Progress"
-
-    <figure markdown="span">
-      ![Conversión Progress](../../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
-      <figcaption>Document being processed</figcaption>
-    </figure>
-
-=== "Complete"
+=== "En curso"
 
     <figure markdown="span">
-      ![Conversión Complete](../../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
-      <figcaption>Successful conversion with stats</figcaption>
+      ![Conversión en curso](../../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
+      <figcaption>Documento en procesamiento</figcaption>
     </figure>
 
-=== "Confidence Score"
+=== "Completada"
 
     <figure markdown="span">
-      ![Confidence Display](../../assets/screenshots/features/confidence-display.svg){ loading=lazy }
-      <figcaption>OCR confidence percentage</figcaption>
+      ![Conversión completada](../../assets/screenshots/features/conversion-complete-es.png){ loading=lazy }
+      <figcaption>Conversión correcta con estadísticas</figcaption>
     </figure>
 
-### Image Gallery
-
-=== "Thumbnail Grid"
+=== "Puntuación de confianza"
 
     <figure markdown="span">
-      ![Images Gallery](../../assets/screenshots/features/images-gallery.png){ loading=lazy }
-      <figcaption>Extraered images as thumbnails</figcaption>
+      ![Indicador de confianza](../../assets/screenshots/features/confidence-display.svg){ loading=lazy }
+      <figcaption>Porcentaje de confianza del OCR</figcaption>
     </figure>
 
-=== "Hover Actions"
+### Galería de imágenes
+
+=== "Cuadrícula de miniaturas"
 
     <figure markdown="span">
-      ![Images Hover](../../assets/screenshots/features/images-hover.png){ loading=lazy }
-      <figcaption>View y download buttons on hover</figcaption>
+      ![Galería de imágenes](../../assets/screenshots/features/images-gallery.png){ loading=lazy }
+      <figcaption>Imágenes extraídas como miniaturas</figcaption>
     </figure>
 
-=== "Lightbox"
+=== "Acciones al pasar el cursor"
 
     <figure markdown="span">
-      ![Images Lightbox](../../assets/screenshots/features/images-lightbox.png){ loading=lazy }
-      <figcaption>Full-size image viewer with navigation</figcaption>
+      ![Imágenes con hover](../../assets/screenshots/features/images-hover.png){ loading=lazy }
+      <figcaption>Botones ver y descargar al pasar el cursor</figcaption>
     </figure>
 
-### Tables
-
-=== "Table List"
+=== "Visor a pantalla completa"
 
     <figure markdown="span">
-      ![Tables List](../../assets/screenshots/features/tables-list.svg){ loading=lazy }
-      <figcaption>Extraered tables with previews</figcaption>
+      ![Lightbox de imágenes](../../assets/screenshots/features/images-lightbox.png){ loading=lazy }
+      <figcaption>Visor a tamaño completo con navegación</figcaption>
     </figure>
 
-=== "Descargar Options"
+### Tablas
+
+=== "Lista de tablas"
 
     <figure markdown="span">
-      ![Tables Descargar](../../assets/screenshots/features/tables-download.svg){ loading=lazy }
-      <figcaption>CSV y image export options</figcaption>
+      ![Lista de tablas](../../assets/screenshots/features/tables-list.svg){ loading=lazy }
+      <figcaption>Tablas extraídas con vistas previas</figcaption>
     </figure>
 
-### RAG Chunks
+=== "Opciones de descarga"
+
+    <figure markdown="span">
+      ![Descarga de tablas](../../assets/screenshots/features/tables-download.svg){ loading=lazy }
+      <figcaption>Exportación a CSV e imagen</figcaption>
+    </figure>
+
+### Fragmentos RAG
 
 <figure markdown="span">
-  ![Chunks List](../../assets/screenshots/features/chunks-list.png){ loading=lazy }
-  <figcaption>Document chunks with metadata</figcaption>
+  ![Lista de fragmentos](../../assets/screenshots/features/chunks-list.png){ loading=lazy }
+  <figcaption>Fragmentos del documento con metadatos</figcaption>
 </figure>
-

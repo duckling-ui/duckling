@@ -1,101 +1,101 @@
 # Unterstützte Formate
 
-Complete reference for input und output formats supported by Duckling.
+Vollständige Referenz zu den von Duckling unterstützten Eingabe- und Ausgabeformaten.
 
-## Input Formate
+## Eingabeformate
 
-### Documents
+### Dokumente
 
-| Format | Extensions | Beschreibung | Notes |
-|--------|------------|-------------|-------|
-| PDF | `.pdf` | Portable Document Format | Full support including scanned PDFs with OCR |
-| Word | `.docx` | Microsoft Word | Modusrn format only (not `.doc`) |
-| PowerPoint | `.pptx` | Microsoft PowerPoint | Extrahierens text und images from slides |
-| Excel | `.xlsx` | Microsoft Excel | Extrahierens tables und data |
-| HTML | `.html`, `.htm` | Web pages | Preserves structure und formatting |
-| Markdown | `.md`, `.markdown` | Markdown files | Full CommonMark support |
+| Format | Erweiterungen | Beschreibung | Hinweise |
+|--------|---------------|--------------|----------|
+| PDF | `.pdf` | Portable Document Format | Volle Unterstützung inkl. gescannter PDFs mit OCR |
+| Word | `.docx` | Microsoft Word | Nur modernes Format (kein `.doc`) |
+| PowerPoint | `.pptx` | Microsoft PowerPoint | Extrahiert Text und Bilder aus Folien |
+| Excel | `.xlsx` | Microsoft Excel | Extrahiert Tabellen und Daten |
+| HTML | `.html`, `.htm` | Webseiten | Struktur und Formatierung bleiben erhalten |
+| Markdown | `.md`, `.markdown` | Markdown-Dateien | Volle CommonMark-Unterstützung |
 
-### Images
+### Bilder
 
-| Format | Extensions | Beschreibung | Notes |
-|--------|------------|-------------|-------|
-| PNG | `.png` | Portable Network Graphics | Best for screenshots und diagrams |
-| JPEG | `.jpg`, `.jpeg` | Joint Photographic Experts Group | Best for photos |
-| TIFF | `.tiff`, `.tif` | Tagged Image Datei Format | Multi-page support |
-| GIF | `.gif` | Graphics Interchange Format | First frame only |
-| WebP | `.webp` | Web Picture format | Modusrn web format |
-| BMP | `.bmp` | Bitmap | Uncompressed images |
+| Format | Erweiterungen | Beschreibung | Hinweise |
+|--------|---------------|--------------|----------|
+| PNG | `.png` | Portable Network Graphics | Gut für Screenshots und Diagramme |
+| JPEG | `.jpg`, `.jpeg` | Joint Photographic Experts Group | Gut für Fotos |
+| TIFF | `.tiff`, `.tif` | Tagged Image File Format | Mehrseitige Bilder |
+| GIF | `.gif` | Graphics Interchange Format | Nur erstes Einzelbild |
+| WebP | `.webp` | Web Picture Format | Modernes Webformat |
+| BMP | `.bmp` | Bitmap | Unkomprimierte Bilder |
 
-### Technical Documents
+### Technische Dokumente
 
-| Format | Extensions | Beschreibung | Notes |
-|--------|------------|-------------|-------|
-| AsciiDoc | `.asciidoc`, `.adoc` | Technical documentation | Full AsciiDoc syntax |
-| PubMed XML | `.xml` | Scientific articles | PubMed Central format |
-| USPTO XML | `.xml` | Patent documents | US Patent format |
+| Format | Erweiterungen | Beschreibung | Hinweise |
+|--------|---------------|--------------|----------|
+| AsciiDoc | `.asciidoc`, `.adoc` | Technische Dokumentation | Volle AsciiDoc-Syntax |
+| PubMed XML | `.xml` | Wissenschaftliche Artikel | PubMed Central-Format |
+| USPTO XML | `.xml` | Patentschriften | US-Patentformat |
 
-## Output Formate
+## Ausgabeformate
 
-### Text Formate
+### Textformate
 
 #### Markdown (`.md`)
 
-Best for documentation und content that needs formatting.
+Am besten für Dokumentation und Inhalte, die Formatierung brauchen.
 
 ```markdown
-# Document Title
+# Dokumenttitel
 
-## Section 1
+## Abschnitt 1
 
-This is a paragraph with **bold** and *italic* text.
+Dies ist ein Absatz mit **fettem** und *kursivem* Text.
 
-- List item 1
-- List item 2
+- Listenpunkt 1
+- Listenpunkt 2
 
-| Column 1 | Column 2 |
+| Spalte 1 | Spalte 2 |
 |----------|----------|
-| Data 1   | Data 2   |
+| Daten 1  | Daten 2  |
 ```
 
 #### HTML (`.html`)
 
-Web-ready format with styling preserved.
+Webtaugliches Format mit erhaltenem Styling.
 
 ```html
-<h1>Document Title</h1>
-<h2>Section 1</h2>
-<p>This is a paragraph with <strong>bold</strong> and <em>italic</em> text.</p>
+<h1>Dokumenttitel</h1>
+<h2>Abschnitt 1</h2>
+<p>Dies ist ein Absatz mit <strong>fettem</strong> und <em>kursivem</em> Text.</p>
 ```
 
 #### Klartext (`.txt`)
 
-Simple text without any formatting.
+Einfacher Text ohne Formatierung.
 
 ```
-Document Title
+Dokumenttitel
 
-Section 1
+Abschnitt 1
 
-This is a paragraph with bold and italic text.
+Dies ist ein Absatz mit fettem und kursivem Text.
 ```
 
-### Structured Formate
+### Strukturierte Formate
 
 #### JSON (`.json`)
 
-Vollständige Dokumentstruktur in JSON format. Lossless representation.
+Vollständige Dokumentstruktur als JSON. Verlustfreie Darstellung.
 
 ```json
 {
-  "title": "Document Title",
+  "title": "Dokumenttitel",
   "sections": [
     {
-      "heading": "Section 1",
+      "heading": "Abschnitt 1",
       "level": 2,
       "content": [
         {
           "type": "paragraph",
-          "text": "This is a paragraph..."
+          "text": "Dies ist ein Absatz..."
         }
       ]
     }
@@ -105,45 +105,45 @@ Vollständige Dokumentstruktur in JSON format. Lossless representation.
 
 #### DocTags (`.doctags`)
 
-Tagged document format for semantic analysis.
+Getaggtes Dokumentformat für semantische Analyse.
 
 ```
 <document>
-  <title>Document Title</title>
+  <title>Dokumenttitel</title>
   <section level="2">
-    <heading>Section 1</heading>
-    <paragraph>This is a paragraph...</paragraph>
+    <heading>Abschnitt 1</heading>
+    <paragraph>Dies ist ein Absatz...</paragraph>
   </section>
 </document>
 ```
 
 #### Document Tokens (`.tokens.json`)
 
-Token-level representation for NLP applications.
+Token-Ebene für NLP-Anwendungen.
 
 ```json
 {
   "tokens": [
-    {"text": "Document", "type": "word", "position": 0},
-    {"text": "Title", "type": "word", "position": 1}
+    {"text": "Dokument", "type": "word", "position": 0},
+    {"text": "Titel", "type": "word", "position": 1}
   ]
 }
 ```
 
-### RAG Formate
+### RAG-Formate
 
 #### RAG Chunks (`.chunks.json`)
 
-Document chunks optimized for retrieval-augmented generation.
+Dokument-Chunks für Retrieval-Augmented Generation optimiert.
 
 ```json
 {
   "chunks": [
     {
       "id": 1,
-      "text": "This is the first chunk of text...",
+      "text": "Dies ist der erste Text-Chunk...",
       "meta": {
-        "headings": ["Section 1"],
+        "headings": ["Abschnitt 1"],
         "page": 1,
         "token_count": 128
       }
@@ -152,40 +152,39 @@ Document chunks optimized for retrieval-augmented generation.
 }
 ```
 
-## Format Selection Guide
+## Formatwahl
 
-| Use Case | Recommended Format |
-|----------|-------------------|
+| Anwendungsfall | Empfohlenes Format |
+|----------------|-------------------|
 | Dokumentation | Markdown |
-| Web publishing | HTML |
-| Data processing | JSON |
-| Search indexing | Klartext |
-| NLP/ML pipelines | Document Tokens |
-| RAG applications | RAG Chunks |
-| Semantic analysis | DocTags |
+| Webpublikation | HTML |
+| Datenverarbeitung | JSON |
+| Suchindexierung | Klartext |
+| NLP-/ML-Pipelines | Document Tokens |
+| RAG-Anwendungen | RAG Chunks |
+| Semantische Analyse | DocTags |
 
-## API Format Parameter
+## API-Formatparameter
 
-When using the API, specify the format in the export endpoint:
+Bei Nutzung der API geben Sie das Format im Export-Endpunkt an:
 
 ```bash
-# Download as Markdown
+# Als Markdown herunterladen
 curl http://localhost:5001/api/export/{job_id}/markdown
 
-# Download as JSON
+# Als JSON herunterladen
 curl http://localhost:5001/api/export/{job_id}/json
 
-# Download as HTML
+# Als HTML herunterladen
 curl http://localhost:5001/api/export/{job_id}/html
 ```
 
-## MIME Types
+## MIME-Typen
 
-| Format | MIME Type |
-|--------|-----------|
+| Format | MIME-Typ |
+|--------|----------|
 | Markdown | `text/markdown` |
 | HTML | `text/html` |
 | JSON | `application/json` |
 | Klartext | `text/plain` |
 | DocTags | `application/xml` |
-

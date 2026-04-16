@@ -12,7 +12,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
 
 <div class="grid cards" markdown>
 
--   <a href="user-guide/features/#drag-and-drop" class="card-link" markdown="1" aria-label="Guía de usuario: sección de carga por arrastrar y soltar">
+-   <a href="user-guide/features/#arrastrar-y-soltar" class="card-link" markdown="1" aria-label="Guía de usuario: sección de carga por arrastrar y soltar">
     :material-cursor-move:{ .lg .middle } __Carga por arrastrar y soltar__
 
     ---
@@ -20,7 +20,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Simplemente arrastra tus documentos a la interfaz para procesamiento instantáneo
     </a>
 
--   <a href="user-guide/features/#batch-processing" class="card-link" markdown="1" aria-label="Guía de usuario: sección de procesamiento por lotes">
+-   <a href="user-guide/features/#varios-archivos-y-carpetas" class="card-link" markdown="1" aria-label="Guía de usuario: sección de procesamiento por lotes">
     :material-file-multiple:{ .lg .middle } __Procesamiento por lotes__
 
     ---
@@ -36,7 +36,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     PDFs, documentos Word, PowerPoints, archivos Excel, HTML, Markdown, imágenes y más
     </a>
 
--   <a href="user-guide/features/#export-formats" class="card-link" markdown="1" aria-label="Guía de usuario: sección de formatos de exportación">
+-   <a href="user-guide/features/#formatos-de-exportacion" class="card-link" markdown="1" aria-label="Guía de usuario: sección de formatos de exportación">
     :material-export:{ .lg .middle } __Múltiples formatos de exportación__
 
     ---
@@ -44,7 +44,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Exporta a Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks o texto plano
     </a>
 
--   <a href="user-guide/features/#table-extraction" class="card-link" markdown="1" aria-label="Guía de usuario: sección de extracción de imágenes y tablas">
+-   <a href="user-guide/features/#extraccion-de-tablas" class="card-link" markdown="1" aria-label="Guía de usuario: sección de extracción de imágenes y tablas">
     :material-image-multiple:{ .lg .middle } __Extracción de imágenes y tablas__
 
     ---
@@ -52,7 +52,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Extrae imágenes y tablas incrustadas con exportación CSV
     </a>
 
--   <a href="user-guide/features/#rag-chunking" class="card-link" markdown="1" aria-label="Guía de usuario: sección de fragmentación RAG">
+-   <a href="user-guide/features/#fragmentacion-para-rag" class="card-link" markdown="1" aria-label="Guía de usuario: sección de fragmentación RAG">
     :material-puzzle:{ .lg .middle } __Fragmentación lista para RAG__
 
     ---
@@ -60,7 +60,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Genera fragmentos de documentos optimizados para aplicaciones RAG
     </a>
 
--   <a href="user-guide/features/#ocr-optical-character-recognition" class="card-link" markdown="1" aria-label="Guía de usuario: sección de OCR">
+-   <a href="user-guide/features/#ocr-reconocimiento-optico-de-caracteres" class="card-link" markdown="1" aria-label="Guía de usuario: sección de OCR">
     :material-eye:{ .lg .middle } __OCR avanzado__
 
     ---
@@ -68,7 +68,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Múltiples backends OCR con soporte de aceleración GPU
     </a>
 
--   <a href="user-guide/features/#conversion-history" class="card-link" markdown="1" aria-label="Guía de usuario: sección de historial de conversiones">
+-   <a href="user-guide/features/#historial-de-conversiones" class="card-link" markdown="1" aria-label="Guía de usuario: sección de historial de conversiones">
     :material-history:{ .lg .middle } __Historial de conversiones__
 
     ---
@@ -76,7 +76,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
     Accede a documentos previamente convertidos en cualquier momento
     </a>
 
--   <a href="user-guide/features/#statistics-panel" class="card-link" markdown="1" aria-label="Guía de usuario: sección de estadísticas de conversión">
+-   <a href="user-guide/features/#panel-de-estadisticas" class="card-link" markdown="1" aria-label="Guía de usuario: sección de estadísticas de conversión">
     :material-chart-line:{ .lg .middle } __Estadísticas de conversión__
 
     ---
@@ -94,12 +94,12 @@ Comienza en minutos:
 
     **Inicio con un comando usando imágenes preconstruidas:**
     ```bash
-    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
     ```
 
     **O construir localmente:**
     ```bash
-    git clone https://github.com/davidgs/duckling.git
+    git clone https://github.com/duckling-ui/duckling.git
     cd duckling
     docker-compose up --build
     ```
@@ -108,7 +108,7 @@ Comienza en minutos:
 
     ```bash
     # Clonar el repositorio
-    git clone https://github.com/davidgs/duckling.git
+    git clone https://github.com/duckling-ui/duckling.git
     cd duckling
 
     # Configuración del backend
@@ -159,10 +159,10 @@ Accede a la aplicación en `http://localhost:3000`
 
 ```mermaid
 graph LR
-    A[Browser] --> B[React Frontend]
-    B --> C[Flask Backend]
-    C --> D[Docling Engine]
-    D --> E[(Storage)]
+    A[Navegador] --> B[Frontend React]
+    B --> C[Backend Flask]
+    C --> D[Motor Docling]
+    D --> E[(Almacenamiento)]
 
     style A fill:#3b82f6,color:#fff
     style B fill:#1e3a5f,color:#fff
@@ -180,6 +180,7 @@ graph LR
 - **[Arquitectura](architecture/index.md)** - Diseño del sistema y componentes
 - **[Despliegue](deployment/index.md)** - Guía de despliegue en producción
 - **[Contribuir](contributing/index.md)** - Cómo contribuir
+- **[Registro de cambios](changelog.md)** - Historial de versiones
 
 ## Agradecimientos
 

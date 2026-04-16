@@ -1,13 +1,13 @@
 # Code-Stil
 
-Codierungsstandards und Konventionen für Duckling.
+Kodierungsstandards und Konventionen für Duckling.
 
 ## Python (Backend)
 
 ### Allgemeine Richtlinien
 
-- PEP-8-Richtlinien befolgen
-- Type Hints verwenden
+- PEP 8 befolgen
+- Typannotationen verwenden
 - Maximale Zeilenlänge: 100 Zeichen
 - Docstrings für Funktionen und Klassen verwenden
 
@@ -16,18 +16,18 @@ Codierungsstandards und Konventionen für Duckling.
 ```python
 def convert_document(file_path: str, settings: dict) -> ConversionResult:
     """
-    Convert a document using Docling.
+    Konvertiert ein Dokument mit Docling.
 
     Args:
-        file_path: Path to the document file
-        settings: Conversion settings dictionary
+        file_path: Pfad zur Dokumentdatei
+        settings: Wörterbuch mit Konvertierungseinstellungen
 
     Returns:
-        ConversionResult object with converted content
+        ConversionResult-Objekt mit konvertiertem Inhalt
 
     Raises:
-        ValueError: If file format is not supported
-        IOError: If file cannot be read
+        ValueError: Wenn das Dateiformat nicht unterstützt wird
+        IOError: Wenn die Datei nicht gelesen werden kann
     """
     pass
 ```
@@ -37,24 +37,24 @@ def convert_document(file_path: str, settings: dict) -> ConversionResult:
 ```python
 class ConverterService:
     """
-    Service for document conversion operations.
+    Dienst für Dokumentkonvertierungen.
 
-    This service manages the conversion pipeline, job queue,
-    and interaction with the Docling library.
+    Dieser Dienst verwaltet die Konvertierungs-Pipeline, die Job-Warteschlange
+    und die Interaktion mit der Docling-Bibliothek.
 
     Attributes:
-        _job_queue: Queue for pending conversion jobs
-        _max_concurrent_jobs: Maximum parallel conversions
+        _job_queue: Warteschlange für ausstehende Konvertierungsjobs
+        _max_concurrent_jobs: Maximale parallele Konvertierungen
     """
     pass
 ```
 
-### Imports
+### Importe
 
-Imports in folgender Reihenfolge:
+Importe in dieser Reihenfolge:
 
 1. Standardbibliothek
-2. Drittanbieter-Pakete
+2. Pakete von Drittanbietern
 3. Lokale Module
 
 ```python
@@ -84,10 +84,10 @@ black backend/
 
 ### Allgemeine Richtlinien
 
-- Funktionskomponenten mit Hooks verwenden
-- TypeScript für Typsicherheit
+- Funktionale Komponenten mit Hooks verwenden
+- TypeScript für Typsicherheit nutzen
 - ESLint-Konfiguration befolgen
-- Aussagekräftige Komponenten- und Variablennamen
+- Aussagekräftige Komponenten- und Variablennamen verwenden
 
 ### Komponentenstruktur
 
@@ -147,21 +147,21 @@ components/
 │   └── index.ts
 ```
 
-### Imports
+### Importe
 
 ```typescript
-// React and hooks first
+// Zuerst React und Hooks
 import { useState, useCallback, useEffect } from 'react';
 
-// Third-party libraries
+// Bibliotheken von Drittanbietern
 import { motion } from 'framer-motion';
 import axios from 'axios';
 
-// Local components
+// Lokale Komponenten
 import { Button } from '@/components/Button';
 import { useConversion } from '@/hooks/useConversion';
 
-// Types
+// Typen
 import type { ConversionResult } from '@/types';
 ```
 
@@ -180,111 +180,111 @@ npm run format
 [Conventional Commits](https://www.conventionalcommits.org/) befolgen:
 
 ```
-type(scope): description
+type(scope): Beschreibung
 
-[optional body]
+[optionaler Textkörper]
 
-[optional footer]
+[optionaler Footer]
 ```
 
 ### Typen
 
 | Typ | Beschreibung |
-|-----|--------------|
+|------|-------------|
 | `feat` | Neue Funktion |
 | `fix` | Fehlerbehebung |
 | `docs` | Dokumentationsänderungen |
-| `style` | Code-Stiländerungen (Formatierung) |
-| `refactor` | Code-Refaktorierung |
+| `style` | Code-Stil (Formatierung) |
+| `refactor` | Refaktorierung |
 | `test` | Tests hinzufügen/aktualisieren |
 | `chore` | Wartungsaufgaben |
 
 ### Beispiele
 
 ```
-feat(upload): add drag-and-drop file upload
+feat(upload): Drag-and-Drop-Dateiupload hinzufügen
 
-Implemented drag-and-drop functionality using react-dropzone.
-Supports multiple file selection and folder upload in the default drop zone.
+Drag-and-Drop mit react-dropzone implementiert.
+Mehrfachauswahl und Ordner-Upload in der Standard-Dropzone unterstützt.
 
 Closes #123
 
-Signed-off-by: Your Name <your.email@example.com>
+Signed-off-by: Ihr Name <ihre.email@beispiel.de>
 ```
 
 ```
-fix(converter): handle large PDF files correctly
+fix(converter): große PDF-Dateien korrekt verarbeiten
 
-Fixed memory issue when processing PDFs > 50MB by streaming
-the file instead of loading entirely into memory.
+Speicherproblem bei PDFs > 50 MB behoben durch Streaming
+statt vollständigem Laden in den Speicher.
 ```
 
 ```
-docs(readme): update installation instructions
+docs(readme): Installationsanweisungen aktualisieren
 
-Added Docker setup instructions and troubleshooting section.
+Docker-Setup und Abschnitt zur Fehlerbehebung ergänzt.
 ```
 
-### DCO-Signatur {#dco-sign-off}
+### DCO-Sign-off {#dco-sign-off}
 
-Alle Commits **MÜSSEN** mit dem [Developer Certificate of Origin (DCO)](https://developercertificate.org/) signiert werden. Dies bestätigt, dass Sie das Recht haben, den Beitrag unter der Projektlizenz einzureichen.
+Alle Commits **MÜSSEN** mit dem [Developer Certificate of Origin (DCO)](https://developercertificate.org/) signiert werden. Damit bestätigen Sie, dass Sie das Recht haben, den Beitrag unter der Projektlizenz einzureichen.
 
-Fügen Sie die Signatur zu jedem Commit mit `git commit -s` hinzu:
+Fügen Sie bei jedem Commit die Signatur mit `git commit -s` hinzu:
 
 ```bash
-git commit -s -m "feat(upload): add drag-and-drop file upload"
+git commit -s -m "feat(upload): Drag-and-Drop-Dateiupload hinzufügen"
 ```
 
-Dies fügt eine `Signed-off-by:`-Zeile mit Ihrem Namen und Ihrer E-Mail aus Ihrer Git-Konfiguration hinzu. Sie können sie auch manuell am Ende Ihrer Commit-Nachricht hinzufügen:
+Damit wird eine Zeile `Signed-off-by:` mit Ihrem Namen und Ihrer E-Mail aus der Git-Konfiguration angehängt. Sie können sie auch manuell am Ende der Commit-Nachricht ergänzen:
 
 ```
-Signed-off-by: Your Name <your.email@example.com>
+Signed-off-by: Ihr Name <ihre.email@beispiel.de>
 ```
 
-PRs mit unsignierten Commits werden nicht gemergt.
+Pull Requests mit nicht signierten Commits werden nicht zusammengeführt.
 
 ---
 
 ## CSS/Tailwind
 
-### Klassenorganisation
+### Klassen-Reihenfolge
 
-Tailwind-Klassen konsistent anordnen:
+Tailwind-Klassen einheitlich sortieren:
 
 1. Layout (flex, grid, position)
 2. Abstände (margin, padding)
 3. Größe (width, height)
 4. Typografie (font, text)
-5. Visuell (background, border, shadow)
-6. Interaktiv (hover, focus)
+5. Darstellung (background, border, shadow)
+6. Interaktion (hover, focus)
 
 ```tsx
 <div className="flex items-center gap-4 p-4 w-full text-sm bg-gray-800 rounded-lg hover:bg-gray-700">
-  {/* content */}
+  {/* Inhalt */}
 </div>
 ```
 
-### Benutzerdefinierte Klassen
+### Eigene Klassen
 
 `@apply` sparsam verwenden, Komposition bevorzugen:
 
 ```css
-/* Prefer this */
+/* So bevorzugen */
 .btn-primary {
   @apply px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600;
 }
 
-/* Over inline classes everywhere */
+/* Statt überall Inline-Klassen */
 ```
 
 ---
 
 ## API-Design
 
-### Endpoint-Benennung
+### Endpunktbenennung
 
-- Substantive, keine Verben
-- Pluralformen verwenden
+- Substantive statt Verben
+- Pluralformen
 - Kebab-Case für mehrteilige Ressourcen
 
 ```
@@ -313,7 +313,7 @@ GET    /api/conversions/{id}/status
 ```json
 {
   "error": "ValidationError",
-  "message": "File type not supported",
+  "message": "Dateityp nicht unterstützt",
   "details": {
     "field": "file",
     "allowed": ["pdf", "docx", "png"]

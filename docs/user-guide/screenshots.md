@@ -78,7 +78,7 @@ The main upload area where you drag and drop documents for conversion.
 === "Install Backend"
 
     <figure markdown="span">
-      ![OCR Install](../assets/screenshots/settings/settings-ocr-install.svg){ loading=lazy }
+      ![OCR Install](../assets/screenshots/settings/settings-ocr-install.png){ loading=lazy }
       <figcaption>One-click backend installation</figcaption>
     </figure>
 
@@ -220,7 +220,7 @@ The main upload area where you drag and drop documents for conversion.
 === "Complete"
 
     <figure markdown="span">
-      ![Conversion Complete](../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
+      ![Conversion Complete](../assets/screenshots/features/conversion-complete.png){ loading=lazy }
       <figcaption>Successful conversion with stats</figcaption>
     </figure>
 

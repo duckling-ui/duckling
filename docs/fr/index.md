@@ -12,7 +12,7 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
 
 <div class="grid cards" markdown>
 
--   <a href="user-guide/features/#drag-and-drop" class="card-link" markdown="1" aria-label="Guide utilisateur : section Téléversement par glisser-déposer">
+-   <a href="user-guide/features/#glisser-deposer" class="card-link" markdown="1" aria-label="Guide utilisateur : section Téléversement par glisser-déposer">
     :material-cursor-move:{ .lg .middle } __Téléversement par glisser-déposer__
 
     ---
@@ -20,7 +20,7 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
     Glissez simplement vos documents sur l'interface pour un traitement instantané
     </a>
 
--   <a href="user-guide/features/#batch-processing" class="card-link" markdown="1" aria-label="Guide utilisateur : section Traitement par lot">
+-   <a href="user-guide/features/#plusieurs-fichiers-et-dossiers" class="card-link" markdown="1" aria-label="Guide utilisateur : section Traitement par lot">
     :material-file-multiple:{ .lg .middle } __Traitement par lot__
 
     ---
@@ -36,7 +36,7 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
     PDFs, documents Word, PowerPoints, fichiers Excel, HTML, Markdown, images et plus encore
     </a>
 
--   <a href="user-guide/features/#export-formats" class="card-link" markdown="1" aria-label="Guide utilisateur : section Formats d'export">
+-   <a href="user-guide/features/#formats-dexport" class="card-link" markdown="1" aria-label="Guide utilisateur : section Formats d'export">
     :material-export:{ .lg .middle } __Formats d'export multiples__
 
     ---
@@ -44,7 +44,7 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
     Exportez vers Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks ou texte brut
     </a>
 
--   <a href="user-guide/features/#table-extraction" class="card-link" markdown="1" aria-label="Guide utilisateur : section Extraction d'images et tableaux">
+-   <a href="user-guide/features/#extraction-des-tableaux" class="card-link" markdown="1" aria-label="Guide utilisateur : section Extraction d'images et tableaux">
     :material-image-multiple:{ .lg .middle } __Extraction d'images et tableaux__
 
     ---
@@ -52,7 +52,7 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
     Extrayez les images intégrées et les tableaux avec export CSV
     </a>
 
--   <a href="user-guide/features/#rag-chunking" class="card-link" markdown="1" aria-label="Guide utilisateur : section Segmentation RAG">
+-   <a href="user-guide/features/#decoupage-pour-rag" class="card-link" markdown="1" aria-label="Guide utilisateur : section Segmentation RAG">
     :material-puzzle:{ .lg .middle } __Segmentation prête pour RAG__
 
     ---
@@ -60,7 +60,7 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
     Générez des segments de document optimisés pour les applications RAG
     </a>
 
--   <a href="user-guide/features/#ocr-optical-character-recognition" class="card-link" markdown="1" aria-label="Guide utilisateur : section OCR">
+-   <a href="user-guide/features/#ocr-reconnaissance-optique-de-caracteres" class="card-link" markdown="1" aria-label="Guide utilisateur : section OCR">
     :material-eye:{ .lg .middle } __OCR avancé__
 
     ---
@@ -68,7 +68,7 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
     Plusieurs backends OCR avec support d'accélération GPU
     </a>
 
--   <a href="user-guide/features/#conversion-history" class="card-link" markdown="1" aria-label="Guide utilisateur : section Historique des conversions">
+-   <a href="user-guide/features/#historique-des-conversions" class="card-link" markdown="1" aria-label="Guide utilisateur : section Historique des conversions">
     :material-history:{ .lg .middle } __Historique des conversions__
 
     ---
@@ -76,7 +76,7 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
     Accédez aux documents précédemment convertis à tout moment
     </a>
 
--   <a href="user-guide/features/#statistics-panel" class="card-link" markdown="1" aria-label="Guide utilisateur : section Statistiques de conversion">
+-   <a href="user-guide/features/#panneau-des-statistiques" class="card-link" markdown="1" aria-label="Guide utilisateur : section Statistiques de conversion">
     :material-chart-line:{ .lg .middle } __Statistiques de conversion__
 
     ---
@@ -89,10 +89,24 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
 
 ## Démarrage rapide
 
-Consultez **Getting Started** pour installer et exécuter Duckling avec Docker ou en développement local.
+Consultez **[Bien démarrer](getting-started/index.md)** pour installer et exécuter Duckling avec Docker ou en développement local. Un guide court est dans **[Démarrage rapide](getting-started/quickstart.md)**.
 
-## Statut de traduction
+## Documentation
 
-La documentation en français est en cours. Certaines pages peuvent être temporaires ou partiellement traduites.
+- **[Bien démarrer](getting-started/index.md)** - Installation et démarrage
+- **[Guide d'utilisation](user-guide/index.md)** - Fonctions et configuration
+- **[Documentation Docling](docling/index.md)** - Documentation Docling (amont)
+- **[Référence API](api/index.md)** - Documentation de l'API
+- **[Architecture](architecture/index.md)** - Conception et composants
+- **[Déploiement](deployment/index.md)** - Mise en production
+- **[Contribuer](contributing/index.md)** - Comment contribuer
+- **[Journal des modifications](changelog.md)** - Historique des versions
 
+## Remerciements
+
+- [Docling](https://github.com/docling-project/docling) (IBM) pour le moteur de conversion
+- [React](https://react.dev/) pour l'interface
+- [Flask](https://flask.palletsprojects.com/) pour l'API
+- [Tailwind CSS](https://tailwindcss.com/) pour le style
+- [Framer Motion](https://www.framer.com/motion/) pour les animations
 

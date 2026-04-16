@@ -1,40 +1,40 @@
-# Arquitectura Diagramas
+# Diagramas de arquitectura
 
-Visual diagrams for Duckling architecture.
+Diagramas visuales de la arquitectura de Duckling.
 
-## System Arquitectura Resumen
+## Visión general de la arquitectura del sistema
 
 ```mermaid
 flowchart LR
     subgraph FE["Frontend"]
         direction TB
-        UI[React UI] --> Hooks[Hooks]
-        Hooks --> Axios[API Client]
+        UI[UI React] --> Hooks[Hooks]
+        Hooks --> Axios[Cliente API]
     end
 
     Axios <-->|REST| API
 
     subgraph BE["Backend"]
         direction TB
-        API[Flask API] --> SVC[Services]
-        SVC --> Queue[Job Queue]
+        API[API Flask] --> SVC[Servicios]
+        SVC --> Queue[Cola de trabajos]
         Queue --> Doc[Docling]
     end
 
     Doc --> DB[(SQLite)]
-    Doc --> FS[(Files)]
+    Doc --> FS[(Archivos)]
 ```
 
 ---
 
-## Simple Arquitectura
+## Arquitectura simple
 
 ```mermaid
 graph LR
-    A[Browser] --> B[React Frontend]
-    B --> C[Flask Backend]
-    C --> D[Docling Engine]
-    D --> E[(Storage)]
+    A[Navegador] --> B[Frontend React]
+    B --> C[Backend Flask]
+    C --> D[Motor Docling]
+    D --> E[(Almacenamiento)]
 
     style A fill:#3b82f6,color:#fff
     style B fill:#1e3a5f,color:#fff
@@ -45,37 +45,37 @@ graph LR
 
 ---
 
-## Detailed Layer View
+## Vista detallada por capas
 
 ```mermaid
 graph TB
     subgraph Client
-        Browser[Web Browser]
+        Browser[Navegador web]
     end
 
     subgraph Frontend
-        React[React App]
-        Components[Components: DropZone, Progress, Export, Settings, History]
+        React[Aplicación React]
+        Components[Componentes: zona de soltar, progreso, exportar, ajustes, historial]
         Hooks[Hooks: useConversion, useSettings]
-        APIClient[Axios Client]
+        APIClient[Cliente Axios]
     end
 
     subgraph Backend
-        Flask[Flask Server]
-        Routes[Routes: convert, settings, history, export, docs]
-        Services[Services: Converter, FileManager, History]
-        JobQueue[Job Queue - 2 workers max]
+        Flask[Servidor Flask]
+        Routes[Rutas: convert, settings, history, export, docs]
+        Services[Servicios: Converter, FileManager, History]
+        JobQueue[Cola de trabajos – máx. 2 workers]
     end
 
     subgraph Engine
         Docling[Docling DocumentConverter]
         OCR[OCR: EasyOCR, Tesseract, OcrMac]
-        Extract[Extraction: Tables, Images, Chunks]
+        Extract[Extracción: tablas, imágenes, fragmentos]
     end
 
     subgraph Storage
-        SQLite[(SQLite DB)]
-        FileSystem[(File System)]
+        SQLite[(BD SQLite)]
+        FileSystem[(Sistema de archivos)]
     end
 
     Browser --> React
@@ -95,31 +95,31 @@ graph TB
 
 ---
 
-## Conversión Flow
+## Flujo de conversión
 
 ```mermaid
 sequenceDiagram
-    participant U as User
+    participant U as Usuario
     participant F as Frontend
     participant B as Backend
     participant D as Docling
 
-    U->>F: Upload File
+    U->>F: Subir archivo
     F->>B: POST /convert
-    B->>B: Save & Queue Job
+    B->>B: Guardar y encolar trabajo
     B-->>F: 202 job_id
 
-    loop Poll
+    loop Sondeo
         F->>B: GET /status
-        B-->>F: progress %
+        B-->>F: progreso %
     end
 
-    B->>D: Convert
-    D-->>B: Results
-    B-->>F: Complete
+    B->>D: Convertir
+    D-->>B: Resultados
+    B-->>F: Completado
     F->>B: GET /result
-    B-->>F: Content
-    U->>F: Download
+    B-->>F: Contenido
+    U->>F: Descargar
 ```
 
 ---
@@ -128,38 +128,38 @@ sequenceDiagram
 
 ```mermaid
 sequenceDiagram
-    participant U as User
+    participant U as Usuario
     participant F as Frontend
-    participant Q as Queue
+    participant Q as Cola
     participant W as Workers
 
-    U->>F: Upload 5 Files
-    F->>Q: Queue 5 Jobs
+    U->>F: Subir 5 archivos
+    F->>Q: Encolar 5 trabajos
 
-    par Process 2 at a time
+    par Procesar 2 a la vez
         Q->>W: Job 1
         Q->>W: Job 2
     end
 
-    W-->>Q: Job 1 Done
+    W-->>Q: Job 1 listo
     Q->>W: Job 3
-    W-->>Q: Job 2 Done
+    W-->>Q: Job 2 listo
     Q->>W: Job 4
 
-    Note over Q,W: Max 2 concurrent
+    Note over Q,W: Máx. 2 concurrentes
 
-    F->>F: Show progress per file
+    F->>F: Mostrar progreso por archivo
 ```
 
 ---
 
-## Escalado Arquitectura
+## Arquitectura de escalado
 
-For production deployments with high traffic:
+Para despliegues en producción con mucho tráfico:
 
 ```mermaid
 graph LR
-    LB[Load Balancer]
+    LB[Balanceador de carga]
 
     LB --> B1[Backend 1]
     LB --> B2[Backend 2]
@@ -185,23 +185,23 @@ graph LR
 
 ---
 
-## Component Tree
+## Árbol de componentes
 
 ```mermaid
 graph TD
     App[App.tsx]
 
-    App --> Header
-    App --> Main
-    App --> Panels
+    App --> Header[Cabecera]
+    App --> Main[Área principal]
+    App --> Panels[Paneles]
 
-    Main --> DropZone
-    Main --> Progress
-    Main --> Export
+    Main --> DropZone[Zona de soltar]
+    Main --> Progress[Progreso]
+    Main --> Export[Exportar]
 
-    Panels --> Settings
-    Panels --> History
-    Panels --> Docs
+    Panels --> Settings[Ajustes]
+    Panels --> History[Historial]
+    Panels --> Docs[Documentación]
 
     style App fill:#3b82f6,color:#fff
     style Main fill:#14b8a6,color:#fff
@@ -210,18 +210,18 @@ graph TD
 
 ---
 
-## OCR Options
+## Opciones OCR
 
 ```mermaid
 graph LR
-    Input[Document] --> OCR{OCR Backend}
+    Input[Documento] --> OCR{Backend OCR}
 
     OCR --> Easy[EasyOCR]
     OCR --> Tess[Tesseract]
     OCR --> Mac[OcrMac]
     OCR --> Rapid[RapidOCR]
 
-    Easy --> Out[Text Output]
+    Easy --> Out[Salida de texto]
     Tess --> Out
     Mac --> Out
     Rapid --> Out
@@ -234,15 +234,14 @@ graph LR
 
 ---
 
-## Static Diagram Images
+## Imágenes estáticas de diagramas
 
-For environments that don't support Mermaid rendering, static images are available:
+Si el entorno no admite el renderizado de Mermaid, hay imágenes estáticas:
 
-- [Arquitectura del sistema](../../arch.png)
-- [Vista detallada por capas](../../Detailed-Layer-View.png)
-- [Pipeline de conversión](../../ConversionPipeline.png)
-- [Procesamiento por lotes](../../BatchProcessing.png)
-- [Arquitectura de escalado](../../ScalingArchitecture.png)
-- [Árbol de componentes](../../ComponentTree.png)
-- [Opciones OCR](../../OCR.png)
-
+- [Arquitectura del sistema](../arch.png)
+- [Vista detallada por capas](../Detailed-Layer-View.png)
+- [Canal de conversión](../ConversionPipeline.png)
+- [Procesamiento por lotes](../BatchProcessing.png)
+- [Arquitectura de escalado](../ScalingArchitecture.png)
+- [Árbol de componentes](../ComponentTree.png)
+- [Opciones OCR](../OCR.png)

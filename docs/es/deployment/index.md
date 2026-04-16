@@ -1,10 +1,10 @@
 # Despliegue
 
-Guías para desplegar Duckling en diversos entornos.
+Guías para desplegar Duckling en distintos entornos.
 
-## Resumen
+## Descripción general
 
-Duckling can be deployed in multiple ways depending on your needs:
+Duckling puede desplegarse de varias formas según sus necesidades:
 
 <div class="grid cards" markdown>
 
@@ -12,7 +12,7 @@ Duckling can be deployed in multiple ways depending on your needs:
 
     ---
 
-    Desplegar con Gunicorn, Nginx y systemd
+    Despliegue con Gunicorn, Nginx y systemd
 
     [:octicons-arrow-right-24: Guía de producción](production.md)
 
@@ -28,7 +28,7 @@ Duckling can be deployed in multiple ways depending on your needs:
 
     ---
 
-    Mejores prácticas de seguridad y endurecimiento
+    Buenas prácticas de seguridad y endurecimiento
 
     [:octicons-arrow-right-24: Guía de seguridad](security.md)
 
@@ -38,13 +38,13 @@ Duckling can be deployed in multiple ways depending on your needs:
 
 | Método | Mejor para | Complejidad |
 |--------|----------|------------|
-| Docker Compose | Despliegue rápido, pruebas | Bajo |
-| Manual + Nginx | Control total, personalización | Medio |
-| Kubernetes | Gran escala, nativo de la nube | Alto |
+| Docker Compose | Despliegue rápido, pruebas | Baja |
+| Manual + Nginx | Control total, personalización | Media |
+| Kubernetes | Gran escala, nativo en la nube | Alta |
 
 ## Referencia rápida
 
-### Docker (más simple)
+### Docker (lo más sencillo)
 
 ```bash
 docker-compose up -d --build
@@ -53,25 +53,25 @@ docker-compose up -d --build
 ### Despliegue manual
 
 ```bash
-# Backend with Gunicorn
+# Backend con Gunicorn
 cd backend
 gunicorn -w 4 -b 0.0.0.0:5001 duckling:app
 
-# Frontend build
+# Compilación del frontend
 cd frontend
 npm run build
-# Serve dist/ with nginx
+# Servir dist/ con nginx
 ```
 
 ## Lista de comprobación del entorno
 
 Antes de desplegar en producción:
 
-- [ ] Establece una `SECRET_KEY`
+- [ ] Establecer un `SECRET_KEY` fuerte
 - [ ] Establecer `FLASK_DEBUG=false`
-- [ ] Configurar CORS para tu dominio
+- [ ] Configurar CORS para su dominio
 - [ ] Habilitar HTTPS
-- [ ] Establecer límites de tamaño de archivo apropiados
-- [ ] Configurar proxy inverso
-- [ ] Configurar monitoreo y registro
+- [ ] Definir límites de tamaño de archivo adecuados
+- [ ] Configurar el proxy inverso
+- [ ] Configurar monitorización y registro
 

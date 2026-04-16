@@ -1,10 +1,10 @@
-# Producción Despliegue
+# Despliegue en producción
 
-Guide for deploying Duckling in production environments.
+Guía para desplegar Duckling en entornos de producción.
 
-## Backend with Gunicorn
+## Backend con Gunicorn
 
-### Installation
+### Instalación
 
 ```bash
 cd backend
@@ -12,13 +12,13 @@ source venv/bin/activate
 pip install gunicorn
 ```
 
-### Basic Usage
+### Uso básico
 
 ```bash
 gunicorn -w 4 -b 0.0.0.0:5001 duckling:app
 ```
 
-### Recommended Configuración
+### Configuración recomendada
 
 ```bash
 gunicorn \
@@ -31,25 +31,25 @@ gunicorn \
   app:app
 ```
 
-!!! tip "Worker Count"
-    A good rule of thumb is `(2 × CPU cores) + 1` workers.
+!!! tip "Número de workers"
+    Una buena regla práctica es `(2 × núcleos de CPU) + 1` workers.
 
 ---
 
-## Frontend Build
+## Compilación del frontend
 
 ```bash
 cd frontend
 npm run build
 ```
 
-The `dist/` directory contains static files ready for deployment.
+El directorio `dist/` contiene archivos estáticos listos para desplegar.
 
 ---
 
-## Nginx Configuración
+## Configuración de Nginx
 
-### Basic Establecerup
+### Configuración básica
 
 ```nginx
 # /etc/nginx/sites-available/duckling
@@ -60,12 +60,12 @@ server {
     root /var/www/duckling/dist;
     index index.html;
 
-    # Frontend routes
+    # Rutas del frontend
     location / {
         try_files $uri $uri/ /index.html;
     }
 
-    # API proxy
+    # Proxy de la API
     location /api/ {
         proxy_pass http://localhost:5001/api/;
         proxy_http_version 1.1;
@@ -74,14 +74,14 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        # For file uploads
+        # Para subida de archivos
         client_max_body_size 100M;
         proxy_read_timeout 300s;
     }
 }
 ```
 
-### Full Producción Configuración
+### Configuración completa para producción
 
 ```nginx
 upstream docling_backend {
@@ -101,7 +101,7 @@ server {
     ssl_certificate /etc/letsencrypt/live/docling.example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/docling.example.com/privkey.pem;
 
-    # Security headers
+    # Cabeceras de seguridad
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-XSS-Protection "1; mode=block" always;
@@ -113,7 +113,7 @@ server {
     location / {
         try_files $uri $uri/ /index.html;
 
-        # Cache static assets
+        # Caché de recursos estáticos
         location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2)$ {
             expires 1y;
             add_header Cache-Control "public, immutable";
@@ -129,7 +129,7 @@ server {
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        # File uploads
+        # Subida de archivos
         client_max_body_size 200M;
         proxy_read_timeout 300s;
         proxy_connect_timeout 60s;
@@ -140,9 +140,9 @@ server {
 
 ---
 
-## Systemd Service
+## Servicio systemd
 
-Create `/etc/systemd/system/duckling.service`:
+Cree `/etc/systemd/system/duckling.service`:
 
 ```ini
 [Unit]
@@ -165,25 +165,25 @@ Restart=always
 WantedBy=multi-user.target
 ```
 
-### Managing the Service
+### Gestionar el servicio
 
 ```bash
-# Enable and start
+# Habilitar e iniciar
 sudo systemctl enable duckling
 sudo systemctl start duckling
 
-# Check status
+# Comprobar estado
 sudo systemctl status duckling
 
-# View logs
+# Ver registros
 sudo journalctl -u duckling -f
 ```
 
 ---
 
-## Caddy Alternative
+## Alternativa: Caddy
 
-For simpler configuration, use Caddy:
+Para una configuración más sencilla, use Caddy:
 
 ```caddyfile
 docling.example.com {
@@ -207,18 +207,18 @@ docling.example.com {
 
 ## Variables de entorno
 
-Establecer these in production:
+Defínalas en producción:
 
 ```env
 FLASK_ENV=production
 SECRET_KEY=your-very-secure-random-key
 DEBUG=False
 FLASK_HOST=127.0.0.1
-MAX_CONTENT_LENGTH=209715200  # 200MB
+MAX_CONTENT_LENGTH=209715200  # 200 MB
 ```
 
 !!! danger "Seguridad"
-    Never use the default `SECRET_KEY` en producción. Generate a secure ryom key:
+    No use nunca el `SECRET_KEY` por defecto en producción. Genere una clave secreta aleatoria segura:
 
     ```bash
     python -c "import secrets; print(secrets.token_hex(32))"
@@ -228,33 +228,33 @@ MAX_CONTENT_LENGTH=209715200  # 200MB
 
 ## Comprobaciones de estado
 
-Monitor service health:
+Supervise el estado del servicio:
 
 ```bash
-# Backend health
+# Estado del backend
 curl http://localhost:5001/api/health
 
-# Response
+# Respuesta
 {"status": "healthy", "service": "duckling-backend"}
 ```
 
 ---
 
-## Logging
+## Registro
 
-### Gunicorn Logs
+### Registros de Gunicorn
 
 ```bash
-# Access log
+# Registro de acceso
 tail -f /var/log/docling/access.log
 
-# Error log
+# Registro de errores
 tail -f /var/log/docling/error.log
 ```
 
-### Structured Logging
+### Registro estructurado
 
-Add to the Flask app:
+Añada en la aplicación Flask:
 
 ```python
 import logging
@@ -273,25 +273,25 @@ app.logger.addHandler(handler)
 
 ---
 
-## Backup Strategy
+## Estrategia de copias de seguridad
 
-### Database
+### Base de datos
 
 ```bash
-# Backup SQLite database
+# Copia de seguridad de la base SQLite
 cp backend/history.db backups/history_$(date +%Y%m%d).db
 ```
 
-### Outputs
+### Salidas
 
 ```bash
-# Backup converted files
+# Copia de seguridad de archivos convertidos
 tar -czf backups/outputs_$(date +%Y%m%d).tar.gz outputs/
 ```
 
-### Automated Backups
+### Copias de seguridad automatizadas
 
-Add to crontab:
+Añada a la crontab:
 
 ```cron
 0 2 * * * /opt/duckling/scripts/backup.sh

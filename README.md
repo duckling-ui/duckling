@@ -1,6 +1,6 @@
 # Duckling
 
-[![Tests](https://github.com/davidgs/duckling/actions/workflows/test.yml/badge.svg)](https://github.com/davidgs/duckling/actions/workflows/test.yml)
+[![Tests](https://github.com/duckling-ui/duckling/actions/workflows/test.yml/badge.svg)](https://github.com/duckling-ui/duckling/actions/workflows/test.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Node.js 22+](https://img.shields.io/badge/node.js-22+-green.svg)](https://nodejs.org/)
@@ -71,7 +71,7 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/davidgs/duckling.git
+   git clone https://github.com/duckling-ui/duckling.git
    cd duckling
    ```
 
@@ -106,11 +106,13 @@ A modern, user-friendly graphical interface for [Docling](https://github.com/doc
    ```
    The UI will be available at `http://localhost:3000`
 
+3. **Batch and folder uploads**: Drag a folder or multiple files onto the drop zone, click the zone to pick a folder, or use **Choose files…** for loose files—see the [Quick Start guide](docs/getting-started/quickstart.md#batch-processing).
+
 ### Using Docker
 
 ## Documentation (MkDocs)
 
-Duckling uses MkDocs + `mkdocs-static-i18n` for multilingual docs. Production docs at [duckling-ui.org](https://duckling-ui.org) are built with [mike](https://github.com/jimporter/mike) for multi-version support.
+Duckling uses MkDocs + `mkdocs-static-i18n` for multilingual docs. Production docs at [duckling-ui.org](https://duckling-ui.org) are built with [mike](https://github.com/jimporter/mike) for multi-version support. With Material’s integrated TOC (`toc.integrate`), translate section headings in localized Markdown (for example `docs/fr/user-guide/features.md`) so the sidebar matches each locale. **Supported formats** and **Screenshots** are mirrored under `docs/{de,fr,es}/user-guide/formats.md` and `screenshots.md` (UI strings, captions, tab titles; image paths `../../assets/...`). Homepage feature tiles in `docs/{de,fr,es}/index.md` should link to those locale-specific heading anchors (for example `#glisser-deposer` on the French Features page), not English slugs. The `de`, `fr`, and `es` trees mirror the English layout (getting started, user guide, API, architecture, deployment, contributing, changelog): keep them in sync when you add or change docs.
 
 - Build (strict):
 
@@ -132,7 +134,7 @@ docker-compose up --build
 **Using Pre-built Images:**
 ```bash
 # Download and run pre-built images
-curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml
+curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml
 docker-compose -f docker-compose.prebuilt.yml up -d
 ```
 
