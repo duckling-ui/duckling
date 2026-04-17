@@ -94,7 +94,7 @@ Get started in minutes:
 
     **One-command start with pre-built images:**
     ```bash
-    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
     ```
 
     **Or build locally:**

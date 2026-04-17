@@ -2,9 +2,9 @@
 
 Guides pour déployer Duckling dans différents environnements.
 
-## Vue d'ensemble
+## Vue d’ensemble
 
-Duckling can be deployed in multiple ways depending on your needs:
+Duckling peut être déployé de plusieurs façons selon vos besoins :
 
 <div class="grid cards" markdown>
 
@@ -12,17 +12,17 @@ Duckling can be deployed in multiple ways depending on your needs:
 
     ---
 
-    Déployer avec Gunicorn, Nginx et systemd
+    Déploiement avec Gunicorn, Nginx et systemd
 
-    [:octicons-arrow-right-24: Guide de production](production.md)
+    [:octicons-arrow-right-24: Guide production](production.md)
 
--   :material-scale-balance:{ .lg .middle } __Mise à l'échelle__
+-   :material-scale-balance:{ .lg .middle } __Montée en charge__
 
     ---
 
-    Mettre à l'échelle pour un trafic élevé avec équilibrage de charge
+    Passer à l’échelle pour un trafic élevé avec répartition de charge
 
-    [:octicons-arrow-right-24: Guide de mise à l'échelle](scaling.md)
+    [:octicons-arrow-right-24: Guide montée en charge](scaling.md)
 
 -   :material-shield-check:{ .lg .middle } __Sécurité__
 
@@ -30,7 +30,7 @@ Duckling can be deployed in multiple ways depending on your needs:
 
     Bonnes pratiques de sécurité et durcissement
 
-    [:octicons-arrow-right-24: Guide de sécurité](security.md)
+    [:octicons-arrow-right-24: Guide sécurité](security.md)
 
 </div>
 
@@ -39,8 +39,8 @@ Duckling can be deployed in multiple ways depending on your needs:
 | Méthode | Idéal pour | Complexité |
 |--------|----------|------------|
 | Docker Compose | Déploiement rapide, tests | Faible |
-| Manual + Nginx | Contrôle total, personnalisation | Moyen |
-| Kubernetes | Grete échelle, cloud-native | Élevé |
+| Manuel + Nginx | Contrôle total, personnalisation | Moyenne |
+| Kubernetes | Grande échelle, cloud natif | Élevée |
 
 ## Référence rapide
 
@@ -53,25 +53,25 @@ docker-compose up -d --build
 ### Déploiement manuel
 
 ```bash
-# Backend with Gunicorn
+# Backend avec Gunicorn
 cd backend
 gunicorn -w 4 -b 0.0.0.0:5001 duckling:app
 
-# Frontend build
+# Build du frontend
 cd frontend
 npm run build
-# Serve dist/ with nginx
+# Servir dist/ avec nginx
 ```
 
-## Liste de contrôle de l'environnement
+## Liste de contrôle d’environnement
 
-Avant de déployer en production :
+Avant un déploiement en production :
 
-- [ ] Définissez une `SECRET_KEY`
+- [ ] Définir un `SECRET_KEY` fort
 - [ ] Définir `FLASK_DEBUG=false`
-- [ ] Configurer CORS pour votre domaine
+- [ ] Configurer le CORS pour votre domaine
 - [ ] Activer HTTPS
-- [ ] Définir des limites de taille de fichier appropriées
-- [ ] Configurer le proxy inverse
-- [ ] Configurer la surveillance et la journalisation
+- [ ] Définir des limites de taille de fichier adaptées
+- [ ] Configurer le reverse proxy
+- [ ] Mettre en place la supervision et les journaux
 

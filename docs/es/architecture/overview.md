@@ -1,42 +1,42 @@
-# Resumen del sistema
+# Visión general del sistema
 
-Arquitectura de alto nivel y flujo de datos in Duckling.
+Arquitectura y flujo de datos de Duckling a alto nivel.
 
-## Arquitectura Diagram
+## Diagrama de arquitectura
 
-![Arquitectura del sistema](../../arch.png)
+![Arquitectura del sistema](../arch.png)
 
-## Detailed Layer View
+## Vista detallada por capas
 
 ```mermaid
 graph TB
     subgraph Client
-        Browser[Web Browser]
+        Browser[Navegador web]
     end
 
     subgraph Frontend
-        React[React App]
-        Components[Components]
-        Hooks[Custom Hooks]
-        APIClient[Axios Client]
+        React[Aplicación React]
+        Components[Componentes]
+        Hooks[Hooks personalizados]
+        APIClient[Cliente Axios]
     end
 
     subgraph Backend
-        Flask[Flask Server]
-        Routes[API Routes]
-        Services[Services]
-        JobQueue[Job Queue]
+        Flask[Servidor Flask]
+        Routes[Rutas API]
+        Services[Servicios]
+        JobQueue[Cola de trabajos]
     end
 
     subgraph Engine
         Docling[DocumentConverter]
-        OCR[OCR Backends]
-        Extract[Extraction]
+        OCR[Backends OCR]
+        Extract[Extracción]
     end
 
     subgraph Storage
-        SQLite[(SQLite DB)]
-        FileSystem[(File System)]
+        SQLite[(BD SQLite)]
+        FileSystem[(Sistema de archivos)]
     end
 
     Browser --> React
@@ -54,55 +54,55 @@ graph TB
     Docling --> FileSystem
 ```
 
-## Data Flow
+## Flujo de datos
 
-### Document Conversión Flow
+### Flujo de conversión de documentos
 
 ```mermaid
 sequenceDiagram
-    participant U as User
+    participant U as Usuario
     participant F as Frontend
     participant B as Backend
     participant D as Docling
 
-    U->>F: Upload File
+    U->>F: Subir archivo
     F->>B: POST /convert
-    B->>B: Save & Queue Job
+    B->>B: Guardar y encolar trabajo
     B-->>F: 202 job_id
 
-    loop Poll
+    loop Sondeo
         F->>B: GET /status
-        B-->>F: progress %
+        B-->>F: progreso %
     end
 
-    B->>D: Convert
-    D-->>B: Results
-    B-->>F: Complete
+    B->>D: Convertir
+    D-->>B: Resultados
+    B-->>F: Completado
     F->>B: GET /result
-    B-->>F: Content
-    U->>F: Download
+    B-->>F: Contenido
+    U->>F: Descargar
 ```
 
-### Conversión Pipeline
+### Canal de conversión
 
-| Step | Descripción |
+| Paso | Descripción |
 |------|-------------|
-| 1 | **Upload Request** - Archivo received via POST |
-| 2 | **Archivo Validation & Storage** - Check extension, save to uploads/ |
-| 3 | **Job Creation** - UUID assigned, entry created |
-| 4 | **Queue for Procesyo** - Added to job queue |
-| 5 | **Worker Thread Picks Up Job** - When capacity available |
-| 6 | **DocumentConverter Initialized** - With OCR, table, image settings |
-| 7 | **Document Conversión** - Extraer images, tables, chunks |
-| 8 | **Export to Formatos** - MD, HTML, JSON, TXT, DocTags, Tokens |
-| 9 | **Update Job Status & History** - Mark complete, store metadata |
-| 10 | **Results Available** - Ready for download |
+| 1 | **Solicitud de subida** – Archivo recibido vía POST |
+| 2 | **Validación y almacenamiento** – Comprobar extensión, guardar en uploads/ |
+| 3 | **Creación del trabajo** – UUID asignado, entrada creada |
+| 4 | **Encolado para procesamiento** – Añadido a la cola de trabajos |
+| 5 | **El hilo worker toma el trabajo** – Cuando hay capacidad |
+| 6 | **DocumentConverter inicializado** – Con ajustes OCR, tablas e imágenes |
+| 7 | **Conversión del documento** – Extraer imágenes, tablas y fragmentos |
+| 8 | **Exportar a formatos** – MD, HTML, JSON, TXT, DocTags, Tokens |
+| 9 | **Actualizar estado e historial** – Marcar como completado, guardar metadatos |
+| 10 | **Resultados disponibles** – Listos para descargar |
 
-**Carpeta (UI):** el navegador expande un directorio elegido o arrastrado a archivos; el frontend filtra por extensión y tamaño y envía los admitidos como `POST /api/convert/batch` con partes `files` repetidas. El backend rechaza las partes no admitidas; si ninguna puede convertirse, la API responde **400**.
+**Subida de carpeta (UI):** El navegador expande un directorio elegido o arrastrado a una lista de archivos; el frontend filtra por extensión y tamaño permitidos y envía los archivos admitidos como `POST /api/convert/batch` con partes `files` repetidas (igual que el lote multiarchivo). El backend rechaza las partes no admitidas de forma individual; si ninguna parte puede convertirse, la API responde **400**.
 
-## Job Queue System
+## Cola de trabajos
 
-To prevent memory exhaustion when processing multiple documents:
+Para evitar el agotamiento de memoria al procesar varios documentos:
 
 ```python
 class ConverterService:
@@ -111,49 +111,48 @@ class ConverterService:
     _max_concurrent_jobs = 2  # Limit parallel processing
 ```
 
-The worker thread:
+El hilo worker:
 
-1. Monitors the job queue
-2. Starts conversion threads up to the concurrent limit
-3. Tracks active threads y cleans up completed ones
-4. Prevents resource exhaustion during batch processing
+1. Supervisa la cola de trabajos
+2. Inicia hilos de conversión hasta el límite de concurrencia
+3. Rastrea los hilos activos y limpia los completados
+4. Evita el agotamiento de recursos durante el procesamiento por lotes
 
-## Database Schema
+## Esquema de base de datos
 
-### Conversión Table
+### Tabla de conversión
 
-| Column | Type | Descripción |
+| Columna | Tipo | Descripción |
 |--------|------|-------------|
-| `id` | VARCHAR(36) | Primary key (UUID) |
-| `filename` | VARCHAR(255) | Sanitized filename |
-| `original_filename` | VARCHAR(255) | Original upload name |
-| `input_format` | VARCHAR(50) | Detected format |
+| `id` | VARCHAR(36) | Clave primaria (UUID) |
+| `filename` | VARCHAR(255) | Nombre de archivo saneado |
+| `original_filename` | VARCHAR(255) | Nombre original de la subida |
+| `input_format` | VARCHAR(50) | Formato detectado |
 | `status` | VARCHAR(50) | pending/processing/completed/failed |
-| `confidence` | FLOAT | OCR confidence score |
-| `error_message` | TEXT | Error details if failed |
-| `output_path` | VARCHAR(500) | Path to output files |
-| `settings` | TEXT | JSON settings used |
-| `file_size` | FLOAT | Archivo size in bytes |
-| `created_at` | DATETIME | Upload timestamp |
-| `completed_at` | DATETIME | Completion timestamp |
+| `confidence` | FLOAT | Puntuación de confianza OCR |
+| `error_message` | TEXT | Detalles del error si falló |
+| `output_path` | VARCHAR(500) | Ruta a los archivos de salida |
+| `settings` | TEXT | Ajustes JSON utilizados |
+| `file_size` | FLOAT | Tamaño del archivo en bytes |
+| `created_at` | DATETIME | Marca de tiempo de la subida |
+| `completed_at` | DATETIME | Marca de tiempo de finalización |
 
-## Seguridad Considerations
+## Consideraciones de seguridad
 
-| Concern | Mitigation |
+| Riesgo | Mitigación |
 |---------|------------|
-| **Archivo Upload** | Only allowed extensions accepted |
-| **Archivo Size** | Configurable max (default 100MB) |
-| **Archivonames** | Sanitized before storage |
-| **Archivo Access** | Served through API only, no direct paths |
-| **CORS** | Restricted to frontend origin |
+| **Subida de archivos** | Solo extensiones permitidas |
+| **Tamaño de archivo** | Máximo configurable (predeterminado 100MB) |
+| **Nombres de archivo** | Saneados antes del almacenamiento |
+| **Acceso a archivos** | Servidos solo por la API, sin rutas directas |
+| **CORS** | Restringido al origen del frontend |
 
-## Rendimiento Optimizations
+## Optimizaciones de rendimiento
 
-| Optimization | Descripción |
+| Optimización | Descripción |
 |--------------|-------------|
-| **Converter Caching** | DocumentConverter instances cached by settings hash |
-| **Job Queue** | Sequential processing prevents memory exhaustion |
-| **Lazy Loading** | Heavy components loaded on demy |
-| **React Query Caching** | API responses cached y deduplicated |
-| **Background Procesyo** | Conversións don't block the API |
-
+| **Caché del convertidor** | Instancias de DocumentConverter en caché por hash de ajustes |
+| **Cola de trabajos** | El procesamiento secuencial evita el agotamiento de memoria |
+| **Carga diferida** | Componentes pesados bajo demanda |
+| **Caché de React Query** | Respuestas de API en caché y deduplicadas |
+| **Procesamiento en segundo plano** | Las conversiones no bloquean la API |

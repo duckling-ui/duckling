@@ -18,7 +18,7 @@ git clone https://github.com/duckling-ui/duckling.git
 cd duckling
 ```
 
-### 2. Backend-Einrichtung
+### 2. Backend einrichten
 
 ```bash
 cd backend
@@ -27,7 +27,7 @@ source venv/bin/activate  # Unter Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-### 3. Frontend-Einrichtung
+### 3. Frontend einrichten
 
 ```bash
 cd ../frontend
@@ -36,24 +36,24 @@ npm install
 
 ### 4. Dokumentation bauen (optional)
 
-Die Backend-Installation enthält bereits MkDocs (`backend/requirements.txt`). Vom **Repository-Stamm** aus:
+Die Backend-Installation enthält bereits MkDocs (gleiche `backend/requirements.txt`). Vom **Repository-Stamm** aus:
 
 ```bash
-cd ..  # Projektstamm (mkdocs.yml liegt hier)
-# Mit Backend-venv: source backend/venv/bin/activate
+cd ..  # Projektstamm (hier liegt mkdocs.yml)
+# Backend-venv nutzen, falls angelegt: source backend/venv/bin/activate
 mkdocs build
 ```
 
-Die Dokumentation nutzt dieselbe **`backend/requirements.txt`** wie die API (MkDocs-Pakete stehen oben in der Datei).
+Für Dokumentations-Builds gilt dieselbe **`backend/requirements.txt`** wie für die API (MkDocs-Plugins stehen oben in dieser Datei).
 
-!!! tip "Auto-Build"
-    Ist MkDocs installiert (über `backend/requirements.txt`), kann das Backend die Dokumentation über das Docs-Panel in der UI bauen.
+!!! tip "Automatischer Build"
+    Ist MkDocs installiert (über `backend/requirements.txt`), kann das Backend die Dokumentation bauen, wenn Sie das Dokumentationspanel in der Benutzeroberfläche nutzen.
 
 ## Umgebungskonfiguration
 
-### Backend-Umgebungsvariablen
+### Umgebungsvariablen Backend
 
-Erstellen Sie eine `.env`-Datei im Verzeichnis `backend`:
+Legen Sie eine `.env`-Datei im Verzeichnis `backend` an:
 
 ```env
 # Flask-Konfiguration
@@ -65,10 +65,10 @@ DEBUG=True
 MAX_CONTENT_LENGTH=104857600  # 100MB
 ```
 
-!!! warning "Produktionssicherheit"
-    In der Produktion immer eine starke `SECRET_KEY` setzen und `DEBUG=False`.
+!!! warning "Sicherheit in Produktion"
+    In Produktion immer einen starken `SECRET_KEY` setzen und `DEBUG=False` setzen.
 
-## Installation überprüfen
+## Installation prüfen
 
 ### Backend prüfen
 
@@ -78,7 +78,7 @@ source venv/bin/activate
 python duckling.py
 ```
 
-Sie sollten sehen:
+Sie sollten etwa Folgendes sehen:
 
 ```
  * Running on http://127.0.0.1:5001
@@ -91,7 +91,7 @@ cd frontend
 npm run dev
 ```
 
-Sie sollten sehen:
+Sie sollten etwa Folgendes sehen:
 
 ```
   VITE v5.x.x  ready in xxx ms
@@ -101,9 +101,9 @@ Sie sollten sehen:
 
 ## Fehlerbehebung
 
-### Python-Versionsprobleme
+### Probleme mit der Python-Version
 
-Bei Python-Versionsproblemen:
+Bei Problemen mit der Python-Version:
 
 ```bash
 # Python-Version prüfen
@@ -113,30 +113,31 @@ python --version
 python3.13 -m venv venv
 ```
 
-### Node.js-Versionsprobleme
+### Probleme mit der Node.js-Version
 
 ```bash
 # Node-Version prüfen
 node --version
 
-# nvm zum Wechseln der Versionen verwenden
+# Mit nvm die Version wechseln
 nvm install 18
 nvm use 18
 ```
 
-### Abhängigkeitsinstallationsfehler
+### Fehler bei der Abhängigkeitsinstallation
 
 ```bash
-# Backend - pip aktualisieren
+# Backend – pip aktualisieren
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Frontend - Cache leeren
+# Frontend – Cache leeren
 rm -rf node_modules package-lock.json
 npm install
 ```
 
 ## Nächste Schritte
 
-- [Schnellstart](quickstart.md) - Grundlagen lernen
-- [Konfiguration](../user-guide/configuration.md) - Einstellungen anpassen
+- [Schnellstart](quickstart.md) – Grundlagen kennenlernen
+- [Konfiguration](../user-guide/configuration.md) – Einstellungen anpassen
+

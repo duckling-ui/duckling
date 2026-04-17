@@ -9,6 +9,20 @@ y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2
 
 ## [Sin publicar]
 
+### Documentación
+
+- **Despliegue**: [deployment/index.md](deployment/index.md), [deployment/production.md](deployment/production.md), [deployment/scaling.md](deployment/scaling.md) y [deployment/security.md](deployment/security.md) traducidos por completo (etiquetas Mermaid localizadas); equivalentes en `de`/`fr`.
+- **Primeros pasos**: [index.md](getting-started/index.md), [installation.md](getting-started/installation.md), [quickstart.md](getting-started/quickstart.md) y [docker.md](getting-started/docker.md) traducidos por completo; reflejados en `de`/`fr`; redacción CI/CD aclarada en inglés [docker.md](../getting-started/docker.md).
+- **Guía de usuario**: páginas [Formatos admitidos](user-guide/formats.md) y [Galería de capturas](user-guide/screenshots.md) traducidas por completo; equivalentes en `de`/`fr`.
+- **Inicio rápido**: la sección « Varios archivos a la vez » en [getting-started/quickstart.md](getting-started/quickstart.md) documenta arrastrar una carpeta, clic en la zona para elegir carpeta y **Elegir archivos…** para varios archivos sueltos; reflejado en `de`/`fr`.
+- **Francés / inglés**: `fr/user-guide/features.md` está traducida por completo (encabezados para la TOC lateral); se eliminó la subsección duplicada «Statistics Panel» en la página en inglés [user-guide/features.md](../user-guide/features.md).
+- **Página de inicio**: [index.md](index.md) enlaza los anclajes en español de Características y añade enlace a [changelog.md](changelog.md); la portada en francés incluye lista de documentación y agradecimientos; la alemana enlaza Docling como en inglés.
+- **Guía de usuario**: [Características](user-guide/features.md) y [Configuración](user-guide/configuration.md) traducidas por completo; mismas páginas en `de`/`fr`.
+- **API**: [api/index.md](api/index.md), [api/conversion.md](api/conversion.md), [api/settings.md](api/settings.md) y [api/history.md](api/history.md) traducidos por completo; equivalentes en `de`/`fr`.
+- **Arquitectura (páginas detalladas)**: [architecture/overview.md](architecture/overview.md), [architecture/components.md](architecture/components.md) y [architecture/diagrams.md](architecture/diagrams.md) traducidos por completo; equivalentes en `de`/`fr`.
+- **Contribuir**: todas las páginas en [contributing/](contributing/index.md) traducidas; anclajes `{#commit-messages}` y `{#dco-sign-off}` en [contributing/code-style.md](contributing/code-style.md).
+- **Docling / capturas**: sección de actualización en [docling/index.md](docling/index.md); [images/README.md](images/README.md) en español.
+
 ### Planificado
 
 - Autenticación de usuarios

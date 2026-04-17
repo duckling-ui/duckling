@@ -1,11 +1,11 @@
 # Tests
 
-Guide pour écrire et exécuter des tests dans Duckling.
+Guide pour rédiger et exécuter les tests dans Duckling.
 
 ## Aperçu
 
-- **Backend** : pytest avec couverture
-- **Frontend** : Vitest avec React Testing Library
+- **Backend** : pytest avec couverture
+- **Frontend** : Vitest avec React Testing Library
 
 ## Exécuter les tests
 
@@ -17,7 +17,7 @@ source venv/bin/activate
 pytest
 ```
 
-Avec couverture :
+Avec couverture :
 
 ```bash
 pytest --cov=. --cov-report=html
@@ -30,13 +30,13 @@ cd frontend
 npm test
 ```
 
-Avec couverture :
+Avec couverture :
 
 ```bash
 npm run test:coverage
 ```
 
-Mode watch :
+Mode surveillance :
 
 ```bash
 npm run test:watch
@@ -46,17 +46,17 @@ npm run test:watch
 
 ## Tests backend
 
-### Structure des tests
+### Structure
 
 ```
 backend/tests/
 ├── __init__.py
 ├── conftest.py         # Fixtures partagées
-├── test_api.py         # Tests des endpoints API
-├── test_converter.py   # Tests du service converter
-├── test_content_store.py # Utilitaires de stockage content-addressed
-├── test_history.py     # Tests du service history
-└── test_migration.py   # Scripts de migration de base de données
+├── test_api.py        # Tests des points de terminaison API
+├── test_converter.py  # Tests du service converter
+├── test_content_store.py # Stockage adressé par contenu
+├── test_history.py    # Tests du service d’historique
+└── test_migration.py  # Scripts de migration de base de données
 ```
 
 ### Fixtures
@@ -68,20 +68,20 @@ from duckling import create_app
 
 @pytest.fixture
 def app():
-    """Create application for testing."""
+    """Crée l'application pour les tests."""
     app = create_app()
     app.config['TESTING'] = True
     return app
 
 @pytest.fixture
 def client(app):
-    """Create test client."""
+    """Crée le client de test."""
     return app.test_client()
 
 @pytest.fixture
 def sample_pdf():
-    """Create a sample PDF file for testing."""
-    # Return a file-like object
+    """Crée un fichier PDF d'exemple pour les tests."""
+    # Retourner un objet de type fichier
     pass
 ```
 
@@ -89,7 +89,7 @@ def sample_pdf():
 
 ```python
 def test_convert_pdf_success(client, sample_pdf):
-    """Test successful PDF conversion."""
+    """Teste la conversion PDF réussie."""
     response = client.post(
         '/api/convert',
         data={'file': sample_pdf},
@@ -100,7 +100,7 @@ def test_convert_pdf_success(client, sample_pdf):
     assert 'job_id' in response.json
 
 def test_convert_invalid_file(client):
-    """Test conversion with invalid file type."""
+    """Teste la conversion avec un type de fichier invalide."""
     response = client.post(
         '/api/convert',
         data={'file': (io.BytesIO(b'invalid'), 'test.exe')},
@@ -111,7 +111,7 @@ def test_convert_invalid_file(client):
     assert 'error' in response.json
 
 def test_get_settings(client):
-    """Test getting current settings."""
+    """Teste la récupération des paramètres actuels."""
     response = client.get('/api/settings')
 
     assert response.status_code == 200
@@ -125,7 +125,7 @@ def test_get_settings(client):
 from unittest.mock import patch, MagicMock
 
 def test_conversion_with_mock(client):
-    """Test conversion with mocked Docling."""
+    """Teste la conversion avec Docling mocké."""
     with patch('services.converter.DocumentConverter') as mock:
         mock_instance = MagicMock()
         mock_instance.convert.return_value = {'content': 'test'}
@@ -140,7 +140,7 @@ def test_conversion_with_mock(client):
 
 ## Tests frontend
 
-### Structure des tests
+### Structure
 
 ```
 frontend/src/tests/
@@ -158,7 +158,7 @@ frontend/src/tests/
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
-// Mock fetch
+// Mock de fetch
 global.fetch = vi.fn();
 ```
 
@@ -232,7 +232,7 @@ describe('useConversion', () => {
 });
 ```
 
-### Mocking API
+### Mock de l’API
 
 ```typescript
 import { vi } from 'vitest';
@@ -258,13 +258,13 @@ describe('conversion flow', () => {
 
 ---
 
-## Directives de test
+## Lignes directrices des tests
 
 ### Backend
 
-- Utiliser pytest pour les tests
-- Viser >80 % de couverture de code
-- Tester les cas de succès et d'erreur
+- Utiliser pytest
+- Viser plus de 80 % de couverture
+- Tester les cas de succès et d’erreur
 - Utiliser des fixtures pour la configuration commune
 - Mocker les services externes (Docling, système de fichiers)
 
@@ -272,15 +272,15 @@ describe('conversion flow', () => {
 
 - Utiliser Vitest et React Testing Library
 - Tester le rendu et les interactions des composants
-- Lorsque vous déclenchez des événements globaux (par ex. `window` `message`) gérés par un `useEffect` dépendant de données chargées de façon asynchrone, attendez que les effets s'exécutent après l'apparition des données (par ex. `await act(async () => { await new Promise((r) => setTimeout(r, 0)); })`) pour éviter en CI d'émettre avant l'enregistrement des écouteurs
-- Mocker les appels API de manière appropriée
-- Tester les états d'erreur et de chargement
+- Lorsque vous déclenchez des événements globaux (par ex. `message` sur `window`) gérés par un `useEffect` dépendant de données chargées de façon asynchrone, attendez que les effets s’exécutent après l’apparition des données (par ex. `await act(async () => { await new Promise((r) => setTimeout(r, 0)); })`) pour que la CI n’envoie pas avant l’attachement des écouteurs
+- Mocker les appels API de façon appropriée
+- Tester les états d’erreur et de chargement
 - Utiliser `userEvent` pour des interactions réalistes
 
 ### Général
 
-- Écrire des noms de test descriptifs
-- Une assertion par test lorsque possible
+- Noms de tests descriptifs
+- Une assertion par test lorsque c’est possible
 - Tester les cas limites
 - Garder les tests indépendants
 - Nettoyer après les tests
@@ -289,10 +289,10 @@ describe('conversion flow', () => {
 
 ## Intégration continue
 
-Les tests s'exécutent automatiquement lors de :
+Les tests s’exécutent automatiquement sur :
 
-- La création d'un pull request
-- Un push sur la branche main
+- Création d’une pull request
+- Push sur la branche `main`
 
 ### Configuration CI
 

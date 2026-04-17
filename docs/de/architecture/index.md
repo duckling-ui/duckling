@@ -4,14 +4,14 @@ Technische Architektur-Dokumentation für Duckling.
 
 ## Übersicht
 
-Duckling is a full-stack web application with a clear separation between frontend und backend:
+Duckling ist eine Full-Stack-Webanwendung mit klarer Trennung von Frontend und Backend:
 
 ```mermaid
 graph LR
-    A[Browser] --> B[React Frontend]
-    B --> C[Flask Backend]
-    C --> D[Docling Engine]
-    D --> E[(Storage)]
+    A[Browser] --> B[React-Frontend]
+    B --> C[Flask-Backend]
+    C --> D[Docling-Engine]
+    D --> E[(Speicher)]
 
     style A fill:#3b82f6,color:#fff
     style B fill:#1e3a5f,color:#fff
@@ -60,52 +60,52 @@ graph LR
 
 ### Async Verarbeitung
 
-Document conversion is hundled asynchronously:
+Die Dokumentkonvertierung läuft asynchron ab:
 
-1. Client uploads file
-2. Server returns job ID immediately
-3. Client polls for status
-4. Server processes in background thread
-5. Results available when complete
+1. Der Client lädt die Datei hoch
+2. Der Server antwortet sofort mit einer Auftrags-ID
+3. Der Client fragt den Status ab
+4. Der Server verarbeitet im Hintergrundthread
+5. Ergebnisse stehen nach Abschluss bereit
 
-### Job Queue
+### Auftragswarteschlange
 
-A thread-based job queue prevents memory exhaustion:
+Eine threadbasierte Warteschlange begrenzt den Speicherverbrauch:
 
-- Maximum 2 concurrent conversions
-- Jobs queued when capacity reached
-- Automatic cleanup of completed jobs
+- Maximal 2 gleichzeitige Konvertierungen
+- Weitere Aufträge werden eingeordnet, wenn die Kapazität erreicht ist
+- Automatische Bereinigung abgeschlossener Aufträge
 
-### Einstellungen Persistence
+### Persistenz der Einstellungen
 
-Einstellungen are stored per-user session und applied per-conversion:
+Einstellungen werden pro Benutzersitzung gespeichert und pro Konvertierung angewendet:
 
-- Global defaults in `config.py`
-- User settings stored in database (per session ID)
-- Per-request overrides via API
+- Globale Standardwerte in `config.py`
+- Benutzereinstellungen in der Datenbank (pro Sitzungs-ID)
+- Überschreibungen pro Anfrage über die API
 
-Einstellungen are isolated per user session, ensuring multi-user deployments don't interfere with each other's preferences.
+Einstellungen sind pro Sitzung getrennt, sodass sich Mehrbenutzer-Installationen nicht gegenseitig beeinflussen.
 
-## Technology Stack
+## Technologie-Stack
 
 ### Frontend
 
-| Technology | Zweck |
+| Technologie | Zweck |
 |------------|---------|
-| React 18 | UI framework |
-| TypeScript | Type safety |
+| React 18 | UI-Framework |
+| TypeScript | Typsicherheit |
 | Tailwind CSS | Styling |
-| Framer Motion | Animations |
-| Axios | HTTP client |
-| Vite | Build tool |
+| Framer Motion | Animationen |
+| Axios | HTTP-Client |
+| Vite | Build-Tool |
 
 ### Backend
 
-| Technology | Zweck |
+| Technologie | Zweck |
 |------------|---------|
-| Flask | Web framework |
-| SQLAlchemy | Database ORM |
-| SQLite | History storage |
-| Docling | Document conversion |
-| Threading | Async processing |
+| Flask | Web-Framework |
+| SQLAlchemy | Datenbank-ORM |
+| SQLite | Verlaufsspeicher |
+| Docling | Dokumentkonvertierung |
+| Threading | Asynchrone Verarbeitung |
 

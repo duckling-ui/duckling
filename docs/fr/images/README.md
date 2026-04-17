@@ -1,34 +1,36 @@
-# French Screenshots (Français)
+# Captures d’écran (français)
 
-This directory contains screenshots for the French locale documentation.
+Ce répertoire contient les captures pour la documentation en français.
 
-## Directory Structure
+## Arborescence
 
-Organize screenshots into subdirectories:
+Organiser les fichiers par sous-dossiers :
 
-- `ui/` - Main interface screenshots (dropzone, header, history)
-- `settings/` - Settings panel screenshots
-- `export/` - Export options and preview screenshots
-- `features/` - Feature-specific screenshots (images, tables, chunks, etc.)
+- `ui/` — Interface principale (zone de dépôt, en-tête, historique)
+- `settings/` — Panneau des paramètres
+- `export/` — Export et aperçu
+- `features/` — Fonctions (images, tableaux, segments, etc.)
 
-## Usage in Documentation
+## Utilisation dans la doc
 
-Reference screenshots from markdown files using relative paths:
+Références relatives en Markdown :
 
 ```markdown
 ![Description](images/ui/dropzone-empty.png)
 ```
 
-For files in the `fr/` directory, use:
+Depuis les fichiers sous `fr/` :
+
 ```markdown
 ![Description](images/ui/dropzone-empty.png)
 ```
 
-For files in subdirectories, adjust the path accordingly:
+Dans un sous-dossier, ajuster le chemin :
+
 ```markdown
 ![Description](../images/ui/dropzone-empty.png)
 ```
 
-**Important**: Ensure the UI language is set to Français before capturing screenshots.
+**Important :** régler l’interface sur **Français** avant de capturer.
 
-See [SCREENSHOT_GUIDE.md](../../assets/screenshots/SCREENSHOT_GUIDE.md) for complete capture instructions.
+Guide complet : [SCREENSHOT_GUIDE.md](../../assets/screenshots/SCREENSHOT_GUIDE.md).

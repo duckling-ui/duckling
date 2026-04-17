@@ -1,10 +1,10 @@
 # Mitwirken
 
-Vielen Dank für Ihr Interesse an Duckling mitzuwirken!
+Vielen Dank für Ihr Interesse an Duckling!
 
 ## Überblick
 
-Dieser Abschnitt enthält alles, was Sie für effektives Mitwirken wissen müssen.
+In diesem Abschnitt finden Sie alles, was Sie für eine effektive Mitarbeit wissen müssen.
 
 <div class="grid cards" markdown>
 
@@ -12,7 +12,7 @@ Dieser Abschnitt enthält alles, was Sie für effektives Mitwirken wissen müsse
 
     ---
 
-    Richten Sie Ihre Entwicklungsumgebung ein
+    Entwicklungsumgebung einrichten
 
     [:octicons-arrow-right-24: Einrichtungsanleitung](development.md)
 
@@ -20,9 +20,9 @@ Dieser Abschnitt enthält alles, was Sie für effektives Mitwirken wissen müsse
 
     ---
 
-    Codierungsstandards und Konventionen
+    Kodierungsstandards und Konventionen
 
-    [:octicons-arrow-right-24: Stilrichtlinie](code-style.md)
+    [:octicons-arrow-right-24: Stilleitfaden](code-style.md)
 
 -   :material-test-tube:{ .lg .middle } __Tests__
 
@@ -30,13 +30,21 @@ Dieser Abschnitt enthält alles, was Sie für effektives Mitwirken wissen müsse
 
     Tests schreiben und ausführen
 
-    [:octicons-arrow-right-24: Testanleitung](testing.md)
+    [:octicons-arrow-right-24: Testleitfaden](testing.md)
+
+-   :material-accessible:{ .lg .middle } __Barrierefreiheit__
+
+    ---
+
+    UI-Semantik, Fokus und Prüfungen in der Dokumentation
+
+    [:octicons-arrow-right-24: Barrierefreiheit](accessibility.md)
 
 -   :material-handshake:{ .lg .middle } __Verhaltenskodex__
 
     ---
 
-    Gemeinschaftsrichtlinien und -standards
+    Gemeinschaftsrichtlinien und Standards
 
     [:octicons-arrow-right-24: Verhaltenskodex](code-of-conduct.md)
 
@@ -44,52 +52,52 @@ Dieser Abschnitt enthält alles, was Sie für effektives Mitwirken wissen müsse
 
 ## Verhaltenskodex
 
-Mit der Teilnahme an diesem Projekt erklären Sie sich mit unserem [Verhaltenskodex](code-of-conduct.md) einverstanden, der auf dem Contributor Covenant 3.0 basiert. Wir setzen uns für eine einladende und inklusive Umgebung für alle ein.
+Durch Ihre Teilnahme an diesem Projekt erklären Sie sich mit unserem [Verhaltenskodex](code-of-conduct.md) einverstanden, der auf dem Contributor Covenant 3.0 basiert. Wir verpflichten uns zu einer einladenden und inklusiven Umgebung für alle.
 
-## So können Sie mitwirken
+## Wie Sie mitwirken können
 
 ### Fehler melden
 
-1. **Bestehende Issues prüfen**, um Duplikate zu vermeiden
-2. **Ein neues Issue erstellen** mit:
-   - Klarem, beschreibendem Titel
+1. **Vorhandene Issues prüfen**, um Duplikate zu vermeiden
+2. **Neues Issue anlegen** mit:
+   - Klarer, beschreibender Titel
    - Schritten zur Reproduktion
    - Erwartetem vs. tatsächlichem Verhalten
-   - Umgebungsdetails (OS, Browser, Versionen)
+   - Umgebungsdetails (Betriebssystem, Browser, Versionen)
    - Screenshots falls zutreffend
 
 ### Funktionen vorschlagen
 
-1. **Bestehende Issues** auf ähnliche Vorschläge prüfen
-2. **Einen Feature-Request erstellen** mit:
+1. **Vorhandene Issues** auf ähnliche Vorschläge prüfen
+2. **Feature-Request anlegen** mit:
    - Klarer Beschreibung der Funktion
-   - Anwendungsfall und Vorteilen
+   - Anwendungsfall und Nutzen
    - Möglichem Implementierungsansatz
 
 ### Pull Requests
 
 1. **Repository forken**
-2. **Feature-Branch erstellen**: `git checkout -b feature/ihr-feature-name`
+2. **Feature-Branch anlegen**: `git checkout -b feature/ihr-feature-name`
 3. **Änderungen vornehmen**
 4. **Tests schreiben/aktualisieren**
-5. **Tests ausführen**: Sicherstellen, dass alle Tests bestehen
-6. **Klare Commit-Nachrichten**: Conventional Commits folgen (siehe [Code-Stil](code-style.md#commit-messages))
-7. **Alle Commits mit DCO signieren**: Jeder Commit MUSS eine `Signed-off-by:`-Zeile enthalten (siehe [Code-Stil](code-style.md#dco-sign-off))
-8. **Zu Ihrem Fork pushen**
+5. **Tests ausführen**: Alle Tests müssen bestehen
+6. **Klare Commit-Nachrichten**: Konventionelle Commits (siehe [Code-Stil](code-style.md#commit-messages))
+7. **Alle Commits mit DCO signieren**: Jeder Commit MUSS eine Zeile `Signed-off-by:` enthalten (siehe [Code-Stil](code-style.md#dco-sign-off))
+8. **In Ihren Fork pushen**
 9. **Pull Request erstellen**
 
 ## Review-Prozess
 
-1. Alle PRs benötigen mindestens eine Freigabe
-2. CI-Checks müssen bestehen
-3. Code-Abdeckung darf nicht sinken
-4. Dokumentation muss bei Bedarf aktualisiert werden
+1. Alle PRs benötigen mindestens eine Genehmigung
+2. CI-Prüfungen müssen bestehen
+3. Die Code-Abdeckung sollte nicht sinken
+4. Die Dokumentation muss bei Bedarf aktualisiert werden
 
 ## Anerkennung
 
-Mitwirkende werden anerkannt in:
+Mitwirkende werden erwähnt in:
 
-- CHANGELOG.md für bedeutende Beiträge
-- README.md Mitwirkenden-Abschnitt
+- CHANGELOG.md bei bedeutenden Beiträgen
+- README.md im Abschnitt zu Mitwirkenden
 
-Vielen Dank für Ihr Mitwirken an Duckling!
+Vielen Dank für Ihren Beitrag zu Duckling!

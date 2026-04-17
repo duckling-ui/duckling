@@ -1,16 +1,16 @@
 # Référence API
 
-Complete API documentation for the Duckling backend.
+Documentation complète de l’API backend Duckling.
 
-## Base URL
+## URL de base
 
 ```
 http://localhost:5001/api
 ```
 
-## Authentication
+## Authentification
 
-Currently, the API does not require authentication. For production deployments, consider adding authentication middleware.
+L’API n’exige pas d’authentification pour le moment. En production, envisagez d’ajouter un middleware d’authentification.
 
 ## Sections
 
@@ -20,66 +20,66 @@ Currently, the API does not require authentication. For production deployments, 
 
     ---
 
-    Upload et convert documents
+    Téléverser et convertir des documents
 
-    [:octicons-arrow-right-24: Conversion API](conversion.md)
+    [:octicons-arrow-right-24: API de conversion](conversion.md)
 
 -   :material-cog:{ .lg .middle } __Paramètres__
 
     ---
 
-    Get et update configuration
+    Lire et mettre à jour la configuration
 
-    [:octicons-arrow-right-24: Paramètres API](settings.md)
+    [:octicons-arrow-right-24: API des paramètres](settings.md)
 
--   :material-history:{ .lg .middle } __History__
+-   :material-history:{ .lg .middle } __Historique__
 
     ---
 
-    Access conversion history
+    Accéder à l’historique des conversions
 
-    [:octicons-arrow-right-24: History API](history.md)
+    [:octicons-arrow-right-24: API d’historique](history.md)
 
 </div>
 
 ## Référence rapide
 
-### Conversion Endpoints
+### Points de terminaison de conversion
 
-| Endpoint | Méthode | Description |
+| Point de terminaison | Méthode | Description |
 |----------|--------|-------------|
-| `/convert` | POST | Télécharger et convertir un document |
-| `/convert/batch` | POST | Batch convert multiple documents |
-| `/convert/{job_id}/status` | GET | Get conversion status |
-| `/convert/{job_id}/result` | GET | Get conversion result |
-| `/convert/{job_id}/images` | GET | List extracted images |
-| `/convert/{job_id}/images/{id}` | GET | Télécharger extracted image |
-| `/convert/{job_id}/tables` | GET | List extracted tables |
-| `/convert/{job_id}/tables/{id}/csv` | GET | Télécharger table as CSV |
-| `/convert/{job_id}/chunks` | GET | Get document chunks |
-| `/export/{job_id}/{format}` | GET | Télécharger converted file |
+| `/convert` | POST | Téléverser et convertir un document |
+| `/convert/batch` | POST | Convertir plusieurs documents par lot |
+| `/convert/{job_id}/status` | GET | Obtenir l’état de la conversion |
+| `/convert/{job_id}/result` | GET | Obtenir le résultat de la conversion |
+| `/convert/{job_id}/images` | GET | Lister les images extraites |
+| `/convert/{job_id}/images/{id}` | GET | Télécharger une image extraite |
+| `/convert/{job_id}/tables` | GET | Lister les tableaux extraits |
+| `/convert/{job_id}/tables/{id}/csv` | GET | Télécharger un tableau au format CSV |
+| `/convert/{job_id}/chunks` | GET | Obtenir les segments du document |
+| `/export/{job_id}/{format}` | GET | Télécharger le fichier converti |
 
-### Paramètres Endpoints
+### Points de terminaison des paramètres
 
-| Endpoint | Méthode | Description |
+| Point de terminaison | Méthode | Description |
 |----------|--------|-------------|
-| `/settings` | GET/PUT | Get/update all settings |
-| `/settings/reset` | POST | Reset to defaults |
-| `/settings/formats` | GET | List supported formats |
-| `/settings/ocr` | GET/PUT | OCR settings |
-| `/settings/tables` | GET/PUT | Table settings |
-| `/settings/images` | GET/PUT | Image settings |
-| `/settings/performance` | GET/PUT | Performances settings |
-| `/settings/chunking` | GET/PUT | Chunking settings |
+| `/settings` | GET/PUT | Lire/mettre à jour tous les paramètres |
+| `/settings/reset` | POST | Réinitialiser aux valeurs par défaut |
+| `/settings/formats` | GET | Lister les formats pris en charge |
+| `/settings/ocr` | GET/PUT | Paramètres OCR |
+| `/settings/tables` | GET/PUT | Paramètres des tableaux |
+| `/settings/images` | GET/PUT | Paramètres des images |
+| `/settings/performance` | GET/PUT | Paramètres de performance |
+| `/settings/chunking` | GET/PUT | Paramètres de découpage (chunks) |
 
-### History Endpoints
+### Points de terminaison d’historique
 
-| Endpoint | Méthode | Description |
+| Point de terminaison | Méthode | Description |
 |----------|--------|-------------|
-| `/history` | GET | List conversion history |
-| `/history/{job_id}` | GET | Get history entry |
-| `/history/stats` | GET | Get conversion statistics |
-| `/history/search` | GET | Search history |
+| `/history` | GET | Lister l’historique des conversions |
+| `/history/{job_id}` | GET | Obtenir une entrée d’historique |
+| `/history/stats` | GET | Obtenir les statistiques de conversion |
+| `/history/search` | GET | Rechercher dans l’historique |
 
 ## Health Check
 
@@ -96,9 +96,9 @@ GET /health
 }
 ```
 
-## Error Réponses
+## Réponses d’erreur
 
-All endpoints may return error responses in the following format:
+Tous les points de terminaison peuvent renvoyer des erreurs au format suivant :
 
 ```json
 {
@@ -107,22 +107,21 @@ All endpoints may return error responses in the following format:
 }
 ```
 
-### HTTP Status Codes
+### Codes de statut HTTP
 
 | Code | Description |
 |------|-------------|
-| 200 | Success |
-| 202 | Accepted (async operation started) |
-| 400 | Bad Request (invalid input) |
-| 404 | Not Found |
-| 413 | Payload Too Large |
-| 500 | Internal Server Error |
+| 200 | Succès |
+| 202 | Accepté (opération asynchrone démarrée) |
+| 400 | Requête incorrecte (entrée invalide) |
+| 404 | Non trouvé |
+| 413 | Charge utile trop volumineuse |
+| 500 | Erreur interne du serveur |
 
-## Rate Limiting
+## Limitation du débit
 
-Currently, no rate limiting is implemented. For production deployments, consider adding rate limiting middleware.
+Aucune limitation du débit n’est implémentée pour le moment. En production, envisagez d’ajouter un middleware de limitation.
 
 ## CORS
 
-The API allows cross-origin requests from the configured frontend origin (default: `http://localhost:3000`).
-
+L’API autorise les requêtes cross-origin depuis l’origine du frontend configurée (par défaut : `http://localhost:3000`).

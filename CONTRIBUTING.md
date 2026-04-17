@@ -10,6 +10,10 @@ Please read the full [Code of Conduct](CODE_OF_CONDUCT.MD) before contributing.
 
 For UI and documentation accessibility expectations (ARIA patterns, MkDocs checks), see [docs/contributing/accessibility.md](docs/contributing/accessibility.md).
 
+When you change upload or batch behavior in the UI, update [docs/getting-started/quickstart.md](docs/getting-started/quickstart.md) (especially **Batch Processing**) and the mirrored pages under `docs/de/`, `docs/fr/`, and `docs/es/`.
+
+Material’s **navigation.integrate** sidebar TOC uses each page’s Markdown headings (`##` / `###` up to `toc_depth`). For localized docs (for example [docs/fr/user-guide/features.md](docs/fr/user-guide/features.md)), translate those headings so the sidebar matches the locale, not only the paragraph text. Keep [formats](docs/de/user-guide/formats.md) and [screenshots](docs/de/user-guide/screenshots.md) in sync across `docs/{de,fr,es}/user-guide/` (including `===` tab titles and figure captions; asset paths `../../assets/...`).
+
 ## How to Contribute
 
 ### Reporting Bugs
@@ -113,7 +117,8 @@ Duckling supports UI and documentation translations.
 
 ### Documentation translations (MkDocs)
 
-- Spanish/French/German docs live under `docs/es/`, `docs/fr/`, `docs/de/` and mirror the English docs structure.
+- Spanish/French/German docs live under `docs/es/`, `docs/fr/`, `docs/de/` and mirror the English docs structure. When you add or substantially change an English doc page, update the same path under **each** locale so the translated trees stay complete (not only the user guide).
+- Localized home pages (`docs/{de,fr,es}/index.md`) link feature tiles to **that locale’s** heading anchors on Features (for example `#glisser-deposer` in French), not English slugs like `#drag-and-drop`.
 - The MkDocs i18n setup is in `mkdocs.yml` under the `i18n` plugin.
 - Run a strict build before submitting changes (uses the repo docs venv in `./venv/` or creates it):
 

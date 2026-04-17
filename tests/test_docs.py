@@ -240,6 +240,18 @@ def test_backend_requirements_includes_mkdocs_stack():
         assert package in content, f"backend/requirements.txt must include {package} for mkdocs.yml"
 
 
+def test_language_selector_js_rewrites_locale_switcher():
+    """Guardrail: locale dropdown must rewrite hrefs (broken ..es/ links from i18n generator)."""
+    script = PROJECT_ROOT / "docs" / "javascripts" / "language-selector.js"
+    text = script.read_text(encoding="utf-8")
+    assert "fixLanguageSwitcherHrefs" in text
+    assert "a.md-select__link" in text
+    assert "getAnchorLanguage" in text
+    assert "parsePathContext" in text
+    assert "INAPP_DOCS_RE" in text
+    assert "hrefForPathContext" in text
+
+
 @pytest.mark.skipif(
     not os.environ.get("TEST_MKDOCS_BUILD"),
     reason="Set TEST_MKDOCS_BUILD=1 to run mkdocs build test"

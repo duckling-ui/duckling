@@ -1,52 +1,52 @@
 # Fonctionnalités
 
-Duckling provides a comprehensive set of features for document conversion.
+Duckling propose un ensemble complet de fonctionnalités pour la conversion de documents.
 
-## Document Upload
+## Téléversement de documents
 
-### Drag-et-Drop
+### Glisser-déposer
 
-Simply drag files onto the drop zone for instant upload. The interface validates file types et shows upload progress.
+Glissez-déposez des fichiers sur la zone de dépôt pour un téléversement immédiat. L’interface valide les types de fichiers et affiche la progression du téléversement.
 
 <figure markdown="span">
-  ![Dropzone Empty](../../assets/screenshots/ui/dropzone-empty.png){ loading=lazy }
-  <figcaption>The dropzone ready to receive files</figcaption>
+  ![Zone de dépôt vide](../../assets/screenshots/ui/dropzone-empty-fr.png){ loading=lazy }
+  <figcaption>Zone de dépôt prête à recevoir des fichiers</figcaption>
 </figure>
 
-### URL Input
+### Saisie par URL
 
-Convert documents directly from URLs without downloading them first:
+Convertissez des documents directement à partir d’URL, sans les télécharger au préalable :
 
 1. Cliquez sur l’onglet **URLs** au-dessus de la zone de dépôt
 2. Collez une URL par ligne (une ligne = un document ; plusieurs lignes = traitement par lot)
-3. Cliquez sur **Convert All**
+3. Cliquez sur **Tout convertir**
 4. Les documents sont téléchargés et convertis automatiquement
 
-Supported URL features:
+Fonctionnalités des URL :
 
-- Automatic file type detection from URL path
-- Content-Type header detection for files without extensions
-- Content-Disposition header support for filename extraction
-- Same file type restrictions as local uploads
-- **Automatic image extraction for HTML pages**: When converting HTML from URLs, Duckling automatically downloads all images referenced in the page et makes them available in the Image Preview Gallery
+- Détection automatique du type de fichier à partir du chemin de l’URL
+- Détection via l’en-tête `Content-Type` pour les fichiers sans extension
+- Prise en charge de l’en-tête `Content-Disposition` pour le nom de fichier
+- Mêmes restrictions de type que pour les téléversements locaux
+- **Extraction automatique des images pour les pages HTML** : lors de la conversion de HTML depuis une URL, Duckling télécharge toutes les images référencées dans la page et les rend disponibles dans la galerie d’aperçu des images
 
-!!! tip "HTML Pages with Images"
-    When you convert an HTML page (like a blog post or article), Duckling will:
+!!! tip "Pages HTML avec images"
+    Lorsque vous convertissez une page HTML (article de blog, etc.), Duckling :
 
-    1. Télécharger the HTML content
-    2. Find all `<img>` tags et CSS background images
-    3. Télécharger each image from its source URL
-    4. Embed the images as base64 data URIs in the HTML
-    5. Save the images separately for preview et download
+    1. Télécharge le contenu HTML
+    2. Repère toutes les balises `<img>` et les images d’arrière-plan CSS
+    3. Télécharge chaque image depuis son URL
+    4. Intègre les images en URI de données base64 dans le HTML
+    5. Enregistre les images séparément pour l’aperçu et le téléchargement
 
-    This ensures that converted HTML documents include all their images, even when viewed offline.
+    Les documents HTML convertis conservent ainsi toutes leurs images, même hors ligne.
 
-!!! tip "Direct Links"
-    Use direct download links, not web page URLs. For example:
+!!! tip "Liens directs"
+    Utilisez des liens de téléchargement directs, pas des URL de pages web génériques. Par exemple :
 
     - ✅ `https://example.com/document.pdf`
-    - ✅ `https://example.com/blog/article` (HTML pages work too!)
-    - ❌ `https://example.com/view/document` (JavaScript-rendered content may not work)
+    - ✅ `https://example.com/blog/article` (les pages HTML fonctionnent aussi)
+    - ❌ `https://example.com/view/document` (le contenu rendu en JavaScript peut ne pas fonctionner)
 
 ### Plusieurs fichiers et dossiers
 
@@ -54,13 +54,8 @@ Téléversez et convertissez plusieurs fichiers (ou tout un dossier) depuis la m
 
 1. Glissez-déposez des fichiers, choisissez un dossier ou utilisez **Choisir des fichiers…**
 2. Passez à l’onglet **URLs** et collez une URL par ligne pour le web
-3. Suivez la progression (un seul job : vue habituelle ; plusieurs jobs : résumé multi-fichiers)
+3. Suivez la progression (un seul traitement : vue habituelle ; plusieurs : résumé multi-fichiers)
 4. Téléchargez les résultats séparément ou ensemble à la fin du lot
-
-<figure markdown="span">
-  ![Plusieurs fichiers](../../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Plusieurs fichiers sélectionnés pour le téléversement</figcaption>
-</figure>
 
 #### Plusieurs URLs
 
@@ -68,248 +63,248 @@ Le champ URL est toujours une zone de texte multiligne :
 
 1. Passez à l’onglet **URLs**
 2. Collez une URL par ligne
-3. Cliquez sur **Convert All**
+3. Cliquez sur **Tout convertir**
 
-!!! info "Concurrent Traitement"
-    The job queue processes up to 2 documents simultaneously to prevent memory exhaustion.
+!!! info "Traitement concurrent"
+    La file d’attente traite jusqu’à 2 documents en parallèle pour limiter l’usage mémoire.
 
-## OCR (Optical Character Recognition)
+## OCR (reconnaissance optique de caractères)
 
-Extraire text from scanned documents et images.
+Extrayez le texte des documents numérisés et des images.
 
-### Supported Backends
+### Moteurs pris en charge
 
-| Backend | Description | Support GPU | Idéal pour |
-|---------|-------------|-------------|----------|
-| **EasyOCR** | Multi-language, précis | Yes (CUDA) | Complex documents |
-| **Tesseract** | Classic, reliable | No | Simple documents |
-| **macOS Vision** | Native Apple OCR | Apple Neural Moteur | Mac users |
-| **RapidOCR** | Fast, lightweight | No | Speed-critical |
+| Moteur | Description | GPU | Idéal pour |
+|---------|-------------|-----|------------|
+| **EasyOCR** | Multilingue, précis | Oui (CUDA) | Documents complexes |
+| **Tesseract** | Classique, fiable | Non | Documents simples |
+| **macOS Vision** | OCR Apple natif | Apple Neural Engine | Utilisateurs Mac |
+| **RapidOCR** | Rapide, léger | Non | Débit prioritaire |
 
-### Automatic Backend Installation
+### Installation automatique des moteurs
 
-Duckling can automatically install OCR backends when you select them:
+Duckling peut installer automatiquement les moteurs OCR lorsque vous les sélectionnez :
 
-1. Open **Paramètres** panel
-2. Select an OCR backend from the dropdown
-3. If the backend is not installed, you'll see an **Install** button
-4. Click to automatically install via pip
-
-<figure markdown="span">
-  ![Paramètres OCR](../../assets/screenshots/settings/settings-ocr.png){ loading=lazy }
-  <figcaption>OCR settings with backend selection</figcaption>
-</figure>
-
-!!! note "Installation Requirements"
-    - **EasyOCR, OcrMac, RapidOCR**: Can be installed automatically via pip
-    - **Tesseract**: Requires system-level installation first:
-      - macOS: `brew install tesseract`
-      - Ubuntu/Debian: `apt-get install tesseract-ocr`
-      - Windows: Télécharger from [GitHub releases](https://github.com/UB-Mannheim/tesseract/wiki)
+1. Ouvrez le panneau **Paramètres**
+2. Choisissez un moteur OCR dans la liste
+3. S’il n’est pas installé, un bouton **Installer** apparaît
+4. Cliquez pour lancer l’installation via pip
 
 <figure markdown="span">
-  ![Tesseract Install Notice](../../assets/screenshots/settings/settings-ocr-tesseract.png){ loading=lazy }
-  <figcaption>Tesseract requires manual system installation</figcaption>
+  ![Paramètres OCR](../../assets/screenshots/settings/settings-ocr-fr.png){ loading=lazy }
+  <figcaption>Paramètres OCR et choix du moteur</figcaption>
 </figure>
 
-The Paramètres panel shows the status of each backend:
+!!! note "Prérequis d’installation"
+    - **EasyOCR, OcrMac, RapidOCR** : installation possible via pip
+    - **Tesseract** : installation système requise au préalable :
+      - macOS : `brew install tesseract`
+      - Ubuntu/Debian : `apt-get install tesseract-ocr`
+      - Windows : téléchargement depuis [GitHub releases](https://github.com/UB-Mannheim/tesseract/wiki)
 
-- ✓ **Installed et ready** - Backend is available for use
-- ⚠ **Not installed** - Click to install (pip-installable backends)
-- ℹ **Requires system installation** - Follow manual installation instructions
+<figure markdown="span">
+  ![Avis Tesseract](../../assets/screenshots/settings/settings-ocr-install-fr.png){ loading=lazy }
+  <figcaption>Tesseract nécessite une installation manuelle sur le système</figcaption>
+</figure>
 
-### Langue Support
+Le panneau **Paramètres** indique l’état de chaque moteur :
 
-28+ languages including:
+- ✓ **Installé et prêt** — disponible pour la conversion
+- ⚠ **Non installé** — cliquez pour installer (moteurs installables via pip)
+- ℹ **Installation système requise** — suivez les instructions manuelles
 
-- **European**: English, German, French, Spanish, Italian, Portuguese, Dutch, Polish, Russian
-- **Asian**: Japanese, Chinese (Simplified/Traditional), Korean, Thai, Vietnamese
-- **Middle Eastern**: Arabic, Hebrew, Turkish
-- **South Asian**: Hindi
+### Langues prises en charge
 
-### OCR Options
+Plus de 28 langues, notamment :
+
+- **Europe** : anglais, allemand, français, espagnol, italien, portugais, néerlandais, polonais, russe
+- **Asie** : japonais, chinois (simplifié/traditionnel), coréen, thaï, vietnamien
+- **Moyen-Orient** : arabe, hébreu, turc
+- **Asie du Sud** : hindi
+
+### Options OCR
 
 | Option | Description |
 |--------|-------------|
-| Force Full Page OCR | Process entire page vs detected regions |
-| GPU Acceleration | Use CUDA for faster processing (EasyOCR) |
-| Confidence Threshold | Minimum confidence for results (0-1) |
-| Bitmap Area Threshold | Minimum area ratio for bitmap OCR |
+| Forcer l’OCR sur toute la page | Traiter toute la page plutôt que les zones détectées |
+| Accélération GPU | Utiliser CUDA pour accélérer (EasyOCR) |
+| Seuil de confiance | Confiance minimale des résultats (0 à 1) |
+| Seuil de surface bitmap | Ratio de surface minimal pour l’OCR sur bitmap |
 
-## Table Extraireion
+## Extraction des tableaux
 
-Automatically detect et extract tables from documents.
+Détectez et extrayez automatiquement les tableaux des documents.
 
-### Detection Modes
+### Modes de détection
 
-=== "Accurate Mode"
+=== "Mode précis"
 
-    - Élevéer precision detection
-    - Better cell boundary recognition
-    - Slower processing
-    - Recommended for complex tables
+    - Détection plus précise
+    - Meilleure reconnaissance des limites des cellules
+    - Traitement plus lent
+    - Recommandé pour les tableaux complexes
 
-=== "Fast Mode"
+=== "Mode rapide"
 
-    - Faster processing
-    - Good for simple tables
-    - May miss complex structures
+    - Traitement plus rapide
+    - Adapté aux tableaux simples
+    - Structures complexes parfois manquées
 
-### Export Options
+### Options d’export
 
-- **CSV**: Télécharger individual tables as CSV files
-- **Image**: Télécharger table as PNG image
-- **JSON**: Full table structure in API response
+- **CSV** : télécharger chaque tableau au format CSV
+- **Image** : télécharger le tableau en PNG
+- **JSON** : structure complète du tableau dans la réponse API
 
-## Image Extraireion
+## Extraction des images
 
-Extraire les images intégrées from documents.
+Extrayez les images intégrées des documents.
 
 ### Options
 
 | Option | Description |
 |--------|-------------|
-| Extraire Images | Enable image extraction |
-| Classify Images | Tag images (figure, picture, etc.) |
-| Generate Page Images | Create images of each page |
-| Generate Picture Images | Extraire pictures as files |
-| Generate Table Images | Extraire tables as images |
-| Image Échelle | Output scale factor (0.1x - 4.0x) |
+| Extraire les images | Activer l’extraction d’images |
+| Classifier les images | Étiqueter les images (figure, illustration, etc.) |
+| Générer des images de page | Créer une image par page |
+| Générer des images d’illustrations | Extraire les illustrations en fichiers |
+| Générer des images de tableaux | Extraire les tableaux sous forme d’images |
+| Échelle des images | Facteur d’échelle de sortie (0,1x à 4,0x) |
 
-### Image Preview Gallery
+### Galerie d’aperçu des images
 
-After conversion, extracted images are displayed in a visual gallery:
+Après conversion, les images extraites s’affichent dans une galerie :
 
-- **Thumbnail Grid**: View all images as thumbnails in a responsive grid
-- **Hover Actions**: Quick access to view et download buttons on hover
-- **Lightbox Viewer**: Click any image to view full-size in a modal
-- **Navigation**: Use arrow buttons to browse through multiple images
-- **Télécharger**: Télécharger individual images directly from the gallery or lightbox
+- **Grille de miniatures** : toutes les images en vignettes
+- **Actions au survol** : aperçu et téléchargement rapides
+- **Visionneuse (lightbox)** : clic pour voir en taille réelle
+- **Navigation** : flèches pour parcourir les images
+- **Télécharger** : téléchargement depuis la galerie ou la lightbox
 
 <figure markdown="span">
-  ![Image Gallery](../../assets/screenshots/features/images-gallery.png){ loading=lazy }
-  <figcaption>Extraireed images displayed as thumbnails</figcaption>
+  ![Galerie d’images](../../assets/screenshots/features/images-gallery.png){ loading=lazy }
+  <figcaption>Images extraites affichées en miniatures</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Image Lightbox](../../assets/screenshots/features/images-lightbox.png){ loading=lazy }
-  <figcaption>Full-size image view with navigation</figcaption>
+  ![Lightbox](../../assets/screenshots/features/images-lightbox.png){ loading=lazy }
+  <figcaption>Vue plein écran avec navigation</figcaption>
 </figure>
 
-!!! tip "Image Formats"
-    All extracted images are saved as PNG format for maximum compatibility.
+!!! tip "Formats d’image"
+    Les images extraites sont enregistrées en PNG pour une compatibilité maximale.
 
-## Document Enrichment
+## Enrichissement des documents
 
-Enhance your converted documents with advanced AI-powered features.
+Enrichissez vos documents convertis avec des fonctions avancées assistées par l’IA.
 
-### Available Enrichments
+### Enrichissements disponibles
 
-| Feature | Description | Impact |
-|---------|-------------|--------|
-| **Code Enrichment** | Detect programming languages et enhance code blocks | Faible |
-| **Formula Enrichment** | Extraire LaTeX from mathematical equations | Moyen |
-| **Picture Classification** | Classify images (figure, chart, diagram, photo) | Faible |
-| **Picture Description** | Generate AI captions for images | Élevé |
+| Fonctionnalité | Description | Impact |
+|----------------|-------------|--------|
+| **Enrichissement du code** | Détection des langages et blocs de code améliorés | Faible |
+| **Enrichissement des formules** | Extraction LaTeX des équations | Moyen |
+| **Classification d’images** | Types sémantiques (figure, graphique, schéma, photo) | Faible |
+| **Description d’images** | Légendes générées par IA | Élevé |
 
 ### Configuration
 
-Enable enrichments in the **Paramètres** panel under **Document Enrichment**:
+Activez les enrichissements dans **Paramètres**, section **Enrichissement des documents** :
 
-1. Open Paramètres (gear icon)
-2. Scroll to "Document Enrichment" section
-3. Activer desired features on/off
-4. Paramètres are saved automatically
-
-<figure markdown="span">
-  ![Enrichment Paramètres](../../assets/screenshots/settings/settings-enrichment.png){ loading=lazy }
-  <figcaption>Document Enrichment settings panel</figcaption>
-</figure>
-
-!!! warning "Traitement Time"
-    Enrichment features, especially **Picture Description** et **Formula Enrichment**, can significantly increase processing time as they require additional AI model inference. A warning is displayed when these features are enabled.
+1. Ouvrez **Paramètres** (icône d’engrenage)
+2. Faites défiler jusqu’à **Enrichissement des documents**
+3. Activez ou désactivez les options souhaitées
+4. Les paramètres sont enregistrés automatiquement
 
 <figure markdown="span">
-  ![Enrichment Warning](../../assets/screenshots/settings/settings-enrichment-warning.png){ loading=lazy }
-  <figcaption>Warning displayed when slow features are enabled</figcaption>
+  ![Paramètres d’enrichissement](../../assets/screenshots/settings/settings-enrichment.png){ loading=lazy }
+  <figcaption>Panneau d’enrichissement des documents</figcaption>
 </figure>
 
-### Code Enrichment
+!!! warning "Durée de traitement"
+    Les enrichissements, surtout **Description d’images** et **Enrichissement des formules**, allongent notablement le traitement (inférence de modèles). Un avertissement s’affiche lorsqu’ils sont activés.
 
-When enabled, code blocks in your documents are enhanced with:
+<figure markdown="span">
+  ![Avertissement enrichissement](../../assets/screenshots/settings/settings-enrichment-warning.png){ loading=lazy }
+  <figcaption>Avertissement lorsque des options lentes sont activées</figcaption>
+</figure>
 
-- Automatic programming language detection
-- Syntax highlighting metadata
-- Improved code structure recognition
+### Enrichissement du code
 
-### Formula Enrichment
+Lorsqu’il est activé, les blocs de code sont enrichis avec :
 
-Extraires mathematical formulas et converts them to LaTeX:
+- Détection automatique du langage
+- Métadonnées pour la coloration syntaxique
+- Meilleure reconnaissance de la structure
 
-- Inline equations: `$E = mc^2$`
-- Display equations with proper formatting
-- Better rendering in HTML et Markdown exports
+### Enrichissement des formules
 
-### Picture Classification
+Extrait les formules mathématiques et les convertit en LaTeX :
 
-Automatically tags images with semantic types:
+- Équations en ligne : `$E = mc^2$`
+- Équations affichées avec mise en forme
+- Meilleur rendu en export HTML et Markdown
 
-- **Figure**: Diagrammes, illustrations, schematics
-- **Chart**: Bar charts, line graphs, pie charts
-- **Photo**: Photographs, screenshots
-- **Logo**: Bret logos, icons
-- **Table**: Table images (separate from table extraction)
+### Classification d’images
 
-### Picture Description
+Étiquette les images par type :
 
-Uses vision-language AI models to generate descriptive captions:
+- **Figure** : schémas, illustrations
+- **Graphique** : histogrammes, courbes, secteurs
+- **Photo** : photographies, captures d’écran
+- **Logo** : logos, icônes
+- **Tableau** : images de tableaux (distinct de l’extraction de tableaux)
 
-- Natural language descriptions of image content
-- Useful for accessibility (alt text)
-- Enhances searchability of documents
-- Requires model download on first use
+### Description d’images
 
-!!! note "Model Requirements"
-    Picture Description requires downloading a vision-language model (~1-2GB). This happens automatically on first use but may take several minutes.
+Utilise des modèles vision-langage pour générer des légendes :
 
-### Pre-Téléchargering Models
+- Descriptions en langage naturel
+- Utile pour l’accessibilité (texte alternatif)
+- Améliore la recherche dans le document
+- Téléchargement du modèle au premier usage
 
-To avoid delays during document processing, you can pre-download enrichment models:
+!!! note "Modèles requis"
+    La description d’images nécessite un modèle vision-langage (~1 à 2 Go), téléchargé automatiquement au premier usage (plusieurs minutes possibles).
 
-1. Open **Paramètres** panel
-2. Scroll to **Document Enrichment** section
-3. Find the **Pre-Télécharger Models** area at the bottom
-4. Click **Télécharger** next to any model you want to pre-download
+### Prétéléchargement des modèles
 
-| Model | Size | Objectif |
-|-------|------|---------|
-| Picture Classifier | ~350MB | Image type classification |
-| Picture Describer | ~2GB | AI image captions |
-| Formula Recognizer | ~500MB | LaTeX extraction |
-| Code Detector | ~200MB | Programming language detection |
+Pour éviter les attentes pendant la conversion, vous pouvez prétélécharger les modèles :
 
-!!! tip "Télécharger Progress"
-    A progress bar shows the download status. Models are cached locally after download, so you only need to download them once.
+1. Ouvrez **Paramètres**
+2. Allez à **Enrichissement des documents**
+3. En bas, zone **Prétélécharger les modèles**
+4. Cliquez sur **Télécharger** à côté du modèle souhaité
 
-## RAG Chunking
+| Modèle | Taille | Rôle |
+|--------|--------|------|
+| Classificateur d’images | ~350 Mo | Type d’image |
+| Descripteur d’images | ~2 Go | Légendes IA |
+| Reconnaisseur de formules | ~500 Mo | Extraction LaTeX |
+| Détecteur de code | ~200 Mo | Langage de programmation |
 
-Generate document chunks optimized for Retrieval-Augmented Generation.
+!!! tip "Progression du téléchargement"
+    Une barre de progression indique l’état. Les modèles sont mis en cache localement ; un seul téléchargement suffit.
 
-### How It Works
+## Découpage pour RAG
 
-1. Document is split into semantic chunks
-2. Each chunk respects document structure
-3. Chunks include metadata (headings, page numbers)
-4. Undersized chunks can be merged
+Générez des segments de document adaptés à la génération augmentée par récupération (RAG).
+
+### Fonctionnement
+
+1. Le document est découpé en segments sémantiques
+2. Chaque segment respecte la structure du document
+3. Les segments incluent des métadonnées (titres, numéros de page)
+4. Les segments trop petits peuvent être fusionnés
 
 ### Configuration
 
 | Paramètre | Description | Par défaut |
-|---------|-------------|---------|
-| Max Tokens | Maximum tokens per chunk | 512 |
-| Merge Peers | Merge undersized chunks | true |
+|-----------|-------------|------------|
+| Jetons max. | Nombre maximal de jetons par segment | 512 |
+| Fusion des pairs | Fusionner les petits segments | true |
 
-### Output Format
+### Format de sortie
 
 ```json
 {
@@ -326,146 +321,118 @@ Generate document chunks optimized for Retrieval-Augmented Generation.
 }
 ```
 
-## Export Formats
+## Formats d’export
 
-### Available Formats
+### Formats disponibles
 
 | Format | Extension | Description |
 |--------|-----------|-------------|
-| **Markdown** | `.md` | Formatted text with headers, lists, links |
-| **HTML** | `.html` | Web-ready format with styling |
-| **JSON** | `.json` | Structure complète du document (lossless) |
-| **Texte brut** | `.txt` | Simple text without formatting |
-| **DocTags** | `.doctags` | Tagged document format |
-| **Document Tokens** | `.tokens.json` | Token-level representation |
-| **RAG Chunks** | `.chunks.json` | Chunks for RAG applications |
+| **Markdown** | `.md` | Texte structuré (titres, listes, liens) |
+| **HTML** | `.html` | Prêt pour le Web avec styles |
+| **JSON** | `.json` | Structure complète du document (sans perte) |
+| **Texte brut** | `.txt` | Texte simple |
+| **DocTags** | `.doctags` | Format balisé |
+| **Jetons de document** | `.tokens.json` | Représentation au niveau des jetons |
+| **Segments RAG** | `.chunks.json` | Segments pour applications RAG |
 
 <figure markdown="span">
-  ![Export Formats](../../assets/screenshots/export/export-formats.png){ loading=lazy }
-  <figcaption>Available export formats with selection</figcaption>
+  ![Formats d’export](../../assets/screenshots/export/export-formats.png){ loading=lazy }
+  <figcaption>Formats d’export disponibles</figcaption>
 </figure>
 
-### Preview
+### Aperçu
 
-The export panel shows a live preview of your converted content that updates as you switch between export formats.
+Le panneau d’export affiche un aperçu en direct qui se met à jour selon le format choisi.
 
-#### Format-Specific Preview
+#### Aperçu par format
 
-- **Dynamic Content**: Preview automatically loads content for the selected export format
-- **Format Badge**: Shows which format you're currently previewing
-- **Content Caching**: Previously loaded formats are cached for instant switching
+- **Contenu dynamique** : chargement selon le format sélectionné
+- **Badge de format** : format actuellement affiché
+- **Mise en cache** : bascule instantanée entre formats déjà chargés
 
-#### Rendered vs Raw Mode
+#### Mode rendu ou brut
 
-For HTML et Markdown formats, toggle between rendered et raw views:
+Pour HTML et Markdown, basculez entre vue rendue et code source :
 
 <figure markdown="span">
-  ![Preview Activer](../../assets/screenshots/export/preview-toggle.png){ loading=lazy }
-  <figcaption>Activer between Rendered et Raw preview modes</figcaption>
+  ![Basculer l’aperçu](../../assets/screenshots/export/preview-toggle.png){ loading=lazy }
+  <figcaption>Basculer entre aperçu rendu et brut</figcaption>
 </figure>
 
-=== "Rendered Mode"
+=== "Mode rendu"
 
-    - **HTML**: Displays formatted HTML with styling, tables, et links
-    - **Markdown**: Renders headers, bold/italic text, code blocks, et links
-    - Best for reviewing the final visual appearance
+    - **HTML** : mise en forme, tableaux, liens
+    - **Markdown** : titres, gras/italique, blocs de code, liens
+    - Idéal pour vérifier le rendu visuel
 
-    ![Markdown Rendered](../../assets/screenshots/export/preview-markdown-rendered.png){ loading=lazy }
+    ![Markdown rendu](../../assets/screenshots/export/preview-markdown-rendered.png){ loading=lazy }
 
-=== "Raw Mode"
+=== "Mode brut"
 
-    - Shows the actual source code/markup
-    - HTML: View raw HTML tags et attributes
-    - Markdown: View markdown syntax (# headers, **bold**, etc.)
-    - Useful for copying content or debugging formatting issues
+    - Affiche le code source
+    - HTML : balises et attributs bruts
+    - Markdown : syntaxe (`#`, `**gras**`, etc.)
+    - Utile pour copier le contenu ou déboguer la mise en forme
 
-    ![Markdown Raw](../../assets/screenshots/export/preview-markdown-raw.png){ loading=lazy }
+    ![Markdown brut](../../assets/screenshots/export/preview-markdown-raw.png){ loading=lazy }
 
-#### Other Formats
+#### Autres formats
 
-- **JSON**: Automatically pretty-printed with proper indentation
-- **Texte brut**: Displayed as-is
-- **DocTags/Tokens**: Raw format display
+- **JSON** : pretty-print avec indentation
+- **Texte brut** : affichage tel quel
+- **DocTags / jetons** : affichage brut
 
 <figure markdown="span">
-  ![JSON Preview](../../assets/screenshots/export/preview-json.png){ loading=lazy }
-  <figcaption>Pretty-printed JSON output</figcaption>
+  ![Aperçu JSON](../../assets/screenshots/export/preview-json.png){ loading=lazy }
+  <figcaption>Sortie JSON mise en forme</figcaption>
 </figure>
 
-## Conversion History
+## Historique des conversions
 
-Access previously converted documents:
+Accédez aux documents déjà convertis :
 
-- View conversion status et metadata
-- Re-download converted files
-- Search history by filename
-- View conversion statistics
+- État de la conversion et métadonnées
+- Retéléchargement des fichiers convertis
+- Recherche par nom de fichier
+- Statistiques de conversion
 
-### History Fonctionnalités
+### Fonctionnalités de l’historique
 
-- **Search**: Find documents by filename
-- **Filter**: Filter by status (completed, failed)
-- **Export**: Télécharger history as JSON
-- **Reload Documents**: Click on completed history entries to reload the converted document without re-conversion
-  - Documents are automatically stored on disk after conversion
-  - Structure complète du document is preserved et can be reloaded instantly
-- **Content deduplication**: Same file with identical settings reuses stored output
-- **Generate Chunks Now**: When no RAG chunks exist, generate them on demet using current chunking settings (no re-conversion needed)
-  - Conversions with matching file content et document-affecting settings (OCR, tables, images) complete instantly from cache
-  - Outputs are stored once in a content-addressed store et shared via symlinks
-### Statistics Panel
+- **Recherche** : par nom de fichier
+- **Filtrage** : par état (terminé, échoué)
+- **Export** : historique au format JSON
+- **Recharger un document** : cliquez une entrée terminée pour rouvrir le résultat sans reconvertir
+  - Les documents sont stockés sur disque après conversion
+  - La structure complète est conservée ; rechargement instantané
+- **Déduplication** : même fichier et mêmes paramètres réutilisent la sortie stockée
+- **Générer les segments maintenant** : si aucun segment RAG n’existe, génération à la demande avec les paramètres de découpage actuels (sans reconversion)
+  - Les conversions avec contenu et paramètres identiques (OCR, tableaux, images) peuvent être servies depuis le cache
+  - Les sorties sont stockées une fois et partagées (liens symboliques)
 
-A dedicated slide-in panel for full conversion analytics. Open via the **Statistics** button dans l'en-tête or the **View full statistics** link in the History panel.
+### Panneau des statistiques
 
-**Vue d'ensemble:**
+Panneau latéral dédié aux analyses de conversion. Ouvrez-le via le bouton **Statistiques** dans l’en-tête ou le lien **Voir les statistiques complètes** dans l’historique.
 
-- Total conversions, success/failed counts, success rate
-- Average processing time et queue depth
+**Vue d’ensemble**
 
-**Storage usage:**
+- Nombre total de conversions, réussites/échecs, taux de réussite
+- Temps de traitement moyen et profondeur de file
 
-- Uploads, outputs, et total storage
+**Stockage**
 
-**Breakdowns:**
+- Téléversements, sorties et stockage total
 
-- Input formats, OCR backends, output formats
-- Performances devices (CPU/CUDA/MPS), source types
-- Error categories
-- Chunking-enabled count
+**Répartitions**
 
-**Extended metrics:**
+- Formats d’entrée, moteurs OCR, formats de sortie
+- Matériel (CPU/CUDA/MPS), types de source
+- Catégories d’erreurs
+- Nombre de conversions avec découpage RAG
 
-- **System**: Hardware type (CPU/CUDA/MPS), CPU count, current CPU usage (Duckling backend process), GPU info
-- **Throughput**: Average pages/sec et pages/sec per CPU
-- **Conversion time distribution**: Median, 95th, et 99th percentile
-- **Pages/sec over time**: Chart showing throughput over conversion history
-- **Performances by config**: Pages/sec et conversion time by hardware, OCR backend, et image classifier
+**Métriques étendues**
 
-### Statistics Panel
-
-A dedicated slide-in panel for full conversion analytics. Open via the **Statistics** button dans l'en-tête or the **View full statistics** link in the History panel.
-
-**Vue d'ensemble:**
-
-- Total conversions, success/failed counts, success rate
-- Average processing time et queue depth
-
-**Storage usage:**
-
-- Uploads, outputs, et total storage
-
-**Breakdowns:**
-
-- Input formats, OCR backends, output formats
-- Performances devices (CPU/CUDA/MPS), source types
-- Error categories
-- Chunking-enabled count
-
-**Extended metrics:**
-
-- **System**: Hardware type (CPU/CUDA/MPS), CPU count, current CPU usage (Duckling backend process), GPU info
-- **Throughput**: Average pages/sec et pages/sec per CPU
-- **Conversion time distribution**: Median, 95th, et 99th percentile
-- **Pages/sec over time**: Chart showing throughput over conversion history
-- **Performances by config**: Pages/sec et conversion time by hardware, OCR backend, et image classifier
-
+- **Système** : type de matériel (CPU/CUDA/MPS), nombre de cœurs, utilisation CPU du backend Duckling, informations GPU
+- **Débit** : pages/s moyen et pages/s par cœur CPU
+- **Distribution des durées** : médiane, 95e et 99e percentiles
+- **Pages/s dans le temps** : graphique du débit sur l’historique
+- **Performances par configuration** : pages/s et durée selon matériel, moteur OCR et classificateur d’images

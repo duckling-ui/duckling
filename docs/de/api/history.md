@@ -1,22 +1,22 @@
-# History API
+# Verlauf-API
 
-Endpoints for accessing conversion history.
+Endpunkte für den Zugriff auf den Konvertierungsverlauf.
 
-## Get Conversion History
+## Konvertierungsverlauf abrufen
 
 ```http
 GET /api/history
 ```
 
-### Query Parameters
+### Abfrageparameter
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `limit` | int | 50 | Maximum entries to return |
-| `offset` | int | 0 | Number of entries to skip |
-| `status` | string | - | Filter by status |
+| Name | Typ | Standard | Beschreibung |
+|------|-----|----------|--------------|
+| `limit` | int | 50 | Maximale Anzahl zurückgegebener Einträge |
+| `offset` | int | 0 | Anzahl der zu überspringenden Einträge |
+| `status` | string | - | Nach Status filtern |
 
-### Response
+### Antwort
 
 ```json
 {
@@ -24,7 +24,7 @@ GET /api/history
     {
       "id": "550e8400-e29b-41d4-a716-446655440000",
       "filename": "document_abc123.pdf",
-      "original_filename": "My Document.pdf",
+      "original_filename": "Mein Dokument.pdf",
       "input_format": "pdf",
       "status": "completed",
       "confidence": 0.92,
@@ -41,33 +41,33 @@ GET /api/history
 
 ---
 
-## Get Recent History
+## Aktuellen Verlauf abrufen
 
 ```http
 GET /api/history/recent
 ```
 
-### Query Parameters
+### Abfrageparameter
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `limit` | int | 10 | Maximum entries to return |
+| Name | Typ | Standard | Beschreibung |
+|------|-----|----------|--------------|
+| `limit` | int | 10 | Maximale Anzahl zurückgegebener Einträge |
 
 ---
 
-## Get History Entry
+## Verlaufseintrag abrufen
 
 ```http
 GET /api/history/{job_id}
 ```
 
-### Response
+### Antwort
 
 ```json
 {
   "id": "550e8400-e29b-41d4-a716-446655440000",
   "filename": "document_abc123.pdf",
-  "original_filename": "My Document.pdf",
+  "original_filename": "Mein Dokument.pdf",
   "input_format": "pdf",
   "status": "completed",
   "confidence": 0.92,
@@ -91,17 +91,17 @@ GET /api/history/{job_id}
 GET /api/history/{job_id}/load
 ```
 
-Lädt ein zuvor konvertiertes Dokument aus dem Verlauf und gibt es als Konvertierungsergebnis zurück. Dieser Endpunkt lädt das `DoclingDocument` aus der gespeicherten JSON-Datei und gibt es im gleichen Format wie ein frisches Konvertierungsergebnis zurück.
+Lädt ein zuvor konvertiertes Dokument aus dem Verlauf und liefert es als Konvertierungsergebnis. Dieser Endpunkt lädt das `DoclingDocument` aus der gespeicherten JSON-Datei und gibt es im gleichen Format wie ein frisches Konvertierungsergebnis zurück.
 
 ### Pfadparameter
 
 | Name | Typ | Erforderlich | Beschreibung |
 |------|-----|--------------|--------------|
-| `job_id` | string | Ja | Die Job-Kennung (muss `[A-Za-z0-9_-]+` entsprechen) |
+| `job_id` | string | Ja | Auftragskennung (muss mit `[A-Za-z0-9_-]+` übereinstimmen) |
 
 ### Antwort
 
-Gibt ein `ConversionResult`-Objekt zurück, das dem Format einer frischen Konvertierung entspricht:
+Gibt ein `ConversionResult`-Objekt im Format einer frischen Konvertierung zurück:
 
 ```json
 {
@@ -115,7 +115,7 @@ Gibt ein `ConversionResult`-Objekt zurück, das dem Format einer frischen Konver
   "formats_available": ["markdown", "html", "json"],
   "images_count": 5,
   "tables_count": 2,
-  "preview": "# Dokumentinhalt-Vorschau..."
+  "preview": "# Vorschau des Dokumentinhalts..."
 }
 ```
 
@@ -124,7 +124,7 @@ Gibt ein `ConversionResult`-Objekt zurück, das dem Format einer frischen Konver
 **404 Not Found**: Verlaufseintrag existiert nicht
 ```json
 {
-  "error": "History entry {job_id} not found"
+  "error": "Verlaufseintrag {job_id} nicht gefunden"
 }
 ```
 
@@ -133,34 +133,34 @@ Gibt ein `ConversionResult`-Objekt zurück, das dem Format einer frischen Konver
 {
   "job_id": "550e8400-e29b-41d4-a716-446655440000",
   "status": "pending",
-  "message": "Conversion not completed"
+  "message": "Konvertierung nicht abgeschlossen"
 }
 ```
 
 ### Hinweise
 
 - Funktioniert nur für abgeschlossene Konvertierungen
-- Wenn die gespeicherte Dokument-JSON-Datei nicht verfügbar ist, versucht der Endpunkt, das Ergebnis aus den Ausgabedateien zu rekonstruieren
-- Dokumente werden automatisch nach jeder erfolgreichen Konvertierung gespeichert
-- Das Feld `document_json_path` in Verlaufseinträgen gibt an, wo das Dokument-JSON gespeichert ist
+- Ist die gespeicherte Dokument-JSON-Datei nicht verfügbar, versucht der Endpunkt, das Ergebnis aus den Ausgabedateien zu rekonstruieren
+- Dokumente werden nach jeder erfolgreichen Konvertierung automatisch gespeichert
+- Das Feld `document_json_path` in Verlaufseinträgen zeigt an, wo die Dokument-JSON gespeichert ist
 
 ---
 
-## Verlauf von Datenträger abgleichen
+## Verlauf mit dem Datenträger abgleichen
 
 ```http
 POST /api/history/reconcile
 ```
 
-Durchsucht das Ausgabeverzeichnis nach Konvertierungen, die auf dem Datenträger existieren, aber keinen Datenbankeintrag haben (z. B. nach DB-Verlust oder -Neustart). Erstellt fehlende Verlaufseinträge, damit sie in der Oberfläche erscheinen und neu geladen werden können.
+Durchsucht das Ausgabeverzeichnis nach Konvertierungsausgaben, die auf dem Datenträger existieren, aber keinen Datenbankeintrag haben (z. B. nach Datenverlust oder Neustart). Legt fehlende Verlaufseinträge an, damit sie in der Oberfläche erscheinen und erneut geladen werden können.
 
-Die Abgleichung erfolgt außerdem automatisch beim Anwendungsstart.
+Der Abgleich wird außerdem automatisch beim Start der Anwendung ausgeführt.
 
 ### Antwort
 
 ```json
 {
-  "message": "Reconciled 3 entries from disk",
+  "message": "3 Einträge vom Datenträger abgeglichen",
   "added_count": 3,
   "added_ids": [
     "550e8400-e29b-41d4-a716-446655440000",
@@ -172,8 +172,36 @@ Die Abgleichung erfolgt außerdem automatisch beim Anwendungsstart.
 
 ### Hinweise
 
-- Nur Ausgabeverzeichnisse mit gültigen UUID-Namen und mindestens einer Ausgabedatei (`.md`, `.html`, `.json` oder `.document.json`) werden abgeglichen
-- Bereits vorhandene Einträge werden übersprungen
+- Es werden nur Ausgabeverzeichnisse mit gültigen UUID-Namen und mindestens einer Ausgabedatei (`.md`, `.html`, `.json` oder `.document.json`) abgeglichen
+- Bereits in der Datenbank vorhandene Einträge werden übersprungen
+
+---
+
+## Chunks generieren
+
+```http
+POST /api/history/{job_id}/generate-chunks
+```
+
+Generiert RAG-Chunks für ein abgeschlossenes Dokument bei Bedarf. Lädt das DoclingDocument vom Datenträger, wendet die aktuellen Chunking-Einstellungen an und liefert die generierten Chunks. Speichert die Chunks auf dem Datenträger zum Herunterladen.
+
+### Antwort
+
+```json
+{
+  "job_id": "550e8400-e29b-41d4-a716-446655440000",
+  "chunks": [
+    {
+      "id": 1,
+      "text": "Chunk-Inhalt...",
+      "meta": { "page": 1, "headings": ["Abschnittstitel"] }
+    }
+  ],
+  "count": 42
+}
+```
+
+**404 Not Found**: Verlaufseintrag oder Dokument nicht gefunden
 
 ---
 
@@ -183,90 +211,122 @@ Die Abgleichung erfolgt außerdem automatisch beim Anwendungsstart.
 DELETE /api/history/{job_id}
 ```
 
-### Response
+### Antwort
 
 ```json
 {
-  "message": "Entry deleted",
+  "message": "Eintrag gelöscht",
   "job_id": "550e8400-e29b-41d4-a716-446655440000"
 }
 ```
 
 ---
 
-## Get History Statistics
+## Verlaufsstatistiken abrufen
 
 ```http
 GET /api/history/stats
 ```
 
-### Response
+### Antwort
+
+Liefert Konvertierungsstatistiken, Speichernutzung und Warteschlangentiefe. Das Objekt `conversions` enthält bei Verfügbarkeit erweiterte Kennzahlen.
 
 ```json
 {
-  "total": 150,
-  "completed": 142,
-  "failed": 5,
-  "pending": 2,
-  "processing": 1,
-  "success_rate": 94.7,
-  "format_breakdown": {
-    "pdf": 100,
-    "docx": 30,
-    "image": 20
-  }
+  "conversions": {
+    "total": 150,
+    "completed": 142,
+    "failed": 5,
+    "pending": 2,
+    "processing": 1,
+    "success_rate": 94.7,
+    "format_breakdown": {
+      "pdf": 100,
+      "docx": 30,
+      "image": 20
+    },
+    "avg_processing_seconds": 12.5,
+    "ocr_backend_breakdown": {
+      "easyocr": 80,
+      "ocrmac": 50,
+      "tesseract": 20
+    },
+    "output_format_breakdown": {
+      "markdown": 150
+    },
+    "performance_device_breakdown": {
+      "auto": 120,
+      "cpu": 30
+    },
+    "chunking_enabled_count": 25,
+    "error_category_breakdown": {
+      "ocr": 2,
+      "other": 3
+    },
+    "source_type_breakdown": {
+      "upload": 100,
+      "url": 30,
+      "batch": 20
+    }
+  },
+  "storage": {
+    "uploads": { "count": 10, "size_bytes": 1048576, "size_mb": 1.0 },
+    "outputs": { "count": 140, "size_bytes": 52428800, "size_mb": 50.0 },
+    "total_size_mb": 51.0
+  },
+  "queue_depth": 2
 }
 ```
 
 ---
 
-## Search History
+## Verlauf durchsuchen
 
 ```http
 GET /api/history/search
 ```
 
-### Query Parameters
+### Abfrageparameter
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `q` | string | Yes | Search query |
-| `limit` | int | No | Maximum results (default: 20) |
+| Name | Typ | Erforderlich | Beschreibung |
+|------|-----|--------------|--------------|
+| `q` | string | Ja | Suchanfrage |
+| `limit` | int | Nein | Maximale Trefferanzahl (Standard: 20) |
 
-### Response
+### Antwort
 
 ```json
 {
   "entries": [...],
-  "query": "invoice",
+  "query": "Rechnung",
   "count": 5
 }
 ```
 
 ---
 
-## Export History
+## Verlauf exportieren
 
 ```http
 GET /api/history/export
 ```
 
-**Response**: JSON file download with all history entries
+**Antwort**: JSON-Dateidownload mit allen Verlaufseinträgen
 
 ---
 
-## Clear All History
+## Gesamten Verlauf löschen
 
 ```http
 DELETE /api/history
 ```
 
-### Response
+### Antwort
 
 ```json
 {
-  "message": "All history entries deleted",
+  "message": "Alle Verlaufseinträge gelöscht",
   "count": 150
 }
 ```
-

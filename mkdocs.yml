@@ -8,7 +8,7 @@ site_author: Duckling Contributors
 site_url: https://duckling-ui.org/
 
 # Repository
-repo_name: davidgs/duckling
+repo_name: duckling-ui/duckling
 repo_url: https://github.com/duckling-ui/duckling
 edit_uri: edit/main/docs/
 
@@ -122,6 +122,7 @@ plugins:
             "Code Style": Estilo de código
             Testing: Pruebas
             "Code of Conduct": Código de conducta
+            Accessibility: Accesibilidad
             Changelog: Registro de cambios
         - locale: fr
           name: "🇫🇷 Français"
@@ -158,6 +159,7 @@ plugins:
             "Code Style": Style de code
             Testing: Tests
             "Code of Conduct": Code de conduite
+            Accessibility: Accessibilité
             Changelog: Journal des modifications
         - locale: de
           name: "🇩🇪 Deutsch"
@@ -194,6 +196,7 @@ plugins:
             "Code Style": Code-Stil
             Testing: Tests
             "Code of Conduct": Verhaltenskodex
+            Accessibility: Barrierefreiheit
             Changelog: Änderungsprotokoll
 
 # Extensions

@@ -4,7 +4,7 @@ Anleitungen zur Bereitstellung von Duckling in verschiedenen Umgebungen.
 
 ## Übersicht
 
-Duckling can be deployed in multiple ways depending on your needs:
+Duckling kann je nach Anforderung auf unterschiedliche Weise bereitgestellt werden:
 
 <div class="grid cards" markdown>
 
@@ -20,7 +20,7 @@ Duckling can be deployed in multiple ways depending on your needs:
 
     ---
 
-    Skalierung für hohen Verkehr mit Lastausgleich
+    Skalierung für hohen Traffic mit Lastausgleich
 
     [:octicons-arrow-right-24: Skalierungsanleitung](scaling.md)
 
@@ -28,7 +28,7 @@ Duckling can be deployed in multiple ways depending on your needs:
 
     ---
 
-    Sicherheitsbest Practices und Härtung
+    Sicherheits-Best-Practices und Härtung
 
     [:octicons-arrow-right-24: Sicherheitsanleitung](security.md)
 
@@ -39,7 +39,7 @@ Duckling can be deployed in multiple ways depending on your needs:
 | Methode | Am besten für | Komplexität |
 |--------|----------|------------|
 | Docker Compose | Schnelle Bereitstellung, Tests | Niedrig |
-| Manual + Nginx | Volle Kontrolle, Anpassung | Mittel |
+| Manuell + Nginx | Volle Kontrolle, Anpassung | Mittel |
 | Kubernetes | Großer Maßstab, Cloud-nativ | Hoch |
 
 ## Kurzreferenz
@@ -53,25 +53,25 @@ docker-compose up -d --build
 ### Manuelle Bereitstellung
 
 ```bash
-# Backend with Gunicorn
+# Backend mit Gunicorn
 cd backend
 gunicorn -w 4 -b 0.0.0.0:5001 duckling:app
 
-# Frontend build
+# Frontend-Build
 cd frontend
 npm run build
-# Serve dist/ with nginx
+# dist/ mit nginx ausliefern
 ```
 
 ## Umgebungs-Checkliste
 
 Vor der Bereitstellung in der Produktion:
 
-- [ ] Setzenzen Sie einen starken `SECRET_KEY`
-- [ ] Setzen `FLASK_DEBUG=false`
+- [ ] Einen starken `SECRET_KEY` setzen
+- [ ] `FLASK_DEBUG=false` setzen
 - [ ] CORS für Ihre Domain konfigurieren
 - [ ] HTTPS aktivieren
 - [ ] Angemessene Dateigrößenlimits setzen
 - [ ] Reverse-Proxy konfigurieren
-- [ ] Überwachung und Protokollierung einrichten
+- [ ] Monitoring und Logging einrichten
 

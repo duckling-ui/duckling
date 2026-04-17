@@ -1,42 +1,42 @@
 # Systemübersicht
 
-Architektur auf hoher Ebene und Datenfluss in Duckling.
+Architektur und Datenfluss in Duckling auf hoher Ebene.
 
-## Architektur Diagram
+## Architekturdiagramm
 
-![Systemarchitektur](../../arch.png)
+![Systemarchitektur](../arch.png)
 
-## Detailed Layer View
+## Detaillierte Schichtenansicht
 
 ```mermaid
 graph TB
     subgraph Client
-        Browser[Web Browser]
+        Browser[Webbrowser]
     end
 
     subgraph Frontend
-        React[React App]
-        Components[Components]
-        Hooks[Custom Hooks]
-        APIClient[Axios Client]
+        React[React-App]
+        Components[Komponenten]
+        Hooks[Eigene Hooks]
+        APIClient[Axios-Client]
     end
 
     subgraph Backend
-        Flask[Flask Server]
-        Routes[API Routes]
-        Services[Services]
-        JobQueue[Job Queue]
+        Flask[Flask-Server]
+        Routes[API-Routen]
+        Services[Dienste]
+        JobQueue[Auftragswarteschlange]
     end
 
     subgraph Engine
         Docling[DocumentConverter]
-        OCR[OCR Backends]
-        Extract[Extraction]
+        OCR[OCR-Backends]
+        Extract[Extraktion]
     end
 
     subgraph Storage
-        SQLite[(SQLite DB)]
-        FileSystem[(File System)]
+        SQLite[(SQLite-DB)]
+        FileSystem[(Dateisystem)]
     end
 
     Browser --> React
@@ -54,55 +54,55 @@ graph TB
     Docling --> FileSystem
 ```
 
-## Data Flow
+## Datenfluss
 
-### Document Konvertierung Flow
+### Ablauf der Dokumentkonvertierung
 
 ```mermaid
 sequenceDiagram
-    participant U as User
+    participant U as Benutzer
     participant F as Frontend
     participant B as Backend
     participant D as Docling
 
-    U->>F: Upload File
+    U->>F: Datei hochladen
     F->>B: POST /convert
-    B->>B: Save & Queue Job
+    B->>B: Speichern & Job einreihen
     B-->>F: 202 job_id
 
-    loop Poll
+    loop Abfragen
         F->>B: GET /status
-        B-->>F: progress %
+        B-->>F: Fortschritt %
     end
 
-    B->>D: Convert
-    D-->>B: Results
-    B-->>F: Complete
+    B->>D: Konvertieren
+    D-->>B: Ergebnisse
+    B-->>F: Abgeschlossen
     F->>B: GET /result
-    B-->>F: Content
-    U->>F: Download
+    B-->>F: Inhalt
+    U->>F: Herunterladen
 ```
 
-### Konvertierung Pipeline
+### Konvertierungspipeline
 
-| Step | Beschreibung |
+| Schritt | Beschreibung |
 |------|-------------|
-| 1 | **Upload Request** - Datei received via POST |
-| 2 | **Datei Validation & Storage** - Check extension, save to uploads/ |
-| 3 | **Job Creation** - UUID assigned, entry created |
-| 4 | **Queue for Verarbeitung** - Added to job queue |
-| 5 | **Worker Thread Picks Up Job** - When capacity available |
-| 6 | **DocumentConverter Initialized** - With OCR, table, image settings |
-| 7 | **Document Konvertierung** - Extrahieren images, tables, chunks |
-| 8 | **Export to Formate** - MD, HTML, JSON, TXT, DocTags, Tokens |
-| 9 | **Update Job Status & History** - Mark complete, store metadata |
-| 10 | **Results Available** - Ready for download |
+| 1 | **Upload-Anfrage** – Datei per POST empfangen |
+| 2 | **Dateivalidierung & Speicherung** – Erweiterung prüfen, in uploads/ speichern |
+| 3 | **Job-Erstellung** – UUID vergeben, Eintrag anlegen |
+| 4 | **Einreihen zur Verarbeitung** – In die Auftragswarteschlange |
+| 5 | **Worker-Thread übernimmt Job** – Wenn Kapazität frei ist |
+| 6 | **DocumentConverter initialisiert** – Mit OCR-, Tabellen- und Bildeinstellungen |
+| 7 | **Dokumentkonvertierung** – Bilder, Tabellen, Chunks extrahieren |
+| 8 | **Export in Formate** – MD, HTML, JSON, TXT, DocTags, Tokens |
+| 9 | **Jobstatus & Verlauf aktualisieren** – Als abgeschlossen markieren, Metadaten speichern |
+| 10 | **Ergebnisse verfügbar** – Bereit zum Download |
 
-**Ordner-Upload (UI):** Der Browser expandiert einen gewählten oder gezogenen Ordner zu Dateien; das Frontend filtert nach Extension und Größe und sendet unterstützte Dateien als `POST /api/convert/batch` mit wiederholten `files`-Teilen. Der Server lehnt nicht unterstützte Teile pro Datei ab; wenn nichts konvertiert werden kann, antwortet die API mit **400**.
+**Ordner-Upload (UI):** Der Browser expandiert ein gewähltes oder per Drag-and-Drop abgelegtes Verzeichnis zu einer Dateiliste; das Frontend filtert nach zulässiger Erweiterung und Größe und sendet unterstützte Dateien als `POST /api/convert/batch` mit wiederholten `files`-Teilen (wie beim Mehrfach-Batch). Das Backend lehnt nicht unterstützte Teile einzeln ab; wenn kein Teil konvertiert werden kann, antwortet die API mit **400**.
 
-## Job Queue System
+## Auftragswarteschlange
 
-To prevent memory exhaustion when processing multiple documents:
+Um eine Speichererschöpfung bei mehreren Dokumenten zu vermeiden:
 
 ```python
 class ConverterService:
@@ -111,49 +111,48 @@ class ConverterService:
     _max_concurrent_jobs = 2  # Limit parallel processing
 ```
 
-The worker thread:
+Der Worker-Thread:
 
-1. Monitors the job queue
-2. Starts conversion threads up to the concurrent limit
-3. Tracks active threads und cleans up completed ones
-4. Prevents resource exhaustion during batch processing
+1. Überwacht die Auftragswarteschlange
+2. Startet Konvertierungs-Threads bis zum Parallelitätslimit
+3. Verfolgt aktive Threads und räumt abgeschlossene auf
+4. Verhindert Ressourcenerschöpfung bei Batch-Verarbeitung
 
-## Database Schema
+## Datenbankschema
 
-### Konvertierung Table
+### Tabelle „Conversion“
 
-| Column | Type | Beschreibung |
+| Spalte | Typ | Beschreibung |
 |--------|------|-------------|
-| `id` | VARCHAR(36) | Primary key (UUID) |
-| `filename` | VARCHAR(255) | Sanitized filename |
-| `original_filename` | VARCHAR(255) | Original upload name |
-| `input_format` | VARCHAR(50) | Detected format |
+| `id` | VARCHAR(36) | Primärschlüssel (UUID) |
+| `filename` | VARCHAR(255) | Bereinigter Dateiname |
+| `original_filename` | VARCHAR(255) | Ursprünglicher Upload-Name |
+| `input_format` | VARCHAR(50) | Erkanntes Format |
 | `status` | VARCHAR(50) | pending/processing/completed/failed |
-| `confidence` | FLOAT | OCR confidence score |
-| `error_message` | TEXT | Error details if failed |
-| `output_path` | VARCHAR(500) | Path to output files |
-| `settings` | TEXT | JSON settings used |
-| `file_size` | FLOAT | Datei size in bytes |
-| `created_at` | DATETIME | Upload timestamp |
-| `completed_at` | DATETIME | Completion timestamp |
+| `confidence` | FLOAT | OCR-Konfidenzwert |
+| `error_message` | TEXT | Fehlerdetails bei Misserfolg |
+| `output_path` | VARCHAR(500) | Pfad zu Ausgabedateien |
+| `settings` | TEXT | Verwendete JSON-Einstellungen |
+| `file_size` | FLOAT | Dateigröße in Bytes |
+| `created_at` | DATETIME | Zeitstempel des Uploads |
+| `completed_at` | DATETIME | Zeitstempel des Abschlusses |
 
-## Sicherheit Considerations
+## Sicherheitsaspekte
 
-| Concern | Mitigation |
+| Thema | Gegenmaßnahme |
 |---------|------------|
-| **Datei Upload** | Only allowed extensions accepted |
-| **Datei Size** | Configurable max (default 100MB) |
-| **Dateinames** | Sanitized before storage |
-| **Datei Access** | Served through API only, no direct paths |
-| **CORS** | Restricted to frontend origin |
+| **Datei-Upload** | Nur zulässige Erweiterungen |
+| **Dateigröße** | Konfigurierbares Maximum (Standard 100MB) |
+| **Dateinamen** | Vor der Speicherung bereinigt |
+| **Dateizugriff** | Nur über API, keine direkten Pfade |
+| **CORS** | Auf Frontend-Ursprung beschränkt |
 
-## Leistung Optimizations
+## Leistungsoptimierungen
 
-| Optimization | Beschreibung |
+| Optimierung | Beschreibung |
 |--------------|-------------|
-| **Converter Caching** | DocumentConverter instances cached by settings hash |
-| **Job Queue** | Sequential processing prevents memory exhaustion |
-| **Lazy Loading** | Heavy components loaded on demund |
-| **React Query Caching** | API responses cached und deduplicated |
-| **Background Verarbeitung** | Konvertierungs don't block the API |
-
+| **Converter-Caching** | DocumentConverter-Instanzen nach Einstellungs-Hash gecacht |
+| **Auftragswarteschlange** | Sequentielle Verarbeitung verhindert Speichererschöpfung |
+| **Lazy Loading** | Schwere Komponenten bei Bedarf geladen |
+| **React-Query-Caching** | API-Antworten gecacht und dedupliziert |
+| **Hintergrundverarbeitung** | Konvertierungen blockieren die API nicht |

@@ -1,6 +1,6 @@
 # Entwicklungsumgebung
 
-Richten Sie Ihre Entwicklungsumgebung für die Mitarbeit an Duckling ein.
+Richten Sie Ihre Entwicklungsumgebung für Mitwirkung an Duckling ein.
 
 ## Voraussetzungen
 
@@ -8,7 +8,7 @@ Richten Sie Ihre Entwicklungsumgebung für die Mitarbeit an Duckling ein.
 - Node.js 18+
 - Git
 
-## Backend-Einrichtung
+## Backend einrichten
 
 ```bash
 cd backend
@@ -17,7 +17,7 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Frontend-Einrichtung
+## Frontend einrichten
 
 ```bash
 cd frontend
@@ -50,7 +50,7 @@ Frontend läuft unter: `http://localhost:3000`
 ```
 duckling/
 ├── backend/
-│   ├── duckling.py         # Flask-Anwendungseinstieg
+│   ├── duckling.py         # Flask-Einstieg der Anwendung
 │   ├── config.py           # Konfiguration
 │   ├── models/             # Datenbankmodelle
 │   ├── routes/             # API-Endpunkte
@@ -59,14 +59,14 @@ duckling/
 ├── frontend/
 │   ├── src/
 │   │   ├── components/     # React-Komponenten
-│   │   ├── hooks/          # Benutzerdefinierte React-Hooks
+│   │   ├── hooks/          # Eigene React-Hooks
 │   │   ├── services/       # API-Client
 │   │   └── types/          # TypeScript-Typen
 │   └── tests/              # Frontend-Tests
 └── docs/                   # Dokumentation
 ```
 
-## IDE-Einrichtung
+## IDE einrichten
 
 ### VS Code
 
@@ -95,7 +95,7 @@ Empfohlene Erweiterungen:
 
 ## Umgebungsvariablen
 
-Erstellen Sie `.env`-Dateien für die lokale Entwicklung:
+Legen Sie `.env`-Dateien für die lokale Entwicklung an:
 
 ### Backend (.env)
 
@@ -111,12 +111,12 @@ DEBUG=True
 VITE_API_URL=http://localhost:5001/api
 ```
 
-## Hot Reloading
+## Hot Reload
 
-Beide Server unterstützen Hot Reloading:
+Beide Server unterstützen Hot Reload:
 
-- **Backend**: Flask-Debug-Modus lädt bei Dateiänderungen automatisch neu
-- **Frontend**: Vite HMR aktualisiert Komponenten ohne Seitenaktualisierung
+- **Backend**: Flask-Debug-Modus lädt bei Dateiänderungen neu
+- **Frontend**: Vite HMR aktualisiert Komponenten ohne Seitenreload
 
 ## Debugging
 
@@ -147,7 +147,7 @@ Beide Server unterstützen Hot Reloading:
 
 ### Frontend
 
-Browser-DevTools mit React Developer Tools-Erweiterung verwenden.
+Browser-DevTools mit der Erweiterung React Developer Tools nutzen.
 
 ## Häufige Aufgaben
 
@@ -167,15 +167,15 @@ npm update
 
 ```bash
 cd frontend
-npm run generate-types  # Falls verfügbar
+npm run generate-types  # falls vorhanden
 ```
 
-### Für Produktion bauen
+### Produktions-Build
 
 ```bash
 # Frontend
 cd frontend
 npm run build
 
-# Backend (kein Build erforderlich)
+# Backend (kein Build nötig)
 ```

@@ -1,34 +1,36 @@
-# Spanish Screenshots (Español)
+# Capturas de pantalla (español)
 
-This directory contains screenshots for the Spanish locale documentation.
+Este directorio contiene capturas para la documentación en español.
 
-## Directory Structure
+## Estructura de carpetas
 
-Organize screenshots into subdirectories:
+Organice las capturas en subcarpetas:
 
-- `ui/` - Main interface screenshots (dropzone, header, history)
-- `settings/` - Settings panel screenshots
-- `export/` - Export options and preview screenshots
-- `features/` - Feature-specific screenshots (images, tables, chunks, etc.)
+- `ui/` — Interfaz principal (zona de entrega, cabecera, historial)
+- `settings/` — Panel de configuración
+- `export/` — Exportación y vista previa
+- `features/` — Funciones (imágenes, tablas, fragmentos, etc.)
 
-## Usage in Documentation
+## Uso en la documentación
 
-Reference screenshots from markdown files using relative paths:
+Rutas relativas en Markdown:
 
 ```markdown
-![Description](images/ui/dropzone-empty.png)
+![Descripción](images/ui/dropzone-empty.png)
 ```
 
-For files in the `es/` directory, use:
+Desde archivos bajo `es/`:
+
 ```markdown
-![Description](images/ui/dropzone-empty.png)
+![Descripción](images/ui/dropzone-empty.png)
 ```
 
-For files in subdirectories, adjust the path accordingly:
+En subcarpetas, ajuste la ruta:
+
 ```markdown
-![Description](../images/ui/dropzone-empty.png)
+![Descripción](../images/ui/dropzone-empty.png)
 ```
 
-**Important**: Ensure the UI language is set to Español before capturing screenshots.
+**Importante:** ponga la interfaz en **Español** antes de capturar.
 
-See [SCREENSHOT_GUIDE.md](../../assets/screenshots/SCREENSHOT_GUIDE.md) for complete capture instructions.
+Guía completa: [SCREENSHOT_GUIDE.md](../../assets/screenshots/SCREENSHOT_GUIDE.md).

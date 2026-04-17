@@ -1,16 +1,22 @@
 # Erste Schritte
 
-Dieser Abschnitt beschreibt Installation und Ausführung von Duckling.
+Willkommen bei Duckling! In diesem Abschnitt bringen Sie das Projekt schnell zum Laufen.
 
-## Inhalt
+!!! tip "Schnellster Start"
+    **Mit Docker?** Ein einziger Befehl genügt:
+    ```bash
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
+    ```
+    Öffnen Sie anschließend [http://localhost:3000](http://localhost:3000) im Browser.
 
-- Installation
-- Quick Start
-- Docker
+## Voraussetzungen
 
+=== "Docker (empfohlen)"
 
+    - **Docker 20.10+**
+    - **Docker Compose 2.0+**
 
-    Das war's! Kein Python oder Node.js erforderlich.
+    Das war’s! Weder Python noch Node.js nötig.
 
 === "Lokale Entwicklung"
 
@@ -21,15 +27,15 @@ Dieser Abschnitt beschreibt Installation und Ausführung von Duckling.
 
 ## Installationsoptionen
 
-Wählen Sie die Installationsmethode, die für Sie am besten funktioniert:
+Wählen Sie die für Sie passende Methode:
 
 <div class="grid cards" markdown>
 
--   :material-docker:{ .lg .middle } __Docker (Empfohlen)__
+-   :material-docker:{ .lg .middle } __Docker (empfohlen)__
 
     ---
 
-    Der schnellste Weg zum Starten. Ein-Befehl-Bereitstellung mit vorgefertigten Images.
+    Der schnellste Einstieg. Ein Befehl mit vorgefertigten Images.
 
     [:octicons-arrow-right-24: Docker-Anleitung](docker.md)
 
@@ -37,7 +43,7 @@ Wählen Sie die Installationsmethode, die für Sie am besten funktioniert:
 
     ---
 
-    Starten Sie in 5 Minuten mit den Grundlagen
+    In 5 Minuten mit dem Wesentlichen starten
 
     [:octicons-arrow-right-24: Schnellstart](quickstart.md)
 
@@ -45,13 +51,17 @@ Wählen Sie die Installationsmethode, die für Sie am besten funktioniert:
 
     ---
 
-    Richten Sie eine lokale Entwicklungsumgebung für Anpassungen und Beiträge ein
+    Lokale Entwicklungsumgebung für Anpassungen und Beiträge einrichten
 
     [:octicons-arrow-right-24: Installationsanleitung](installation.md)
 
 </div>
 
-## Was kommt als Nächstes?Nach der Installation erkunden Sie:1. **[Funktionen](../user-guide/features.md)** - Erfahren Sie mehr über alle Funktionen
-2. **[Konfiguration](../user-guide/configuration.md)** - Passen Sie die Einstellungen an Ihre Bedürfnisse an
-3. **[API-Referenz](../api/index.md)** - Integrieren Sie mit Ihren Anwendungen
+## Wie geht es weiter?
+
+Nach der Installation können Sie folgendes vertiefen:
+
+1. **[Funktionen](../user-guide/features.md)** – Alle Möglichkeiten kennenlernen
+2. **[Konfiguration](../user-guide/configuration.md)** – Einstellungen an Ihre Bedürfnisse anpassen
+3. **[API-Referenz](../api/index.md)** – In Ihre Anwendungen integrieren
 

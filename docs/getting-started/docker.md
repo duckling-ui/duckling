@@ -107,7 +107,7 @@ Use the provided build script for easy image building. The script automatically 
 
 ### Automatic Publishing (CI/CD)
 
-When a pull request is merged to `main`, the [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) workflow automatically:
+When a pull request is merged to `main`, the [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) GitHub Actions workflow runs automatically. It:
 
 1. Builds multi-platform images (linux/amd64, linux/arm64)
 2. Pushes to **Docker Hub** as `{DOCKERHUB_USERNAME}/duckling-backend` and `{DOCKERHUB_USERNAME}/duckling-frontend`

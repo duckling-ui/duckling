@@ -1,22 +1,22 @@
-# History API
+# API Historique
 
-Endpoints for accessing conversion history.
+Points de terminaison pour accéder à l’historique des conversions.
 
-## Get Conversion History
+## Obtenir l’historique des conversions
 
 ```http
 GET /api/history
 ```
 
-### Query Parameters
+### Paramètres de requête
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `limit` | int | 50 | Maximum entries to return |
-| `offset` | int | 0 | Number of entries to skip |
-| `status` | string | - | Filter by status |
+| Nom | Type | Défaut | Description |
+|-----|------|--------|-------------|
+| `limit` | int | 50 | Nombre maximal d’entrées à renvoyer |
+| `offset` | int | 0 | Nombre d’entrées à ignorer |
+| `status` | string | - | Filtrer par statut |
 
-### Response
+### Réponse
 
 ```json
 {
@@ -24,7 +24,7 @@ GET /api/history
     {
       "id": "550e8400-e29b-41d4-a716-446655440000",
       "filename": "document_abc123.pdf",
-      "original_filename": "My Document.pdf",
+      "original_filename": "Mon document.pdf",
       "input_format": "pdf",
       "status": "completed",
       "confidence": 0.92,
@@ -41,33 +41,33 @@ GET /api/history
 
 ---
 
-## Get Recent History
+## Obtenir l’historique récent
 
 ```http
 GET /api/history/recent
 ```
 
-### Query Parameters
+### Paramètres de requête
 
-| Name | Type | Default | Description |
-|------|------|---------|-------------|
-| `limit` | int | 10 | Maximum entries to return |
+| Nom | Type | Défaut | Description |
+|-----|------|--------|-------------|
+| `limit` | int | 10 | Nombre maximal d’entrées à renvoyer |
 
 ---
 
-## Get History Entry
+## Obtenir une entrée d’historique
 
 ```http
 GET /api/history/{job_id}
 ```
 
-### Response
+### Réponse
 
 ```json
 {
   "id": "550e8400-e29b-41d4-a716-446655440000",
   "filename": "document_abc123.pdf",
-  "original_filename": "My Document.pdf",
+  "original_filename": "Mon document.pdf",
   "input_format": "pdf",
   "status": "completed",
   "confidence": 0.92,
@@ -85,30 +85,30 @@ GET /api/history/{job_id}
 
 ---
 
-## Charger un document depuis l'historique
+## Charger un document depuis l’historique
 
 ```http
 GET /api/history/{job_id}/load
 ```
 
-Charge un document précédemment converti depuis l'historique et le retourne comme un résultat de conversion. Cet endpoint charge le `DoclingDocument` depuis le fichier JSON stocké et le retourne dans le même format qu'un résultat de conversion frais.
+Charge un document précédemment converti depuis l’historique et le renvoie comme résultat de conversion. Ce point de terminaison charge le `DoclingDocument` depuis le fichier JSON stocké et le renvoie au même format qu’un résultat de conversion tout juste produit.
 
 ### Paramètres de chemin
 
-| Nom | Type | Requis | Description |
-|------|------|--------|-------------|
-| `job_id` | string | Oui | L'identifiant du job (doit correspondre à `[A-Za-z0-9_-]+`) |
+| Nom | Type | Obligatoire | Description |
+|-----|------|-------------|-------------|
+| `job_id` | string | Oui | Identifiant du travail (doit correspondre à `[A-Za-z0-9_-]+`) |
 
 ### Réponse
 
-Retourne un objet `ConversionResult` correspondant au format d'une conversion fraîche :
+Renvoie un objet `ConversionResult` au même format qu’une conversion fraîche :
 
 ```json
 {
   "job_id": "550e8400-e29b-41d4-a716-446655440000",
   "status": "completed",
   "document": {
-    "title": "Mon Document",
+    "title": "Mon document",
     "content": "...",
     "metadata": {...}
   },
@@ -119,48 +119,48 @@ Retourne un objet `ConversionResult` correspondant au format d'une conversion fr
 }
 ```
 
-### Réponses d'erreur
+### Réponses d’erreur
 
-**404 Not Found**: L'entrée d'historique n'existe pas
+**404 Not Found** : l’entrée d’historique n’existe pas
 ```json
 {
-  "error": "History entry {job_id} not found"
+  "error": "Entrée d’historique {job_id} introuvable"
 }
 ```
 
-**400 Bad Request**: Conversion non terminée
+**400 Bad Request** : conversion non terminée
 ```json
 {
   "job_id": "550e8400-e29b-41d4-a716-446655440000",
   "status": "pending",
-  "message": "Conversion not completed"
+  "message": "Conversion non terminée"
 }
 ```
 
 ### Notes
 
 - Ne fonctionne que pour les conversions terminées
-- Si le fichier JSON du document stocké n'est pas disponible, l'endpoint tentera de reconstruire le résultat à partir des fichiers de sortie
+- Si le fichier JSON du document stocké est indisponible, le point de terminaison tentera de reconstruire le résultat à partir des fichiers de sortie
 - Les documents sont automatiquement stockés après chaque conversion réussie
-- Le champ `document_json_path` dans les entrées d'historique indique où le JSON du document est stocké
+- Le champ `document_json_path` dans les entrées d’historique indique où le JSON du document est stocké
 
 ---
 
-## Réconcilier l'historique depuis le disque
+## Réconcilier l’historique avec le disque
 
 ```http
 POST /api/history/reconcile
 ```
 
-Analyse le répertoire de sortie pour trouver les conversions qui existent sur disque mais n'ont pas d'entrée en base de données (par ex. après perte ou réinitialisation de la base). Crée les entrées manquantes pour qu'elles apparaissent dans l'interface et puissent être rechargées.
+Parcourt le répertoire de sortie à la recherche de sorties de conversion présentes sur le disque mais sans entrée en base (par ex. après perte de la base ou redémarrage). Crée les entrées d’historique manquantes pour qu’elles apparaissent dans l’interface et puissent être rechargées.
 
-La réconciliation s'exécute également automatiquement au démarrage de l'application.
+La réconciliation s’exécute aussi automatiquement au démarrage de l’application.
 
 ### Réponse
 
 ```json
 {
-  "message": "Reconciled 3 entries from disk",
+  "message": "3 entrées réconciliées depuis le disque",
   "added_count": 3,
   "added_ids": [
     "550e8400-e29b-41d4-a716-446655440000",
@@ -172,101 +172,161 @@ La réconciliation s'exécute également automatiquement au démarrage de l'appl
 
 ### Notes
 
-- Seuls les répertoires de sortie avec des noms UUID valides et au moins un fichier de sortie (`.md`, `.html`, `.json` ou `.document.json`) sont réconciliés
+- Seuls les répertoires de sortie dont le nom est un UUID valide et qui contiennent au moins un fichier de sortie (`.md`, `.html`, `.json` ou `.document.json`) sont réconciliés
 - Les entrées déjà présentes en base sont ignorées
 
 ---
 
-## Supprimer une entrée d'historique
+## Générer des segments (chunks)
+
+```http
+POST /api/history/{job_id}/generate-chunks
+```
+
+Génère à la demande des segments RAG pour un document terminé. Charge le `DoclingDocument` depuis le disque, applique les paramètres de découpage actuels et renvoie les segments générés. Enregistre les segments sur le disque pour téléchargement.
+
+### Réponse
+
+```json
+{
+  "job_id": "550e8400-e29b-41d4-a716-446655440000",
+  "chunks": [
+    {
+      "id": 1,
+      "text": "Contenu du segment...",
+      "meta": { "page": 1, "headings": ["Titre de section"] }
+    }
+  ],
+  "count": 42
+}
+```
+
+**404 Not Found** : entrée d’historique ou document introuvable
+
+---
+
+## Supprimer une entrée d’historique
 
 ```http
 DELETE /api/history/{job_id}
 ```
 
-### Response
+### Réponse
 
 ```json
 {
-  "message": "Entry deleted",
+  "message": "Entrée supprimée",
   "job_id": "550e8400-e29b-41d4-a716-446655440000"
 }
 ```
 
 ---
 
-## Get History Statistics
+## Obtenir les statistiques d’historique
 
 ```http
 GET /api/history/stats
 ```
 
-### Response
+### Réponse
+
+Renvoie des statistiques de conversion, l’utilisation du stockage et la profondeur de la file. L’objet `conversions` inclut des métriques étendues lorsqu’elles sont disponibles.
 
 ```json
 {
-  "total": 150,
-  "completed": 142,
-  "failed": 5,
-  "pending": 2,
-  "processing": 1,
-  "success_rate": 94.7,
-  "format_breakdown": {
-    "pdf": 100,
-    "docx": 30,
-    "image": 20
-  }
+  "conversions": {
+    "total": 150,
+    "completed": 142,
+    "failed": 5,
+    "pending": 2,
+    "processing": 1,
+    "success_rate": 94.7,
+    "format_breakdown": {
+      "pdf": 100,
+      "docx": 30,
+      "image": 20
+    },
+    "avg_processing_seconds": 12.5,
+    "ocr_backend_breakdown": {
+      "easyocr": 80,
+      "ocrmac": 50,
+      "tesseract": 20
+    },
+    "output_format_breakdown": {
+      "markdown": 150
+    },
+    "performance_device_breakdown": {
+      "auto": 120,
+      "cpu": 30
+    },
+    "chunking_enabled_count": 25,
+    "error_category_breakdown": {
+      "ocr": 2,
+      "other": 3
+    },
+    "source_type_breakdown": {
+      "upload": 100,
+      "url": 30,
+      "batch": 20
+    }
+  },
+  "storage": {
+    "uploads": { "count": 10, "size_bytes": 1048576, "size_mb": 1.0 },
+    "outputs": { "count": 140, "size_bytes": 52428800, "size_mb": 50.0 },
+    "total_size_mb": 51.0
+  },
+  "queue_depth": 2
 }
 ```
 
 ---
 
-## Search History
+## Rechercher dans l’historique
 
 ```http
 GET /api/history/search
 ```
 
-### Query Parameters
+### Paramètres de requête
 
-| Name | Type | Required | Description |
-|------|------|----------|-------------|
-| `q` | string | Yes | Search query |
-| `limit` | int | No | Maximum results (default: 20) |
+| Nom | Type | Obligatoire | Description |
+|-----|------|-------------|-------------|
+| `q` | string | Oui | Requête de recherche |
+| `limit` | int | Non | Nombre maximal de résultats (défaut : 20) |
 
-### Response
+### Réponse
 
 ```json
 {
   "entries": [...],
-  "query": "invoice",
+  "query": "facture",
   "count": 5
 }
 ```
 
 ---
 
-## Export History
+## Exporter l’historique
 
 ```http
 GET /api/history/export
 ```
 
-**Response**: JSON file download with all history entries
+**Réponse** : téléchargement d’un fichier JSON contenant toutes les entrées d’historique
 
 ---
 
-## Clear All History
+## Effacer tout l’historique
 
 ```http
 DELETE /api/history
 ```
 
-### Response
+### Réponse
 
 ```json
 {
-  "message": "All history entries deleted",
+  "message": "Toutes les entrées d’historique ont été supprimées",
   "count": 150
 }
 ```
-

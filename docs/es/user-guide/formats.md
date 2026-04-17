@@ -1,101 +1,101 @@
-# Formatos compatibles
+# Formatos admitidos
 
-Complete reference for input y output formats supported by Duckling.
+Referencia completa de los formatos de entrada y salida que admite Duckling.
 
-## Input Formatos
+## Formatos de entrada
 
-### Documents
+### Documentos
 
-| Format | Extensions | Descripción | Notes |
-|--------|------------|-------------|-------|
-| PDF | `.pdf` | Portable Document Format | Full support including scanned PDFs with OCR |
-| Word | `.docx` | Microsoft Word | Modorn format only (not `.doc`) |
-| PowerPoint | `.pptx` | Microsoft PowerPoint | Extraers text y images from slides |
-| Excel | `.xlsx` | Microsoft Excel | Extraers tables y data |
-| HTML | `.html`, `.htm` | Web pages | Preserves structure y formatting |
-| Markdown | `.md`, `.markdown` | Markdown files | Full CommonMark support |
+| Formato | Extensiones | Descripción | Notas |
+|---------|-------------|-------------|-------|
+| PDF | `.pdf` | Portable Document Format | Soporte completo, incluidos PDF escaneados con OCR |
+| Word | `.docx` | Microsoft Word | Solo formato moderno (no `.doc`) |
+| PowerPoint | `.pptx` | Microsoft PowerPoint | Extrae texto e imágenes de las diapositivas |
+| Excel | `.xlsx` | Microsoft Excel | Extrae tablas y datos |
+| HTML | `.html`, `.htm` | Páginas web | Conserva estructura y formato |
+| Markdown | `.md`, `.markdown` | Archivos Markdown | Soporte completo de CommonMark |
 
-### Images
+### Imágenes
 
-| Format | Extensions | Descripción | Notes |
-|--------|------------|-------------|-------|
-| PNG | `.png` | Portable Network Graphics | Best for screenshots y diagrams |
-| JPEG | `.jpg`, `.jpeg` | Joint Photographic Experts Group | Best for photos |
-| TIFF | `.tiff`, `.tif` | Tagged Image Archivo Format | Multi-page support |
-| GIF | `.gif` | Graphics Interchange Format | First frame only |
-| WebP | `.webp` | Web Picture format | Modorn web format |
-| BMP | `.bmp` | Bitmap | Uncompressed images |
+| Formato | Extensiones | Descripción | Notas |
+|---------|-------------|-------------|-------|
+| PNG | `.png` | Portable Network Graphics | Ideal para capturas y diagramas |
+| JPEG | `.jpg`, `.jpeg` | Joint Photographic Experts Group | Ideal para fotos |
+| TIFF | `.tiff`, `.tif` | Tagged Image File Format | Soporte multipágina |
+| GIF | `.gif` | Graphics Interchange Format | Solo el primer fotograma |
+| WebP | `.webp` | Web Picture format | Formato web moderno |
+| BMP | `.bmp` | Bitmap | Imágenes sin comprimir |
 
-### Technical Documents
+### Documentos técnicos
 
-| Format | Extensions | Descripción | Notes |
-|--------|------------|-------------|-------|
-| AsciiDoc | `.asciidoc`, `.adoc` | Technical documentation | Full AsciiDoc syntax |
-| PubMed XML | `.xml` | Scientific articles | PubMed Central format |
-| USPTO XML | `.xml` | Patent documents | US Patent format |
+| Formato | Extensiones | Descripción | Notas |
+|---------|-------------|-------------|-------|
+| AsciiDoc | `.asciidoc`, `.adoc` | Documentación técnica | Sintaxis AsciiDoc completa |
+| PubMed XML | `.xml` | Artículos científicos | Formato PubMed Central |
+| USPTO XML | `.xml` | Patentes | Formato de patentes de EE. UU. |
 
-## Output Formatos
+## Formatos de salida
 
-### Text Formatos
+### Formatos de texto
 
 #### Markdown (`.md`)
 
-Best for documentation y content that needs formatting.
+Lo mejor para documentación y contenido que necesita formato.
 
 ```markdown
-# Document Title
+# Título del documento
 
-## Section 1
+## Sección 1
 
-This is a paragraph with **bold** and *italic* text.
+Este es un párrafo con texto en **negrita** y en *cursiva*.
 
-- List item 1
-- List item 2
+- Elemento de lista 1
+- Elemento de lista 2
 
-| Column 1 | Column 2 |
-|----------|----------|
-| Data 1   | Data 2   |
+| Columna 1 | Columna 2 |
+|-----------|-----------|
+| Dato 1    | Dato 2    |
 ```
 
 #### HTML (`.html`)
 
-Web-ready format with styling preserved.
+Formato listo para la web con estilos conservados.
 
 ```html
-<h1>Document Title</h1>
-<h2>Section 1</h2>
-<p>This is a paragraph with <strong>bold</strong> and <em>italic</em> text.</p>
+<h1>Título del documento</h1>
+<h2>Sección 1</h2>
+<p>Este es un párrafo con texto en <strong>negrita</strong> y en <em>cursiva</em>.</p>
 ```
 
 #### Texto plano (`.txt`)
 
-Simple text without any formatting.
+Texto simple sin formato.
 
 ```
-Document Title
+Título del documento
 
-Section 1
+Sección 1
 
-This is a paragraph with bold and italic text.
+Este es un párrafo con texto en negrita y en cursiva.
 ```
 
-### Structured Formatos
+### Formatos estructurados
 
 #### JSON (`.json`)
 
-Estructura completa del documento in JSON format. Lossless representation.
+Estructura completa del documento en JSON. Representación sin pérdida.
 
 ```json
 {
-  "title": "Document Title",
+  "title": "Título del documento",
   "sections": [
     {
-      "heading": "Section 1",
+      "heading": "Sección 1",
       "level": 2,
       "content": [
         {
           "type": "paragraph",
-          "text": "This is a paragraph..."
+          "text": "Este es un párrafo..."
         }
       ]
     }
@@ -105,45 +105,45 @@ Estructura completa del documento in JSON format. Lossless representation.
 
 #### DocTags (`.doctags`)
 
-Tagged document format for semantic analysis.
+Formato de documento etiquetado para análisis semántico.
 
 ```
 <document>
-  <title>Document Title</title>
+  <title>Título del documento</title>
   <section level="2">
-    <heading>Section 1</heading>
-    <paragraph>This is a paragraph...</paragraph>
+    <heading>Sección 1</heading>
+    <paragraph>Este es un párrafo...</paragraph>
   </section>
 </document>
 ```
 
 #### Document Tokens (`.tokens.json`)
 
-Token-level representation for NLP applications.
+Representación a nivel de tokens para aplicaciones de PLN.
 
 ```json
 {
   "tokens": [
-    {"text": "Document", "type": "word", "position": 0},
-    {"text": "Title", "type": "word", "position": 1}
+    {"text": "Documento", "type": "word", "position": 0},
+    {"text": "Título", "type": "word", "position": 1}
   ]
 }
 ```
 
-### RAG Formatos
+### Formatos RAG
 
 #### RAG Chunks (`.chunks.json`)
 
-Document chunks optimized for retrieval-augmented generation.
+Fragmentos de documento optimizados para generación aumentada por recuperación (RAG).
 
 ```json
 {
   "chunks": [
     {
       "id": 1,
-      "text": "This is the first chunk of text...",
+      "text": "Este es el primer fragmento de texto...",
       "meta": {
-        "headings": ["Section 1"],
+        "headings": ["Sección 1"],
         "page": 1,
         "token_count": 128
       }
@@ -152,40 +152,39 @@ Document chunks optimized for retrieval-augmented generation.
 }
 ```
 
-## Format Selection Guide
+## Guía de selección de formato
 
-| Use Case | Recommended Format |
-|----------|-------------------|
+| Caso de uso | Formato recomendado |
+|-------------|---------------------|
 | Documentación | Markdown |
-| Web publishing | HTML |
-| Data processing | JSON |
-| Search indexing | Texto plano |
-| NLP/ML pipelines | Document Tokens |
-| RAG applications | RAG Chunks |
-| Semantic analysis | DocTags |
+| Publicación web | HTML |
+| Procesamiento de datos | JSON |
+| Indexación de búsqueda | Texto plano |
+| Pipelines de PLN / ML | Document Tokens |
+| Aplicaciones RAG | RAG Chunks |
+| Análisis semántico | DocTags |
 
-## API Format Parameter
+## Parámetro de formato de la API
 
-When using the API, specify the format in the export endpoint:
+Al usar la API, indique el formato en el punto final de exportación:
 
 ```bash
-# Download as Markdown
+# Descargar como Markdown
 curl http://localhost:5001/api/export/{job_id}/markdown
 
-# Download as JSON
+# Descargar como JSON
 curl http://localhost:5001/api/export/{job_id}/json
 
-# Download as HTML
+# Descargar como HTML
 curl http://localhost:5001/api/export/{job_id}/html
 ```
 
-## MIME Types
+## Tipos MIME
 
-| Format | MIME Type |
-|--------|-----------|
+| Formato | Tipo MIME |
+|---------|-----------|
 | Markdown | `text/markdown` |
 | HTML | `text/html` |
 | JSON | `application/json` |
 | Texto plano | `text/plain` |
 | DocTags | `application/xml` |
-

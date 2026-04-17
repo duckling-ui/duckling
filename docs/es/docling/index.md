@@ -14,3 +14,11 @@ Esta sección incluye una **selección** de la documentación oficial de Docling
 - [Architecture](architecture.md)
 - [DoclingDocument](docling-document.md)
 
+## Actualizar estas páginas
+
+Para volver a sincronizar desde el proyecto upstream:
+
+```bash
+python3 scripts/sync_docling_docs.py
+```
+

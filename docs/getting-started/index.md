@@ -5,7 +5,7 @@ Welcome to Duckling! This section will help you get up and running quickly.
 !!! tip "Fastest Way to Start"
     **Using Docker?** Run this single command and you're done:
     ```bash
-    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml && docker-compose -f docker-compose.prebuilt.yml up -d
     ```
     Then open [http://localhost:3000](http://localhost:3000) in your browser.
 

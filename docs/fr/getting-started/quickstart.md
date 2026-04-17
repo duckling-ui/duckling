@@ -2,35 +2,35 @@
 
 Démarrez avec Duckling en 5 minutes.
 
-## Démarrer l'application
+## Lancer l’application
 
 Choisissez votre méthode préférée :
 
-=== "Docker (recommeté)"
+=== "Docker (recommandé)"
 
-    Le moyen le plus rapide de démarrer - aucune dépendance à installer !
+    Le moyen le plus rapide pour commencer — aucune dépendance à installer !
 
-    **Option 1 : Images préconstruites (le plus rapide)**
+    **Option 1 : Images préconstruites (la plus rapide)**
     ```bash
-    # Download the compose file
-    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml
+    # Télécharger le fichier compose
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml
 
-    # Start Duckling
+    # Démarrer Duckling
     docker-compose -f docker-compose.prebuilt.yml up -d
     ```
 
     **Option 2 : Construire localement**
     ```bash
-    # Clone and start
+    # Cloner le dépôt et démarrer
     git clone https://github.com/duckling-ui/duckling.git
     cd duckling
     docker-compose up --build
     ```
 
-    L'interface sera disponible à `http://localhost:3000`
+    L’interface est disponible sur `http://localhost:3000`
 
-    !!! tip "Premier démarrage"
-        Le premier démarrage peut prendre quelques minutes pendant que Docker télécharge/construit les images.
+    !!! tip "Premier lancement"
+        Le premier démarrage peut prendre quelques minutes pendant que Docker télécharge ou construit les images.
 
 === "Configuration manuelle"
 
@@ -38,11 +38,11 @@ Choisissez votre méthode préférée :
 
     ```bash
     cd backend
-    source venv/bin/activate  # Windows: venv\Scripts\activate
+    source venv/bin/activate  # Windows : venv\Scripts\activate
     python duckling.py
     ```
 
-    L'API sera disponible à `http://localhost:5001`
+    L’API est disponible sur `http://localhost:5001`
 
     ### Terminal 2 : Frontend
 
@@ -51,113 +51,102 @@ Choisissez votre méthode préférée :
     npm run dev
     ```
 
-    L'interface sera disponible à `http://localhost:3000`
+    L’interface est disponible sur `http://localhost:3000`
 
 ## Votre première conversion
 
-### 1. Ouvrir l'application
+### 1. Ouvrir l’application
 
-Accédez à `http://localhost:3000` dans votre navigateur.
-
-<figure markdown="span">
-  ![Duckling Interface](../../assets/screenshots/ui/main-english.png){ loading=lazy }
-  <figcaption>L'interface principale de Duckling</figcaption>
-</figure>
-
-### 2. Télécharger un document
-
-Glissez-déposez un PDF, document Word ou image dans la zone de dépôt, ou cliquez pour parcourir.
+Ouvrez `http://localhost:3000` dans votre navigateur.
 
 <figure markdown="span">
-  ![Uploading Document](../../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
-  <figcaption>Indicateur de progression du téléchargement</figcaption>
+  ![Interface Duckling](../../assets/screenshots/ui/main-french.png){ loading=lazy }
+  <figcaption>L’interface principale de Duckling</figcaption>
 </figure>
+
+### 2. Téléverser un document
+
+Glissez-déposez un PDF, un document Word ou une image dans la zone de dépôt, ou cliquez pour parcourir.
+
 
 ### 3. Suivre la progression
 
-La progression de la conversion sera affichée en temps réel.
-
-<figure markdown="span">
-  ![Conversion Progress](../../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
-  <figcaption>Progression de conversion en temps réel</figcaption>
-</figure>
+La progression de la conversion s’affiche en temps réel.
 
 ### 4. Télécharger les résultats
 
-Une fois terminé, choisissez votre format d'exportation :
+Une fois terminé, choisissez votre format d’export :
 
 <figure markdown="span">
-  ![Conversion Complete](../../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
-  <figcaption>Conversion terminée avec options d'export</figcaption>
+  ![Conversion terminée](../../assets/screenshots/features/conversion-complete-fr.png){ loading=lazy }
+  <figcaption>Conversion terminée avec options d’export</figcaption>
 </figure>
 
-- **Markdown** - Idéal pour la documentation
-- **HTML** - Sortie prête pour le web
-- **JSON** - Structure complète du document
-- **Texte brut** - Extraireion de texte simple
+- **Markdown** – Idéal pour la documentation
+- **HTML** – Sortie prête pour le web
+- **JSON** – Structure complète du document
+- **Texte brut** – Extraction de texte simple
 
 ## Configuration de base
 
-Cliquez sur :material-cog: **Paramètres** bouton pour configurer :
+Cliquez sur le bouton :material-cog: **Paramètres** pour configurer :
 
 ### Paramètres OCR
 
 | Paramètre | Par défaut | Description |
-|---------|---------|-------------|
-| Activé | `true` | Activer l'OCR pour les documents numérisés |
-| Backend | `easyocr` | Moteur OCR à utiliser |
+|-----------|------------|-------------|
+| Activé | `true` | Activer l’OCR pour les documents numérisés |
+| Moteur | `easyocr` | Moteur OCR à utiliser |
 | Langue | `en` | Langue principale |
 
 ### Paramètres des tableaux
 
 | Paramètre | Par défaut | Description |
-|---------|---------|-------------|
+|-----------|------------|-------------|
 | Activé | `true` | Extraire les tableaux des documents |
-| Mode | `précis` | Niveau de précision de détection |
+| Mode | `accurate` | Niveau de précision de détection |
 
 ### Paramètres des images
 
 | Paramètre | Par défaut | Description |
-|---------|---------|-------------|
+|-----------|------------|-------------|
 | Extraire | `true` | Extraire les images intégrées |
 | Échelle | `1.0` | Échelle de sortie des images |
 
-## Plusieurs fichiers à la fois
+## Traitement par lots
 
 Pour convertir plusieurs fichiers à la fois :
 
-1. Glissez plusieurs fichiers dans la zone, choisissez un dossier ou utilisez **Choisir des fichiers…**
-2. Les fichiers sont traités via la file de tâches (voir Fonctionnalités pour les limites de parallélisme)
+1. **Glissez-déposez** plusieurs fichiers **ou un dossier entier** dans la zone de dépôt. Le navigateur développe un dossier en liste de fichiers ; Duckling met en file chaque document pris en charge (les types non pris en charge sont ignorés).
+2. **Cliquez** sur la zone de dépôt pour ouvrir un sélecteur de **dossier** et téléverser d’un coup tous les fichiers pris en charge qu’il contient.
+3. Utilisez **Choisir des fichiers…** lorsque vous voulez sélectionner **uniquement des fichiers** (pas le mode dossier).
 
-<figure markdown="span">
-  ![Plusieurs fichiers](../../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Plusieurs fichiers sélectionnés pour le téléversement</figcaption>
-</figure>
+Tous les fichiers en file sont traités selon la file d’attente des tâches (voir [Fonctionnalités](../user-guide/features.md) pour les limites de concurrence).
 
 !!! tip "Performances"
-    Le traitement par lots utilise une file d'attente de tâches avec un maximum de 2 conversions simultanées pour éviter l'épuisement de la mémoire.
+    Le traitement par lots utilise une file d’attente avec au plus 2 conversions simultanées pour éviter l’épuisement de la mémoire.
 
-## Utiliser l'API
+## Utiliser l’API
 
-Pour un accès programmatique, utilisez l'API REST :
+Pour un accès programmatique, utilisez l’API REST :
 
 ```bash
-# Upload and convert a document
+# Téléverser et convertir un document
 curl -X POST http://localhost:5001/api/convert \
   -F "file=@document.pdf"
 
-# Response
+# Réponse
 {
   "job_id": "550e8400-e29b-41d4-a716-446655440000",
   "status": "processing"
 }
 ```
 
-Consultez la [Référence API](../api/index.md) pour la documentation complète.
+Consultez la [référence API](../api/index.md) pour la documentation complète.
 
-## Prochaines étapes
+## Étapes suivantes
 
-- [Fonctionnalités](../user-guide/features.md) - Explorer toutes les fonctionnalités
-- [Configuration](../user-guide/configuration.md) - Paramètres avancés
-- [Référence API](../api/index.md) - Intégrer à vos applications
+- [Fonctionnalités](../user-guide/features.md) – Explorer toutes les capacités
+- [Configuration](../user-guide/configuration.md) – Paramètres avancés
+- [Référence API](../api/index.md) – Intégrer à vos applications
 

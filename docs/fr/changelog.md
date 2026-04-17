@@ -9,6 +9,20 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 
 ## [Non publié]
 
+### Documentation
+
+- **Déploiement** : [deployment/index.md](deployment/index.md), [deployment/production.md](deployment/production.md), [deployment/scaling.md](deployment/scaling.md) et [deployment/security.md](deployment/security.md) entièrement traduits (libellés Mermaid localisés) ; équivalents en `de`/`es`.
+- **Premiers pas** : [index.md](getting-started/index.md), [installation.md](getting-started/installation.md), [quickstart.md](getting-started/quickstart.md) et [docker.md](getting-started/docker.md) entièrement traduits ; miroirs `de`/`es` ; formulation CI/CD clarifiée dans la version anglaise [docker.md](../getting-started/docker.md).
+- **Guide utilisateur** : pages [Formats pris en charge](user-guide/formats.md) et [Galerie de captures d’écran](user-guide/screenshots.md) entièrement traduites ; équivalents en `de`/`es`.
+- **Démarrage rapide** : la section « Plusieurs fichiers à la fois » dans [getting-started/quickstart.md](getting-started/quickstart.md) décrit le glisser-déposer de dossier, le clic sur la zone pour choisir un dossier et **Choisir des fichiers…** pour plusieurs fichiers sans mode dossier ; reflété en `de`/`es`.
+- **Guide utilisateur** : [Fonctionnalités](user-guide/features.md) entièrement traduits (titres et texte) pour la table des matières latérale ; doublon « Panneau des statistiques » supprimé dans la version anglaise.
+- **Pages d’accueil** : [index.md](index.md) — tuiles vers les ancres françaises de la page Fonctionnalités, liste Documentation, liens Bien démarrer / Démarrage rapide, remerciements ; `de`/`es` alignés (ancres localisées, Docling sur `de`, journal des modifications sur `es`).
+- **Guide utilisateur** : [Configuration](user-guide/configuration.md) entièrement traduite ; pages Fonctionnalités et Configuration traduites en `de`/`es`.
+- **API** : [api/index.md](api/index.md), [api/conversion.md](api/conversion.md), [api/settings.md](api/settings.md) et [api/history.md](api/history.md) entièrement traduits ; miroirs `de`/`es`.
+- **Architecture (pages détaillées)** : [architecture/overview.md](architecture/overview.md), [architecture/components.md](architecture/components.md) et [architecture/diagrams.md](architecture/diagrams.md) entièrement traduits ; miroirs `de`/`es`.
+- **Contribuer** : toutes les pages sous [contributing/](contributing/index.md) traduites ; ancres stables `{#commit-messages}` et `{#dco-sign-off}` dans [contributing/code-style.md](contributing/code-style.md).
+- **Docling / captures** : section de mise à jour dans [docling/index.md](docling/index.md) ; [images/README.md](images/README.md) entièrement en français.
+
 ### Prévu
 
 - Authentification des utilisateurs

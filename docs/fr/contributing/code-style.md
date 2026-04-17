@@ -2,32 +2,32 @@
 
 Normes et conventions de codage pour Duckling.
 
-## Python (Backend)
+## Python (backend)
 
-### Directives générales
+### Lignes directrices générales
 
-- Suivre les directives PEP 8
-- Utiliser les type hints
-- Longueur maximale de ligne : 100 caractères
-- Utiliser des docstrings pour les fonctions et classes
+- Suivre PEP 8
+- Utiliser les annotations de type
+- Longueur de ligne maximale : 100 caractères
+- Utiliser des docstrings pour les fonctions et les classes
 
 ### Documentation des fonctions
 
 ```python
 def convert_document(file_path: str, settings: dict) -> ConversionResult:
     """
-    Convert a document using Docling.
+    Convertit un document avec Docling.
 
     Args:
-        file_path: Path to the document file
-        settings: Conversion settings dictionary
+        file_path: Chemin vers le fichier document
+        settings: Dictionnaire des paramètres de conversion
 
     Returns:
-        ConversionResult object with converted content
+        Objet ConversionResult avec le contenu converti
 
     Raises:
-        ValueError: If file format is not supported
-        IOError: If file cannot be read
+        ValueError: Si le format de fichier n'est pas pris en charge
+        IOError: Si le fichier ne peut pas être lu
     """
     pass
 ```
@@ -37,21 +37,21 @@ def convert_document(file_path: str, settings: dict) -> ConversionResult:
 ```python
 class ConverterService:
     """
-    Service for document conversion operations.
+    Service pour les opérations de conversion de documents.
 
-    This service manages the conversion pipeline, job queue,
-    and interaction with the Docling library.
+    Ce service gère le pipeline de conversion, la file d'attente des tâches
+    et l'interaction avec la bibliothèque Docling.
 
     Attributes:
-        _job_queue: Queue for pending conversion jobs
-        _max_concurrent_jobs: Maximum parallel conversions
+        _job_queue: File des tâches de conversion en attente
+        _max_concurrent_jobs: Nombre maximal de conversions parallèles
     """
     pass
 ```
 
 ### Imports
 
-Ordre des imports :
+Ordonner les imports ainsi :
 
 1. Bibliothèque standard
 2. Paquets tiers
@@ -71,7 +71,7 @@ from services.converter import ConverterService
 
 ### Formatage
 
-Utiliser Black pour le formatage automatique :
+Utiliser Black pour le formatage automatique :
 
 ```bash
 pip install black
@@ -80,16 +80,16 @@ black backend/
 
 ---
 
-## TypeScript/React (Frontend)
+## TypeScript/React (frontend)
 
-### Directives générales
+### Lignes directrices générales
 
-- Utiliser des composants fonctionnels avec des hooks
-- Utiliser TypeScript pour la sécurité des types
-- Suivre la configuration ESLint
-- Utiliser des noms significatifs pour les composants et variables
+- Composants fonctionnels avec hooks
+- TypeScript pour la sûreté des types
+- Respecter la configuration ESLint
+- Noms de composants et de variables explicites
 
-### Structure des composants
+### Structure d’un composant
 
 ```typescript
 interface ButtonProps {
@@ -150,14 +150,14 @@ components/
 ### Imports
 
 ```typescript
-// React and hooks first
+// React et hooks en premier
 import { useState, useCallback, useEffect } from 'react';
 
-// Third-party libraries
+// Bibliothèques tierces
 import { motion } from 'framer-motion';
 import axios from 'axios';
 
-// Local components
+// Composants locaux
 import { Button } from '@/components/Button';
 import { useConversion } from '@/hooks/useConversion';
 
@@ -167,7 +167,7 @@ import type { ConversionResult } from '@/types';
 
 ### Formatage
 
-Utiliser Prettier pour le formatage automatique :
+Utiliser Prettier pour le formatage automatique :
 
 ```bash
 npm run format
@@ -177,14 +177,14 @@ npm run format
 
 ## Messages de commit {#commit-messages}
 
-Suivre les [Conventional Commits](https://www.conventionalcommits.org/) :
+Suivre [Conventional Commits](https://www.conventionalcommits.org/) :
 
 ```
 type(scope): description
 
-[optional body]
+[corps optionnel]
 
-[optional footer]
+[pied de page optionnel]
 ```
 
 ### Types
@@ -192,53 +192,53 @@ type(scope): description
 | Type | Description |
 |------|-------------|
 | `feat` | Nouvelle fonctionnalité |
-| `fix` | Correction de bug |
-| `docs` | Documentation |
+| `fix` | Correction de bogue |
+| `docs` | Modifications de documentation |
 | `style` | Style de code (formatage) |
 | `refactor` | Refactorisation |
-| `test` | Ajout/mise à jour de tests |
-| `chore` | Maintenance |
+| `test` | Ajout ou mise à jour de tests |
+| `chore` | Tâches de maintenance |
 
 ### Exemples
 
 ```
-feat(upload): add drag-and-drop file upload
+feat(upload): ajouter le dépôt de fichiers par glisser-déposer
 
-Implemented drag-and-drop functionality using react-dropzone.
-Supports multiple file selection and folder upload in the default drop zone.
+Fonctionnalité glisser-déposer implémentée avec react-dropzone.
+Prise en charge de la sélection multiple et du dépôt de dossier dans la zone par défaut.
 
 Closes #123
 
-Signed-off-by: Your Name <your.email@example.com>
+Signed-off-by: Votre Nom <votre.email@exemple.com>
 ```
 
 ```
-fix(converter): handle large PDF files correctly
+fix(converter): traiter correctement les gros fichiers PDF
 
-Fixed memory issue when processing PDFs > 50MB by streaming
-the file instead of loading entirely into memory.
+Problème de mémoire corrigé pour les PDF > 50 Mo en diffusant
+le fichier au lieu de le charger entièrement en mémoire.
 ```
 
 ```
-docs(readme): update installation instructions
+docs(readme): mettre à jour les instructions d'installation
 
-Added Docker setup instructions and troubleshooting section.
+Ajout des instructions Docker et d'une section dépannage.
 ```
 
 ### Signature DCO {#dco-sign-off}
 
-Tous les commits **DOIVENT** être signés avec le [Developer Certificate of Origin (DCO)](https://developercertificate.org/). Cela certifie que vous avez le droit de soumettre la contribution sous la licence du projet.
+Tous les commits **DOIVENT** être signés avec le [Developer Certificate of Origin (DCO)](https://developercertificate.org/). Cela atteste que vous avez le droit de soumettre la contribution sous la licence du projet.
 
-Ajoutez la signature à chaque commit avec `git commit -s` :
+Ajoutez la signature à chaque commit avec `git commit -s` :
 
 ```bash
-git commit -s -m "feat(upload): add drag-and-drop file upload"
+git commit -s -m "feat(upload): ajouter le dépôt de fichiers par glisser-déposer"
 ```
 
-Cela ajoute une ligne `Signed-off-by:` avec votre nom et email de votre configuration Git. Vous pouvez aussi l'ajouter manuellement à la fin du message de commit :
+Cela ajoute une ligne `Signed-off-by:` avec votre nom et votre e-mail issus de la configuration Git. Vous pouvez aussi l’ajouter manuellement à la fin du message de commit :
 
 ```
-Signed-off-by: Your Name <your.email@example.com>
+Signed-off-by: Votre Nom <votre.email@exemple.com>
 ```
 
 Les PR avec des commits non signés ne seront pas fusionnées.
@@ -249,24 +249,24 @@ Les PR avec des commits non signés ne seront pas fusionnées.
 
 ### Organisation des classes
 
-Ordre des classes Tailwind de manière cohérente :
+Ordonner les classes Tailwind de façon cohérente :
 
-1. Layout (flex, grid, position)
+1. Mise en page (flex, grid, position)
 2. Espacement (margin, padding)
-3. Taille (width, height)
+3. Dimensions (width, height)
 4. Typographie (font, text)
 5. Visuel (background, border, shadow)
 6. Interactif (hover, focus)
 
 ```tsx
 <div className="flex items-center gap-4 p-4 w-full text-sm bg-gray-800 rounded-lg hover:bg-gray-700">
-  {/* content */}
+  {/* contenu */}
 </div>
 ```
 
 ### Classes personnalisées
 
-Utiliser `@apply` avec parcimonie, préférer la composition :
+Utiliser `@apply` avec parcimonie, préférer la composition :
 
 ```css
 /* Préférer ceci */
@@ -274,18 +274,18 @@ Utiliser `@apply` avec parcimonie, préférer la composition :
   @apply px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600;
 }
 
-/* Plutôt que des classes inline partout */
+/* Plutôt que des classes en ligne partout */
 ```
 
 ---
 
-## Conception API
+## Conception d’API
 
-### Nommage des endpoints
+### Nommage des points de terminaison
 
 - Utiliser des noms, pas des verbes
-- Utiliser les formes plurielles
-- Utiliser kebab-case pour les ressources multi-mots
+- Formes plurielles
+- kebab-case pour les ressources multi-mots
 
 ```
 GET    /api/conversions
@@ -308,12 +308,12 @@ GET    /api/conversions/{id}/status
 }
 ```
 
-### Format d'erreur
+### Format d’erreur
 
 ```json
 {
   "error": "ValidationError",
-  "message": "File type not supported",
+  "message": "Type de fichier non pris en charge",
   "details": {
     "field": "file",
     "allowed": ["pdf", "docx", "png"]

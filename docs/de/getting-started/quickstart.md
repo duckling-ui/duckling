@@ -4,33 +4,33 @@ Starten Sie in 5 Minuten mit Duckling.
 
 ## Anwendung starten
 
-Wählen Sie Ihre bevorzugte Methodee:
+Wählen Sie Ihre bevorzugte Methode:
 
 === "Docker (empfohlen)"
 
-    Der schnellste Weg zum Start - keine Abhängigkeiten zu installieren!
+    Der schnellste Weg zum Start – keine Abhängigkeiten zu installieren!
 
     **Option 1: Vorgefertigte Images (am schnellsten)**
     ```bash
-    # Download the compose file
-    curl -O https://raw.githubusercontent.com/davidgs/duckling/main/docker-compose.prebuilt.yml
+    # Compose-Datei herunterladen
+    curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml
 
-    # Start Duckling
+    # Duckling starten
     docker-compose -f docker-compose.prebuilt.yml up -d
     ```
 
     **Option 2: Lokal erstellen**
     ```bash
-    # Clone and start
+    # Repository klonen und starten
     git clone https://github.com/duckling-ui/duckling.git
     cd duckling
     docker-compose up --build
     ```
 
-    Die Benutzeroberfläche ist verfügbar unter `http://localhost:3000`
+    Die Benutzeroberfläche ist unter `http://localhost:3000` erreichbar.
 
     !!! tip "Erster Start"
-        Der erste Start kann einige Minuten dauern, da Docker die Images herunterlädt/erstellt.
+        Der erste Start kann einige Minuten dauern, während Docker die Images herunterlädt oder baut.
 
 === "Manuelle Einrichtung"
 
@@ -42,7 +42,7 @@ Wählen Sie Ihre bevorzugte Methodee:
     python duckling.py
     ```
 
-    Die API ist verfügbar unter `http://localhost:5001`
+    Die API ist unter `http://localhost:5001` erreichbar.
 
     ### Terminal 2: Frontend
 
@@ -51,113 +51,101 @@ Wählen Sie Ihre bevorzugte Methodee:
     npm run dev
     ```
 
-    Die Benutzeroberfläche ist verfügbar unter `http://localhost:3000`
+    Die Benutzeroberfläche ist unter `http://localhost:3000` erreichbar.
 
 ## Ihre erste Konvertierung
 
 ### 1. Anwendung öffnen
 
-Navigieren Sie zu `http://localhost:3000` in Ihrem Browser.
+Öffnen Sie `http://localhost:3000` im Browser.
 
 <figure markdown="span">
-  ![Duckling Interface](../../assets/screenshots/ui/main-english.png){ loading=lazy }
+  ![Duckling-Oberfläche](../../assets/screenshots/ui/main-german.png){ loading=lazy }
   <figcaption>Die Hauptoberfläche von Duckling</figcaption>
 </figure>
 
 ### 2. Dokument hochladen
 
-Ziehen Sie eine PDF-, Word-Datei oder ein Bild in die Ablagezone oder klicken Sie zum Durchsuchen.
-
-<figure markdown="span">
-  ![Uploading Document](../../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
-  <figcaption>Fortschrittsanzeige beim Hochladen</figcaption>
-</figure>
+Ziehen Sie eine PDF-, Word-Datei oder ein Bild in die Ablagezone, oder klicken Sie zum Durchsuchen.
 
 ### 3. Fortschritt beobachten
 
 Der Konvertierungsfortschritt wird in Echtzeit angezeigt.
 
-<figure markdown="span">
-  ![Konvertierung Progress](../../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
-  <figcaption>Echtzeit-Konvertierungsfortschritt</figcaption>
-</figure>
-
 ### 4. Ergebnisse herunterladen
 
-Wählen Sie nach Abschluss Ihr Exportformat:
+Nach Abschluss wählen Sie Ihr Exportformat:
 
 <figure markdown="span">
-  ![Konvertierung Complete](../../assets/screenshots/features/conversion-complete.svg){ loading=lazy }
+  ![Konvertierung abgeschlossen](../../assets/screenshots/features/conversion-complete-de.png){ loading=lazy }
   <figcaption>Konvertierung abgeschlossen mit Exportoptionen</figcaption>
 </figure>
 
-- **Markdown** - Ideal für Dokumentation
-- **HTML** - Webfertige Ausgabe
-- **JSON** - Vollständige Dokumentstruktur
-- **Klartext** - Einfache Textextraktion
+- **Markdown** – Gut für Dokumentation
+- **HTML** – Ausgabe für das Web
+- **JSON** – Vollständige Dokumentstruktur
+- **Nur Text** – Einfache Textextraktion
 
-## Grundkonfiguration
+## Grundlegende Konfiguration
 
-Klicken Sie auf :material-cog: **Einstellungen** Schaltfläche zum Konfigurieren:
+Klicken Sie auf die Schaltfläche :material-cog: **Einstellungen**, um zu konfigurieren:
 
 ### OCR-Einstellungen
 
-| Einstellung | Stundard | Beschreibung |
-|---------|---------|-------------|
+| Einstellung | Standard | Beschreibung |
+|-------------|----------|--------------|
 | Aktiviert | `true` | OCR für gescannte Dokumente aktivieren |
 | Backend | `easyocr` | Zu verwendende OCR-Engine |
-| Sprache | `en` | Hauptsprache |
+| Sprache | `en` | Primärsprache |
 
 ### Tabelleneinstellungen
 
-| Einstellung | Stundard | Beschreibung |
-|---------|---------|-------------|
+| Einstellung | Standard | Beschreibung |
+|-------------|----------|--------------|
 | Aktiviert | `true` | Tabellen aus Dokumenten extrahieren |
-| Modus | `genau` | Erkennungsgenauigkeitsstufe |
+| Modus | `accurate` | Genauigkeit der Erkennung |
 
 ### Bildeinstellungen
 
-| Einstellung | Stundard | Beschreibung |
-|---------|---------|-------------|
+| Einstellung | Standard | Beschreibung |
+|-------------|----------|--------------|
 | Extrahieren | `true` | Eingebettete Bilder extrahieren |
-| Skalierung | `1.0` | Bildausgabeskalierung |
+| Skalierung | `1.0` | Ausgabeskala für Bilder |
 
-## Mehrere Dateien auf einmal
+## Stapelverarbeitung
 
-Um mehrere Dateien gleichzeitig zu konvertieren:
+Um mehrere Dateien auf einmal zu konvertieren:
 
-1. Ziehen Sie mehrere Dateien in die Zone, wählen Sie einen Ordner oder nutzen Sie **Dateien wählen…**
-2. Die Dateien werden über die Job-Warteschlange verarbeitet (siehe Features zu parallelen Limits)
+1. **Ziehen Sie** mehrere Dateien **oder einen ganzen Ordner** per Drag-and-drop in die Ablagezone. Der Browser löst einen Ordner in seine Dateien auf; Duckling reiht jedes unterstützte Dokument ein (nicht unterstützte Typen werden übersprungen).
+2. **Klicken** Sie auf die Ablagezone, um einen **Ordner**-Dialog zu öffnen und alle unterstützten Dateien darin auf einmal hochzuladen.
+3. Nutzen Sie **Dateien auswählen…**, wenn Sie nur **einzelne Dateien** wählen möchten (kein Ordnermodus).
 
-<figure markdown="span">
-  ![Mehrere Dateien](../../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Mehrere Dateien zum Upload ausgewählt</figcaption>
-</figure>
+Alle eingereihten Dateien werden über die Auftragswarteschlange verarbeitet (siehe [Funktionen](../user-guide/features.md) zu gleichzeitigen Grenzen).
 
 !!! tip "Leistung"
-    Die Stapelverarbeitung verwendet eine Job-Warteschlange mit maximal 2 gleichzeitigen Konvertierungen, um Speichererschöpfung zu vermeiden.
+    Die Stapelverarbeitung nutzt eine Auftragswarteschlange mit maximal 2 gleichzeitigen Konvertierungen, um Speicherüberlastung zu vermeiden.
 
-## API verwenden
+## API nutzen
 
 Für programmatischen Zugriff verwenden Sie die REST-API:
 
 ```bash
-# Upload and convert a document
+# Dokument hochladen und konvertieren
 curl -X POST http://localhost:5001/api/convert \
   -F "file=@document.pdf"
 
-# Response
+# Antwort
 {
   "job_id": "550e8400-e29b-41d4-a716-446655440000",
   "status": "processing"
 }
 ```
 
-Siehe die [API-Referenz](../api/index.md) für vollständige Dokumentation.
+Die [API-Referenz](../api/index.md) enthält die vollständige Dokumentation.
 
 ## Nächste Schritte
 
-- [Funktionen](../user-guide/features.md) - Alle Funktionen erkunden
-- [Konfiguration](../user-guide/configuration.md) - Erweiterte Einstellungen
-- [API-Referenz](../api/index.md) - In Ihre Apps integrieren
+- [Funktionen](../user-guide/features.md) – Alle Möglichkeiten entdecken
+- [Konfiguration](../user-guide/configuration.md) – Erweiterte Einstellungen
+- [API-Referenz](../api/index.md) – In Ihre Apps integrieren
 

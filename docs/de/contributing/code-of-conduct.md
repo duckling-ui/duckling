@@ -6,111 +6,111 @@
 
 Wir verpflichten uns, unsere Gemeinschaft für alle einladend, sicher und gerecht zu gestalten.
 
-Wir setzen uns für eine Umgebung ein, die die Würde, Rechte und Beiträge aller Menschen respektiert und fördert – unabhängig von Merkmalen wie ethnischer Zugehörigkeit, Kaste, Hautfarbe, Alter, körperlichen Merkmalen, Neurodiversität, Behinderung, Geschlecht oder Geschlechtsidentität, sexueller Orientierung, Sprache, Philosophie oder Religion, nationaler oder sozialer Herkunft, sozioökonomischer Stellung, Bildungsniveau oder anderem Status. Dieselben Teilnahmerechte gelten für alle, die in gutem Glauben und in Übereinstimmung mit diesem Covenant teilnehmen.
+Wir fördern ein Umfeld, das die Würde, Rechte und Beiträge aller Menschen achtet und fördert – unabhängig von Merkmalen wie Hautfarbe, ethnischer Zugehörigkeit, Kaste, Alter, körperlichen Eigenschaften, Neurodiversität, Behinderung, biologischem oder sozialem Geschlecht, geschlechtlicher Identität oder Ausdrucksform, sexueller Orientierung, Sprache, Philosophie oder Religion, nationaler oder sozialer Herkunft, sozioökonomischer Stellung, Bildungsstand oder anderem Status. Dieselben Teilnahmerechte gelten für alle, die in gutem Glauben handeln und diesen Kodex einhalten.
 
 ---
 
-## Ermutigte Verhaltensweisen
+## Erwünschtes Verhalten
 
-Bei Anerkennung von Unterschieden in sozialen Normen streben wir alle danach, die Erwartungen unserer Gemeinschaft an positives Verhalten zu erfüllen. Wir verstehen auch, dass unsere Worte und Taten je nach Kultur, Hintergrund oder Muttersprache anders interpretiert werden können als beabsichtigt.
+Wir wissen, dass soziale Normen unterschiedlich sind, und bemühen uns dennoch, die Erwartungen unserer Gemeinschaft an positives Verhalten zu erfüllen. Wir sind uns bewusst, dass unsere Worte und Taten je nach Kultur, Hintergrund oder Muttersprache anders verstanden werden können als beabsichtigt.
 
-Mit diesen Überlegungen im Hinterkopf verpflichten wir uns, achtsam miteinander umzugehen und in einer Weise zu handeln, die unsere gemeinsamen Werte in den Mittelpunkt stellt, einschließlich:
+Vor diesem Hintergrund verpflichten wir uns, einander achtsam zu begegnen und so zu handeln, dass unsere gemeinsamen Werte im Mittelpunkt stehen, unter anderem:
 
-1. Respekt vor dem **Zweck unserer Gemeinschaft**, unseren Aktivitäten und unseren Versammlungsformen.
-2. **Freundlicher und ehrlicher** Umgang mit anderen.
-3. Respekt vor **unterschiedlichen Standpunkten** und Erfahrungen.
-4. **Verantwortung übernehmen** für unsere Handlungen und Beiträge.
-5. **Konstruktives Feedback** bereitwillig geben und annehmen.
-6. Verpflichtung zur **Wiedergutmachung von Schaden**, wenn er auftritt.
-7. Sich auf andere Weise zu verhalten, die das **Wohl unserer Gemeinschaft** fördert und erhält.
+1. Den **Zweck unserer Gemeinschaft**, unsere Aktivitäten und unsere Formen des Zusammenkommens respektieren.
+2. **Freundlich und ehrlich** mit anderen umgehen.
+3. **Unterschiedliche Standpunkte** und Erfahrungen respektieren.
+4. **Verantwortung** für unsere Handlungen und Beiträge übernehmen.
+5. Konstruktives Feedback **würdevoll geben und annehmen**.
+6. Sich verpflichten, **entstandenen Schaden zu beheben**, wenn er auftritt.
+7. Sich so verhalten, dass das **Wohlergehen unserer Gemeinschaft** gefördert und erhalten wird.
 
 ---
 
-## Eingeschränkte Verhaltensweisen
+## Eingeschränktes Verhalten
 
-Wir verpflichten uns, die folgenden Verhaltensweisen in unserer Gemeinschaft einzuschränken. Vorkommen, Androhungen und Förderung dieser Verhaltensweisen stellen Verstöße gegen diesen Verhaltenskodex dar.
+Wir verpflichten uns, folgendes Verhalten in unserer Gemeinschaft zu unterlassen. Vorkommen, Androhungen oder Bewerbung dieses Verhaltens verletzen diesen Verhaltenskodex.
 
-1. **Belästigung.** Verletzung ausdrücklich geäußerter Grenzen oder unnötige persönliche Aufmerksamkeit nach klarer Aufforderung zum Aufhören.
-2. **Charakterangriffe.** Beleidigende, herabsetzende oder abwertende Äußerungen gegenüber einem Gemeinschaftsmitglied oder einer Gruppe.
-3. **Stereotypisierung oder Diskriminierung.** Charakterisierung der Persönlichkeit oder des Verhaltens einer Person auf der Grundlage unveränderlicher Identitäten oder Merkmale.
-4. **Sexualisierung.** Verhalten, das im Kontext oder Zweck der Gemeinschaft allgemein als unangemessen intim angesehen würde.
-5. **Vertraulichkeitsverletzung.** Weitergabe oder Nutzung persönlicher oder privater Informationen ohne Erlaubnis.
-6. **Gefährdung.** Verursachen, Ermutigen oder Androhen von Gewalt oder anderem Schaden gegenüber einer Person oder Gruppe.
-7. Anderes Verhalten, das das **Wohl unserer Gemeinschaft** bedroht.
+1. **Belästigung.** Ausdrücklich geäußerte Grenzen verletzen oder nach einem klaren Stopp-Wunsch weiterhin unnötig persönliche Aufmerksamkeit erzwingen.
+2. **Persönliche Angriffe.** Beleidigende, herabsetzende oder abwertende Äußerungen gegenüber einem Gemeinschaftsmitglied oder einer Gruppe.
+3. **Stereotypisierung oder Diskriminierung.** Persönlichkeit oder Verhalten allein aufgrund unveränderlicher Identitäten oder Merkmale charakterisieren.
+4. **Sexualisierung.** Sich so verhalten, dass es im Kontext oder Zweck der Gemeinschaft allgemein als unangemessen intim gilt.
+5. **Vertraulichkeit verletzen.** Persönliche oder private Informationen ohne Erlaubnis weitergeben oder danach handeln.
+6. **Gefährdung.** Gewalt oder anderen Schaden gegenüber Personen oder Gruppen verursachen, ermutigen oder androhen.
+7. Sich so verhalten, dass das **Wohlergehen unserer Gemeinschaft** bedroht wird.
 
 ### Weitere Einschränkungen
 
-1. **Irreführende Identität.** Sich aus beliebigem Grund als jemand anderes ausgeben oder vorgeben, jemand anderes zu sein, um Durchsetzungsmaßnahmen zu umgehen.
-2. **Fehlende Quellenangabe.** Quellen von Inhalten, die Sie beitragen, nicht ordnungsgemäß angeben.
-3. **Werbematerialien.** Marketing- oder andere kommerzielle Inhalte teilen, die außerhalb der Normen der Gemeinschaft liegen.
-4. **Verantwortungslose Kommunikation.** Inhalte, die andere eingeschränkte Verhaltensweisen enthält, verlinkt oder beschreibt, nicht verantwortungsvoll präsentieren.
+1. **Irreführende Identität.** Sich als jemand anderes ausgeben oder vorgeben, jemand anderes zu sein, um durchsetzende Maßnahmen zu umgehen.
+2. **Quellen nicht nennen.** Quellen von Inhalten, die Sie beisteuern, nicht ordnungsgemäß angeben.
+3. **Werbematerial.** Marketing- oder sonstige kommerzielle Inhalte in einer Weise teilen, die außerhalb der Normen der Gemeinschaft liegt.
+4. **Unverantwortliche Kommunikation.** Inhalte nicht verantwortungsvoll darstellen, die andere eingeschränkte Verhaltensweisen beinhalten, verlinken oder beschreiben.
 
 ---
 
-## Verstoß melden
+## Einen Vorfall melden
 
-Spannungen können zwischen Gemeinschaftsmitgliedern auftreten, auch wenn sie ihr Bestes zur Zusammenarbeit geben. Nicht jeder Konflikt stellt einen Verstoß gegen den Verhaltenskodex dar, und dieser Verhaltenskodex bekräftigt ermutigte Verhaltensweisen und Normen, die helfen können, Konflikte zu vermeiden und Schaden zu minimieren.
+Spannungen können zwischen Gemeinschaftsmitgliedern entstehen, auch wenn alle ihr Bestes geben. Nicht jeder Konflikt ist ein Verstoß gegen den Verhaltenskodex; dieser Kodex stärkt erwünschtes Verhalten und Normen, die Konflikte verringern und Schaden minimieren können.
 
-Wenn ein Vorfall auftritt, ist es wichtig, ihn umgehend zu melden.
+Tritt ein Vorfall dennoch auf, ist es wichtig, ihn zeitnah zu melden.
 
 !!! info "Verstoß melden"
-    Um einen möglichen Verstoß zu melden, E-Mail an: **conduct@duckling-ui.org**
+    Um einen möglichen Verstoß zu melden, schreiben Sie an: **conduct@duckling-ui.org**
 
-Die Community-Moderatoren nehmen Meldungen über Verstöße ernst und werden sich bemühen, zeitnah zu reagieren. Sie werden alle Meldungen über Verstöße gegen den Verhaltenskodex untersuchen, Nachrichten, Logs und Aufzeichnungen prüfen oder Zeugen und andere Beteiligte befragen. Die Community-Moderatoren werden Untersuchungs- und Durchsetzungsmaßnahmen so transparent wie möglich halten und dabei Sicherheit und Vertraulichkeit priorisieren. Um diese Werte zu wahren, werden Durchsetzungsmaßnahmen privat mit den betroffenen Parteien durchgeführt; die Kommunikation mit der gesamten Gemeinschaft kann Teil einer einvernehmlich vereinbarten Lösung sein.
+Die Community-Moderatorinnen und -Moderatoren nehmen Meldungen ernst und bemühen sich um zeitnahe Reaktion. Sie untersuchen alle Meldungen zu Verstößen gegen den Verhaltenskodex, prüfen Nachrichten, Protokolle und Aufzeichnungen oder führen Gespräche mit Zeuginnen, Zeugen und Beteiligten. Durchsetzungsmaßnahmen werden so transparent wie möglich mitgeteilt, wobei Sicherheit und Vertraulichkeit Vorrang haben. Um diese Werte zu wahren, erfolgen Maßnahmen vertraulich mit den Beteiligten; eine Information der gesamten Gemeinschaft kann Teil einer einvernehmlich vereinbarten Lösung sein.
 
 ---
 
-## Schaden beheben und wiedergutmachen
+## Schaden ansprechen und beheben
 
-Wenn eine Untersuchung durch die Community-Moderatoren ergibt, dass dieser Verhaltenskodex verletzt wurde, kann die folgende Durchsetzungsleiter verwendet werden, um zu bestimmen, wie Schaden am besten wiedergutgemacht werden kann, basierend auf der Auswirkung des Vorfalls auf die betroffenen Personen und die Gemeinschaft als Ganzes. Je nach Schwere eines Verstoßes können niedrigere Stufen der Leiter übersprungen werden.
+Stellt eine Untersuchung durch die Community-Moderatorinnen und -Moderatoren einen Verstoß gegen diesen Kodex fest, kann die folgende Eskalationsleiter genutzt werden, um Schaden angemessen zu beheben – abhängig von der Auswirkung des Vorfalls auf Betroffene und die Gemeinschaft. Je nach Schwere kann auf niedrigere Stufen verzichtet werden.
 
 ### 1. Verwarnung
 
 | | |
 |---|---|
-| **Ereignis** | Ein Verstoß mit einem einzelnen Vorfall oder einer Reihe von Vorfällen. |
-| **Konsequenz** | Eine private, schriftliche Verwarnung von den Community-Moderatoren. |
-| **Wiedergutmachung** | Beispiele: private schriftliche Entschuldigung, Anerkennung der Verantwortung und Klärung der Erwartungen. |
+| **Vorfall** | Ein Verstoß in einem einzelnen oder einer Serie von Vorfällen. |
+| **Folge** | Eine private, schriftliche Verwarnung der Community-Moderation. |
+| **Wiedergutmachung** | Beispiele: private schriftliche Entschuldigung, Anerkennung der Verantwortung, Klärung der Erwartungen. |
 
-### 2. Vorübergehend eingeschränkte Aktivitäten
-
-| | |
-|---|---|
-| **Ereignis** | Wiederholter Verstoß nach vorheriger Verwarnung oder erster Verstoß bei schwererem Vergehen. |
-| **Konsequenz** | Private, schriftliche Verwarnung mit zeitlich begrenzter Abkühlphase zur Unterstreichung der Ernsthaftigkeit. |
-| **Wiedergutmachung** | Beispiele: Entschuldigung, Nutzung der Abkühlphase zur Reflexion über Handlungen und Auswirkungen. |
-
-### 3. Vorübergehende Aussetzung
+### 2. Zeitlich begrenzte Einschränkung der Aktivität
 
 | | |
 |---|---|
-| **Ereignis** | Ein Muster wiederholter Verstöße, die die Community-Moderatoren mit Verwarnungen zu adressieren versucht haben, oder ein einzelner schwerer Verstoß. |
-| **Konsequenz** | Private schriftliche Verwarnung mit Bedingungen für die Rückkehr nach der Aussetzung. |
-| **Wiedergutmachung** | Beispiele: Respekt des Geistes der Aussetzung und Erfüllung der festgelegten Rückkehrbedingungen. |
+| **Vorfall** | Wiederholter Verstoß nach vorheriger Verwarnung oder erstmaliger schwererer Verstoß. |
+| **Folge** | Private, schriftliche Verwarnung mit zeitlich begrenzter „Cooldown“-Phase zur Betonung der Ernsthaftigkeit. |
+| **Wiedergutmachung** | Beispiele: Entschuldigung, Nutzung der Pause zur Reflexion über Handeln und Wirkung. |
 
-### 4. Dauerhafte Sperre
+### 3. Vorübergehender Ausschluss
 
 | | |
 |---|---|
-| **Ereignis** | Ein Muster wiederholter Verstöße gegen den Verhaltenskodex, die andere Stufen der Leiter nicht zu lösen vermochten, oder ein so schwerer Verstoß, dass die Community-Moderatoren feststellen, dass die Gemeinschaft mit dieser Person als Mitglied nicht sicher gehalten werden kann. |
-| **Konsequenz** | Zugang zu allen Gemeinschaftsräumen, -Tools und -Kommunikationskanälen wird entzogen. |
+| **Vorfall** | Wiederholtes Verstöße-Muster trotz vorheriger Verwarnungen oder ein einzelner schwerer Verstoß. |
+| **Folge** | Private schriftliche Mitteilung mit Bedingungen für die Rückkehr nach dem Ausschluss. |
+| **Wiedergutmachung** | Beispiele: Geist des Ausschlusses respektieren und festgelegte Rückkehrbedingungen erfüllen. |
+
+### 4. Dauerhafter Ausschluss
+
+| | |
+|---|---|
+| **Vorfall** | Wiederholte Verstöße gegen den Kodex, die mit anderen Stufen nicht behoben wurden, oder ein Verstoß so schwerwiegend, dass die Moderation keine sichere Gemeinschaft mit dieser Person für möglich hält. |
+| **Folge** | Entzug des Zugangs zu allen Gemeinschaftsräumen, -werkzeugen und -kommunikationskanälen. |
 | **Wiedergutmachung** | Bei dieser Schwere ist keine Wiedergutmachung möglich. |
 
 !!! note
-    Diese Durchsetzungsleiter dient als Richtlinie. Sie schränkt die Fähigkeit der Community-Manager nicht ein, ihr Ermessen und Urteilsvermögen im besten Interesse unserer Gemeinschaft zu nutzen.
+    Diese Eskalationsleiter ist eine Richtlinie. Sie schränkt das Ermessen der Community-Managerin bzw. des Community-Managers nicht ein, im besten Interesse unserer Gemeinschaft zu handeln.
 
 ---
 
 ## Geltungsbereich
 
-Dieser Verhaltenskodex gilt in allen Gemeinschaftsräumen und auch, wenn eine Person die Gemeinschaft offiziell in der Öffentlichkeit oder anderen Räumen vertritt. Beispiele für die Vertretung unserer Gemeinschaft sind die Verwendung einer offiziellen E-Mail-Adresse, das Posten über ein offizielles Social-Media-Konto oder die Tätigkeit als ernannter Vertreter bei einer Online- oder Offline-Veranstaltung.
+Dieser Verhaltenskodex gilt in allen Gemeinschaftsräumen und auch dann, wenn eine Person die Gemeinschaft offiziell in der Öffentlichkeit oder anderswo vertritt. Beispiele: offizielle E-Mail-Adresse, Postings über ein offizielles Social-Media-Konto oder Auftreten als benannte Vertretung bei Online- oder Präsenzveranstaltungen.
 
 ---
 
-## Zuschreibung
+## Quellenangabe
 
-Dieser Verhaltenskodex ist angepasst vom [Contributor Covenant](https://www.contributor-covenant.org/), Version 3.0, dauerhaft verfügbar unter [https://www.contributor-covenant.org/version/3/0/](https://www.contributor-covenant.org/version/3/0/).
+Dieser Verhaltenskodex basiert auf dem [Contributor Covenant](https://www.contributor-covenant.org/), Version 3.0, dauerhaft verfügbar unter [https://www.contributor-covenant.org/version/3/0/](https://www.contributor-covenant.org/version/3/0/).
 
-Der Contributor Covenant wird von der Organization for Ethical Source betreut und ist unter [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) lizenziert.
+Der Contributor Covenant wird von der Organization for Ethical Source betreut und steht unter der Lizenz [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
-Für Antworten auf häufige Fragen zum Contributor Covenant siehe die [FAQ](https://www.contributor-covenant.org/faq). Übersetzungen sind unter [contributor-covenant.org/translations](https://www.contributor-covenant.org/translations) verfügbar. Zusätzliche Ressourcen zu Durchsetzung und Gemeinschaftsrichtlinien finden Sie unter [contributor-covenant.org/resources](https://www.contributor-covenant.org/resources). Die Durchsetzungsleiter wurde inspiriert von der Arbeit von [Mozillas Verhaltenskodex-Team](https://github.com/mozilla/inclusion).
+Häufige Fragen zum Contributor Covenant: [FAQ](https://www.contributor-covenant.org/faq). Übersetzungen: [contributor-covenant.org/translations](https://www.contributor-covenant.org/translations). Weitere Ressourcen zu Durchsetzung und Community-Richtlinien: [contributor-covenant.org/resources](https://www.contributor-covenant.org/resources). Die Eskalationsleiter wurde inspiriert durch die Arbeit des [Mozilla-Teams zum Verhaltenskodex](https://github.com/mozilla/inclusion).

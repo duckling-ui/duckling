@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Documentation
+
+- **UI localization**: Batch results header and counters in `frontend/src/App.tsx` now use i18n keys (`conversion.batchCompleteTitle`, `batchSucceeded`, `batchFailed`, `convertedFilesTitle`) so the “Batch Conversion Complete” view is translated in `en`/`de`/`fr`/`es`.
+- **Language switcher (MkDocs)**: `docs/javascripts/language-selector.js` rewrites Material language dropdown `href`s to absolute paths so switching locale keeps the same page (and hash). Locale detection now works even when dropdown links are malformed (for example `..fr/`) or rendered without `hreflang`; works for standalone `mkdocs serve` and in-app docs under `/api/docs/site/<lang>/...`.
+- **Deployment (de/fr/es)**: [index](docs/de/deployment/index.md), [production](docs/de/deployment/production.md), [scaling](docs/de/deployment/scaling.md), and [security](docs/de/deployment/security.md) fully translated (mirrored under `fr/deployment/` and `es/deployment/`); Mermaid labels localized; German deployment index overview and checklist corrected.
+- **Getting started (de/fr/es)**: [Index](docs/de/getting-started/index.md), [Installation](docs/de/getting-started/installation.md), [Quick Start](docs/de/getting-started/quickstart.md), and [Docker](docs/de/getting-started/docker.md) fully translated (same filenames under `docs/fr/getting-started/` and `docs/es/getting-started/`); user-facing bash comments localized; commands unchanged; quickstart screenshots use `main-german.png` / `main-french.png` / `main-spanish.png`. [English Docker guide](docs/getting-started/docker.md) CI/CD sentence clarified (“workflow runs automatically. It:”).
+- **User guide (de/fr/es)**: [Supported formats](docs/de/user-guide/formats.md) and [Screenshots gallery](docs/de/user-guide/screenshots.md) fully translated for German, French, and Spanish (`user-guide/formats.md`, `user-guide/screenshots.md` per locale; sample paragraphs, tab titles, captions; asset paths `../../assets/...`).
+- **Quick Start**: [Batch Processing](docs/getting-started/quickstart.md#batch-processing) documents folder drag-and-drop, clicking the drop zone to select a folder, and **Choose files…** for multi-file selection without folder mode (localized `docs/{de,fr,es}/getting-started/quickstart.md`).
+- **French user guide**: [Features](docs/fr/user-guide/features.md) headings and body text are fully translated so the integrated TOC/sidebar matches the French locale; removed duplicate **Statistics Panel** section from [English features](docs/user-guide/features.md).
+- **Localized home pages**: [German](docs/de/index.md) lists Docling docs like English; [French](docs/fr/index.md) and [Spanish](docs/es/index.md) feature tiles link to locale-specific heading anchors on Features; French homepage adds a documentation list, quickstart links, and acknowledgments; Spanish homepage links [changelog](docs/es/changelog.md).
+- **User guide (de/es/fr)**: [Features](docs/de/user-guide/features.md) and [Features](docs/es/user-guide/features.md) fully translated (aligned with UI strings); [Configuration](docs/de/user-guide/configuration.md), [Configuration](docs/fr/user-guide/configuration.md), and [Configuration](docs/es/user-guide/configuration.md) fully translated.
+- **German docs**: [Architecture index](docs/de/architecture/index.md) and [User guide index](docs/de/user-guide/index.md) prose and headings translated (removed English fragments; corrected **Benutzerhandbuch** title typo).
+- **API (de/fr/es)**: Full localization of [API index](docs/de/api/index.md), [conversion](docs/de/api/conversion.md), [settings](docs/de/api/settings.md), and [history](docs/de/api/history.md) (same filenames under `docs/fr/api/` and `docs/es/api/`).
+- **Architecture (de/fr/es)**: Full localization of [overview](docs/de/architecture/overview.md), [components](docs/de/architecture/components.md), and [diagrams](docs/de/architecture/diagrams.md) per locale (Mermaid labels translated).
+- **Contributing (de/fr/es)**: Full localization of all pages under `docs/{de,fr,es}/contributing/`; explicit `{#commit-messages}` and `{#dco-sign-off}` heading anchors on localized [code-style](docs/de/contributing/code-style.md) for stable links from contributing index pages.
+- **Docling hub / images README**: Localized “update” sections on `docs/{de,fr,es}/docling/index.md` and screenshot contributor notes on `docs/{de,fr,es}/images/README.md`.
+
 ### Planned
 
 - User authentication

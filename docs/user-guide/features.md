@@ -57,11 +57,6 @@ Upload and convert more than one file (or a whole folder) from the same drop zon
 3. Monitor progress (a single job uses the standard progress view; several jobs show the multi-file progress summary)
 4. Download results separately or together when batch conversion completes
 
-<figure markdown="span">
-  ![Multiple files](../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
-  <figcaption>Multiple files selected for upload</figcaption>
-</figure>
-
 #### Multiple URLs
 
 The URL field is always a multi-line textarea:
@@ -108,7 +103,7 @@ Duckling can automatically install OCR backends when you select them:
       - Windows: Download from [GitHub releases](https://github.com/UB-Mannheim/tesseract/wiki)
 
 <figure markdown="span">
-  ![Tesseract Install Notice](../assets/screenshots/settings/settings-ocr-tesseract.png){ loading=lazy }
+  ![Tesseract Install Notice](../assets/screenshots/settings/settings-ocr-install.png){ loading=lazy }
   <figcaption>Tesseract requires manual system installation</figcaption>
 </figure>
 
@@ -413,33 +408,6 @@ Access previously converted documents:
 - **Generate Chunks Now**: When no RAG chunks exist, generate them on demand using current chunking settings (no re-conversion needed)
   - Conversions with matching file content and document-affecting settings (OCR, tables, images) complete instantly from cache
   - Outputs are stored once in a content-addressed store and shared via symlinks
-### Statistics Panel
-
-A dedicated slide-in panel for full conversion analytics. Open via the **Statistics** button in the header or the **View full statistics** link in the History panel.
-
-**Overview:**
-
-- Total conversions, success/failed counts, success rate
-- Average processing time and queue depth
-
-**Storage usage:**
-
-- Uploads, outputs, and total storage
-
-**Breakdowns:**
-
-- Input formats, OCR backends, output formats
-- Performance devices (CPU/CUDA/MPS), source types
-- Error categories
-- Chunking-enabled count
-
-**Extended metrics:**
-
-- **System**: Hardware type (CPU/CUDA/MPS), CPU count, current CPU usage (Duckling backend process), GPU info
-- **Throughput**: Average pages/sec and pages/sec per CPU
-- **Conversion time distribution**: Median, 95th, and 99th percentile
-- **Pages/sec over time**: Chart showing throughput over conversion history
-- **Performance by config**: Pages/sec and conversion time by hardware, OCR backend, and image classifier
 
 ### Statistics Panel
 

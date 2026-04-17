@@ -1,10 +1,10 @@
 # Tests
 
-Anleitung zum Schreiben und Ausführen von Tests in Duckling.
+Leitfaden zum Schreiben und Ausführen von Tests in Duckling.
 
 ## Überblick
 
-- **Backend**: pytest mit Coverage
+- **Backend**: pytest mit Abdeckung
 - **Frontend**: Vitest mit React Testing Library
 
 ## Tests ausführen
@@ -17,7 +17,7 @@ source venv/bin/activate
 pytest
 ```
 
-Mit Coverage:
+Mit Abdeckung:
 
 ```bash
 pytest --cov=. --cov-report=html
@@ -30,7 +30,7 @@ cd frontend
 npm test
 ```
 
-Mit Coverage:
+Mit Abdeckung:
 
 ```bash
 npm run test:coverage
@@ -46,17 +46,17 @@ npm run test:watch
 
 ## Backend-Tests
 
-### Teststruktur
+### Struktur
 
 ```
 backend/tests/
 ├── __init__.py
 ├── conftest.py         # Gemeinsame Fixtures
-├── test_api.py         # API-Endpunkt-Tests
-├── test_converter.py   # Converter-Service-Tests
-├── test_content_store.py # Content-addressed Storage Utilities
-├── test_history.py     # History-Service-Tests
-└── test_migration.py   # Datenbank-Migrationsskripte
+├── test_api.py        # API-Endpunkt-Tests
+├── test_converter.py  # Converter-Service-Tests
+├── test_content_store.py # inhaltsadressierter Speicher
+├── test_history.py    # History-Service-Tests
+└── test_migration.py  # Datenbank-Migrationsskripte
 ```
 
 ### Fixtures
@@ -68,20 +68,20 @@ from duckling import create_app
 
 @pytest.fixture
 def app():
-    """Create application for testing."""
+    """Erstellt die Anwendung für Tests."""
     app = create_app()
     app.config['TESTING'] = True
     return app
 
 @pytest.fixture
 def client(app):
-    """Create test client."""
+    """Erstellt den Test-Client."""
     return app.test_client()
 
 @pytest.fixture
 def sample_pdf():
-    """Create a sample PDF file for testing."""
-    # Return a file-like object
+    """Erstellt eine Beispiel-PDF-Datei für Tests."""
+    # Dateiähnliches Objekt zurückgeben
     pass
 ```
 
@@ -89,7 +89,7 @@ def sample_pdf():
 
 ```python
 def test_convert_pdf_success(client, sample_pdf):
-    """Test successful PDF conversion."""
+    """Erfolgreiche PDF-Konvertierung testen."""
     response = client.post(
         '/api/convert',
         data={'file': sample_pdf},
@@ -100,7 +100,7 @@ def test_convert_pdf_success(client, sample_pdf):
     assert 'job_id' in response.json
 
 def test_convert_invalid_file(client):
-    """Test conversion with invalid file type."""
+    """Konvertierung mit ungültigem Dateityp testen."""
     response = client.post(
         '/api/convert',
         data={'file': (io.BytesIO(b'invalid'), 'test.exe')},
@@ -111,7 +111,7 @@ def test_convert_invalid_file(client):
     assert 'error' in response.json
 
 def test_get_settings(client):
-    """Test getting current settings."""
+    """Aktuelle Einstellungen abrufen testen."""
     response = client.get('/api/settings')
 
     assert response.status_code == 200
@@ -125,7 +125,7 @@ def test_get_settings(client):
 from unittest.mock import patch, MagicMock
 
 def test_conversion_with_mock(client):
-    """Test conversion with mocked Docling."""
+    """Konvertierung mit gemocktem Docling testen."""
     with patch('services.converter.DocumentConverter') as mock:
         mock_instance = MagicMock()
         mock_instance.convert.return_value = {'content': 'test'}
@@ -140,12 +140,12 @@ def test_conversion_with_mock(client):
 
 ## Frontend-Tests
 
-### Teststruktur
+### Struktur
 
 ```
 frontend/src/tests/
 ├── setup.ts         # Test-Setup
-├── App.test.tsx     # App-Komponenten-Tests
+├── App.test.tsx     # App-Komponententests
 ├── DropZone.test.tsx
 ├── useConversion.test.ts
 └── api.test.ts
@@ -158,11 +158,11 @@ frontend/src/tests/
 import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
-// Mock fetch
+// fetch mocken
 global.fetch = vi.fn();
 ```
 
-### Komponenten-Tests
+### Komponententests
 
 ```typescript
 import { render, screen, fireEvent } from '@testing-library/react';
@@ -252,7 +252,7 @@ describe('conversion flow', () => {
     vi.mocked(api.getStatus).mockResolvedValue({ status: 'completed' });
   });
 
-  // ... tests
+  // ... Tests
 });
 ```
 
@@ -263,25 +263,25 @@ describe('conversion flow', () => {
 ### Backend
 
 - pytest für Tests verwenden
-- Ziel: >80 % Code-Abdeckung
+- Über 80 % Code-Abdeckung anstreben
 - Erfolgs- und Fehlerfälle testen
-- Fixtures für gemeinsames Setup
+- Fixtures für gemeinsames Setup nutzen
 - Externe Dienste mocken (Docling, Dateisystem)
 
 ### Frontend
 
 - Vitest und React Testing Library verwenden
-- Komponenten-Rendering und Interaktionen testen
-- Globale Events (z. B. `window` `message`), die von einem `useEffect` verarbeitet werden und von asynchron geladenen Daten abhängen, erst auslösen, nachdem die Effekte gelaufen sind (z. B. `await act(async () => { await new Promise((r) => setTimeout(r, 0)); })`), damit in der CI nicht vor dem Registrieren der Listener gefeuert wird
+- Rendering und Interaktionen der Komponenten testen
+- Bei globalen Events (z. B. `window` `message`), die von einem `useEffect` verarbeitet werden, der von asynchron geladenen Daten abhängt, auf die Ausführung der Effects nach dem Erscheinen der Daten warten (z. B. `await act(async () => { await new Promise((r) => setTimeout(r, 0)); })`), damit die CI nicht auslöst, bevor Listener registriert sind
 - API-Aufrufe angemessen mocken
 - Fehler- und Ladezustände testen
-- `userEvent` für realistische Interaktionen
+- `userEvent` für realistische Interaktionen verwenden
 
 ### Allgemein
 
 - Aussagekräftige Testnamen
-- Eine Assertion pro Test wenn möglich
-- Randfälle testen
+- Wenn möglich eine Assertion pro Test
+- Grenzfälle testen
 - Tests unabhängig halten
 - Nach Tests aufräumen
 
@@ -292,7 +292,7 @@ describe('conversion flow', () => {
 Tests laufen automatisch bei:
 
 - Erstellung eines Pull Requests
-- Push auf den main-Branch
+- Push auf den Branch `main`
 
 ### CI-Konfiguration
 

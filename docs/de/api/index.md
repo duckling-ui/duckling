@@ -1,16 +1,16 @@
 # API-Referenz
 
-Complete API documentation for the Duckling backend.
+Vollständige API-Dokumentation für das Duckling-Backend.
 
-## Base URL
+## Basis-URL
 
 ```
 http://localhost:5001/api
 ```
 
-## Authentication
+## Authentifizierung
 
-Currently, the API does not require authentication. For production deployments, consider adding authentication middleware.
+Derzeit ist für die API keine Authentifizierung erforderlich. Für Produktionsumgebungen sollten Sie eine Authentifizierungs-Middleware ergänzen.
 
 ## Abschnitte
 
@@ -20,66 +20,66 @@ Currently, the API does not require authentication. For production deployments, 
 
     ---
 
-    Upload und convert documents
+    Dokumente hochladen und konvertieren
 
-    [:octicons-arrow-right-24: Konvertierung API](conversion.md)
+    [:octicons-arrow-right-24: Konvertierungs-API](conversion.md)
 
 -   :material-cog:{ .lg .middle } __Einstellungen__
 
     ---
 
-    Get und update configuration
+    Konfiguration abrufen und aktualisieren
 
-    [:octicons-arrow-right-24: Einstellungen API](settings.md)
+    [:octicons-arrow-right-24: Einstellungen-API](settings.md)
 
--   :material-history:{ .lg .middle } __History__
+-   :material-history:{ .lg .middle } __Verlauf__
 
     ---
 
-    Access conversion history
+    Konvertierungsverlauf abrufen
 
-    [:octicons-arrow-right-24: History API](history.md)
+    [:octicons-arrow-right-24: Verlaufs-API](history.md)
 
 </div>
 
 ## Kurzreferenz
 
-### Konvertierung Endpoints
+### Konvertierungs-Endpunkte
 
-| Endpoint | Methode | Beschreibung |
+| Endpunkt | Methode | Beschreibung |
 |----------|--------|-------------|
-| `/convert` | POST | Dokument hochladen und konvertieren |
-| `/convert/batch` | POST | Batch convert multiple documents |
-| `/convert/{job_id}/status` | GET | Get conversion status |
-| `/convert/{job_id}/result` | GET | Get conversion result |
-| `/convert/{job_id}/images` | GET | List extracted images |
-| `/convert/{job_id}/images/{id}` | GET | Herunterladen extracted image |
-| `/convert/{job_id}/tables` | GET | List extracted tables |
-| `/convert/{job_id}/tables/{id}/csv` | GET | Herunterladen table as CSV |
-| `/convert/{job_id}/chunks` | GET | Get document chunks |
-| `/export/{job_id}/{format}` | GET | Herunterladen converted file |
+| `/convert` | POST | Einzelnes Dokument hochladen und konvertieren |
+| `/convert/batch` | POST | Mehrere Dokumente stapelweise konvertieren |
+| `/convert/{job_id}/status` | GET | Konvertierungsstatus abrufen |
+| `/convert/{job_id}/result` | GET | Konvertierungsergebnis abrufen |
+| `/convert/{job_id}/images` | GET | Extrahierte Bilder auflisten |
+| `/convert/{job_id}/images/{id}` | GET | Extrahiertes Bild herunterladen |
+| `/convert/{job_id}/tables` | GET | Extrahierte Tabellen auflisten |
+| `/convert/{job_id}/tables/{id}/csv` | GET | Tabelle als CSV herunterladen |
+| `/convert/{job_id}/chunks` | GET | Dokumentsegmente abrufen |
+| `/export/{job_id}/{format}` | GET | Konvertierte Datei herunterladen |
 
-### Einstellungen Endpoints
+### Einstellungen-Endpunkte
 
-| Endpoint | Methode | Beschreibung |
+| Endpunkt | Methode | Beschreibung |
 |----------|--------|-------------|
-| `/settings` | GET/PUT | Get/update all settings |
-| `/settings/reset` | POST | Reset to defaults |
-| `/settings/formats` | GET | List supported formats |
-| `/settings/ocr` | GET/PUT | OCR settings |
-| `/settings/tables` | GET/PUT | Table settings |
-| `/settings/images` | GET/PUT | Image settings |
-| `/settings/performance` | GET/PUT | Leistung settings |
-| `/settings/chunking` | GET/PUT | Chunking settings |
+| `/settings` | GET/PUT | Alle Einstellungen abrufen/aktualisieren |
+| `/settings/reset` | POST | Auf Standardwerte zurücksetzen |
+| `/settings/formats` | GET | Unterstützte Formate auflisten |
+| `/settings/ocr` | GET/PUT | OCR-Einstellungen |
+| `/settings/tables` | GET/PUT | Tabelleneinstellungen |
+| `/settings/images` | GET/PUT | Bildeinstellungen |
+| `/settings/performance` | GET/PUT | Leistungseinstellungen |
+| `/settings/chunking` | GET/PUT | Segmentierungseinstellungen |
 
-### History Endpoints
+### Verlaufs-Endpunkte
 
-| Endpoint | Methode | Beschreibung |
+| Endpunkt | Methode | Beschreibung |
 |----------|--------|-------------|
-| `/history` | GET | List conversion history |
-| `/history/{job_id}` | GET | Get history entry |
-| `/history/stats` | GET | Get conversion statistics |
-| `/history/search` | GET | Search history |
+| `/history` | GET | Konvertierungsverlauf auflisten |
+| `/history/{job_id}` | GET | Verlaufseintrag abrufen |
+| `/history/stats` | GET | Konvertierungsstatistiken abrufen |
+| `/history/search` | GET | Verlauf durchsuchen |
 
 ## Health Check
 
@@ -96,9 +96,9 @@ GET /health
 }
 ```
 
-## Error Antworts
+## Fehlerantworten
 
-All endpoints may return error responses in the following format:
+Alle Endpunkte können Fehlerantworten im folgenden Format zurückgeben:
 
 ```json
 {
@@ -107,22 +107,21 @@ All endpoints may return error responses in the following format:
 }
 ```
 
-### HTTP Status Codes
+### HTTP-Statuscodes
 
 | Code | Beschreibung |
 |------|-------------|
-| 200 | Success |
-| 202 | Accepted (async operation started) |
-| 400 | Bad Request (invalid input) |
-| 404 | Not Found |
-| 413 | Payload Too Large |
-| 500 | Internal Server Error |
+| 200 | Erfolg |
+| 202 | Akzeptiert (asynchrone Operation gestartet) |
+| 400 | Fehlerhafte Anfrage (ungültige Eingabe) |
+| 404 | Nicht gefunden |
+| 413 | Nutzlast zu groß |
+| 500 | Interner Serverfehler |
 
-## Rate Limiting
+## Ratenbegrenzung
 
-Currently, no rate limiting is implemented. For production deployments, consider adding rate limiting middleware.
+Derzeit ist keine Ratenbegrenzung implementiert. Für Produktionsumgebungen sollten Sie eine entsprechende Middleware ergänzen.
 
 ## CORS
 
-The API allows cross-origin requests from the configured frontend origin (default: `http://localhost:3000`).
-
+Die API erlaubt domänenübergreifende Anfragen von der konfigurierten Frontend-Origin (Standard: `http://localhost:3000`).

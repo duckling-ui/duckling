@@ -1,11 +1,11 @@
-# Configuración (API)
+# API de configuración
 
 Endpoints para gestionar la configuración de conversión.
 
-!!! note "Almacenamiento Basado en Sesiones"
-    Los ajustes se almacenan por sesión de usuario en la base de datos. Los ajustes de cada usuario están aislados y no afectan a otros usuarios, lo que hace que Duckling sea seguro para despliegues multi-usuario.
+!!! note "Almacenamiento basado en sesión"
+    La configuración se almacena por sesión de usuario en la base de datos. La configuración de cada usuario está aislada y no afecta a otros usuarios, lo que hace que Duckling sea seguro en despliegues multiusuario.
 
-## Obtener Todas las Configuraciones
+## Obtener toda la configuración
 
 ```http
 GET /api/settings
@@ -62,14 +62,14 @@ GET /api/settings
 
 ---
 
-## Actualizar Configuración
+## Actualizar configuración
 
 ```http
 PUT /api/settings
 Content-Type: application/json
 ```
 
-### Cuerpo de la Solicitud
+### Cuerpo de la solicitud
 
 ```json
 {
@@ -89,7 +89,7 @@ Devuelve el objeto de configuración actualizado.
 
 ---
 
-## Restablecer Configuración a Valores Predeterminados
+## Restablecer la configuración a los valores predeterminados
 
 ```http
 POST /api/settings/reset
@@ -101,7 +101,7 @@ Devuelve el objeto de configuración predeterminado.
 
 ---
 
-## Obtener Formatos Soportados
+## Obtener formatos admitidos
 
 ```http
 GET /api/settings/formats
@@ -112,9 +112,9 @@ GET /api/settings/formats
 ```json
 {
   "input_formats": [
-    {"id": "pdf", "name": "Documento PDF", "extensions": [".pdf"], "icon": "document"},
+    {"id": "pdf", "name": "PDF Document", "extensions": [".pdf"], "icon": "document"},
     {"id": "docx", "name": "Microsoft Word", "extensions": [".docx"], "icon": "document"},
-    {"id": "image", "name": "Imagen", "extensions": [".png", ".jpg", ".jpeg", ".tiff"], "icon": "image"}
+    {"id": "image", "name": "Image", "extensions": [".png", ".jpg", ".jpeg", ".tiff"], "icon": "image"}
   ],
   "output_formats": [
     {"id": "markdown", "name": "Markdown", "extension": ".md", "mime_type": "text/markdown"},
@@ -126,26 +126,26 @@ GET /api/settings/formats
 
 ---
 
-## Configuración OCR
+## Configuración de OCR
 
-### Obtener Configuración OCR
+### Obtener la configuración de OCR
 
 ```http
 GET /api/settings/ocr
 ```
 
-### Actualizar Configuración OCR
+### Actualizar la configuración de OCR
 
 ```http
 PUT /api/settings/ocr
 Content-Type: application/json
 ```
 
-**Parámetros de Consulta:**
+**Parámetros de consulta:**
 
 | Parámetro | Tipo | Descripción |
 |-----------|------|-------------|
-| `auto_install` | boolean | Si es `true`, instala automáticamente los backends instalables mediante pip |
+| `auto_install` | boolean | Si es `true`, instala automáticamente los backends instalables con pip |
 
 ### Respuesta/Solicitud
 
@@ -161,30 +161,30 @@ Content-Type: application/json
     "bitmap_area_threshold": 0.05
   },
   "available_languages": [
-    {"code": "en", "name": "Inglés"},
-    {"code": "de", "name": "Alemán"},
-    {"code": "fr", "name": "Francés"}
+    {"code": "en", "name": "English"},
+    {"code": "de", "name": "German"},
+    {"code": "fr", "name": "French"}
   ],
   "available_backends": [
-    {"id": "easyocr", "name": "EasyOCR", "description": "OCR de propósito general con soporte GPU"},
-    {"id": "tesseract", "name": "Tesseract", "description": "Motor OCR clásico"},
-    {"id": "ocrmac", "name": "macOS Vision", "description": "OCR nativo de macOS (solo Mac)"},
-    {"id": "rapidocr", "name": "RapidOCR", "description": "OCR rápido con runtime ONNX"}
+    {"id": "easyocr", "name": "EasyOCR", "description": "General-purpose OCR with GPU support"},
+    {"id": "tesseract", "name": "Tesseract", "description": "Classic OCR engine"},
+    {"id": "ocrmac", "name": "macOS Vision", "description": "Native macOS OCR (Mac only)"},
+    {"id": "rapidocr", "name": "RapidOCR", "description": "Fast OCR with ONNX runtime"}
   ]
 }
 ```
 
 ---
 
-## Gestión de Backends OCR
+## Gestión de backends de OCR
 
-### Obtener Estado de Todos los Backends
+### Obtener el estado de todos los backends
 
 ```http
 GET /api/settings/ocr/backends
 ```
 
-Devuelve el estado de instalación de todos los backends OCR.
+Devuelve el estado de instalación de todos los backends de OCR.
 
 ### Respuesta
 
@@ -194,33 +194,33 @@ Devuelve el estado de instalación de todos los backends OCR.
     {
       "id": "easyocr",
       "name": "EasyOCR",
-      "description": "OCR de propósito general con soporte GPU",
+      "description": "General-purpose OCR with GPU support",
       "installed": true,
       "available": true,
       "error": null,
       "pip_installable": true,
       "requires_system_install": false,
       "platform": null,
-      "note": "La primera ejecución descargará modelos de idioma (~100MB por idioma)"
+      "note": "First run will download language models (~100MB per language)"
     },
     {
       "id": "tesseract",
       "name": "Tesseract",
-      "description": "Motor OCR clásico",
+      "description": "Classic OCR engine",
       "installed": false,
       "available": false,
-      "error": "Paquete no instalado",
+      "error": "Package not installed",
       "pip_installable": true,
       "requires_system_install": true,
       "platform": null,
-      "note": "Requiere que Tesseract esté instalado en su sistema"
+      "note": "Requires Tesseract to be installed on your system"
     }
   ],
   "current_platform": "darwin"
 }
 ```
 
-### Verificar Backend Específico
+### Comprobar un backend concreto
 
 ```http
 GET /api/settings/ocr/backends/{backend_id}/check
@@ -236,61 +236,61 @@ GET /api/settings/ocr/backends/{backend_id}/check
   "error": null,
   "pip_installable": true,
   "requires_system_install": false,
-  "note": "La primera ejecución descargará modelos de idioma"
+  "note": "First run will download language models"
 }
 ```
 
-### Instalar Backend
+### Instalar backend
 
 ```http
 POST /api/settings/ocr/backends/{backend_id}/install
 ```
 
-Instala un backend OCR instalable mediante pip.
+Instala un backend de OCR instalable con pip.
 
-### Respuesta (Éxito)
+### Respuesta (correcto)
 
 ```json
 {
-  "message": "EasyOCR instalado correctamente",
+  "message": "Successfully installed easyocr",
   "success": true,
   "installed": true,
   "available": true,
-  "note": "La primera ejecución descargará modelos de idioma"
+  "note": "First run will download language models"
 }
 ```
 
-### Respuesta (Ya Instalado)
+### Respuesta (ya instalado)
 
 ```json
 {
-  "message": "easyocr ya está instalado y disponible",
+  "message": "easyocr is already installed and available",
   "already_installed": true
 }
 ```
 
-### Respuesta (Requiere Instalación del Sistema)
+### Respuesta (requiere instalación del sistema)
 
 ```json
 {
-  "message": "Error al instalar tesseract",
+  "message": "Failed to install tesseract",
   "success": false,
-  "error": "tesseract requiere instalación a nivel del sistema",
+  "error": "tesseract requires system-level installation",
   "requires_system_install": true
 }
 ```
 
 ---
 
-## Configuración de Tablas
+## Configuración de tablas
 
-### Obtener Configuración de Tablas
+### Obtener la configuración de tablas
 
 ```http
 GET /api/settings/tables
 ```
 
-### Actualizar Configuración de Tablas
+### Actualizar la configuración de tablas
 
 ```http
 PUT /api/settings/tables
@@ -312,15 +312,15 @@ Content-Type: application/json
 
 ---
 
-## Configuración de Imágenes
+## Configuración de imágenes
 
-### Obtener Configuración de Imágenes
+### Obtener la configuración de imágenes
 
 ```http
 GET /api/settings/images
 ```
 
-### Actualizar Configuración de Imágenes
+### Actualizar la configuración de imágenes
 
 ```http
 PUT /api/settings/images
@@ -344,9 +344,9 @@ Content-Type: application/json
 
 ---
 
-## Configuración de Enriquecimiento
+## Configuración de enriquecimiento
 
-### Obtener Configuración de Enriquecimiento
+### Obtener la configuración de enriquecimiento
 
 ```http
 GET /api/settings/enrichment
@@ -364,30 +364,30 @@ GET /api/settings/enrichment
   },
   "options": {
     "code_enrichment": {
-      "description": "Mejorar bloques de código con detección de idioma y resaltado de sintaxis",
+      "description": "Mejora los bloques de código con detección de idioma y resaltado de sintaxis",
       "default": false,
       "note": "Puede aumentar el tiempo de procesamiento"
     },
     "formula_enrichment": {
-      "description": "Extraer representaciones LaTeX de fórmulas matemáticas",
+      "description": "Extrae representaciones LaTeX de fórmulas matemáticas",
       "default": false,
-      "note": "Permite mejor renderizado de fórmulas en las exportaciones"
+      "note": "Permite un mejor renderizado de fórmulas en las exportaciones"
     },
     "picture_classification": {
-      "description": "Clasificar imágenes por tipo (figura, gráfico, diagrama, foto, etc.)",
+      "description": "Clasifica las imágenes por tipo (figura, gráfico, diagrama, foto, etc.)",
       "default": false,
       "note": "Añade etiquetas semánticas a las imágenes extraídas"
     },
     "picture_description": {
-      "description": "Generar descripciones de imágenes usando modelos de visión IA",
+      "description": "Genera descripciones para imágenes usando modelos de visión con IA",
       "default": false,
-      "note": "Requiere descarga adicional de modelo, aumenta significativamente el tiempo de procesamiento"
+      "note": "Requiere descargar modelos adicionales y aumenta notablemente el tiempo de procesamiento"
     }
   }
 }
 ```
 
-### Actualizar Configuración de Enriquecimiento
+### Actualizar la configuración de enriquecimiento
 
 ```http
 PUT /api/settings/enrichment
@@ -407,7 +407,7 @@ Content-Type: application/json
 
 ```json
 {
-  "message": "Configuración de enriquecimiento actualizada",
+  "message": "Enrichment settings updated",
   "enrichment": {
     "code_enrichment": true,
     "formula_enrichment": true,
@@ -419,25 +419,25 @@ Content-Type: application/json
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
-| `code_enrichment` | boolean | Mejorar bloques de código con detección de idioma |
-| `formula_enrichment` | boolean | Extraer LaTeX de fórmulas matemáticas |
-| `picture_classification` | boolean | Clasificar imágenes por tipo semántico |
-| `picture_description` | boolean | Generar subtítulos IA para imágenes |
+| `code_enrichment` | boolean | Mejora los bloques de código con detección de idioma |
+| `formula_enrichment` | boolean | Extrae LaTeX de fórmulas matemáticas |
+| `picture_classification` | boolean | Clasifica las imágenes por tipo semántico |
+| `picture_description` | boolean | Genera descripciones con IA para las imágenes |
 
-!!! warning "Tiempo de Procesamiento"
-    Habilitar `formula_enrichment` y especialmente `picture_description` puede aumentar significativamente el tiempo de procesamiento de documentos.
+!!! warning "Tiempo de procesamiento"
+    Activar `formula_enrichment` y sobre todo `picture_description` puede aumentar de forma notable el tiempo de procesamiento de los documentos.
 
 ---
 
-## Configuración de Rendimiento
+## Configuración de rendimiento
 
-### Obtener Configuración de Rendimiento
+### Obtener la configuración de rendimiento
 
 ```http
 GET /api/settings/performance
 ```
 
-### Actualizar Configuración de Rendimiento
+### Actualizar la configuración de rendimiento
 
 ```http
 PUT /api/settings/performance
@@ -458,15 +458,15 @@ Content-Type: application/json
 
 ---
 
-## Configuración de Fragmentación
+## Configuración de fragmentación
 
-### Obtener Configuración de Fragmentación
+### Obtener la configuración de fragmentación
 
 ```http
 GET /api/settings/chunking
 ```
 
-### Actualizar Configuración de Fragmentación
+### Actualizar la configuración de fragmentación
 
 ```http
 PUT /api/settings/chunking
@@ -487,15 +487,15 @@ Content-Type: application/json
 
 ---
 
-## Configuración de Salida
+## Configuración de salida
 
-### Obtener Configuración de Salida
+### Obtener la configuración de salida
 
 ```http
 GET /api/settings/output
 ```
 
-### Actualizar Configuración de Salida
+### Actualizar la configuración de salida
 
 ```http
 PUT /api/settings/output
@@ -511,3 +511,4 @@ Content-Type: application/json
   }
 }
 ```
+
