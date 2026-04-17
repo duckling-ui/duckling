@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-**Latest release:** [0.0.11](https://github.com/duckling-ui/duckling/releases/tag/v0.0.11) (2026-03-30)
+**Latest release:** [0.0.12](https://github.com/duckling-ui/duckling/releases/tag/v0.0.12) (2026-04-17)
 
 ## [Unreleased]
 
@@ -37,7 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Keyboard shortcuts
 - Accessibility improvements (WCAG 2.1)
 
-## [0.0.11] - 2026-03-30
+## [0.0.12] - 2026-04-17
 
 ### Changed
 
@@ -343,8 +343,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maximum file size limits
 - Secure filename handling
 
-[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.11...HEAD
-[0.0.11]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.11
+[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.12...HEAD
+[0.0.12]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.12
 [0.0.10a]: https://github.com/duckling-ui/duckling/compare/v0.0.10...v0.0.10a
 [0.0.10]: https://github.com/duckling-ui/duckling/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/duckling-ui/duckling/compare/v0.0.8...v0.0.9

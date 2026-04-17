@@ -37,7 +37,7 @@ import { ScrollableRegion } from "./components/ScrollableRegion";
 import type { HistoryEntry, ConversionResult } from "./types";
 
 // App version from package.json
-const APP_VERSION = "0.0.11";
+const APP_VERSION = "0.0.12";
 
 export default function App() {
   const { t, i18n } = useTranslation();
