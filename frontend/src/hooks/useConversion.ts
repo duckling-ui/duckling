@@ -24,9 +24,12 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import {
   uploadAndConvert,
   uploadAndConvertBatch,
+  convertFromUrl,
+  convertFromUrlsBatch,
   getConversionStatus,
   getConversionResult,
   loadHistoryDocument,
@@ -57,6 +60,21 @@ interface BatchJobStatus {
   error?: string;
 }
 
+function getApiErrorMessage(err: unknown, fallback: string): string {
+  if (axios.isAxiosError(err)) {
+    const data = err.response?.data as { message?: string; error?: string } | undefined;
+    if (data?.message) return data.message;
+    if (data?.error) return data.error;
+    if (err.message) return err.message;
+  }
+
+  if (err instanceof Error && err.message) {
+    return err.message;
+  }
+
+  return fallback;
+}
+
 export function useConversion(options: UseConversionOptions = {}) {
   const { onComplete, onError, pollInterval = 1000 } = options;
 
@@ -66,6 +84,7 @@ export function useConversion(options: UseConversionOptions = {}) {
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [statusMessage, setStatusMessage] = useState('');
+  const [conversionSource, setConversionSource] = useState<'file' | 'url'>('file');
 
   // Batch processing state
   const [batchJobs, setBatchJobs] = useState<BatchJobStatus[]>([]);
@@ -89,14 +108,16 @@ export function useConversion(options: UseConversionOptions = {}) {
     onSuccess: (data) => {
       setCurrentJob(data);
       setState('processing');
-      setProgress(0);
+      // Move progress forward into the analyzing phase rather than restarting.
+      setProgress((prev) => (prev > 0 ? Math.max(prev, 10) : 10));
       setStatusMessage('Starting conversion...');
       startPolling(data.job_id);
     },
     onError: (err: Error) => {
-      setError(err.message);
+      const message = getApiErrorMessage(err, 'Conversion failed');
+      setError(message);
       setState('error');
-      onError?.(err.message);
+      onError?.(message);
     },
   });
 
@@ -142,9 +163,86 @@ export function useConversion(options: UseConversionOptions = {}) {
       startBatchPolling(initialStatuses);
     },
     onError: (err: Error) => {
-      setError(err.message);
+      const message = getApiErrorMessage(err, 'Batch conversion failed');
+      setError(message);
       setState('error');
-      onError?.(err.message);
+      onError?.(message);
+    },
+  });
+
+  // URL conversion (single URL)
+  const urlConversionMutation = useMutation({
+    mutationFn: async ({
+      url,
+      settings,
+    }: {
+      url: string;
+      settings?: Partial<ConversionSettings>;
+    }) => {
+      return convertFromUrl(url, settings);
+    },
+    onSuccess: (data) => {
+      setCurrentJob(data);
+      setState('processing');
+      // Continue smoothly from the URL fetching phase.
+      setProgress((prev) => (prev > 0 ? Math.max(prev, 10) : 10));
+      setStatusMessage('Starting conversion...');
+      startPolling(data.job_id);
+    },
+    onError: (err: Error) => {
+      const message = getApiErrorMessage(err, 'URL conversion failed');
+      setError(message);
+      setState('error');
+      onError?.(message);
+    },
+  });
+
+  // URL conversion (batch URLs)
+  const batchUrlConversionMutation = useMutation({
+    mutationFn: async ({
+      urls,
+      settings,
+    }: {
+      urls: string[];
+      settings?: Partial<ConversionSettings>;
+    }) => {
+      return convertFromUrlsBatch(urls, settings);
+    },
+    onSuccess: (data) => {
+      const processingJobs = data.jobs.filter((j) => j.status === 'processing');
+      if (processingJobs.length === 0) {
+        const allRejected =
+          data.jobs.length > 0 && data.jobs.every((j) => j.status === 'rejected');
+        const msg = allRejected
+          ? 'No URLs could be converted.'
+          : 'No conversions were started.';
+        setError(msg);
+        setState('error');
+        onError?.(msg);
+        return;
+      }
+
+      // Initialize batch job statuses
+      const initialStatuses: BatchJobStatus[] = data.jobs.map((job) => ({
+        job,
+        status: job.status === 'rejected' ? 'rejected' : 'processing',
+        progress: job.status === 'rejected' ? 0 : 10,
+        error: job.error,
+      }));
+
+      setBatchJobs(initialStatuses);
+      setBatchProgress({ completed: 0, total: processingJobs.length });
+      setState('processing');
+      setStatusMessage(`Processing ${processingJobs.length} URLs...`);
+
+      // Start polling for each job
+      startBatchPolling(initialStatuses);
+    },
+    onError: (err: Error) => {
+      const message = getApiErrorMessage(err, 'Batch URL conversion failed');
+      setError(message);
+      setState('error');
+      onError?.(message);
     },
   });
 
@@ -311,6 +409,7 @@ export function useConversion(options: UseConversionOptions = {}) {
   const uploadFile = useCallback(
     (file: File, existingJobId?: string, settings?: Partial<ConversionSettings>) => {
       setBatchMode(false);
+      setConversionSource('file');
       setError(null);
       setResult(null);
       setBatchJobs([]);
@@ -330,6 +429,7 @@ export function useConversion(options: UseConversionOptions = {}) {
         startPolling(existingJobId);
       } else {
         // Regular file upload
+        setConversionSource('file');
         setState('uploading');
         uploadMutation.mutate({ file, settings });
       }
@@ -363,6 +463,7 @@ export function useConversion(options: UseConversionOptions = {}) {
       }
 
       setBatchMode(true);
+      setConversionSource('file');
       setState('uploading');
       setError(null);
       setResult(null);
@@ -371,6 +472,42 @@ export function useConversion(options: UseConversionOptions = {}) {
       batchUploadMutation.mutate({ files: accepted, settings });
     },
     [uploadFile, batchUploadMutation, onError]
+  );
+
+  // Convert one or more URLs
+  const startUrlConversion = useCallback(
+    (urls: string[], settings?: Partial<ConversionSettings>) => {
+      if (urls.length === 0) return;
+
+      setError(null);
+      setResult(null);
+      setBatchJobs([]);
+      setCurrentJob(null);
+      setConversionSource('url');
+
+      if (urls.length === 1) {
+        setBatchMode(false);
+        setCurrentJob({
+          job_id: 'pending-url-job',
+          filename: urls[0],
+          input_format: 'url',
+          status: 'processing',
+          message: 'Fetching URL content...',
+        });
+        setState('uploading');
+        setProgress(5);
+        setStatusMessage('Fetching URL content...');
+        urlConversionMutation.mutate({ url: urls[0], settings });
+        return;
+      }
+
+      setBatchMode(true);
+      setState('uploading');
+      setProgress(5);
+      setStatusMessage(`Fetching ${urls.length} URLs...`);
+      batchUrlConversionMutation.mutate({ urls, settings });
+    },
+    [urlConversionMutation, batchUrlConversionMutation]
   );
 
   // Download export
@@ -427,6 +564,7 @@ export function useConversion(options: UseConversionOptions = {}) {
     setStatusMessage('');
     setBatchJobs([]);
     setBatchMode(false);
+    setConversionSource('file');
     setBatchProgress({ completed: 0, total: 0 });
   }, [stopPolling, stopBatchPolling]);
 
@@ -465,11 +603,17 @@ export function useConversion(options: UseConversionOptions = {}) {
     error,
     progress,
     statusMessage,
-    isUploading: uploadMutation.isPending || batchUploadMutation.isPending,
+    conversionSource,
+    isUploading:
+      uploadMutation.isPending ||
+      batchUploadMutation.isPending ||
+      urlConversionMutation.isPending ||
+      batchUrlConversionMutation.isPending,
     /** True while POST /convert/batch is in flight (false during single-file POST /convert). */
     isUploadingMultipleFiles: batchUploadMutation.isPending,
     uploadFile,
     uploadFiles,
+    startUrlConversion,
     downloadFormat,
     getContent,
     reset,

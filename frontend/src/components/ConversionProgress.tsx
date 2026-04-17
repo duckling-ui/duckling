@@ -29,13 +29,16 @@ interface ConversionProgressProps {
   progress: number;
   message: string;
   filename?: string;
+  source?: "file" | "url";
 }
 
 export default function ConversionProgress({
   progress,
   message,
   filename,
+  source = "file",
 }: ConversionProgressProps) {
+  const isUrlConversion = source === "url";
   const { t } = useTranslation();
   const reduceMotion = useReducedMotion();
   const progressValue = Math.min(100, Math.max(0, Math.round(progress)));
@@ -134,17 +137,29 @@ export default function ConversionProgress({
         {/* Status steps */}
         <div className="space-y-2" role="list">
           <StatusStep
-            label={t("progress.uploadComplete")}
+            label={
+              isUrlConversion
+                ? t("progress.urlFetching")
+                : t("progress.uploadComplete")
+            }
             isComplete={progress >= 10}
             isActive={progress < 10}
           />
           <StatusStep
-            label={t("progress.analyzing")}
+            label={
+              isUrlConversion
+                ? t("progress.urlAnalyzingPage")
+                : t("progress.analyzing")
+            }
             isComplete={progress >= 30}
             isActive={progress >= 10 && progress < 30}
           />
           <StatusStep
-            label={t("progress.extracting")}
+            label={
+              isUrlConversion
+                ? t("progress.urlExtractingAssets")
+                : t("progress.extracting")
+            }
             isComplete={progress >= 70}
             isActive={progress >= 30 && progress < 70}
           />

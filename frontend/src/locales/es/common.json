@@ -33,7 +33,11 @@
     "filesCount": "{{completed}}/{{total}} archivos",
     "batchFileProgressList": "Progreso de conversión por archivo",
     "batchResultsFileList": "Lista de archivos convertidos",
-    "batchResultsPreview": "Vista previa Markdown"
+    "batchResultsPreview": "Vista previa Markdown",
+    "batchCompleteTitle": "¡Conversión por lotes completada!",
+    "batchSucceeded": "{{count}} correctas",
+    "batchFailed": "{{count}} fallidas",
+    "convertedFilesTitle": "Archivos convertidos"
   },
   "features": {
     "ocr": "OCR",
@@ -364,6 +368,43 @@
     "tabTables": "Tablas",
     "tabChunks": "Fragmentos RAG",
     "exportFormatTitle": "Formato de exportación",
+    "formats": {
+      "markdown": {
+        "name": "Markdown",
+        "description": "Texto con encabezados, listas y enlaces",
+        "icon": "M"
+      },
+      "html": {
+        "name": "HTML",
+        "description": "Formato listo para la web con estilo completo",
+        "icon": "</>"
+      },
+      "json": {
+        "name": "JSON",
+        "description": "Datos estructurados con jerarquía del documento",
+        "icon": "{}"
+      },
+      "doctags": {
+        "name": "DocTags",
+        "description": "Tokens de documento con etiquetas para procesamiento por IA",
+        "icon": "#"
+      },
+      "text": {
+        "name": "Texto sin formato",
+        "description": "Texto simple sin formato",
+        "icon": "Aa"
+      },
+      "document_tokens": {
+        "name": "Tokens del documento",
+        "description": "Representación del documento a nivel de tokens",
+        "icon": "[]"
+      },
+      "chunks": {
+        "name": "Fragmentos RAG",
+        "description": "Fragmentos del documento para aplicaciones RAG",
+        "icon": "◫"
+      }
+    },
     "download": "Descargar",
     "convertAnother": "Convertir otro documento",
     "previewTitle": "Vista previa",
@@ -398,6 +439,9 @@
   "progress": {
     "title": "Convirtiendo documento",
     "uploadComplete": "Subida completa",
+    "urlFetching": "Descargando contenido de la URL",
+    "urlAnalyzingPage": "Analizando la estructura de la página",
+    "urlExtractingAssets": "Extrayendo contenido e imágenes de la página",
     "analyzing": "Analizando la estructura del documento",
     "extracting": "Extrayendo contenido",
     "generating": "Generando formatos de salida",
@@ -407,5 +451,3 @@
     "stepStatusPending": "Pendiente"
   }
 }
-
-

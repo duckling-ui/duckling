@@ -89,7 +89,33 @@ Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konv
 
 ## Schnellstart
 
-Siehe **[Erste Schritte](getting-started/index.md)**, um Duckling mit Docker oder in der lokalen Entwicklung zu installieren und auszuführen. Eine kompakte Anleitung steht im **[Schnellstart](getting-started/quickstart.md)**.
+Siehe **Getting Started**, um Duckling mit Docker oder lokal in der Entwicklung zu installieren und auszuführen.
+
+## Übersetzungsstatus
+
+Die deutsche Dokumentation ist in Arbeit. Einige Seiten können vorläufig oder nur teilweise übersetzt sein.
+
+
+
+    ```bash
+    # Repository klonen
+    git clone https://github.com/duckling-ui/duckling.git
+    cd duckling
+
+    # Backend-Einrichtung
+    cd backend
+    python -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+    python duckling.py
+
+    # Frontend-Einrichtung (neues Terminal)
+    cd frontend
+    npm install
+    npm run dev
+    ```
+
+Greifen Sie auf die Anwendung unter `http://localhost:3000` zu
 
 ## Unterstützte Formate
 

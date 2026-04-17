@@ -18,7 +18,7 @@ Despliegue Duckling con Docker para una puesta en marcha rápida y aislamiento.
 ### Opción 1: Compilar localmente
 
 ```bash
-# Clonar el repositorio
+# Clone the repository
 git clone https://github.com/duckling-ui/duckling.git
 cd duckling
 

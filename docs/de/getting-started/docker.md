@@ -18,7 +18,7 @@ Stellen Sie Duckling mit Docker für schnelles Setup und Isolation bereit.
 ### Option 1: Lokal bauen
 
 ```bash
-# Repository klonen
+# Clone the repository
 git clone https://github.com/duckling-ui/duckling.git
 cd duckling
 
@@ -32,7 +32,7 @@ docker-compose up -d --build
 ### Option 2: Vorgefertigte Images nutzen
 
 ```bash
-# docker-compose.prebuilt.yml herunterladen
+# Download docker-compose.prebuilt.yml
 curl -O https://raw.githubusercontent.com/duckling-ui/duckling/main/docker-compose.prebuilt.yml
 
 # Mit vorgefertigten Images starten
