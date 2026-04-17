@@ -66,7 +66,7 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ### Images préconstruites
 
 ```bash
-# Registre par défaut (davidgs)
+# Registre par défaut (ducklingui)
 docker-compose -f docker-compose.prebuilt.yml up -d
 
 # Registre personnalisé
@@ -149,7 +149,7 @@ FLASK_ENV=production
 DEBUG=False
 
 # Facultatif : registre personnalisé pour images préconstruites
-DOCKER_REGISTRY=davidgs
+DOCKER_REGISTRY=ducklingui
 VERSION=latest
 ```
 
