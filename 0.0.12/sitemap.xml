@@ -1,0 +1,1407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/changelog/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/changelog/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/changelog/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/changelog/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/changelog/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/api/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/api/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/api/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/api/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/api/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/api/conversion/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/api/conversion/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/api/conversion/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/api/conversion/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/api/conversion/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/api/history/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/api/history/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/api/history/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/api/history/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/api/history/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/api/settings/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/api/settings/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/api/settings/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/api/settings/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/api/settings/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/architecture/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/architecture/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/architecture/components/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/architecture/components/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/architecture/components/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/architecture/components/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/architecture/components/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/architecture/diagrams/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/architecture/diagrams/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/architecture/diagrams/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/architecture/diagrams/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/architecture/diagrams/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/architecture/overview/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/architecture/overview/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/architecture/overview/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/architecture/overview/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/architecture/overview/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/assets/screenshots/SCREENSHOT_GUIDE/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/assets/screenshots/SCREENSHOT_GUIDE/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/assets/screenshots/SCREENSHOT_GUIDE/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/assets/screenshots/SCREENSHOT_GUIDE/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/assets/screenshots/SCREENSHOT_GUIDE/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/contributing/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/contributing/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/contributing/accessibility/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/contributing/accessibility/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/accessibility/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/accessibility/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/accessibility/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/contributing/code-of-conduct/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/contributing/code-of-conduct/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/code-of-conduct/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/code-of-conduct/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/code-of-conduct/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/contributing/code-style/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/contributing/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/code-style/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/contributing/development/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/contributing/development/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/development/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/development/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/development/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/contributing/testing/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/contributing/testing/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/testing/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/testing/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/testing/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/deployment/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/deployment/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/deployment/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/deployment/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/deployment/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/deployment/production/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/deployment/production/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/deployment/production/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/deployment/production/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/deployment/production/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/deployment/scaling/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/deployment/scaling/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/deployment/scaling/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/deployment/scaling/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/deployment/scaling/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/deployment/security/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/deployment/security/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/deployment/security/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/deployment/security/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/deployment/security/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/docling/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/docling/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/docling/advanced-options/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/docling/advanced-options/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/advanced-options/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/advanced-options/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/advanced-options/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/docling/architecture/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/docling/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/architecture/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/docling/docling-document/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/docling/docling-document/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/docling-document/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/docling-document/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/docling-document/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/docling/installation/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/docling/installation/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/installation/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/installation/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/installation/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/docling/quickstart/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/docling/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/quickstart/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/docling/supported-formats/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/docling/supported-formats/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/supported-formats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/supported-formats/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/supported-formats/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/getting-started/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/getting-started/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/getting-started/docker/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/getting-started/docker/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/getting-started/docker/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/getting-started/docker/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/getting-started/docker/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/getting-started/installation/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/getting-started/installation/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/getting-started/quickstart/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/getting-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/getting-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/getting-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/getting-started/quickstart/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/images/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/images/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/images/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/images/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/images/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/includes/abbreviations/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/includes/abbreviations/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/includes/abbreviations/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/includes/abbreviations/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/includes/abbreviations/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/user-guide/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/user-guide/configuration/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/user-guide/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/configuration/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/user-guide/features/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/user-guide/features/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/features/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/features/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/features/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/user-guide/formats/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/user-guide/formats/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/formats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/formats/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/formats/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/user-guide/screenshots/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12/user-guide/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/screenshots/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/changelog/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/changelog/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/changelog/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12changelog/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/changelog/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/api/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/api/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/api/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12api/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/api/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/api/conversion/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/api/conversion/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/api/conversion/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12api/conversion/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/api/conversion/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/api/history/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/api/history/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/api/history/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12api/history/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/api/history/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/api/settings/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/api/settings/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/api/settings/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12api/settings/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/api/settings/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/architecture/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12architecture/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/architecture/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/architecture/components/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/architecture/components/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/architecture/components/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12architecture/components/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/architecture/components/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/architecture/diagrams/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/architecture/diagrams/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/architecture/diagrams/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12architecture/diagrams/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/architecture/diagrams/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/architecture/overview/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/architecture/overview/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/architecture/overview/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12architecture/overview/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/architecture/overview/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/assets/screenshots/SCREENSHOT_GUIDE/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/assets/screenshots/SCREENSHOT_GUIDE/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/assets/screenshots/SCREENSHOT_GUIDE/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12assets/screenshots/SCREENSHOT_GUIDE/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/assets/screenshots/SCREENSHOT_GUIDE/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/contributing/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/contributing/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/contributing/accessibility/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/contributing/accessibility/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/accessibility/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/accessibility/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/accessibility/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/contributing/code-of-conduct/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/contributing/code-of-conduct/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/code-of-conduct/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/code-of-conduct/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/code-of-conduct/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/contributing/code-style/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/contributing/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/code-style/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/contributing/development/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/contributing/development/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/development/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/development/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/development/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/contributing/testing/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/contributing/testing/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/testing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/testing/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/testing/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/deployment/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/deployment/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/deployment/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12deployment/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/deployment/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/deployment/production/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/deployment/production/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/deployment/production/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12deployment/production/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/deployment/production/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/deployment/scaling/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/deployment/scaling/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/deployment/scaling/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12deployment/scaling/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/deployment/scaling/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/deployment/security/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/deployment/security/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/deployment/security/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12deployment/security/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/deployment/security/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/docling/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/docling/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/docling/advanced-options/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/docling/advanced-options/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/advanced-options/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/advanced-options/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/advanced-options/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/docling/architecture/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/docling/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/architecture/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/docling/docling-document/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/docling/docling-document/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/docling-document/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/docling-document/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/docling-document/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/docling/installation/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/docling/installation/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/installation/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/installation/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/docling/quickstart/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/docling/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/quickstart/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/docling/supported-formats/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/docling/supported-formats/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/supported-formats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/supported-formats/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/supported-formats/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/getting-started/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/getting-started/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/getting-started/docker/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/getting-started/docker/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/getting-started/docker/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12getting-started/docker/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/getting-started/docker/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/getting-started/installation/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/getting-started/installation/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/getting-started/quickstart/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/getting-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/getting-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12getting-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/getting-started/quickstart/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/images/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/images/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/images/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12images/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/images/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/user-guide/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/user-guide/configuration/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/user-guide/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/configuration/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/user-guide/features/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/user-guide/features/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/features/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/features/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/features/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/user-guide/formats/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/user-guide/formats/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/formats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/formats/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/formats/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/user-guide/screenshots/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/user-guide/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/screenshots/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/es/includes/abbreviations/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12/es/includes/abbreviations/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/includes/abbreviations/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12includes/abbreviations/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/includes/abbreviations/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/changelog/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/changelog/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/changelog/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12changelog/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/changelog/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/api/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/api/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/api/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12api/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/api/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/api/conversion/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/api/conversion/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/api/conversion/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12api/conversion/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/api/conversion/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/api/history/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/api/history/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/api/history/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12api/history/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/api/history/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/api/settings/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/api/settings/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/api/settings/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12api/settings/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/api/settings/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/architecture/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12architecture/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/architecture/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/architecture/components/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/architecture/components/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/architecture/components/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12architecture/components/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/architecture/components/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/architecture/diagrams/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/architecture/diagrams/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/architecture/diagrams/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12architecture/diagrams/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/architecture/diagrams/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/architecture/overview/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/architecture/overview/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/architecture/overview/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12architecture/overview/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/architecture/overview/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/assets/screenshots/SCREENSHOT_GUIDE/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/assets/screenshots/SCREENSHOT_GUIDE/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/assets/screenshots/SCREENSHOT_GUIDE/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12assets/screenshots/SCREENSHOT_GUIDE/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/assets/screenshots/SCREENSHOT_GUIDE/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/contributing/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/contributing/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/contributing/accessibility/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/contributing/accessibility/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/accessibility/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/accessibility/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/accessibility/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/contributing/code-of-conduct/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/contributing/code-of-conduct/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/code-of-conduct/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/code-of-conduct/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/code-of-conduct/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/contributing/code-style/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/contributing/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/code-style/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/contributing/development/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/contributing/development/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/development/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/development/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/development/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/contributing/testing/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/contributing/testing/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/contributing/testing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/testing/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/testing/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/deployment/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/deployment/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/deployment/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12deployment/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/deployment/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/deployment/production/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/deployment/production/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/deployment/production/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12deployment/production/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/deployment/production/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/deployment/scaling/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/deployment/scaling/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/deployment/scaling/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12deployment/scaling/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/deployment/scaling/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/deployment/security/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/deployment/security/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/deployment/security/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12deployment/security/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/deployment/security/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/docling/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/docling/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/docling/advanced-options/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/docling/advanced-options/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/advanced-options/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/advanced-options/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/advanced-options/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/docling/architecture/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/docling/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/architecture/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/docling/docling-document/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/docling/docling-document/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/docling-document/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/docling-document/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/docling-document/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/docling/installation/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/docling/installation/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/installation/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/installation/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/docling/quickstart/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/docling/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/quickstart/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/docling/supported-formats/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/docling/supported-formats/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/docling/supported-formats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/supported-formats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/supported-formats/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/getting-started/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/getting-started/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/getting-started/docker/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/getting-started/docker/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/getting-started/docker/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12getting-started/docker/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/getting-started/docker/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/getting-started/installation/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/getting-started/installation/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/getting-started/quickstart/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/getting-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/getting-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12getting-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/getting-started/quickstart/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/images/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/images/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/images/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12images/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/images/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/user-guide/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/user-guide/configuration/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/user-guide/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/configuration/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/user-guide/features/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/user-guide/features/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/features/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/features/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/features/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/user-guide/formats/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/user-guide/formats/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/formats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/formats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/formats/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/user-guide/screenshots/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/user-guide/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/user-guide/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/screenshots/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/fr/includes/abbreviations/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12/fr/includes/abbreviations/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12de/includes/abbreviations/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12includes/abbreviations/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/includes/abbreviations/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/changelog/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/changelog/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12changelog/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/changelog/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/changelog/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/api/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/api/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12api/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/api/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/api/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/api/conversion/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/api/conversion/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12api/conversion/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/api/conversion/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/api/conversion/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/api/history/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/api/history/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12api/history/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/api/history/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/api/history/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/api/settings/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/api/settings/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12api/settings/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/api/settings/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/api/settings/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/architecture/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12architecture/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/architecture/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/architecture/components/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/architecture/components/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12architecture/components/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/architecture/components/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/architecture/components/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/architecture/diagrams/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/architecture/diagrams/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12architecture/diagrams/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/architecture/diagrams/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/architecture/diagrams/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/architecture/overview/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/architecture/overview/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12architecture/overview/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/architecture/overview/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/architecture/overview/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/assets/screenshots/SCREENSHOT_GUIDE/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/assets/screenshots/SCREENSHOT_GUIDE/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12assets/screenshots/SCREENSHOT_GUIDE/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/assets/screenshots/SCREENSHOT_GUIDE/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/assets/screenshots/SCREENSHOT_GUIDE/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/contributing/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/contributing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/contributing/accessibility/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/contributing/accessibility/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/accessibility/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/accessibility/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/accessibility/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/contributing/code-of-conduct/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/contributing/code-of-conduct/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/code-of-conduct/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/code-of-conduct/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/code-of-conduct/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/contributing/code-style/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/contributing/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/code-style/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/code-style/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/contributing/development/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/contributing/development/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/development/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/development/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/development/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/contributing/testing/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/contributing/testing/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12contributing/testing/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/contributing/testing/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/contributing/testing/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/deployment/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/deployment/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12deployment/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/deployment/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/deployment/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/deployment/production/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/deployment/production/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12deployment/production/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/deployment/production/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/deployment/production/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/deployment/scaling/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/deployment/scaling/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12deployment/scaling/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/deployment/scaling/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/deployment/scaling/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/deployment/security/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/deployment/security/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12deployment/security/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/deployment/security/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/deployment/security/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/docling/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/docling/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/getting-started/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/getting-started/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/getting-started/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/getting-started/docker/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/getting-started/docker/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12getting-started/docker/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/getting-started/docker/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/getting-started/docker/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/getting-started/installation/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/getting-started/installation/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/getting-started/installation/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/getting-started/quickstart/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/getting-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12getting-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/getting-started/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/getting-started/quickstart/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/images/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/images/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12images/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/images/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/images/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/user-guide/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/user-guide/configuration/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/user-guide/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/configuration/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/configuration/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/user-guide/features/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/user-guide/features/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/features/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/features/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/features/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/user-guide/formats/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/user-guide/formats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/formats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/formats/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/formats/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/user-guide/screenshots/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/user-guide/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12user-guide/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/user-guide/screenshots/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/user-guide/screenshots/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/docling/advanced-options/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/docling/advanced-options/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/advanced-options/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/advanced-options/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/advanced-options/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/docling/architecture/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/docling/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/architecture/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/architecture/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/docling/docling-document/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/docling/docling-document/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/docling-document/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/docling-document/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/docling-document/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/docling/installation/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/docling/installation/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/installation/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/installation/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/installation/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/docling/quickstart/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/docling/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/quickstart/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/quickstart/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/docling/supported-formats/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/docling/supported-formats/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12docling/supported-formats/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/docling/supported-formats/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/docling/supported-formats/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.0.12/de/includes/abbreviations/</loc>
+        <lastmod>2026-04-17</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.0.12/de/includes/abbreviations/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.0.12includes/abbreviations/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.0.12es/includes/abbreviations/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.0.12fr/includes/abbreviations/"/>
+    </url>
+</urlset>
