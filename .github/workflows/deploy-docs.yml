@@ -52,7 +52,7 @@ jobs:
 
       - name: Deploy docs with mike
         run: |
-          VERSION=$(python scripts/get_version.py 2>/dev/null || echo "0.0.11")
+          VERSION=$(python scripts/get_version.py 2>/dev/null || echo "0.0.12")
           mike deploy --push --update-aliases --alias-type redirect "$VERSION" latest
           mike set-default --push latest
 

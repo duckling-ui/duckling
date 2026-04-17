@@ -144,8 +144,8 @@ def main():
 
     # If still no version, use default
     if not version:
-        print("Warning: Could not determine version, using default '0.0.11'", file=sys.stderr)
-        version = "0.0.11"
+        print("Warning: Could not determine version, using default '0.0.12'", file=sys.stderr)
+        version = "0.0.12"
 
     # Update mkdocs.yml (mike generates versions.json during deploy)
     mkdocs_updated = update_mkdocs_yml(version)
