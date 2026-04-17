@@ -233,7 +233,7 @@ markdown_extensions:
   - pymdownx.magiclink:
       normalize_issue_symbols: true
       repo_url_shorthand: true
-      user: davidgs
+      user: duckling-ui
       repo: duckling
   - pymdownx.mark
   - pymdownx.smartsymbols
