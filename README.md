@@ -1,6 +1,8 @@
 # Duckling
 
 [![Tests](https://github.com/duckling-ui/duckling/actions/workflows/test.yml/badge.svg)](https://github.com/duckling-ui/duckling/actions/workflows/test.yml)
+[![Deploy Docs](https://github.com/duckling-ui/duckling/actions/workflows/deploy-docs.yml/badge.svg)](https://github.com/duckling-ui/duckling/actions/workflows/deploy-docs.yml)
+[![Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml/badge.svg)](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Node.js 22+](https://img.shields.io/badge/node.js-22+-green.svg)](https://nodejs.org/)
@@ -9,7 +11,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178c6.svg)](https://www.typescriptlang.org/)
 
-A modern, user-friendly graphical interface for [Docling](https://github.com/docling-project/docling) - the powerful document conversion library by IBM.
+A modern, user-friendly browser-based graphical interface for [Docling](https://github.com/docling-project/docling) - the powerful document conversion library by IBM.
 
 ![Duckling Screenshot](docs/screenshot.png)
 
