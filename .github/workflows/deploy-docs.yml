@@ -8,6 +8,7 @@ permissions:
   contents: write  # Required for mike to push to gh-pages
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
 
