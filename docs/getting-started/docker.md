@@ -320,6 +320,31 @@ services:
           memory: 256M
 ```
 
+## Runtime Hardening
+
+Production and pre-built compose configurations include hardened runtime defaults:
+
+```yaml
+services:
+  backend:
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs:
+      - /tmp
+
+  frontend:
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
+```
+
+These settings reduce container mutation and privilege escalation risk while preserving required writable runtime paths.
+
 ## Networking
 
 Services communicate over a bridge network:

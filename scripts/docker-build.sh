@@ -40,6 +40,8 @@ PUSH=false
 PLATFORMS="linux/amd64,linux/arm64"
 BUILD_MULTI_PLATFORM=false
 SKIP_DOCS=false
+ENABLE_SBOM=false
+ENABLE_PROVENANCE=false
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -64,6 +66,14 @@ while [[ $# -gt 0 ]]; do
             SKIP_DOCS=true
             shift
             ;;
+        --sbom)
+            ENABLE_SBOM=true
+            shift
+            ;;
+        --provenance)
+            ENABLE_PROVENANCE=true
+            shift
+            ;;
         *)
             echo "Unknown option: $1"
             exit 1
@@ -81,6 +91,8 @@ echo -e "${GREEN}=== Duckling Docker Build ===${NC}"
 echo "Registry: ${REGISTRY:-local}"
 echo "Version: $VERSION"
 echo "Push: $PUSH"
+echo "SBOM: $ENABLE_SBOM"
+echo "Provenance: $ENABLE_PROVENANCE"
 echo ""
 
 # Navigate to project root
@@ -152,10 +164,18 @@ fi
 
 # Build backend
 echo -e "${YELLOW}Building backend image...${NC}"
+BACKEND_LABELS=(
+    --label "org.opencontainers.image.source=https://github.com/duckling-ui/duckling"
+    --label "org.opencontainers.image.title=duckling-backend"
+    --label "org.opencontainers.image.version=${VERSION}"
+)
 if [ "$BUILD_MULTI_PLATFORM" = true ]; then
     docker buildx build \
         --platform $PLATFORMS \
         --target production \
+        "${BACKEND_LABELS[@]}" \
+        ${ENABLE_SBOM:+--sbom=true} \
+        ${ENABLE_PROVENANCE:+--provenance=true} \
         -t "${REGISTRY}duckling-backend:${VERSION}" \
         -t "${REGISTRY}duckling-backend:latest" \
         ${PUSH:+--push} \
@@ -163,6 +183,7 @@ if [ "$BUILD_MULTI_PLATFORM" = true ]; then
 else
     docker build \
         --target production \
+        "${BACKEND_LABELS[@]}" \
         -t "${REGISTRY}duckling-backend:${VERSION}" \
         -t "${REGISTRY}duckling-backend:latest" \
         ./backend
@@ -171,10 +192,18 @@ echo -e "${GREEN}✓ Backend image built${NC}"
 
 # Build frontend
 echo -e "${YELLOW}Building frontend image...${NC}"
+FRONTEND_LABELS=(
+    --label "org.opencontainers.image.source=https://github.com/duckling-ui/duckling"
+    --label "org.opencontainers.image.title=duckling-frontend"
+    --label "org.opencontainers.image.version=${VERSION}"
+)
 if [ "$BUILD_MULTI_PLATFORM" = true ]; then
     docker buildx build \
         --platform $PLATFORMS \
         --target production \
+        "${FRONTEND_LABELS[@]}" \
+        ${ENABLE_SBOM:+--sbom=true} \
+        ${ENABLE_PROVENANCE:+--provenance=true} \
         -t "${REGISTRY}duckling-frontend:${VERSION}" \
         -t "${REGISTRY}duckling-frontend:latest" \
         ${PUSH:+--push} \

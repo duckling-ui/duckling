@@ -56,6 +56,35 @@ Before deploying to production, ensure:
 
 ## Security Measures
 
+### Container Runtime Hardening
+
+Duckling production compose files support hardened container defaults:
+
+- run containers with a read-only root filesystem
+- drop all Linux capabilities (`cap_drop: ["ALL"]`)
+- enforce `no-new-privileges`
+- use explicit writable `tmpfs` mounts for transient runtime paths
+- run backend/frontend as non-root users inside the image
+
+For production-like runs, use:
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
+For pre-built images, `docker-compose.prebuilt.yml` includes the same hardening defaults.
+
+### Container Supply Chain Hardening
+
+The Docker image publish workflow includes:
+
+- vulnerability scanning gate (Trivy, fails on `HIGH` and `CRITICAL`)
+- SBOM generation (Syft SPDX JSON artifacts)
+- build provenance enabled for `buildx` publishes
+- keyless image signing (Cosign)
+
+These controls are defined in `.github/workflows/publish-docker.yml`.
+
 ### Backend Security
 
 #### 1. Environment-Based Configuration

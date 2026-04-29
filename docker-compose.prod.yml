@@ -5,6 +5,13 @@ services:
   backend:
     build:
       target: production
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
     environment:
       - FLASK_ENV=production
       - FLASK_DEBUG=false
@@ -20,6 +27,15 @@ services:
           memory: 1G
 
   frontend:
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
     deploy:
       resources:
         limits:

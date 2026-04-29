@@ -298,6 +298,19 @@ it('should upload file on drop', async () => {
 
 When a PR is merged to `main`, the **Publish Docker Images** workflow runs automatically. It builds multi-platform images and pushes them to Docker Hub and GitHub Container Registry. Maintainers must configure `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` repository secrets for this to work. See [Docker Deployment](docs/getting-started/docker.md#automatic-publishing-cicd) for details.
 
+Container publishing is security-gated. The publish workflow now:
+
+- scans pushed images with Trivy and fails on `HIGH`/`CRITICAL` vulnerabilities
+- generates SPDX SBOM artifacts with Syft
+- enables build provenance during `buildx` publish
+- signs release images using keyless Cosign
+
+When changing Dockerfiles, compose runtime settings, or publish automation, update:
+
+- `tests/test_docker_hardening.py`
+- `tests/TEST_SUITE_SUMMARY.md`
+- deployment/security docs in both `docs/deployment/security.md` and `SECURITY.md`
+
 ## Getting Help
 
 - Create an issue for questions

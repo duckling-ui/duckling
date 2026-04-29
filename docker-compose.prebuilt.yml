@@ -9,6 +9,13 @@ services:
   backend:
     image: ${DOCKER_REGISTRY:-ducklingui}/duckling-backend:${VERSION:-latest}
     container_name: duckling-backend
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
     ports:
       - "5001:5001"
     volumes:
@@ -23,7 +30,13 @@ services:
       - FLASK_HOST=0.0.0.0
       - FLASK_PORT=5001
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5001/api/health"]
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:5001/api/health', timeout=5)",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -35,6 +48,15 @@ services:
   frontend:
     image: ${DOCKER_REGISTRY:-ducklingui}/duckling-frontend:${VERSION:-latest}
     container_name: duckling-frontend
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp
+      - /var/cache/nginx
+      - /var/run
     ports:
       - "3000:3000"
     depends_on:

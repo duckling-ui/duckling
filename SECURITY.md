@@ -21,6 +21,7 @@ Last audit: March 3, 2026
 
 ### Product surface notes
 
+- **2026-04-29**: Docker hardening update: frontend image now runs as non-root (`USER nginxuser`), production/prebuilt compose add read-only rootfs + `cap_drop: ["ALL"]` + `no-new-privileges` + scoped `tmpfs` mounts, and publish CI adds Trivy gating, Syft SBOM artifacts, provenance-enabled builds, and keyless Cosign signing.
 - **2026-04-08**: Documentation only: the Quick Start guide clarifies folder drag-and-drop and folder vs **Choose files…** selection; upload endpoints and server-side validation are unchanged.
 - **2026-04-08**: Documentation only: French **Features** page translation and removal of a duplicate statistics subsection in English features; no application or API change.
 - **2026-04-08**: Documentation only: German and Spanish **Features**, German/French/Spanish **Configuration**, and localized home page updates (feature-card anchors, Docling link on `de`, changelog link on `es`); no application or API change.
@@ -43,6 +44,8 @@ Last audit: March 3, 2026
 | XSS (Cross-Site Scripting) | ⚠️ Mitigated | Uses dangerouslySetInnerHTML for trusted docs only |
 | CORS | ✅ Configured | Restricted to localhost origins in development |
 | Batch / folder uploads | ✅ Validated | Same extension and size rules as single uploads; unsupported parts are rejected; empty batches return 400. Whole-request limit remains `MAX_CONTENT_LENGTH`—very large folders may require multiple requests. |
+| Container runtime hardening | ✅ Enforced in prod compose | Non-root runtime, read-only rootfs, no new privileges, all caps dropped, scoped writable tmpfs paths |
+| Container supply chain | ✅ Gated in publish CI | Trivy high/critical gate, SBOM generation, provenance-enabled buildx publish, Cosign signing |
 
 ### Frontend Security Updates (January 2026)
 
@@ -123,6 +126,9 @@ Before deploying to production, ensure:
 - [ ] Review and restrict file upload extensions if needed
 - [ ] Enable rate limiting (via reverse proxy or middleware)
 - [ ] Set up log monitoring for security events
+- [ ] Use `docker-compose.prod.yml` or `docker-compose.prebuilt.yml` hardened runtime defaults
+- [ ] Verify image signatures before deployment (`cosign verify`)
+- [ ] Review SBOM and vulnerability scan output for release tags
 
 ## Environment Variables
 
