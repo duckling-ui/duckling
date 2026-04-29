@@ -1,0 +1,22 @@
+---
+name: BranchCheckBeforeEdits
+description: Require explicit branch verification before implementation edits
+alwaysApply: true
+---
+
+## Rules
+
+### 1. Check current branch before coding
+Before making substantive file edits, run `git branch --show-current` and verify the active branch.
+
+### 2. Report branch context in the workflow
+State the current branch name in the working update before substantive edits.
+
+### 3. Enforce branch-scope match
+If the active branch does not match the requested feature/fix/change-set scope, create or switch to an appropriate branch first.
+
+### 4. Block implementation on default branches
+If the active branch is `main` or `master`, do not begin feature/fix implementation; create a scoped branch first.
+
+### 5. Re-verify branch after switching
+After creating or switching branches, re-run `git branch --show-current` before proceeding with edits.
