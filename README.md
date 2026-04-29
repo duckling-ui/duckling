@@ -172,6 +172,8 @@ Published images now include supply-chain security gates in CI:
 - build provenance enabled during `buildx` publish
 - keyless image signing (Cosign)
 
+To keep image vulnerability scans green, backend Python dependencies include pinned minimums for security-sensitive packaging libraries (`jaraco.context`, `wheel`).
+
 ## Configuration
 
 ### Backend Environment Variables

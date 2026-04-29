@@ -35,3 +35,9 @@ def test_backend_config_uses_writable_db_path_for_docker():
     config = _read("backend/config.py")
     assert 'DATA_FOLDER = Path("/app/data")' in config
     assert "DATABASE_PATH = DATA_FOLDER / \"history.db\"" in config
+
+
+def test_backend_requirements_pin_cve_fixes_for_image_scans():
+    requirements = _read("backend/requirements.txt")
+    assert "jaraco.context>=6.1.0" in requirements
+    assert "wheel>=0.46.2" in requirements

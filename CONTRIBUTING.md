@@ -305,6 +305,8 @@ Container publishing is security-gated. The publish workflow now:
 - enables build provenance during `buildx` publish
 - signs release images using keyless Cosign
 
+If image scan gates fail on Python packaging CVEs, update and pin secure minimum versions in `backend/requirements.txt` (for example, `jaraco.context` and `wheel`) and add/adjust regression assertions in `tests/test_docker_hardening.py`.
+
 When changing Dockerfiles, compose runtime settings, or publish automation, update:
 
 - `tests/test_docker_hardening.py`
