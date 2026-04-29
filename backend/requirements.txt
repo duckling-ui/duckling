@@ -23,3 +23,6 @@ werkzeug==3.1.6
 gunicorn==23.0.0
 # pymdown-extensions 10.21.2+ requires markdown>=3.6 (was 3.5.1; conflict broke pip on CI)
 markdown>=3.6,<4
+# Image-scan hardening (Trivy): pin vulnerable transitive packages to fixed versions.
+jaraco.context>=6.1.0
+wheel>=0.46.2
