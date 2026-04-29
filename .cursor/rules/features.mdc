@@ -1,0 +1,21 @@
+---
+name: EnsureBranches
+description: Rules for branch discipline per feature/change set
+alwaysApply: true
+---
+## Rules
+
+### 1. Use a single git branch for each set of associated changes
+Always keep all related edits for one feature/change set in one dedicated branch.
+
+### 2. Never implement feature/change-set work directly on main/master
+Always create and switch to a dedicated branch before starting a new feature/change set.
+
+### 3. Create a new discrete branch for unrelated work
+When a new request is unrelated to the current branch scope, create a new branch for that request instead of mixing changes.
+
+### 4. Use a clear branch naming convention
+Name branches with a scope prefix and short slug, such as `feature/<slug>`, `fix/<slug>`, `docs/<slug>`, or `chore/<slug>`.
+
+### 5. Confirm branch scope before coding
+Before substantial edits, verify the current branch matches the requested scope; if not, create/switch branches first.
