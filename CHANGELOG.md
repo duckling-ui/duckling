@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- **Docker image hardening**: Frontend production image now explicitly runs as non-root (`USER nginxuser`), backend healthcheck no longer depends on `curl`, and production/prebuilt compose defaults now enforce `read_only`, `cap_drop: ["ALL"]`, `security_opt: ["no-new-privileges:true"]`, and scoped `tmpfs` writable paths.
+- **Read-only runtime fix**: Backend SQLite history DB path now uses writable Docker volume storage (`/app/data/history.db`) so history records and document-path metadata continue working with `read_only: true`.
+- **Container supply chain hardening**: Publish workflow now enables build provenance, generates SBOM artifacts (Syft SPDX), scans release images with Trivy (fails on HIGH/CRITICAL), and signs published images with keyless Cosign.
+
+### Added
+
+- **Container hardening tests**: Added `tests/test_docker_hardening.py` and updated `tests/TEST_SUITE_SUMMARY.md` to guard non-root runtime, compose hardening flags, and publish workflow security gates.
+
 ### Documentation
 
 - **UI localization**: Batch results header and counters in `frontend/src/App.tsx` now use i18n keys (`conversion.batchCompleteTitle`, `batchSucceeded`, `batchFailed`, `convertedFilesTitle`) so the “Batch Conversion Complete” view is translated in `en`/`de`/`fr`/`es`.

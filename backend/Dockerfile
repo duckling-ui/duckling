@@ -1,7 +1,8 @@
 # Duckling Backend Dockerfile
 # Multi-stage build for optimized production image
 
-FROM python:3.11-slim AS base
+ARG PYTHON_BASE_IMAGE=python:3.11-slim-bookworm
+FROM ${PYTHON_BASE_IMAGE} AS base
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -15,7 +16,6 @@ WORKDIR /app
 # Note: libgl1-mesa-glx replaced with libgl1 for newer Debian versions
 RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \
-  curl \
   libgl1 \
   libglib2.0-0 \
   libsm6 \
@@ -61,8 +61,8 @@ RUN useradd --create-home --shell /bin/bash appuser \
 USER appuser
 
 EXPOSE 5001
-# Health check
+# Health check without extra runtime tools
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:5001/api/health || exit 1
+  CMD python -c "import sys, urllib.request; urllib.request.urlopen('http://localhost:5001/api/health', timeout=5); sys.exit(0)" || exit 1
 # Run with Gunicorn for production
 CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "4", "--threads", "2", "--timeout", "300", "duckling:app"]

@@ -48,20 +48,23 @@ if BACKEND_DIR == Path("/app"):
     BASE_DIR = BACKEND_DIR
     UPLOAD_FOLDER = Path("/app/uploads")
     OUTPUT_FOLDER = Path("/app/outputs")
+    DATA_FOLDER = Path("/app/data")
 else:
     # Running locally - use parent of backend as base
     BASE_DIR = BACKEND_DIR.parent.absolute()
     UPLOAD_FOLDER = BASE_DIR / "uploads"
     OUTPUT_FOLDER = BASE_DIR / "outputs"
+    DATA_FOLDER = BACKEND_DIR
 
 # Ensure directories exist (with parents to handle Docker volume mounts)
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
 CONTENT_STORE = OUTPUT_FOLDER / "_content"
 CONTENT_STORE.mkdir(parents=True, exist_ok=True)
+DATA_FOLDER.mkdir(parents=True, exist_ok=True)
 
 # Database configuration
-DATABASE_PATH = BACKEND_DIR / "history.db"
+DATABASE_PATH = DATA_FOLDER / "history.db"
 DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
 
 # Flask configuration

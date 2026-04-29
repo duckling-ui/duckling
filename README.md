@@ -145,6 +145,13 @@ docker-compose -f docker-compose.prebuilt.yml up -d
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
+The production override now applies hardened runtime defaults for both services:
+
+- `read_only: true`
+- `cap_drop: ["ALL"]`
+- `security_opt: ["no-new-privileges:true"]`
+- `tmpfs` mounts for transient runtime paths (`/tmp`, plus nginx cache/runtime dirs)
+
 Access the application at `http://localhost:3000`
 
 **Build Docker Images:**
@@ -157,6 +164,13 @@ Access the application at `http://localhost:3000`
 ```
 
 When PRs are merged to `main`, images are automatically published to Docker Hub and GitHub Container Registry. See [Docker Deployment Guide](docs/getting-started/docker.md) for details and required secrets.
+
+Published images now include supply-chain security gates in CI:
+
+- vulnerability scanning (Trivy) with `HIGH`/`CRITICAL` fail gates
+- SBOM artifact generation (Syft SPDX JSON)
+- build provenance enabled during `buildx` publish
+- keyless image signing (Cosign)
 
 ## Configuration
 

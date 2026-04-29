@@ -6,6 +6,7 @@ This repository contains multiple test suites:
   - `tests/test_docs.py`: Verifies MkDocs documentation structure (including the vendored Docling docs section; can optionally run `mkdocs build`)
   - `tests/test_docs_build.py`: Static regression test ensuring backend docs rebuild prefers the repo-local `./venv` MkDocs environment (for required plugins like `mkdocs-static-i18n`)
   - `tests/test_github_templates.py`: Ensures `.github/` issue and PR templates exist and include required policy pointers
+  - `tests/test_docker_hardening.py`: Guards Docker hardening regressions (frontend non-root runtime, production compose hardening flags, and publish workflow security gates for scan/SBOM/signing)
 - **Backend (pytest)**: API and service tests in `backend/tests/`
   - `backend/tests/conftest.py` stubs the app singleton’s `converter_service.start_conversion` (autouse) so convert endpoints are tested without spawning Docling worker threads (prevents segfaults on some platforms)
   - Includes regression tests for history reload endpoint validation and error handling in `backend/tests/test_api.py`
