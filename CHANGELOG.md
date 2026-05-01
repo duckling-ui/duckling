@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- **Frontend runtime base refresh**: `frontend/Dockerfile` now uses `nginx:1.29-alpine3.22` for the production stage to pick up newer Alpine security fixes (OpenSSL/libxml/musl/zlib family) surfaced by Trivy in `nginx:1.27-alpine`-based images.
+- **Frontend runtime base refresh**: `frontend/Dockerfile` now uses `nginx:1.29-alpine3.22` for the production stage and runs `apk upgrade --no-cache` so Alpine OS packages are refreshed to current patch revisions during build (OpenSSL/libxml/musl/zlib/libpng/libexpat family) for Trivy gates.
 - **Docker CI vulnerability gate fix**: Backend image builds now use deterministic pins (`backend/requirements.txt`: `jaraco.context==6.1.0`, `wheel==0.46.2`) and force-reinstall/verify these versions in `backend/Dockerfile`, plus cleanup of stale vulnerable metadata artifacts (`*.dist-info`, legacy ensurepip wheel bundles) so Trivy publish scans do not fail on stale package metadata (`CVE-2026-23949`, `CVE-2026-24049`).
 - **Docker image hardening**: Frontend production image now explicitly runs as non-root (`USER nginxuser`), backend healthcheck no longer depends on `curl`, and production/prebuilt compose defaults now enforce `read_only`, `cap_drop: ["ALL"]`, `security_opt: ["no-new-privileges:true"]`, and scoped `tmpfs` writable paths.
 - **Read-only runtime fix**: Backend SQLite history DB path now uses writable Docker volume storage (`/app/data/history.db`) so history records and document-path metadata continue working with `read_only: true`.

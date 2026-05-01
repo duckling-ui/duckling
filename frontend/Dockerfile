@@ -22,6 +22,9 @@ RUN npm run build
 # Production stage with nginx
 FROM nginx:1.29-alpine3.22 AS production
 
+# Refresh Alpine packages to latest security patch level available in this release train.
+RUN apk upgrade --no-cache
+
 # Copy custom nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 

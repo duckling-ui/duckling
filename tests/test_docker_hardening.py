@@ -12,6 +12,7 @@ def test_frontend_dockerfile_runs_as_non_root():
     dockerfile = _read("frontend/Dockerfile")
     assert "USER nginxuser" in dockerfile
     assert "FROM nginx:1.29-alpine3.22 AS production" in dockerfile
+    assert "RUN apk upgrade --no-cache" in dockerfile
 
 
 def test_prod_compose_has_restricted_runtime_defaults():

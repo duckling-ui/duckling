@@ -311,7 +311,7 @@ If image scan gates fail on Python packaging CVEs, update deterministic safe pin
 
 When changing Dockerfiles, compose runtime settings, or publish automation, update:
 
-- keep frontend runtime base current (`frontend/Dockerfile` currently pins `nginx:1.29-alpine3.22`) so Trivy OS-package gates do not regress
+- keep frontend runtime base current (`frontend/Dockerfile` currently pins `nginx:1.29-alpine3.22`) and preserve the `apk upgrade --no-cache` hardening step so Trivy OS-package gates do not regress
 
 
 - `tests/test_docker_hardening.py`
