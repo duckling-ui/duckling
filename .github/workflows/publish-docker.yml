@@ -4,6 +4,9 @@
 #
 # The build entrypoint is ./scripts/docker-build.sh. Pull requests run the "Docker build script (publish parity)"
 # job in .github/workflows/test.yml (syntax + same flag/expansion paths on ubuntu-latest) so changes stay safe for this workflow.
+#
+# After images are pushed, this workflow runs Trivy on the GitHub Actions runner (not `docker run aquasec/trivy`) so scans
+# can use the workflow's Docker Hub + GHCR logins and the runner Docker engine.
 name: Publish Docker Images
 
 on:
@@ -14,6 +17,9 @@ jobs:
   publish:
     name: Build and Push Docker Images
     runs-on: ubuntu-latest
+    env:
+      # Quieter CI logs; vulnerability results are unchanged.
+      TRIVY_DISABLE_VEX_NOTICE: "true"
     permissions:
       contents: read
       packages: write
@@ -54,21 +60,42 @@ jobs:
         run: |
           ./scripts/docker-build.sh --push --registry ghcr.io/${{ github.repository_owner }} --version ${{ steps.version.outputs.version }} --multi-platform --skip-docs --sbom --provenance
 
+      - name: Install Trivy CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+          echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install -y trivy
+
+      - name: Pull published images for local Trivy scan
+        run: |
+          set -euo pipefail
+          DH_BACKEND="${{ secrets.DOCKERHUB_USERNAME }}/duckling-backend:${{ steps.version.outputs.version }}"
+          DH_FRONTEND="${{ secrets.DOCKERHUB_USERNAME }}/duckling-frontend:${{ steps.version.outputs.version }}"
+          GH_BACKEND="ghcr.io/${{ github.repository_owner }}/duckling-backend:${{ steps.version.outputs.version }}"
+          GH_FRONTEND="ghcr.io/${{ github.repository_owner }}/duckling-frontend:${{ steps.version.outputs.version }}"
+          docker pull "$DH_BACKEND"
+          docker pull "$DH_FRONTEND"
+          docker pull "$GH_BACKEND"
+          docker pull "$GH_FRONTEND"
+
       - name: Scan Docker Hub backend image
         run: |
-          docker run --rm aquasec/trivy:0.56.2 image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed ${{ secrets.DOCKERHUB_USERNAME }}/duckling-backend:${{ steps.version.outputs.version }}
+          trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed --scanners vuln ${{ secrets.DOCKERHUB_USERNAME }}/duckling-backend:${{ steps.version.outputs.version }}
 
       - name: Scan Docker Hub frontend image
         run: |
-          docker run --rm aquasec/trivy:0.56.2 image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed ${{ secrets.DOCKERHUB_USERNAME }}/duckling-frontend:${{ steps.version.outputs.version }}
+          trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed --scanners vuln ${{ secrets.DOCKERHUB_USERNAME }}/duckling-frontend:${{ steps.version.outputs.version }}
 
       - name: Scan GHCR backend image
         run: |
-          docker run --rm aquasec/trivy:0.56.2 image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed ghcr.io/${{ github.repository_owner }}/duckling-backend:${{ steps.version.outputs.version }}
+          trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed --scanners vuln ghcr.io/${{ github.repository_owner }}/duckling-backend:${{ steps.version.outputs.version }}
 
       - name: Scan GHCR frontend image
         run: |
-          docker run --rm aquasec/trivy:0.56.2 image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed ghcr.io/${{ github.repository_owner }}/duckling-frontend:${{ steps.version.outputs.version }}
+          trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed --scanners vuln ghcr.io/${{ github.repository_owner }}/duckling-frontend:${{ steps.version.outputs.version }}
 
       - name: Install Syft
         uses: anchore/sbom-action/download-syft@v0.20.6

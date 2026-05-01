@@ -300,7 +300,7 @@ When a PR is merged to `main`, the **Publish Docker Images** workflow runs autom
 
 Container publishing is security-gated. The publish workflow now:
 
-- scans pushed images with Trivy and fails on `HIGH`/`CRITICAL` vulnerabilities
+- scans pushed images with Trivy and fails on `HIGH`/`CRITICAL` vulnerabilities (runner-installed `trivy`, after `docker pull` of the published tags — avoid `docker run aquasec/trivy`, which breaks registry auth / Docker socket access in nested containers)
 - generates SPDX SBOM artifacts with Syft
 - enables build provenance during `buildx` publish
 - signs release images using keyless Cosign

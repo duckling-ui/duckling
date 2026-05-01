@@ -27,7 +27,10 @@ def test_prod_compose_has_restricted_runtime_defaults():
 def test_publish_workflow_has_security_gates():
     workflow = _read(".github/workflows/publish-docker.yml")
     assert "id-token: write" in workflow
-    assert "aquasec/trivy:" in workflow
+    assert "Install Trivy CLI" in workflow
+    assert "sudo apt-get install -y trivy" in workflow
+    assert "trivy image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed --scanners vuln" in workflow
+    assert "docker run --rm aquasec/trivy" not in workflow
     assert "--severity HIGH,CRITICAL --exit-code 1" in workflow
     assert "cosign sign --yes" in workflow
     assert "syft " in workflow

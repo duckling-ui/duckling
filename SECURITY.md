@@ -4,6 +4,7 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 0.0.13  | :white_check_mark:                |
 | 0.0.12  | :white_check_mark:                |
 | 0.0.10a  | :white_check_mark:                |
 | 0.0.9  | :white_check_mark:                |
@@ -21,6 +22,7 @@ Last audit: March 3, 2026
 
 ### Product surface notes
 
+- **2026-05-01**: Publish workflow scan reliability: `.github/workflows/publish-docker.yml` now runs Trivy on the GitHub Actions runner (after `docker pull` of the published Docker Hub + GHCR tags) instead of `docker run aquasec/trivy`, fixing nested-container failures (`Cannot connect to the Docker daemon…`, `GHCR … UNAUTHORIZED`) when scanning registry-hosted images after merge.
 - **2026-05-01**: Container supply-chain hardening follow-up: backend image build now uses deterministic pins (`jaraco.context==6.1.0`, `wheel==0.46.2`) and explicitly force-reinstalls/verifies them in `backend/Dockerfile`, with cleanup of stale vulnerable metadata artifacts from Python paths, preventing stale package metadata from surviving into published images. Pull request CI runs both **Docker build script (publish parity)** checks and a **Docker publish rehearsal (PR gate)** job that builds local images and executes Trivy HIGH/CRITICAL scan gates pre-merge.
 - **2026-05-01**: Build reliability: local Docker exporter (`--load`) does not support SBOM/provenance attestations; `scripts/docker-build.sh` now auto-disables `--sbom`/`--provenance` in non-push local-load mode, avoiding manifest-list export failures while keeping publish-path attestations intact. PR rehearsal Trivy scans now run on runner-installed Trivy CLI against `docker save` archives via `--input`, avoiding in-container daemon access issues for local image tags.
 - **2026-05-01**: Frontend container baseline update: production frontend image now pins `nginx:1.29-alpine3.22` and runs `apk upgrade --no-cache` to reduce Alpine OS-package CVE exposure found by Trivy in older `nginx:1.27-alpine` images (OpenSSL/libxml/musl/zlib/libpng/libexpat families).

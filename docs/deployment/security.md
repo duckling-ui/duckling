@@ -78,7 +78,7 @@ For pre-built images, `docker-compose.prebuilt.yml` includes the same hardening 
 
 The Docker image publish workflow includes:
 
-- vulnerability scanning gate (Trivy, fails on `HIGH` and `CRITICAL`)
+- vulnerability scanning gate (Trivy, fails on `HIGH` and `CRITICAL`; installs `trivy` on the runner, `docker pull`s the published tags, then runs `trivy image` so registry authentication matches the workflow logins)
 - SBOM generation (Syft SPDX JSON artifacts)
 - build provenance enabled for `buildx` publishes
 - keyless image signing (Cosign)
