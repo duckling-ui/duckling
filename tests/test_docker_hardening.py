@@ -31,6 +31,17 @@ def test_publish_workflow_has_security_gates():
     assert "syft " in workflow
 
 
+def test_tests_workflow_rehearses_publish_docker_scan_gates():
+    workflow = _read(".github/workflows/test.yml")
+    assert "Docker publish rehearsal (PR gate)" in workflow
+    assert "--platform linux/amd64" in workflow
+    assert "--sbom" in workflow
+    assert "--provenance" in workflow
+    assert "aquasec/trivy:0.56.2" in workflow
+    assert "duckling-backend:${{ steps.version.outputs.version }}" in workflow
+    assert "duckling-frontend:${{ steps.version.outputs.version }}" in workflow
+
+
 def test_backend_config_uses_writable_db_path_for_docker():
     config = _read("backend/config.py")
     assert 'DATA_FOLDER = Path("/app/data")' in config
@@ -67,3 +78,5 @@ def test_docker_build_script_forces_plain_progress_logging():
     # macOS /bin/bash 3.2: "${arr[@]}" with set -u errors when arr is empty; use ${arr[@]+"${arr[@]}"}
     assert 'BUILDX_FLAGS[@]+"${BUILDX_FLAGS[@]}"' in script
     assert 'BUILDX_OUTPUT_FLAGS[@]+"${BUILDX_OUTPUT_FLAGS[@]}"' in script
+    assert "--load is incompatible with --sbom/--provenance" in script
+    assert "disabling attestations for local image load" in script

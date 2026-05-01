@@ -111,6 +111,8 @@ VERSION=$(node -p "require('./frontend/package.json').version")
 
 On macOS, the script is intended to run correctly with the default `/bin/bash` (3.2). Optional BuildKit arguments use Bash expansions that stay valid under `set -u` even when those flag lists are empty. In CI, pull requests run the **Docker build script (publish parity)** job in `.github/workflows/test.yml`, which checks syntax and the same optional-flag branches the [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) workflow uses on `ubuntu-latest`.
 
+When building local images with `--load` (no `--push`), Buildx does not support exporting SBOM/provenance attestations through the Docker exporter. `scripts/docker-build.sh` automatically disables `--sbom` and `--provenance` in that specific mode (with a warning) to avoid manifest-list export failures.
+
 !!! note "Documentation Build"
     The build script automatically runs `mkdocs build` to ensure documentation is available in the Docker containers. If MkDocs is not installed, it attempts `pip install -r backend/requirements.txt` before building. The backend image installs dependencies from `backend/requirements.txt` only.
 
@@ -121,6 +123,8 @@ When a pull request is merged to `main`, the [Publish Docker Images](https://git
 1. Builds multi-platform images (linux/amd64, linux/arm64)
 2. Pushes to **Docker Hub** as `{DOCKERHUB_USERNAME}/duckling-backend` and `{DOCKERHUB_USERNAME}/duckling-frontend`
 3. Pushes to **GitHub Container Registry** as `ghcr.io/{owner}/duckling-backend` and `ghcr.io/{owner}/duckling-frontend`
+
+Before merge, PR CI runs a publish rehearsal job in `.github/workflows/test.yml` that builds local `linux/amd64` images with `--sbom`/`--provenance` and executes the same Trivy HIGH/CRITICAL gates, so Docker security failures are caught pre-merge.
 
 Images are tagged with the version from `frontend/package.json` and `latest`.
 

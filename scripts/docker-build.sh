@@ -213,6 +213,11 @@ if [ "$PUSH" = true ]; then
 elif [ "${PLATFORMS#*,}" != "$PLATFORMS" ]; then
     echo -e "${YELLOW}⚠ Multi-arch build without --push will only populate build cache (no local image load).${NC}"
 else
+    # Buildx docker exporter (--load) cannot export attestations; avoid hard-fail in local/CI rehearsal builds.
+    if [ "$ENABLE_SBOM" = true ] || [ "$ENABLE_PROVENANCE" = true ]; then
+        echo -e "${YELLOW}⚠ --load is incompatible with --sbom/--provenance; disabling attestations for local image load.${NC}"
+        BUILDX_FLAGS=()
+    fi
     BUILDX_OUTPUT_FLAGS+=(--load)
 fi
 BACKEND_LABELS=(
