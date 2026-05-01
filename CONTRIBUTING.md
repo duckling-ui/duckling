@@ -305,7 +305,7 @@ Container publishing is security-gated. The publish workflow now:
 - enables build provenance during `buildx` publish
 - signs release images using keyless Cosign
 
-To avoid merge-only validation loops, pull requests run **Docker publish rehearsal (PR gate)** in `.github/workflows/test.yml`, which builds local `linux/amd64` images with publish-parity flags (`--sbom`, `--provenance`) and enforces Trivy HIGH/CRITICAL scan gates before merge.
+To avoid merge-only validation loops, pull requests run **Docker publish rehearsal (PR gate)** in `.github/workflows/test.yml`, which builds local `linux/amd64` images with publish-parity flags (`--sbom`, `--provenance`), exports them with `docker save`, installs Trivy CLI on the runner, and enforces Trivy HIGH/CRITICAL scan gates via `--input` tar scanning before merge.
 
 If image scan gates fail on Python packaging CVEs, update and pin secure minimum versions in `backend/requirements.txt` (for example, `jaraco.context` and `wheel`) and add/adjust regression assertions in `tests/test_docker_hardening.py`.
 

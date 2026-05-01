@@ -170,13 +170,28 @@ jobs:
             --sbom \
             --provenance
 
+      - name: Export local images for daemon-independent Trivy scan
+        run: |
+          mkdir -p trivy-images
+          docker save -o trivy-images/duckling-backend-${{ steps.version.outputs.version }}.tar duckling-backend:${{ steps.version.outputs.version }}
+          docker save -o trivy-images/duckling-frontend-${{ steps.version.outputs.version }}.tar duckling-frontend:${{ steps.version.outputs.version }}
+
+      - name: Install Trivy CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+          echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install -y trivy
+
       - name: Scan local backend image (Trivy gate)
         run: |
-          docker run --rm aquasec/trivy:0.56.2 image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed duckling-backend:${{ steps.version.outputs.version }}
+          trivy image --input trivy-images/duckling-backend-${{ steps.version.outputs.version }}.tar --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed --scanners vuln
 
       - name: Scan local frontend image (Trivy gate)
         run: |
-          docker run --rm aquasec/trivy:0.56.2 image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed duckling-frontend:${{ steps.version.outputs.version }}
+          trivy image --input trivy-images/duckling-frontend-${{ steps.version.outputs.version }}.tar --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed --scanners vuln
 
   docs-build:
     name: Docs Build (MkDocs)

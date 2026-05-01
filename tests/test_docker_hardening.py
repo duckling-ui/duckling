@@ -37,9 +37,12 @@ def test_tests_workflow_rehearses_publish_docker_scan_gates():
     assert "--platform linux/amd64" in workflow
     assert "--sbom" in workflow
     assert "--provenance" in workflow
-    assert "aquasec/trivy:0.56.2" in workflow
-    assert "duckling-backend:${{ steps.version.outputs.version }}" in workflow
-    assert "duckling-frontend:${{ steps.version.outputs.version }}" in workflow
+    assert "Install Trivy CLI" in workflow
+    assert "sudo apt-get install -y trivy" in workflow
+    assert "docker save -o trivy-images/duckling-backend-${{ steps.version.outputs.version }}.tar" in workflow
+    assert "docker save -o trivy-images/duckling-frontend-${{ steps.version.outputs.version }}.tar" in workflow
+    assert "--input trivy-images/duckling-backend-${{ steps.version.outputs.version }}.tar" in workflow
+    assert "--input trivy-images/duckling-frontend-${{ steps.version.outputs.version }}.tar" in workflow
 
 
 def test_backend_config_uses_writable_db_path_for_docker():

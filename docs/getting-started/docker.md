@@ -124,7 +124,7 @@ When a pull request is merged to `main`, the [Publish Docker Images](https://git
 2. Pushes to **Docker Hub** as `{DOCKERHUB_USERNAME}/duckling-backend` and `{DOCKERHUB_USERNAME}/duckling-frontend`
 3. Pushes to **GitHub Container Registry** as `ghcr.io/{owner}/duckling-backend` and `ghcr.io/{owner}/duckling-frontend`
 
-Before merge, PR CI runs a publish rehearsal job in `.github/workflows/test.yml` that builds local `linux/amd64` images with `--sbom`/`--provenance` and executes the same Trivy HIGH/CRITICAL gates, so Docker security failures are caught pre-merge.
+Before merge, PR CI runs a publish rehearsal job in `.github/workflows/test.yml` that builds local `linux/amd64` images with `--sbom`/`--provenance`, exports them with `docker save`, installs Trivy CLI on the runner, and executes Trivy HIGH/CRITICAL gates using `--input` tar scanning, so Docker security failures are caught pre-merge without requiring daemon access from inside a Trivy container.
 
 Images are tagged with the version from `frontend/package.json` and `latest`.
 
