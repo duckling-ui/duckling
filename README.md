@@ -172,6 +172,8 @@ When PRs are merged to `main`, images are automatically published to Docker Hub 
 
 When PRs are merged to `main`, images are automatically published to Docker Hub and GitHub Container Registry. The backend Docker image build enforces secure minimum versions for `jaraco.context` and `wheel` during image creation to keep Trivy publish gates green. Pull requests now run a publish-rehearsal Docker job that builds local `linux/amd64` images with publish-parity flags and runs Trivy gates before merge, so breakages are caught without needing a merge-to-main cycle. See [Docker Deployment Guide](docs/getting-started/docker.md) for details and required secrets.
 
+Published images now include supply-chain security gates in CI. The frontend runtime image is pinned to `nginx:1.29-alpine3.22` to track a newer Alpine security baseline for Trivy scanning.
+
 Published images now include supply-chain security gates in CI:
 
 - vulnerability scanning (Trivy) with `HIGH`/`CRITICAL` fail gates
