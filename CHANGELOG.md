@@ -16,9 +16,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Read-only runtime fix**: Backend SQLite history DB path now uses writable Docker volume storage (`/app/data/history.db`) so history records and document-path metadata continue working with `read_only: true`.
 - **Container supply chain hardening**: Publish workflow now enables build provenance, generates SBOM artifacts (Syft SPDX), scans release images with Trivy (fails on HIGH/CRITICAL), and signs published images with keyless Cosign.
 
+### Changed
+
+- **Docker build visibility**: `scripts/docker-build.sh` now forces plain BuildKit progress output (`BUILDKIT_PROGRESS=plain`), prints executed Docker commands, bootstraps buildx once before backend builds, timestamps major steps, and supports `--platform` / `DUCKLING_BUILD_PLATFORMS` for fast single-arch local builds (avoids multi-day `linux/arm64` QEMU builds on some hosts).
+- **Docker build script reliability**: `scripts/docker-build.sh` now fails fast if the Docker daemon is unavailable and fixes boolean CLI flag handling so `--sbom`, `--provenance`, and `--push` are only passed when explicitly enabled.
+- **Docker build script (macOS Bash 3.2)**: Optional `buildx` flag arrays (`BUILDX_FLAGS`, `BUILDX_OUTPUT_FLAGS`) now expand with `${name[@]+"${name[@]}"}` so an empty array no longer trips `set -u` under `/bin/bash` 3.2 (fixes `BUILDX_FLAGS[@]: unbound variable` when SBOM/provenance are off).
+
 ### Added
 
 - **Container hardening tests**: Added `tests/test_docker_hardening.py` and updated `tests/TEST_SUITE_SUMMARY.md` to guard non-root runtime, compose hardening flags, and publish workflow security gates.
+- **CI: Docker build script parity**: The `docker-build-script` job in `.github/workflows/test.yml` runs `tests/test_docker_hardening.py`, `bash -n scripts/docker-build.sh`, and ubuntu-latest Bash checks that mirror `publish-docker.yml` flag handling (`--sbom` / `--provenance` / `--push`) plus the empty optional-flags case.
 
 ### Documentation
 
