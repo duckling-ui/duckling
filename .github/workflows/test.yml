@@ -99,6 +99,50 @@ jobs:
         working-directory: frontend
         run: npx tsc --noEmit
 
+  docker-build-script:
+    name: Docker build script (publish parity)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install pytest
+        run: python -m pip install --upgrade pip && pip install pytest
+
+      - name: Run docker hardening / build-script regression tests
+        run: pytest tests/test_docker_hardening.py -v --tb=short
+
+      - name: Validate docker-build.sh syntax and flag expansions (ubuntu bash)
+        run: |
+          set -euo pipefail
+          bash -n scripts/docker-build.sh
+          # Empty BUILDX_FLAGS (local default) + --load: must work under set -u (macOS bash 3.2 parity)
+          bash -c 'set -euo pipefail
+          BUILDX_FLAGS=()
+          BUILDX_OUTPUT_FLAGS=(--load)
+          args=("${BUILDX_FLAGS[@]+"${BUILDX_FLAGS[@]}"}" "${BUILDX_OUTPUT_FLAGS[@]+"${BUILDX_OUTPUT_FLAGS[@]}"}")
+          [ "${#args[@]}" -eq 1 ] && [ "${args[0]}" = --load ]
+          '
+          # Matches publish-docker.yml: --multi-platform --sbom --provenance --push
+          bash -c 'set -euo pipefail
+          ENABLE_SBOM=true
+          ENABLE_PROVENANCE=true
+          PUSH=true
+          BUILDX_FLAGS=()
+          if [ "$ENABLE_SBOM" = true ]; then BUILDX_FLAGS+=(--sbom=true); fi
+          if [ "$ENABLE_PROVENANCE" = true ]; then BUILDX_FLAGS+=(--provenance=true); fi
+          BUILDX_OUTPUT_FLAGS=()
+          if [ "$PUSH" = true ]; then BUILDX_OUTPUT_FLAGS+=(--push); fi
+          args=("${BUILDX_FLAGS[@]+"${BUILDX_FLAGS[@]}"}" "${BUILDX_OUTPUT_FLAGS[@]+"${BUILDX_OUTPUT_FLAGS[@]}"}")
+          [ "${#args[@]}" -eq 3 ] || exit 1
+          [ "${args[0]}" = --sbom=true ] && [ "${args[1]}" = --provenance=true ] && [ "${args[2]}" = --push ]
+          '
+
   docs-build:
     name: Docs Build (MkDocs)
     runs-on: ubuntu-latest

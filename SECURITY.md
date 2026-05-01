@@ -21,6 +21,7 @@ Last audit: March 3, 2026
 
 ### Product surface notes
 
+- **2026-05-01**: Container supply-chain hardening follow-up: backend image build now explicitly runs `pip install --upgrade "jaraco.context>=6.1.0" "wheel>=0.46.2"` after `requirements.txt` install in `backend/Dockerfile`, preventing stale vulnerable preinstalled versions from surviving into published images. Pull request CI continues to run **Docker build script (publish parity)** checks for workflow safety.
 - **2026-04-29**: Docker publish scan gate fix: backend requirements now pin `jaraco.context>=6.1.0` and `wheel>=0.46.2` to resolve Trivy-reported high vulnerabilities in Python packaging components.
 - **2026-04-29**: Docker hardening update: frontend image now runs as non-root (`USER nginxuser`), production/prebuilt compose add read-only rootfs + `cap_drop: ["ALL"]` + `no-new-privileges` + scoped `tmpfs` mounts, and publish CI adds Trivy gating, Syft SBOM artifacts, provenance-enabled builds, and keyless Cosign signing.
 - **2026-04-08**: Documentation only: the Quick Start guide clarifies folder drag-and-drop and folder vs **Choose files…** selection; upload endpoints and server-side validation are unchanged.

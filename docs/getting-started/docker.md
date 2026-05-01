@@ -100,14 +100,23 @@ Use the provided build script for easy image building. The script automatically 
 
 # Skip documentation build (use existing site/)
 ./scripts/docker-build.sh --skip-docs
+
+# Local single-arch build (recommended on laptops): CI uses amd64+arm64; building both
+# locally can take many hours on some machines (QEMU) with sparse logs. Limit to one:
+VERSION=$(node -p "require('./frontend/package.json').version")
+./scripts/docker-build.sh --version "$VERSION" --multi-platform --platform linux/amd64 --skip-docs
+# Apple Silicon without amd64 emulation: try --platform linux/arm64 instead.
+# Or: DUCKLING_BUILD_PLATFORMS=linux/amd64 ./scripts/docker-build.sh --multi-platform --skip-docs
 ```
+
+On macOS, the script is intended to run correctly with the default `/bin/bash` (3.2). Optional BuildKit arguments use Bash expansions that stay valid under `set -u` even when those flag lists are empty. In CI, pull requests run the **Docker build script (publish parity)** job in `.github/workflows/test.yml`, which checks syntax and the same optional-flag branches the [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) workflow uses on `ubuntu-latest`.
 
 !!! note "Documentation Build"
     The build script automatically runs `mkdocs build` to ensure documentation is available in the Docker containers. If MkDocs is not installed, it attempts `pip install -r backend/requirements.txt` before building. The backend image installs dependencies from `backend/requirements.txt` only.
 
 ### Automatic Publishing (CI/CD)
 
-When a pull request is merged to `main`, the [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) GitHub Actions workflow runs automatically. It:
+When a pull request is merged to `main`, the [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) GitHub Actions workflow runs automatically. It enforces secure minimum versions of `jaraco.context` and `wheel` inside backend images during build, then:
 
 1. Builds multi-platform images (linux/amd64, linux/arm64)
 2. Pushes to **Docker Hub** as `{DOCKERHUB_USERNAME}/duckling-backend` and `{DOCKERHUB_USERNAME}/duckling-frontend`
@@ -399,6 +408,8 @@ docker builder prune
 # Rebuild without cache
 docker-compose build --no-cache
 ```
+
+If `scripts/docker-build.sh` fails with `docker.sock/_ping` or API 500 errors, Docker Desktop/daemon is not healthy. Restart Docker, verify `docker version` succeeds, then rerun the build.
 
 ### Memory Issues
 

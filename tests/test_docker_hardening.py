@@ -41,3 +41,29 @@ def test_backend_requirements_pin_cve_fixes_for_image_scans():
     requirements = _read("backend/requirements.txt")
     assert "jaraco.context>=6.1.0" in requirements
     assert "wheel>=0.46.2" in requirements
+
+
+def test_backend_dockerfile_enforces_cve_fix_versions():
+    dockerfile = _read("backend/Dockerfile")
+    assert 'pip install --upgrade "jaraco.context>=6.1.0" "wheel>=0.46.2"' in dockerfile
+    assert 'assert_min("jaraco.context", "6.1.0")' in dockerfile
+    assert 'assert_min("wheel", "0.46.2")' in dockerfile
+
+
+def test_docker_build_script_forces_plain_progress_logging():
+    script = _read("scripts/docker-build.sh")
+    assert "export BUILDKIT_PROGRESS=plain" in script
+    assert "run_cmd()" in script
+    assert "docker buildx build \\" in script
+    assert "--progress=plain \\" in script
+    assert "--platform)" in script
+    assert "DUCKLING_BUILD_PLATFORMS" in script
+    assert "if [ \"$ENABLE_SBOM\" = true ]" in script
+    assert "if [ \"$ENABLE_PROVENANCE\" = true ]" in script
+    assert "if [ \"$PUSH\" = true ]" in script
+    assert "${ENABLE_SBOM:+--sbom=true}" not in script
+    assert "${ENABLE_PROVENANCE:+--provenance=true}" not in script
+    assert "${PUSH:+--push}" not in script
+    # macOS /bin/bash 3.2: "${arr[@]}" with set -u errors when arr is empty; use ${arr[@]+"${arr[@]}"}
+    assert 'BUILDX_FLAGS[@]+"${BUILDX_FLAGS[@]}"' in script
+    assert 'BUILDX_OUTPUT_FLAGS[@]+"${BUILDX_OUTPUT_FLAGS[@]}"' in script

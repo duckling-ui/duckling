@@ -30,7 +30,33 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 FROM base AS development
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt \
+  && pip install --upgrade "jaraco.context>=6.1.0" "wheel>=0.46.2" \
+  && python - <<'PY'
+from importlib.metadata import version
+import sys
+
+def _parse(v):
+    out = []
+    for part in v.split("."):
+        n = ""
+        for ch in part:
+            if ch.isdigit():
+                n += ch
+            else:
+                break
+        out.append(int(n or 0))
+    return out
+
+def assert_min(pkg, minimum):
+    installed = version(pkg)
+    if _parse(installed) < _parse(minimum):
+        raise SystemExit(f"{pkg}={installed} is below required {minimum}")
+
+assert_min("jaraco.context", "6.1.0")
+assert_min("wheel", "0.46.2")
+print("Verified hardened Python package minimums")
+PY
 
 COPY . .
 
@@ -46,7 +72,33 @@ FROM base AS production
 
 # Copy requirements and install (includes MkDocs for /api/docs/build)
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt \
+  && pip install --upgrade "jaraco.context>=6.1.0" "wheel>=0.46.2" \
+  && python - <<'PY'
+from importlib.metadata import version
+import sys
+
+def _parse(v):
+    out = []
+    for part in v.split("."):
+        n = ""
+        for ch in part:
+            if ch.isdigit():
+                n += ch
+            else:
+                break
+        out.append(int(n or 0))
+    return out
+
+def assert_min(pkg, minimum):
+    installed = version(pkg)
+    if _parse(installed) < _parse(minimum):
+        raise SystemExit(f"{pkg}={installed} is below required {minimum}")
+
+assert_min("jaraco.context", "6.1.0")
+assert_min("wheel", "0.46.2")
+print("Verified hardened Python package minimums")
+PY
 
 # Copy application code
 COPY . .

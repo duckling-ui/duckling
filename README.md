@@ -161,9 +161,14 @@ Access the application at `http://localhost:3000`
 
 # Build and push to registry
 ./scripts/docker-build.sh --push --registry yourusername
+
+# Faster local build (single architecture; CI still builds linux/amd64 + linux/arm64):
+# ./scripts/docker-build.sh --multi-platform --platform linux/amd64 --skip-docs
 ```
 
-When PRs are merged to `main`, images are automatically published to Docker Hub and GitHub Container Registry. See [Docker Deployment Guide](docs/getting-started/docker.md) for details and required secrets.
+If the script exits early with a Docker daemon error, start Docker Desktop (or your Docker engine) first; the build script now performs a daemon health check before running `buildx`. The script stays compatible with macOS `/bin/bash` 3.2 (empty optional `buildx` flag arrays do not error under `set -u`). On pull requests, the **Tests** workflow runs a **Docker build script (publish parity)** job (`bash -n`, regression tests, and Bash expansions matching `publish-docker.yml` on `ubuntu-latest`).
+
+When PRs are merged to `main`, images are automatically published to Docker Hub and GitHub Container Registry. The backend Docker image build enforces secure minimum versions for `jaraco.context` and `wheel` during image creation to keep Trivy publish gates green. See [Docker Deployment Guide](docs/getting-started/docker.md) for details and required secrets.
 
 Published images now include supply-chain security gates in CI:
 

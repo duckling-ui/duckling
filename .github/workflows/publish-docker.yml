@@ -1,6 +1,9 @@
 # Publish Docker images to Docker Hub and GitHub Container Registry when PRs are merged to main.
 # Required secrets: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN
 # GHCR uses GITHUB_TOKEN (automatically provided by Actions)
+#
+# The build entrypoint is ./scripts/docker-build.sh. Pull requests run the "Docker build script (publish parity)"
+# job in .github/workflows/test.yml (syntax + same flag/expansion paths on ubuntu-latest) so changes stay safe for this workflow.
 name: Publish Docker Images
 
 on:
