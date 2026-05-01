@@ -143,6 +143,41 @@ jobs:
           [ "${args[0]}" = --sbom=true ] && [ "${args[1]}" = --provenance=true ] && [ "${args[2]}" = --push ]
           '
 
+  docker-publish-rehearsal:
+    name: Docker publish rehearsal (PR gate)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./frontend/package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend and frontend images locally (publish parity flags)
+        run: |
+          ./scripts/docker-build.sh \
+            --version ${{ steps.version.outputs.version }} \
+            --multi-platform \
+            --platform linux/amd64 \
+            --skip-docs \
+            --sbom \
+            --provenance
+
+      - name: Scan local backend image (Trivy gate)
+        run: |
+          docker run --rm aquasec/trivy:0.56.2 image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed duckling-backend:${{ steps.version.outputs.version }}
+
+      - name: Scan local frontend image (Trivy gate)
+        run: |
+          docker run --rm aquasec/trivy:0.56.2 image --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed duckling-frontend:${{ steps.version.outputs.version }}
+
   docs-build:
     name: Docs Build (MkDocs)
     runs-on: ubuntu-latest

@@ -168,7 +168,7 @@ Access the application at `http://localhost:3000`
 
 If the script exits early with a Docker daemon error, start Docker Desktop (or your Docker engine) first; the build script now performs a daemon health check before running `buildx`. The script stays compatible with macOS `/bin/bash` 3.2 (empty optional `buildx` flag arrays do not error under `set -u`). On pull requests, the **Tests** workflow runs a **Docker build script (publish parity)** job (`bash -n`, regression tests, and Bash expansions matching `publish-docker.yml` on `ubuntu-latest`).
 
-When PRs are merged to `main`, images are automatically published to Docker Hub and GitHub Container Registry. The backend Docker image build enforces secure minimum versions for `jaraco.context` and `wheel` during image creation to keep Trivy publish gates green. See [Docker Deployment Guide](docs/getting-started/docker.md) for details and required secrets.
+When PRs are merged to `main`, images are automatically published to Docker Hub and GitHub Container Registry. The backend Docker image build enforces secure minimum versions for `jaraco.context` and `wheel` during image creation to keep Trivy publish gates green. Pull requests now run a publish-rehearsal Docker job that builds local `linux/amd64` images with publish-parity flags and runs Trivy gates before merge, so breakages are caught without needing a merge-to-main cycle. See [Docker Deployment Guide](docs/getting-started/docker.md) for details and required secrets.
 
 Published images now include supply-chain security gates in CI:
 

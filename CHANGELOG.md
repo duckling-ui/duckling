@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Container hardening tests**: Added `tests/test_docker_hardening.py` and updated `tests/TEST_SUITE_SUMMARY.md` to guard non-root runtime, compose hardening flags, and publish workflow security gates.
 - **CI: Docker build script parity**: The `docker-build-script` job in `.github/workflows/test.yml` runs `tests/test_docker_hardening.py`, `bash -n scripts/docker-build.sh`, and ubuntu-latest Bash checks that mirror `publish-docker.yml` flag handling (`--sbom` / `--provenance` / `--push`) plus the empty optional-flags case.
+- **CI: Docker publish rehearsal on PRs**: The `docker-publish-rehearsal` job in `.github/workflows/test.yml` now builds `linux/amd64` backend/frontend images with publish-parity flags (`--sbom`, `--provenance`) and runs Trivy HIGH/CRITICAL gates against local tags before merge.
 
 ### Documentation
 

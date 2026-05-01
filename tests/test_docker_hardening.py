@@ -31,6 +31,17 @@ def test_publish_workflow_has_security_gates():
     assert "syft " in workflow
 
 
+def test_tests_workflow_rehearses_publish_docker_scan_gates():
+    workflow = _read(".github/workflows/test.yml")
+    assert "Docker publish rehearsal (PR gate)" in workflow
+    assert "--platform linux/amd64" in workflow
+    assert "--sbom" in workflow
+    assert "--provenance" in workflow
+    assert "aquasec/trivy:0.56.2" in workflow
+    assert "duckling-backend:${{ steps.version.outputs.version }}" in workflow
+    assert "duckling-frontend:${{ steps.version.outputs.version }}" in workflow
+
+
 def test_backend_config_uses_writable_db_path_for_docker():
     config = _read("backend/config.py")
     assert 'DATA_FOLDER = Path("/app/data")' in config
