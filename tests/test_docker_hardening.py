@@ -11,6 +11,8 @@ def _read(path: str) -> str:
 def test_frontend_dockerfile_runs_as_non_root():
     dockerfile = _read("frontend/Dockerfile")
     assert "USER nginxuser" in dockerfile
+    assert "FROM nginx:1.29-alpine3.22 AS production" in dockerfile
+    assert "RUN apk upgrade --no-cache" in dockerfile
 
 
 def test_prod_compose_has_restricted_runtime_defaults():
@@ -31,6 +33,20 @@ def test_publish_workflow_has_security_gates():
     assert "syft " in workflow
 
 
+def test_tests_workflow_rehearses_publish_docker_scan_gates():
+    workflow = _read(".github/workflows/test.yml")
+    assert "Docker publish rehearsal (PR gate)" in workflow
+    assert "--platform linux/amd64" in workflow
+    assert "--sbom" in workflow
+    assert "--provenance" in workflow
+    assert "Install Trivy CLI" in workflow
+    assert "sudo apt-get install -y trivy" in workflow
+    assert "docker save -o trivy-images/duckling-backend-${{ steps.version.outputs.version }}.tar" in workflow
+    assert "docker save -o trivy-images/duckling-frontend-${{ steps.version.outputs.version }}.tar" in workflow
+    assert "--input trivy-images/duckling-backend-${{ steps.version.outputs.version }}.tar" in workflow
+    assert "--input trivy-images/duckling-frontend-${{ steps.version.outputs.version }}.tar" in workflow
+
+
 def test_backend_config_uses_writable_db_path_for_docker():
     config = _read("backend/config.py")
     assert 'DATA_FOLDER = Path("/app/data")' in config
@@ -39,8 +55,17 @@ def test_backend_config_uses_writable_db_path_for_docker():
 
 def test_backend_requirements_pin_cve_fixes_for_image_scans():
     requirements = _read("backend/requirements.txt")
-    assert "jaraco.context>=6.1.0" in requirements
-    assert "wheel>=0.46.2" in requirements
+    assert "jaraco.context==6.1.0" in requirements
+    assert "wheel==0.46.2" in requirements
+
+
+def test_backend_dockerfile_enforces_cve_fix_versions():
+    dockerfile = _read("backend/Dockerfile")
+    assert 'pip install --upgrade --force-reinstall --no-deps "jaraco.context==6.1.0" "wheel==0.46.2"' in dockerfile
+    assert 'assert_min("jaraco.context", "6.1.0")' in dockerfile
+    assert 'assert_min("wheel", "0.46.2")' in dockerfile
+    assert "remove_legacy_metadata(" in dockerfile
+    assert "remove_legacy_ensurepip_wheels(" in dockerfile
 
 
 def test_docker_build_script_forces_plain_progress_logging():
@@ -60,3 +85,5 @@ def test_docker_build_script_forces_plain_progress_logging():
     # macOS /bin/bash 3.2: "${arr[@]}" with set -u errors when arr is empty; use ${arr[@]+"${arr[@]}"}
     assert 'BUILDX_FLAGS[@]+"${BUILDX_FLAGS[@]}"' in script
     assert 'BUILDX_OUTPUT_FLAGS[@]+"${BUILDX_OUTPUT_FLAGS[@]}"' in script
+    assert "--load is incompatible with --sbom/--provenance" in script
+    assert "disabling attestations for local image load" in script

@@ -305,9 +305,14 @@ Container publishing is security-gated. The publish workflow now:
 - enables build provenance during `buildx` publish
 - signs release images using keyless Cosign
 
-If image scan gates fail on Python packaging CVEs, update and pin secure minimum versions in `backend/requirements.txt` (for example, `jaraco.context` and `wheel`) and add/adjust regression assertions in `tests/test_docker_hardening.py`.
+To avoid merge-only validation loops, pull requests run **Docker publish rehearsal (PR gate)** in `.github/workflows/test.yml`, which builds local `linux/amd64` images with publish-parity flags (`--sbom`, `--provenance`), exports them with `docker save`, installs Trivy CLI on the runner, and enforces Trivy HIGH/CRITICAL scan gates via `--input` tar scanning before merge.
+
+If image scan gates fail on Python packaging CVEs, update deterministic safe pins in `backend/requirements.txt` (for example, `jaraco.context==...` and `wheel==...`), ensure `backend/Dockerfile` force-reinstall/verification and legacy metadata cleanup logic stays aligned, and add/adjust regression assertions in `tests/test_docker_hardening.py`.
 
 When changing Dockerfiles, compose runtime settings, or publish automation, update:
+
+- keep frontend runtime base current (`frontend/Dockerfile` currently pins `nginx:1.29-alpine3.22`) and preserve the `apk upgrade --no-cache` hardening step so Trivy OS-package gates do not regress
+
 
 - `tests/test_docker_hardening.py`
 
@@ -316,6 +321,10 @@ When changing Dockerfiles, compose runtime settings, or publish automation, upda
 Changing that script should keep the **Docker build script (publish parity)** job green in `.github/workflows/test.yml` (it mirrors the flag logic used by `.github/workflows/publish-docker.yml` on `ubuntu-latest`).
 - `tests/TEST_SUITE_SUMMARY.md`
 - deployment/security docs in both `docs/deployment/security.md` and `SECURITY.md`
+
+`scripts/docker-build.sh` uses `set -u` and must keep working on macOS `/bin/bash` 3.2: for arrays that may be empty (for example optional `buildx` flags), expand with `${name[@]+"${name[@]}"}` instead of `"${name[@]}"` alone. Changing that script should keep the **Docker build script (publish parity)** job green in `.github/workflows/test.yml` (it mirrors the flag logic used by `.github/workflows/publish-docker.yml` on `ubuntu-latest`).
+
+Buildx with local Docker exporter (`--load`) cannot emit SBOM/provenance attestations. Keep the script behavior that auto-disables `--sbom`/`--provenance` in non-push `--load` mode (with a warning) to prevent CI/local manifest-list export failures.
 
 ## Getting Help
 

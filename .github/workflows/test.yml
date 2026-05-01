@@ -143,6 +143,56 @@ jobs:
           [ "${args[0]}" = --sbom=true ] && [ "${args[1]}" = --provenance=true ] && [ "${args[2]}" = --push ]
           '
 
+  docker-publish-rehearsal:
+    name: Docker publish rehearsal (PR gate)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./frontend/package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build backend and frontend images locally (publish parity flags)
+        run: |
+          ./scripts/docker-build.sh \
+            --version ${{ steps.version.outputs.version }} \
+            --multi-platform \
+            --platform linux/amd64 \
+            --skip-docs \
+            --sbom \
+            --provenance
+
+      - name: Export local images for daemon-independent Trivy scan
+        run: |
+          mkdir -p trivy-images
+          docker save -o trivy-images/duckling-backend-${{ steps.version.outputs.version }}.tar duckling-backend:${{ steps.version.outputs.version }}
+          docker save -o trivy-images/duckling-frontend-${{ steps.version.outputs.version }}.tar duckling-frontend:${{ steps.version.outputs.version }}
+
+      - name: Install Trivy CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+          echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install -y trivy
+
+      - name: Scan local backend image (Trivy gate)
+        run: |
+          trivy image --input trivy-images/duckling-backend-${{ steps.version.outputs.version }}.tar --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed --scanners vuln
+
+      - name: Scan local frontend image (Trivy gate)
+        run: |
+          trivy image --input trivy-images/duckling-frontend-${{ steps.version.outputs.version }}.tar --severity HIGH,CRITICAL --exit-code 1 --ignore-unfixed --scanners vuln
+
   docs-build:
     name: Docs Build (MkDocs)
     runs-on: ubuntu-latest

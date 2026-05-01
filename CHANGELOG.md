@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- **Docker CI vulnerability gate fix**: Backend Python requirements now pin `jaraco.context>=6.1.0` and `wheel>=0.46.2` to resolve Trivy-reported high vulnerabilities (`CVE-2026-23949`, `CVE-2026-24049`) during image publish scanning.
+- **Frontend runtime base refresh**: `frontend/Dockerfile` now uses `nginx:1.29-alpine3.22` for the production stage and runs `apk upgrade --no-cache` so Alpine OS packages are refreshed to current patch revisions during build (OpenSSL/libxml/musl/zlib/libpng/libexpat family) for Trivy gates.
+- **Docker CI vulnerability gate fix**: Backend image builds now use deterministic pins (`backend/requirements.txt`: `jaraco.context==6.1.0`, `wheel==0.46.2`) and force-reinstall/verify these versions in `backend/Dockerfile`, plus cleanup of stale vulnerable metadata artifacts (`*.dist-info`, legacy ensurepip wheel bundles) so Trivy publish scans do not fail on stale package metadata (`CVE-2026-23949`, `CVE-2026-24049`).
 - **Docker image hardening**: Frontend production image now explicitly runs as non-root (`USER nginxuser`), backend healthcheck no longer depends on `curl`, and production/prebuilt compose defaults now enforce `read_only`, `cap_drop: ["ALL"]`, `security_opt: ["no-new-privileges:true"]`, and scoped `tmpfs` writable paths.
 - **Read-only runtime fix**: Backend SQLite history DB path now uses writable Docker volume storage (`/app/data/history.db`) so history records and document-path metadata continue working with `read_only: true`.
 - **Container supply chain hardening**: Publish workflow now enables build provenance, generates SBOM artifacts (Syft SPDX), scans release images with Trivy (fails on HIGH/CRITICAL), and signs published images with keyless Cosign.
@@ -21,11 +22,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Docker build visibility**: `scripts/docker-build.sh` now forces plain BuildKit progress output (`BUILDKIT_PROGRESS=plain`), prints executed Docker commands, bootstraps buildx once before backend builds, timestamps major steps, and supports `--platform` / `DUCKLING_BUILD_PLATFORMS` for fast single-arch local builds (avoids multi-day `linux/arm64` QEMU builds on some hosts).
 - **Docker build script reliability**: `scripts/docker-build.sh` now fails fast if the Docker daemon is unavailable and fixes boolean CLI flag handling so `--sbom`, `--provenance`, and `--push` are only passed when explicitly enabled.
 - **Docker build script (macOS Bash 3.2)**: Optional `buildx` flag arrays (`BUILDX_FLAGS`, `BUILDX_OUTPUT_FLAGS`) now expand with `${name[@]+"${name[@]}"}` so an empty array no longer trips `set -u` under `/bin/bash` 3.2 (fixes `BUILDX_FLAGS[@]: unbound variable` when SBOM/provenance are off).
+- **Docker build script (`--load` + attestations)**: When building a locally loaded image (`--load`, no `--push`), `scripts/docker-build.sh` now auto-disables `--sbom`/`--provenance` with a warning so Buildx does not fail with `docker exporter does not currently support exporting manifest lists`.
 
 ### Added
 
 - **Container hardening tests**: Added `tests/test_docker_hardening.py` and updated `tests/TEST_SUITE_SUMMARY.md` to guard non-root runtime, compose hardening flags, and publish workflow security gates.
 - **CI: Docker build script parity**: The `docker-build-script` job in `.github/workflows/test.yml` runs `tests/test_docker_hardening.py`, `bash -n scripts/docker-build.sh`, and ubuntu-latest Bash checks that mirror `publish-docker.yml` flag handling (`--sbom` / `--provenance` / `--push`) plus the empty optional-flags case.
+- **CI: Docker publish rehearsal on PRs**: The `docker-publish-rehearsal` job in `.github/workflows/test.yml` builds `linux/amd64` backend/frontend images with publish-parity flags (`--sbom`, `--provenance`), exports them via `docker save`, installs Trivy CLI on the runner, and runs HIGH/CRITICAL gates with `trivy image --input` tar scanning (daemon-independent, no nested Docker daemon dependency) before merge.
 
 ### Documentation
 
