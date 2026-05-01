@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
+- **Publish workflow Trivy reliability**: `.github/workflows/publish-docker.yml` now installs Trivy on the GitHub Actions runner, `docker pull`s the freshly pushed Docker Hub + GHCR tags, and runs `trivy image` directly (instead of `docker run aquasec/trivy`), so scans use the workflow’s registry logins and do not fail with missing Docker socket / GHCR auth inside a nested container.
 - **Frontend runtime base refresh**: `frontend/Dockerfile` now uses `nginx:1.29-alpine3.22` for the production stage and runs `apk upgrade --no-cache` so Alpine OS packages are refreshed to current patch revisions during build (OpenSSL/libxml/musl/zlib/libpng/libexpat family) for Trivy gates.
 - **Docker CI vulnerability gate fix**: Backend image builds now use deterministic pins (`backend/requirements.txt`: `jaraco.context==6.1.0`, `wheel==0.46.2`) and force-reinstall/verify these versions in `backend/Dockerfile`, plus cleanup of stale vulnerable metadata artifacts (`*.dist-info`, legacy ensurepip wheel bundles) so Trivy publish scans do not fail on stale package metadata (`CVE-2026-23949`, `CVE-2026-24049`).
 - **Docker image hardening**: Frontend production image now explicitly runs as non-root (`USER nginxuser`), backend healthcheck no longer depends on `curl`, and production/prebuilt compose defaults now enforce `read_only`, `cap_drop: ["ALL"]`, `security_opt: ["no-new-privileges:true"]`, and scoped `tmpfs` writable paths.
