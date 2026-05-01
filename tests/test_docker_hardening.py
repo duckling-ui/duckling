@@ -53,15 +53,17 @@ def test_backend_config_uses_writable_db_path_for_docker():
 
 def test_backend_requirements_pin_cve_fixes_for_image_scans():
     requirements = _read("backend/requirements.txt")
-    assert "jaraco.context>=6.1.0" in requirements
-    assert "wheel>=0.46.2" in requirements
+    assert "jaraco.context==6.1.0" in requirements
+    assert "wheel==0.46.2" in requirements
 
 
 def test_backend_dockerfile_enforces_cve_fix_versions():
     dockerfile = _read("backend/Dockerfile")
-    assert 'pip install --upgrade "jaraco.context>=6.1.0" "wheel>=0.46.2"' in dockerfile
+    assert 'pip install --upgrade --force-reinstall --no-deps "jaraco.context==6.1.0" "wheel==0.46.2"' in dockerfile
     assert 'assert_min("jaraco.context", "6.1.0")' in dockerfile
     assert 'assert_min("wheel", "0.46.2")' in dockerfile
+    assert "remove_legacy_metadata(" in dockerfile
+    assert "remove_legacy_ensurepip_wheels(" in dockerfile
 
 
 def test_docker_build_script_forces_plain_progress_logging():

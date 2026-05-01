@@ -118,7 +118,7 @@ When building local images with `--load` (no `--push`), Buildx does not support 
 
 ### Automatic Publishing (CI/CD)
 
-When a pull request is merged to `main`, the [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) GitHub Actions workflow runs automatically. It enforces secure minimum versions of `jaraco.context` and `wheel` inside backend images during build, then:
+When a pull request is merged to `main`, the [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) GitHub Actions workflow runs automatically. It enforces deterministic safe versions of `jaraco.context` and `wheel` inside backend images during build (including cleanup of stale vulnerable metadata artifacts), then:
 
 1. Builds multi-platform images (linux/amd64, linux/arm64)
 2. Pushes to **Docker Hub** as `{DOCKERHUB_USERNAME}/duckling-backend` and `{DOCKERHUB_USERNAME}/duckling-frontend`

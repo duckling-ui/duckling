@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- **Docker CI vulnerability gate fix**: Backend image builds now both pin (`backend/requirements.txt`) and enforce-upgrade (`backend/Dockerfile`) `jaraco.context>=6.1.0` and `wheel>=0.46.2` so Trivy publish scans do not fail on stale preinstalled package versions (`CVE-2026-23949`, `CVE-2026-24049`).
+- **Docker CI vulnerability gate fix**: Backend image builds now use deterministic pins (`backend/requirements.txt`: `jaraco.context==6.1.0`, `wheel==0.46.2`) and force-reinstall/verify these versions in `backend/Dockerfile`, plus cleanup of stale vulnerable metadata artifacts (`*.dist-info`, legacy ensurepip wheel bundles) so Trivy publish scans do not fail on stale package metadata (`CVE-2026-23949`, `CVE-2026-24049`).
 - **Docker image hardening**: Frontend production image now explicitly runs as non-root (`USER nginxuser`), backend healthcheck no longer depends on `curl`, and production/prebuilt compose defaults now enforce `read_only`, `cap_drop: ["ALL"]`, `security_opt: ["no-new-privileges:true"]`, and scoped `tmpfs` writable paths.
 - **Read-only runtime fix**: Backend SQLite history DB path now uses writable Docker volume storage (`/app/data/history.db`) so history records and document-path metadata continue working with `read_only: true`.
 - **Container supply chain hardening**: Publish workflow now enables build provenance, generates SBOM artifacts (Syft SPDX), scans release images with Trivy (fails on HIGH/CRITICAL), and signs published images with keyless Cosign.
