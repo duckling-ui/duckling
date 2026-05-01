@@ -21,6 +21,7 @@ Last audit: March 3, 2026
 
 ### Product surface notes
 
+- **2026-05-01**: Tooling only: `scripts/docker-build.sh` uses Bash parameter expansions that remain valid under `set -u` on macOS `/bin/bash` 3.2 when optional `buildx` flag arrays are empty (developer ergonomics; no change to image contents or publish gates). Pull request CI runs a **Docker build script (publish parity)** job that re-checks syntax and the same flag branches used by `publish-docker.yml` on `ubuntu-latest`.
 - **2026-04-29**: Docker publish scan gate fix: backend requirements now pin `jaraco.context>=6.1.0` and `wheel>=0.46.2` to resolve Trivy-reported high vulnerabilities in Python packaging components.
 - **2026-04-29**: Docker hardening update: frontend image now runs as non-root (`USER nginxuser`), production/prebuilt compose add read-only rootfs + `cap_drop: ["ALL"]` + `no-new-privileges` + scoped `tmpfs` mounts, and publish CI adds Trivy gating, Syft SBOM artifacts, provenance-enabled builds, and keyless Cosign signing.
 - **2026-04-08**: Documentation only: the Quick Start guide clarifies folder drag-and-drop and folder vs **Choose files…** selection; upload endpoints and server-side validation are unchanged.

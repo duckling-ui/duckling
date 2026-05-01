@@ -310,6 +310,10 @@ If image scan gates fail on Python packaging CVEs, update and pin secure minimum
 When changing Dockerfiles, compose runtime settings, or publish automation, update:
 
 - `tests/test_docker_hardening.py`
+
+`scripts/docker-build.sh` uses `set -u` and must keep working on macOS `/bin/bash` 3.2: for arrays that may be empty (for example optional `buildx` flags), expand with `${name[@]+"${name[@]}"}` instead of `"${name[@]}"` alone.
+
+Changing that script should keep the **Docker build script (publish parity)** job green in `.github/workflows/test.yml` (it mirrors the flag logic used by `.github/workflows/publish-docker.yml` on `ubuntu-latest`).
 - `tests/TEST_SUITE_SUMMARY.md`
 - deployment/security docs in both `docs/deployment/security.md` and `SECURITY.md`
 
