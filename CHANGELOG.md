@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Docs deploy version injection**: Replaced broad `sed` on `mkdocs.yml` in publish/deploy workflows with `scripts/get_version.py` so prerelease versions (e.g. `0.0.14-doclang-beta.3`) no longer corrupt i18n `fallback_to_default: true`.
+
 - **Backend Docker OS package hardening**: `backend/Dockerfile` now runs `apt-get upgrade` on the Bookworm base image so Trivy publish gates pick up Debian security fixes (for example `libgnutls30`, `libssl3`/`openssl`).
 
 - **Docker image Python hardening**: Replaced Dockerfile `--no-deps` force-reinstall heredoc with `backend/scripts/harden_python_packages.py` that upgrades `jaraco.context`/`wheel` with dependencies intact, cleans stale dist-info for Trivy, and verifies `pip`/`wheel` still work at runtime.

@@ -4,6 +4,7 @@ This repository contains multiple test suites:
 
 - **Root (pytest)**: Lightweight repository checks and documentation structure tests in `tests/`
   - `tests/test_docs.py`: Verifies MkDocs documentation structure (including DocLang coverage in Quick Start, formats, API, and Docling hub pages; can optionally run `mkdocs build`)
+  - `tests/test_get_version.py`: Ensures `scripts/get_version.py` updates only `extra.version.default` (does not corrupt i18n `fallback_to_default`) and docs workflows avoid broad `sed` on mkdocs.yml
   - `tests/test_docs_build.py`: Static regression test ensuring backend docs rebuild prefers the repo-local `./venv` MkDocs environment (for required plugins like `mkdocs-static-i18n`)
   - `tests/test_github_templates.py`: Ensures `.github/` issue and PR templates exist and include required policy pointers
   - `tests/test_docker_hardening.py`: Guards Docker hardening regressions (including prerelease `workflow_dispatch` / tag triggers on `publish-docker.yml`, frontend non-root runtime, production compose hardening flags, writable Docker DB path, publish workflow security gates, backend requirements pins for image-scan CVE fixes, explicit backend Dockerfile force-reinstall enforcement for `jaraco.context`/`wheel`, and `docker-build.sh` expansions safe for macOS Bash 3.2 under `set -u`). On pull requests and `main` pushes, GitHub Actions job **Docker build script (publish parity)** (`.github/workflows/test.yml`) runs this file plus `bash -n` and Bash expansion checks aligned with `publish-docker.yml`.

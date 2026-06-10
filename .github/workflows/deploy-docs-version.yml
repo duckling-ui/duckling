@@ -50,8 +50,7 @@ jobs:
 
       - name: Set version in mkdocs.yml for correct version selector
         run: |
-          VERSION="${{ github.event.inputs.version }}"
-          sed -i "s/\(default:\s*\)[0-9a-zA-Z._-]\+/\1$VERSION/" mkdocs.yml
+          python scripts/get_version.py "${{ github.event.inputs.version }}"
 
       - name: Fetch gh-pages for mike
         run: |
