@@ -36,6 +36,18 @@ def test_publish_workflow_has_security_gates():
     assert "syft " in workflow
 
 
+def test_publish_workflow_supports_manual_and_prerelease_tags():
+    workflow = _read(".github/workflows/publish-docker.yml")
+    assert "workflow_dispatch:" in workflow
+    assert "v*-beta*" in workflow
+    assert "v*-alpha*" in workflow
+    assert "publish_docs:" in workflow
+    assert "set_docs_default:" in workflow
+    assert "Resolve version and docs options" in workflow
+    assert "needs.publish.outputs.publish_docs == 'true'" in workflow
+    assert "Skipping mike set-default" in _read(".github/workflows/deploy-docs-version.yml")
+
+
 def test_tests_workflow_rehearses_publish_docker_scan_gates():
     workflow = _read(".github/workflows/test.yml")
     assert "Docker publish rehearsal (PR gate)" in workflow
@@ -58,8 +70,8 @@ def test_backend_config_uses_writable_db_path_for_docker():
 
 def test_backend_requirements_pin_cve_fixes_for_image_scans():
     requirements = _read("backend/requirements.txt")
-    assert "jaraco.context>=6.1.0" in requirements
-    assert "wheel>=0.46.2" in requirements
+    assert "jaraco.context==6.1.0" in requirements or "jaraco.context>=6.1.0" in requirements
+    assert "wheel==0.46.2" in requirements or "wheel>=0.46.2" in requirements
 
 
 def test_backend_dockerfile_enforces_cve_fix_versions():

@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Prerelease publish workflows**: `publish-docker.yml` supports `workflow_dispatch` (manual ref/version, optional docs) and auto-publish on prerelease tags (`v*-beta*`, `v*-alpha*`, `v*a`). `deploy-docs-version.yml` adds optional `set_docs_default` (off by default for betas).
+
 - **DocLang export format**: Export conversions to `.dclg.xml` via Docling's `export_to_doclang()` API; available in the export panel, settings default-format list, and `GET /api/export/{job_id}/doclang`. Requires `docling>=2.70.0` and `docling-core>=2.70.0`.
 
 - **Container hardening tests**: Added `tests/test_docker_hardening.py` and updated `tests/TEST_SUITE_SUMMARY.md` to guard non-root runtime, compose hardening flags, and publish workflow security gates.

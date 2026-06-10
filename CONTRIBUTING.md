@@ -328,6 +328,8 @@ Changing that script should keep the **Docker build script (publish parity)** jo
 
 Buildx with local Docker exporter (`--load`) cannot emit SBOM/provenance attestations. Keep the script behavior that auto-disables `--sbom`/`--provenance` in non-push `--load` mode (with a warning) to prevent CI/local manifest-list export failures.
 
+**Prerelease / beta publishes** (not merged to `main`): use Actions → **Publish Docker Images** → Run workflow, select the feature branch, set `ref` (tag or branch), `version` (image tag label), optional `publish_docs`, and `set_docs_default` only for stable releases. Pushing tags matching `v*-beta*`, `v*-alpha*`, or `v*a` also triggers Docker publish when the tagged commit includes the workflow. See [docs/getting-started/docker.md](docs/getting-started/docker.md#prerelease-and-beta-publishing-manual-or-tag).
+
 ## Getting Help
 
 - Create an issue for questions

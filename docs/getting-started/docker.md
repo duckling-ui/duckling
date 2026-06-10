@@ -132,6 +132,27 @@ Before merge, PR CI runs a publish rehearsal job in `.github/workflows/test.yml`
 
 Images are tagged with the version from `frontend/package.json` and `latest`.
 
+### Prerelease and beta publishing (manual or tag)
+
+Stable releases still publish on merge to `main`. For feature branches and betas (for example `v0.0.14-doclang-beta`), use one of:
+
+**Option 1 — Manual workflow (recommended)**
+
+1. Open [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) → **Run workflow**.
+2. Select branch **`feature/doclang-export`** (or the branch that contains the updated workflow).
+3. Set **ref** to your tag or branch (e.g. `v0.0.14-doclang-beta`).
+4. Set **version** to the image label (e.g. `0.0.14-doclang-beta`). If omitted, the workflow derives it from the tag name or `frontend/package.json`.
+5. Enable **publish_docs** only if you want docs on gh-pages / duckling-ui.org.
+6. Leave **set_docs_default** off for betas so `latest` docs stay on the stable release.
+
+**Option 2 — Push a prerelease tag**
+
+Pushing tags matching `v*-beta*`, `v*-alpha*`, or `v*a` (e.g. `v0.0.14-doclang-beta`) triggers the publish workflow automatically when the tag commit includes this workflow definition. Docs are not deployed unless you run the manual workflow with **publish_docs** enabled.
+
+**Docs only for a tagged version**
+
+Use [Deploy Docs Version](https://github.com/duckling-ui/duckling/actions/workflows/deploy-docs-version.yml) with version `0.0.14-doclang-beta` (no `v` prefix). Leave **set_docs_default** off for betas.
+
 **Required repository secrets** (Settings → Secrets and variables → Actions):
 
 | Secret | Description |

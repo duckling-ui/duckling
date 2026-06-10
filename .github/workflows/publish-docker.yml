@@ -1,24 +1,52 @@
-# Publish Docker images to Docker Hub and GitHub Container Registry when PRs are merged to main.
+# Publish Docker images to Docker Hub and GitHub Container Registry.
+#
+# Triggers:
+#   - push to main (stable release; version from frontend/package.json)
+#   - push of prerelease tags matching v*-beta*, v*-alpha*, or v*a (e.g. v0.0.14-doclang-beta)
+#   - workflow_dispatch (manual beta/feature publishes)
+#
+# Documentation deploy on main still runs via deploy-docs.yml. For betas, enable
+# publish_docs in workflow_dispatch or use deploy-docs-version.yml.
+#
 # Required secrets: DOCKERHUB_USERNAME, DOCKERHUB_TOKEN
 # GHCR uses GITHUB_TOKEN (automatically provided by Actions)
-#
-# The build entrypoint is ./scripts/docker-build.sh. Pull requests run the "Docker build script (publish parity)"
-# job in .github/workflows/test.yml (syntax + same flag/expansion paths on ubuntu-latest) so changes stay safe for this workflow.
-#
-# After images are pushed, this workflow runs Trivy on the GitHub Actions runner (not `docker run aquasec/trivy`) so scans
-# can use the workflow's Docker Hub + GHCR logins and the runner Docker engine.
 name: Publish Docker Images
 
 on:
   push:
     branches: [main]
+    tags:
+      - "v*-beta*"
+      - "v*-alpha*"
+      - "v*a"
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Branch or tag to build (e.g. v0.0.14-doclang-beta)"
+        required: false
+        type: string
+      version:
+        description: "Docker image version label (defaults from tag or package.json)"
+        required: false
+        type: string
+      publish_docs:
+        description: "Deploy documentation to gh-pages and duckling-ui.org"
+        type: boolean
+        default: false
+      set_docs_default:
+        description: "Set mike 'latest' alias to this version (leave off for betas)"
+        type: boolean
+        default: false
 
 jobs:
   publish:
     name: Build and Push Docker Images
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      publish_docs: ${{ steps.version.outputs.publish_docs }}
+      set_docs_default: ${{ steps.version.outputs.set_docs_default }}
     env:
-      # Quieter CI logs; vulnerability results are unchanged.
       TRIVY_DISABLE_VEX_NOTICE: "true"
     permissions:
       contents: read
@@ -26,15 +54,65 @@ jobs:
       id-token: write
 
     steps:
+      - name: Resolve checkout ref
+        id: checkout_ref
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.ref }}" ]; then
+            echo "ref=${{ github.event.inputs.ref }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=${{ github.ref }}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.checkout_ref.outputs.ref }}
+          fetch-depth: 0
 
-      - name: Get version
+      - name: Resolve version and docs options
         id: version
         run: |
-          VERSION=$(node -p "require('./frontend/package.json').version")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Version: $VERSION"
+          set -euo pipefail
+          EVENT="${{ github.event_name }}"
+          INPUT_VERSION="${{ github.event.inputs.version }}"
+          INPUT_REF="${{ github.event.inputs.ref }}"
+
+          if [ "$EVENT" = "workflow_dispatch" ] && [ -n "$INPUT_VERSION" ]; then
+            VERSION="$INPUT_VERSION"
+          elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          elif [ "$EVENT" = "workflow_dispatch" ] && [ -n "$INPUT_REF" ]; then
+            if [[ "$INPUT_REF" == refs/tags/v* ]]; then
+              VERSION="${INPUT_REF#refs/tags/v}"
+            elif [[ "$INPUT_REF" == refs/tags/* ]]; then
+              VERSION="${INPUT_REF#refs/tags/}"
+            elif [[ "$INPUT_REF" == v* ]]; then
+              VERSION="${INPUT_REF#v}"
+            else
+              VERSION=$(node -p "require('./frontend/package.json').version")
+            fi
+          else
+            VERSION=$(node -p "require('./frontend/package.json').version")
+          fi
+
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            PUBLISH_DOCS="${{ github.event.inputs.publish_docs }}"
+            SET_DEFAULT="${{ github.event.inputs.set_docs_default }}"
+          elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
+            PUBLISH_DOCS="false"
+            SET_DEFAULT="false"
+          else
+            PUBLISH_DOCS="false"
+            SET_DEFAULT="false"
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "publish_docs=$PUBLISH_DOCS" >> "$GITHUB_OUTPUT"
+          echo "set_docs_default=$SET_DEFAULT" >> "$GITHUB_OUTPUT"
+          echo "Resolved version: $VERSION"
+          echo "Publish docs: $PUBLISH_DOCS"
+          echo "Set docs default: $SET_DEFAULT"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -125,3 +203,109 @@ jobs:
           cosign sign --yes ${{ secrets.DOCKERHUB_USERNAME }}/duckling-frontend:${{ steps.version.outputs.version }}
           cosign sign --yes ghcr.io/${{ github.repository_owner }}/duckling-backend:${{ steps.version.outputs.version }}
           cosign sign --yes ghcr.io/${{ github.repository_owner }}/duckling-frontend:${{ steps.version.outputs.version }}
+
+  docs:
+    name: Deploy Documentation
+    needs: publish
+    if: needs.publish.outputs.publish_docs == 'true'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve checkout ref
+        id: checkout_ref
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ github.event.inputs.ref }}" ]; then
+            echo "ref=${{ github.event.inputs.ref }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=${{ github.ref }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.checkout_ref.outputs.ref }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - name: Install docs dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      - name: Inject PostHog API key
+        run: |
+          if grep -q "__POSTHOG_API_KEY__" docs/overrides/main.html 2>/dev/null; then
+            sed -i "s|__POSTHOG_API_KEY__|${{ secrets.POSTHOG_API_KEY }}|g" docs/overrides/main.html
+          fi
+
+      - name: Set version in mkdocs.yml
+        run: |
+          VERSION="${{ needs.publish.outputs.version }}"
+          sed -i "s/\(default:\s*\)[0-9a-zA-Z._-]\+/\1$VERSION/" mkdocs.yml
+
+      - name: Fetch gh-pages for mike
+        run: |
+          git fetch origin gh-pages --depth=1 || true
+
+      - name: Configure Git for mike
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Deploy docs with mike
+        run: |
+          VERSION="${{ needs.publish.outputs.version }}"
+          if [ "${{ needs.publish.outputs.set_docs_default }}" = "true" ]; then
+            mike deploy --push --update-aliases --alias-type redirect "$VERSION" latest
+            mike set-default --push latest
+          else
+            mike deploy --push --alias-type redirect "$VERSION"
+            echo "Deployed $VERSION without updating mike 'latest' (prerelease / beta publish)"
+          fi
+
+  docs-rsync:
+    name: Rsync Documentation to Website
+    needs: [publish, docs]
+    if: needs.publish.outputs.publish_docs == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Copy sitemap.xml to language directories
+        run: |
+          for ver_dir in */; do
+            if [ -f "${ver_dir}sitemap.xml" ]; then
+              for lang in es fr de; do
+                lang_dir="${ver_dir}${lang}"
+                if [ -d "$lang_dir" ]; then
+                  cp "${ver_dir}sitemap.xml" "$lang_dir/sitemap.xml"
+                fi
+              done
+              en_dir="${ver_dir}en"
+              mkdir -p "$en_dir"
+              cp "${ver_dir}sitemap.xml" "$en_dir/sitemap.xml"
+            fi
+          done
+
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          switches: -avzr
+          path: .
+          remote_path: ${{ secrets.REMOTE_PATH }}
+          remote_host: ${{ secrets.SSH_HOST }}
+          remote_port: ${{ secrets.SSH_PORT }}
+          remote_user: ${{ secrets.SSH_USER }}
+          remote_key: ${{ secrets.WEBSITE_DEPLOY_KEY }}
+          remote_key_pass: ${{ secrets.DEPLOY_KEY_PASS }}
