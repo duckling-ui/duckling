@@ -22,6 +22,7 @@ Last audit: March 3, 2026
 
 ### Product surface notes
 
+- **2026-06-10**: Backend Docker OS hardening: `backend/Dockerfile` runs `apt-get upgrade` on the Bookworm base so publish Trivy gates pick up Debian security fixes for packages such as `libgnutls30` and `openssl`/`libssl3`.
 - **2026-06-10**: Docker image hardening: `backend/scripts/harden_python_packages.py` replaces Dockerfile `--no-deps` force-reinstall so `pip`/`wheel` remain functional at runtime (OCR auto-install, settings) while stale dist-info cleanup still supports Trivy gates.
 - **2026-06-04**: Prerelease CI: `publish-docker.yml` accepts manual `workflow_dispatch` and prerelease tag pushes; optional docs deploy does not set mike `latest` unless `set_docs_default` is enabled.
 - **2026-06-04**: DocLang export: Duckling emits DocLang XML (`.dclg.xml`) derived from parsed document content via Docling's `export_to_doclang()`; same trust model as other export formats (server-generated output from user-uploaded documents). This release does not accept DocLang as an upload/input format.

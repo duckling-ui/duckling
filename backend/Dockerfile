@@ -14,7 +14,9 @@ WORKDIR /app
 
 # Install system dependencies
 # Note: libgl1-mesa-glx replaced with libgl1 for newer Debian versions
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Upgrade base image OS packages (openssl, gnutls, etc.) for Trivy publish gates.
+RUN apt-get update && apt-get upgrade -y --no-install-recommends \
+  && apt-get install -y --no-install-recommends \
   build-essential \
   libgl1 \
   libglib2.0-0 \

@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Backend Docker OS package hardening**: `backend/Dockerfile` runs `apt-get upgrade` on Bookworm for Trivy gates (`libgnutls30`, `openssl`/`libssl3`).
+
 - **Docker image Python hardening**: `backend/scripts/harden_python_packages.py` upgrades `jaraco.context`/`wheel` with dependencies intact and verifies `pip` runtime (replaces Dockerfile `--no-deps` heredoc).
 
 ### Changed

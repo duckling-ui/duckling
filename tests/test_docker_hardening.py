@@ -8,6 +8,11 @@ def _read(path: str) -> str:
     return (PROJECT_ROOT / path).read_text(encoding="utf-8")
 
 
+def test_backend_dockerfile_upgrades_os_packages_for_trivy():
+    dockerfile = _read("backend/Dockerfile")
+    assert "apt-get upgrade -y --no-install-recommends" in dockerfile
+
+
 def test_frontend_dockerfile_runs_as_non_root():
     dockerfile = _read("frontend/Dockerfile")
     assert "USER nginxuser" in dockerfile

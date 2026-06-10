@@ -126,7 +126,7 @@ When a pull request is merged to `main`, the [Publish Docker Images](https://git
 
 After the pushes complete, the workflow installs Trivy on the GitHub Actions runner, `docker pull`s the freshly published tags, and runs `trivy image` directly (instead of `docker run aquasec/trivy`) so scans use the same Docker Hub + GHCR logins as the build/push steps.
 
-The frontend production image is based on `nginx:1.29-alpine3.22` and runs `apk upgrade --no-cache` during image build to keep Alpine package CVE exposure lower during Trivy gate checks.
+The backend image runs `apt-get upgrade` on the Debian Bookworm base before installing system packages, and the frontend production image is based on `nginx:1.29-alpine3.22` and runs `apk upgrade --no-cache` during image build, so OS package CVE exposure stays lower during Trivy gate checks.
 
 Before merge, PR CI runs a publish rehearsal job in `.github/workflows/test.yml` that builds local `linux/amd64` images with `--sbom`/`--provenance`, exports them with `docker save`, installs Trivy CLI on the runner, and executes Trivy HIGH/CRITICAL gates using `--input` tar scanning, so Docker security failures are caught pre-merge without requiring daemon access from inside a Trivy container.
 
