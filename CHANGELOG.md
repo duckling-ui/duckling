@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Read-only runtime fix**: Backend SQLite history DB path now uses writable Docker volume storage (`/app/data/history.db`) so history records and document-path metadata continue working with `read_only: true`.
 - **Container supply chain hardening**: Publish workflow now enables build provenance, generates SBOM artifacts (Syft SPDX), scans release images with Trivy (fails on HIGH/CRITICAL), and signs published images with keyless Cosign.
 
+### Fixed
+
+- **Docker image Python hardening**: Replaced Dockerfile `--no-deps` force-reinstall heredoc with `backend/scripts/harden_python_packages.py` that upgrades `jaraco.context`/`wheel` with dependencies intact, cleans stale dist-info for Trivy, and verifies `pip`/`wheel` still work at runtime.
+
 ### Changed
 
 - **Docling dependency**: Minimum version raised to `docling>=2.70.0` and `docling-core>=2.70.0` (DocLang export; `docling` alone can still resolve an older `docling-core` without `export_to_doclang`).

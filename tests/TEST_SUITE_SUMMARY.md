@@ -10,6 +10,7 @@ This repository contains multiple test suites:
 - **Backend (pytest)**: API and service tests in `backend/tests/`
   - `backend/tests/conftest.py` stubs the app singleton’s `converter_service.start_conversion` (autouse) so convert endpoints are tested without spawning Docling worker threads (prevents segfaults on some platforms)
   - Includes regression tests for history reload endpoint validation and error handling in `backend/tests/test_api.py`
+  - `backend/tests/test_harden_python_packages.py`: Docker image hardening script keeps pip runtime working (no `--no-deps`, no ensurepip wheel deletion)
   - `backend/tests/test_api.py`: DocLang export format listed on `/api/formats` and `/api/settings/formats` (`test_output_formats_includes_doclang`, `test_settings_formats_includes_doclang`)
   - `POST /api/convert/batch`: mixed valid/rejected files (202) and all-rejected batches (400)
   - History reconciliation tests in `backend/tests/test_history.py` (`create_entry_from_disk`, `reconcile_from_disk`) and `backend/tests/test_api.py` (`POST /api/history/reconcile`)

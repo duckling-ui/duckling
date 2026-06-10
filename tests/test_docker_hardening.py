@@ -76,11 +76,15 @@ def test_backend_requirements_pin_cve_fixes_for_image_scans():
 
 def test_backend_dockerfile_enforces_cve_fix_versions():
     dockerfile = _read("backend/Dockerfile")
-    assert 'pip install --upgrade --force-reinstall --no-deps "jaraco.context==6.1.0" "wheel==0.46.2"' in dockerfile
-    assert 'assert_min("jaraco.context", "6.1.0")' in dockerfile
-    assert 'assert_min("wheel", "0.46.2")' in dockerfile
-    assert "remove_legacy_metadata" in dockerfile
-    assert "remove_legacy_ensurepip_wheels" in dockerfile
+    assert "scripts/harden_python_packages.py" in dockerfile
+    assert "python scripts/harden_python_packages.py" in dockerfile
+    assert "--no-deps" not in dockerfile
+    script = _read("backend/scripts/harden_python_packages.py")
+    assert "jaraco.context>=" in script
+    assert "wheel>=" in script
+    assert "remove_legacy_metadata" in script
+    assert "remove_legacy_ensurepip_wheels" not in script
+    assert "importlib.import_module(\"pip\")" in script
 
 
 def test_docker_build_script_forces_plain_progress_logging():
