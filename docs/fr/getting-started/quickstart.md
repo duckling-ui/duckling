@@ -86,6 +86,20 @@ Une fois terminé, choisissez votre format d’export :
 - **HTML** – Sortie prête pour le web
 - **JSON** – Structure complète du document
 - **Texte brut** – Extraction de texte simple
+- **DocTags** – Format de document étiqueté pour pipelines structurés
+- **DocLang** – XML natif IA (`.dclg.xml`) pour workflows LLM et agents ; voir [Formats pris en charge](../../user-guide/formats.md#doclang-dclgxml)
+- **Document Tokens** – Représentation au niveau des jetons (JSON)
+- **RAG Chunks** – Segments pour applications de retrieval
+
+!!! note "Disponibilité DocLang"
+    DocLang nécessite Docling 2.70.0+ et docling-core 2.70.0+. Après mise à jour des dépendances, **reconvertissez** le document — le panneau d’export n’affiche que les formats générés pour ce job.
+- **DocTags** – Format de document étiqueté pour pipelines structurés
+- **DocLang** – XML natif IA (`.dclg.xml`) pour workflows LLM et agents ; voir [Formats pris en charge](../../user-guide/formats.md#doclang-dclgxml)
+- **Document Tokens** – Représentation au niveau des jetons (JSON)
+- **RAG Chunks** – Segments pour applications de retrieval
+
+!!! note "Disponibilité DocLang"
+    DocLang nécessite Docling 2.70.0+ et docling-core 2.70.0+. Après mise à jour des dépendances, **reconvertissez** le document — le panneau d’export n’affiche que les formats générés pour ce job.
 
 ## Configuration de base
 

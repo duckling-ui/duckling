@@ -435,11 +435,17 @@ GET /api/export/{job_id}/{format}
 - `json`
 - `text`
 - `doctags`
-- `doclang`
+- `doclang` — DocLang XML (`.dclg.xml`, `application/xml`); see [Supported formats — DocLang](../user-guide/formats.md#doclang-dclgxml)
 - `document_tokens`
 - `chunks`
 
 **Response**: File download with appropriate MIME type
+
+Example:
+
+```bash
+curl -OJ http://localhost:5001/api/export/{job_id}/doclang
+```
 
 ---
 

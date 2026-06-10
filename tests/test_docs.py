@@ -211,6 +211,33 @@ def test_required_docs_sections_exist():
         assert section_path.exists(), f"Required German documentation section not found: {section}"
 
 
+def test_doclang_documented_in_user_facing_guides():
+    """DocLang export must appear in primary user-facing docs (not only changelog)."""
+    doclang_markers = ("DocLang", "doclang", "dclg.xml", "#doclang-dclgxml")
+    checked_files = [
+        "docs/getting-started/quickstart.md",
+        "docs/user-guide/formats.md",
+        "docs/user-guide/index.md",
+        "docs/api/settings.md",
+        "docs/api/conversion.md",
+        "docs/docling/index.md",
+        "docs/index.md",
+        "docs/de/getting-started/quickstart.md",
+        "docs/fr/getting-started/quickstart.md",
+        "docs/es/getting-started/quickstart.md",
+        "docs/de/docling/index.md",
+        "docs/fr/docling/index.md",
+        "docs/es/docling/index.md",
+    ]
+    for rel_path in checked_files:
+        content = (PROJECT_ROOT / rel_path).read_text(encoding="utf-8")
+        assert any(marker in content for marker in doclang_markers), (
+            f"Expected DocLang documentation in {rel_path}"
+        )
+    formats = (PROJECT_ROOT / "docs" / "user-guide" / "formats.md").read_text(encoding="utf-8")
+    assert "{#doclang-dclgxml}" in formats
+
+
 def test_docs_assets_exist():
     """Test that documentation assets exist."""
     required_assets = [

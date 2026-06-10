@@ -87,6 +87,19 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
 </div>
 
 
+### Formats d'export
+
+| Format | Extension | Description |
+|--------|-----------|-------------|
+| Markdown | `.md` | Texte formaté avec titres, listes et liens |
+| HTML | `.html` | Format prêt pour le web |
+| JSON | `.json` | Structure complète du document |
+| Texte brut | `.txt` | Texte simple sans mise en forme |
+| DocTags | `.doctags` | Format de document étiqueté |
+| DocLang | `.dclg.xml` | Format XML de document natif IA |
+| Document Tokens | `.tokens.json` | Représentation au niveau des jetons |
+| RAG Chunks | `.chunks.json` | Segments pour applications RAG |
+
 ## Démarrage rapide
 
 Consultez **[Bien démarrer](getting-started/index.md)** pour installer et exécuter Duckling avec Docker ou en développement local. Un guide court est dans **[Démarrage rapide](getting-started/quickstart.md)**.

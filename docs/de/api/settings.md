@@ -119,7 +119,11 @@ GET /api/settings/formats
   "output_formats": [
     {"id": "markdown", "name": "Markdown", "extension": ".md", "mime_type": "text/markdown"},
     {"id": "html", "name": "HTML", "extension": ".html", "mime_type": "text/html"},
-    {"id": "json", "name": "JSON", "extension": ".json", "mime_type": "application/json"}
+    {"id": "json", "name": "JSON", "extension": ".json", "mime_type": "application/json"},
+    {"id": "text", "name": "Plain Text", "extension": ".txt", "mime_type": "text/plain"},
+    {"id": "doctags", "name": "DocTags", "extension": ".doctags", "mime_type": "text/plain"},
+    {"id": "doclang", "name": "DocLang", "extension": ".dclg.xml", "mime_type": "application/xml"},
+    {"id": "document_tokens", "name": "Document Tokens", "extension": ".tokens", "mime_type": "application/json"}
   ]
 }
 ```

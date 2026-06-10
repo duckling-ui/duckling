@@ -50,3 +50,6 @@ Duckling offre une interface complète pour la conversion de documents, avec not
 !!! tip "Découpage RAG"
     Activez le découpage dans les paramètres pour produire des segments adaptés à la génération augmentée par récupération (RAG). Les segments incluent des métadonnées (titres, numéros de page).
 
+!!! tip "Export DocLang"
+    Duckling peut exporter [DocLang](https://doclang.ai) (`.dclg.xml`) — un format XML natif IA préservant structure, mise en page et géométrie. Voir [Formats pris en charge — DocLang](formats.md#doclang-dclgxml). Nécessite Docling 2.70.0+ ; reconvertissez après mise à jour des dépendances.
+

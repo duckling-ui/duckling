@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Documentation
 
+- **DocLang documentation coverage**: Quick Start, Settings API, User Guide tips, French homepage export table, localized Docling hub links, and `#doclang-dclgxml` anchors in all `formats.md` locales.
+
 - **UI localization**: Batch results text now uses locale strings (`frontend/src/App.tsx`, `frontend/src/locales/*/common.json`) so the batch-complete view is translated in all supported UI languages.
 - **Language switcher**: [javascripts/language-selector.js](javascripts/language-selector.js) fixes locale links (same-page switch, preserve hash) for standalone docs and `/api/docs/site/<lang>/...`, including malformed `..fr/` links and menu items without `hreflang`.
 - **Deployment**: full translation of `de/deployment/`, `fr/deployment/`, and `es/deployment/` (index, production, scaling, security); Mermaid labels localized.

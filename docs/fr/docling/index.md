@@ -5,6 +5,10 @@ Cette section inclut une **sélection** de la documentation officielle de Doclin
 !!! note "Contenu en anglais"
     Ces pages sont synchronisées depuis le projet upstream `docling-project/docling` (MIT). Pour la documentation complète et à jour, voir `https://docling-project.github.io/docling/`.
 
+## Duckling et DocLang
+
+Duckling peut exporter des documents convertis en [DocLang](https://doclang.ai) (`.dclg.xml`) via l’API `export_to_doclang()` de Docling. DocLang est le format d’échange de documents natif IA ouvert du groupe de travail LF AI & Data DocLang. Voir [Formats pris en charge](../user-guide/formats.md#doclang-dclgxml) dans le guide utilisateur Duckling.
+
 ## Pages incluses
 
 - [Installation](installation.md)

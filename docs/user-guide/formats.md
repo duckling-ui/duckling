@@ -117,7 +117,7 @@ Tagged document format for semantic analysis.
 </document>
 ```
 
-#### DocLang (`.dclg.xml`)
+#### DocLang (`.dclg.xml`) {#doclang-dclgxml}
 
 AI-native XML document format from the [DocLang open standard](https://doclang.ai). Duckling exports DocLang via Docling's `export_to_doclang()` API. The format preserves document structure, semantic roles, layout, and bounding-box geometry in a single machine-readable representation suited for LLM and agent pipelines.
 
