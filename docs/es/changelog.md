@@ -9,6 +9,14 @@ y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2
 
 ## [Sin publicar]
 
+### Añadido
+
+- **Exportación DocLang**: conversiones a `.dclg.xml` mediante `export_to_doclang()` de Docling; panel de exportación, ajustes y `GET /api/export/{job_id}/doclang`. Requiere `docling>=2.70.0`.
+
+### Cambiado
+
+- **Dependencia Docling**: versión mínima `docling>=2.70.0`.
+
 ### Documentación
 
 - **Despliegue**: [deployment/index.md](deployment/index.md), [deployment/production.md](deployment/production.md), [deployment/scaling.md](deployment/scaling.md) y [deployment/security.md](deployment/security.md) traducidos por completo (etiquetas Mermaid localizadas); equivalentes en `de`/`fr`.

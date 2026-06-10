@@ -21,7 +21,7 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
 - **URL-Based Conversion**: Convert documents directly from URLs with automatic image extraction for HTML pages
 - **Multi-file and folder upload**: Convert multiple files or URLs at once from one drop zone—choose a folder, use **Choose files…**, or drag and drop; unsupported extensions are skipped client-side, and the API rejects a batch if nothing can be converted
 - **Multi-Format Support**: Convert PDFs, Word docs, PowerPoints, Excel files, HTML, Markdown, images, and more
-- **Multiple Export Formats**: Export to Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks, or plain text
+- **Multiple Export Formats**: Export to Markdown, HTML, JSON, DocTags, DocLang, Document Tokens, RAG Chunks, or plain text
 - **Image & Table Extraction**: Extract embedded images and tables with CSV export
 - **Image Preview Gallery**: View extracted images as thumbnails with full-size lightbox viewer
 - **RAG-Ready Chunking**: Generate document chunks optimized for RAG applications
@@ -58,6 +58,7 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
 | JSON | `.json` | Full document structure |
 | Plain Text | `.txt` | Simple text without formatting |
 | DocTags | `.doctags` | Tagged document format |
+| DocLang | `.dclg.xml` | AI-native XML document format ([doclang.ai](https://doclang.ai)) |
 | Document Tokens | `.tokens.json` | Token-level representation |
 | RAG Chunks | `.chunks.json` | Chunks for RAG applications |
 

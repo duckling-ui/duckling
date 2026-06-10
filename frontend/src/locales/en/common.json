@@ -389,6 +389,11 @@
         "description": "Tagged document tokens for AI processing",
         "icon": "#"
       },
+      "doclang": {
+        "name": "DocLang",
+        "description": "AI-native XML document format with structure, layout, and geometry preserved",
+        "icon": "DL"
+      },
       "text": {
         "name": "Plain Text",
         "description": "Simple text without formatting",

@@ -173,5 +173,18 @@ describe('ExportOptions', () => {
     // Now should show "Show" button
     expect(screen.getByRole('button', { name: /show/i })).toBeInTheDocument();
   });
+
+  it('renders DocLang when available in formatsAvailable', async () => {
+    render(
+      <ExportOptions
+        {...defaultProps}
+        formatsAvailable={['markdown', 'doclang']}
+      />
+    );
+
+    await waitFor(() => {
+      expect(screen.getAllByText('DocLang').length).toBeGreaterThanOrEqual(1);
+    });
+  });
 });
 

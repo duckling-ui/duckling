@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Prerelease publish workflows**: `publish-docker.yml` supports `workflow_dispatch` (manual ref/version, optional docs) and auto-publish on prerelease tags (`v*-beta*`, `v*-alpha*`, `v*a`). `deploy-docs-version.yml` adds optional `set_docs_default` (off by default for betas).
+
+- **DocLang export**: Export conversions to `.dclg.xml` via Docling `export_to_doclang()`; UI export panel, settings, and `GET /api/export/{job_id}/doclang`. Requires `docling>=2.70.0` and `docling-core>=2.70.0`.
+
+### Changed
+
+- **Docling dependency**: Minimum versions `docling>=2.70.0` and `docling-core>=2.70.0` (explicit core pin; DocLang needs `export_to_doclang` on `DoclingDocument`).
+
 ### Documentation
 
 - **UI localization**: Batch results text now uses locale strings (`frontend/src/App.tsx`, `frontend/src/locales/*/common.json`) so the batch-complete view is translated in all supported UI languages.

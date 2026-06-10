@@ -14,7 +14,8 @@ pymdown-extensions>=10.21.2
 flask==3.1.3
 psutil>=5.9.0
 flask-cors==6.0.0
-docling>=2.50.0  # 2.50.0+ required for enrichment models (picture classification, description, formula recognition, code detection)
+docling>=2.70.0  # 2.50.0+ enrichment models; 2.70.0+ required for DocLang export (export_to_doclang)
+docling-core>=2.70.0  # export_to_doclang() lives in docling-core; docling 2.70 alone may resolve core 2.61.x
 sqlalchemy==2.0.36
 python-dotenv==1.0.0
 pytest==7.4.3
@@ -23,6 +24,6 @@ werkzeug==3.1.6
 gunicorn==23.0.0
 # pymdown-extensions 10.21.2+ requires markdown>=3.6 (was 3.5.1; conflict broke pip on CI)
 markdown>=3.6,<4
-# Image-scan hardening (Trivy): pin vulnerable transitive packages to fixed versions.
-jaraco.context>=6.1.0
-wheel>=0.46.2
+# Image-scan hardening (Trivy): exact minimum-safe versions for deterministic image content.
+jaraco.context==6.1.0
+wheel==0.46.2

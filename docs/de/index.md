@@ -41,7 +41,7 @@ Duckling bietet eine intuitive Web-Oberfläche, um Dokumente mit Docling zu konv
 
     ---
 
-    Exportieren Sie nach Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks oder Klartext
+    Exportieren Sie nach Markdown, HTML, JSON, DocTags, DocLang, Document Tokens, RAG Chunks oder Klartext
     </a>
 
 -   <a href="user-guide/features/#tabellenextraktion" class="card-link" markdown="1" aria-label="Benutzerhandbuch: Abschnitt Bild- und Tabellenextraktion">
@@ -143,6 +143,7 @@ Greifen Sie auf die Anwendung unter `http://localhost:3000` zu
 | JSON | `.json` | Vollständige Dokumentstruktur |
 | Klartext | `.txt` | Einfacher Text ohne Formatierung |
 | DocTags | `.doctags` | Markiertes Dokumentformat |
+| DocLang | `.dclg.xml` | KI-natives XML-Dokumentformat |
 | Document Tokens | `.tokens.json` | Token-Ebene-Darstellung |
 | RAG Chunks | `.chunks.json` | Chunks für RAG-Anwendungen |
 

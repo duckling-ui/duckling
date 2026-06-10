@@ -41,7 +41,7 @@ Duckling proporciona una interfaz web intuitiva para convertir documentos usando
 
     ---
 
-    Exporta a Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks o texto plano
+    Exporta a Markdown, HTML, JSON, DocTags, DocLang, Document Tokens, RAG Chunks o texto plano
     </a>
 
 -   <a href="user-guide/features/#extraccion-de-tablas" class="card-link" markdown="1" aria-label="Guía de usuario: sección de extracción de imágenes y tablas">
@@ -152,6 +152,7 @@ Accede a la aplicación en `http://localhost:3000`
 | JSON | `.json` | Estructura completa del documento |
 | Texto plano | `.txt` | Texto simple sin formato |
 | DocTags | `.doctags` | Formato de documento etiquetado |
+| DocLang | `.dclg.xml` | Formato XML de documento nativo para IA |
 | Document Tokens | `.tokens.json` | Representación a nivel de tokens |
 | RAG Chunks | `.chunks.json` | Fragmentos para aplicaciones RAG |
 

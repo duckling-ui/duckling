@@ -10,6 +10,7 @@ This repository contains multiple test suites:
 - **Backend (pytest)**: API and service tests in `backend/tests/`
   - `backend/tests/conftest.py` stubs the app singleton’s `converter_service.start_conversion` (autouse) so convert endpoints are tested without spawning Docling worker threads (prevents segfaults on some platforms)
   - Includes regression tests for history reload endpoint validation and error handling in `backend/tests/test_api.py`
+  - `backend/tests/test_api.py`: DocLang export format listed on `/api/formats` and `/api/settings/formats` (`test_output_formats_includes_doclang`, `test_settings_formats_includes_doclang`)
   - `POST /api/convert/batch`: mixed valid/rejected files (202) and all-rejected batches (400)
   - History reconciliation tests in `backend/tests/test_history.py` (`create_entry_from_disk`, `reconcile_from_disk`) and `backend/tests/test_api.py` (`POST /api/history/reconcile`)
 - **Frontend (Vitest)**: UI and hook tests in `frontend/src/tests/`
@@ -18,6 +19,8 @@ This repository contains multiple test suites:
   - `frontend/src/hooks/useSlideOver.tsx`: Focus trap, Escape, and focus restore for dialog-style slide-over panels (used by settings, history, stats, docs)
   - `frontend/src/components/ScrollableRegion.tsx`: Focusable (`tabIndex={0}`) scroll containers with `role="region"` + `aria-label` for keyboard scrolling in long UI areas (settings, panels, export)
   - `frontend/src/tests/components/DocsPanel.test.tsx`: Ensures the in-app docs sidebar stays in sync when navigation happens inside the embedded MkDocs iframe (after docs load, flushes a macrotask so the `window` `message` listener is registered before dispatching; `waitFor` uses an extended timeout for CI)
+  - `frontend/src/tests/components/ExportOptions.test.tsx`: DocLang format card when `formatsAvailable` includes `doclang`
+  - `frontend/src/tests/services/api.test.ts`: expected output format list includes `doclang`
 
 ## Running tests
 

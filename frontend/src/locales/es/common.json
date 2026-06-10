@@ -389,6 +389,11 @@
         "description": "Tokens de documento con etiquetas para procesamiento por IA",
         "icon": "#"
       },
+      "doclang": {
+        "name": "DocLang",
+        "description": "Formato XML de documento nativo para IA con estructura, diseño y geometría preservados",
+        "icon": "DL"
+      },
       "text": {
         "name": "Texto sin formato",
         "description": "Texto simple sin formato",

@@ -193,6 +193,7 @@ SUPPORTED_OUTPUT_FORMATS = [
     {"id": "json", "name": "JSON", "extension": ".json", "mime_type": "application/json"},
     {"id": "text", "name": "Plain Text", "extension": ".txt", "mime_type": "text/plain"},
     {"id": "doctags", "name": "DocTags", "extension": ".doctags", "mime_type": "text/plain"},
+    {"id": "doclang", "name": "DocLang", "extension": ".dclg.xml", "mime_type": "application/xml"},
     {"id": "document_tokens", "name": "Document Tokens", "extension": ".tokens", "mime_type": "application/json"},
 ]
 

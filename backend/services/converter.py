@@ -961,6 +961,15 @@ class ConverterService:
                 except Exception as e:
                     print(f"DocTags export failed: {e}")
 
+                # DocLang
+                try:
+                    doclang_path = output_base / f"{Path(job.original_filename).stem}.dclg.xml"
+                    doclang_content = doc.export_to_doclang()
+                    doclang_path.write_text(str(doclang_content), encoding="utf-8")
+                    job.output_paths["doclang"] = str(doclang_path)
+                except Exception as e:
+                    print(f"DocLang export failed: {e}")
+
                 # Document tokens
                 try:
                     tokens_path = output_base / f"{Path(job.original_filename).stem}.tokens.json"
@@ -1191,6 +1200,7 @@ class ConverterService:
                 "json": ".json",
                 "text": ".txt",
                 "doctags": ".doctags",
+                "doclang": ".dclg.xml",
                 "document_tokens": ".tokens.json",
                 "chunks": ".chunks.json"
             }
@@ -1222,6 +1232,7 @@ class ConverterService:
                 "json": ".json",
                 "text": ".txt",
                 "doctags": ".doctags",
+                "doclang": ".dclg.xml",
                 "document_tokens": ".tokens.json",
                 "chunks": ".chunks.json"
             }

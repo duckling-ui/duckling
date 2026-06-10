@@ -77,6 +77,33 @@ class TestFormatsEndpoint:
             assert "name" in fmt
             assert "extension" in fmt
 
+    def test_output_formats_includes_doclang(self, client):
+        """Test legacy formats endpoint lists DocLang export."""
+        response = client.get("/api/formats")
+        data = json.loads(response.data)
+
+        doclang = next((f for f in data["output_formats"] if f["id"] == "doclang"), None)
+        assert doclang is not None
+        assert doclang["name"] == "DocLang"
+        assert doclang["extension"] == ".dclg.xml"
+
+
+class TestSettingsFormatsEndpoint:
+    """Tests for settings formats endpoint."""
+
+    def test_settings_formats_includes_doclang(self, client):
+        """Test settings formats endpoint lists DocLang export."""
+        response = client.get("/api/settings/formats")
+        assert response.status_code == 200
+        data = json.loads(response.data)
+
+        output_ids = [f["id"] for f in data["output_formats"]]
+        assert "doclang" in output_ids
+
+        doclang = next(f for f in data["output_formats"] if f["id"] == "doclang")
+        assert doclang["extension"] == ".dclg.xml"
+        assert doclang["mime_type"] == "application/xml"
+
 
 class TestConvertEndpoint:
     """Tests for conversion endpoints."""

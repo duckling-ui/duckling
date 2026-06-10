@@ -14,6 +14,8 @@ When you change upload or batch behavior in the UI, update [docs/getting-started
 
 Material’s **navigation.integrate** sidebar TOC uses each page’s Markdown headings (`##` / `###` up to `toc_depth`). For localized docs (for example [docs/fr/user-guide/features.md](docs/fr/user-guide/features.md)), translate those headings so the sidebar matches the locale, not only the paragraph text. Keep [formats](docs/de/user-guide/formats.md) and [screenshots](docs/de/user-guide/screenshots.md) in sync across `docs/{de,fr,es}/user-guide/` (including `===` tab titles and figure captions; asset paths `../../assets/...`).
 
+When adding a new **output export format**, register it consistently: `backend/config.py` (`SUPPORTED_OUTPUT_FORMATS`), conversion export in `backend/services/converter.py`, export/history/file-manager extension maps, `backend/routes/convert.py` valid formats and MIME types, legacy `/api/formats` in `backend/duckling.py`, frontend `FORMAT_INFO` in `ExportOptions.tsx`, `getExtension()` in `useConversion.ts`, all four `frontend/src/locales/*/common.json` entries, and [docs/user-guide/formats.md](docs/user-guide/formats.md) plus localized mirrors. See the DocLang export change set as a reference.
+
 ## How to Contribute
 
 ### Reporting Bugs

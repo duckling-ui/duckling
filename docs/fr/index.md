@@ -41,7 +41,7 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
 
     ---
 
-    Exportez vers Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks ou texte brut
+    Exportez vers Markdown, HTML, JSON, DocTags, DocLang, Document Tokens, RAG Chunks ou texte brut
     </a>
 
 -   <a href="user-guide/features/#extraction-des-tableaux" class="card-link" markdown="1" aria-label="Guide utilisateur : section Extraction d'images et tableaux">

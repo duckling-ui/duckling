@@ -332,6 +332,7 @@ Erzeugen Sie Dokumentsegmente für Retrieval-Augmented Generation (RAG).
 | **JSON** | `.json` | Vollständige Dokumentstruktur (verlustfrei) |
 | **Klartext** | `.txt` | Einfacher Text |
 | **DocTags** | `.doctags` | Getaggtes Format |
+| **DocLang** | `.dclg.xml` | KI-natives XML-Dokumentformat |
 | **Document Tokens** | `.tokens.json` | Token-Ebene |
 | **RAG-Chunks** | `.chunks.json` | Segmente für RAG-Anwendungen |
 
@@ -380,7 +381,7 @@ Bei HTML und Markdown zwischen gerendertem und Quelltext umschalten:
 
 - **JSON**: formatiert mit Einrückung
 - **Klartext**: unverändert
-- **DocTags / Tokens**: Rohanzeige
+- **DocTags / DocLang / Tokens**: Rohanzeige
 
 <figure markdown="span">
   ![JSON-Vorschau](../../assets/screenshots/export/preview-json.png){ loading=lazy }

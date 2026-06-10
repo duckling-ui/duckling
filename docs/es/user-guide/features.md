@@ -332,6 +332,7 @@ Genera fragmentos de documento optimizados para generación aumentada por recupe
 | **JSON** | `.json` | Estructura completa del documento (sin pérdida) |
 | **Texto plano** | `.txt` | Texto simple |
 | **DocTags** | `.doctags` | Formato etiquetado |
+| **DocLang** | `.dclg.xml` | Formato XML de documento nativo para IA |
 | **Tokens de documento** | `.tokens.json` | Representación a nivel de tokens |
 | **Fragmentos RAG** | `.chunks.json` | Fragmentos para aplicaciones RAG |
 
@@ -380,7 +381,7 @@ En HTML y Markdown, alterna entre vista renderizada y código fuente:
 
 - **JSON**: formateado con sangría
 - **Texto plano**: tal cual
-- **DocTags / tokens**: vista en bruto
+- **DocTags / DocLang / tokens**: vista en bruto
 
 <figure markdown="span">
   ![Vista previa JSON](../../assets/screenshots/export/preview-json.png){ loading=lazy }

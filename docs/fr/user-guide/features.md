@@ -332,6 +332,7 @@ Générez des segments de document adaptés à la génération augmentée par r�
 | **JSON** | `.json` | Structure complète du document (sans perte) |
 | **Texte brut** | `.txt` | Texte simple |
 | **DocTags** | `.doctags` | Format balisé |
+| **DocLang** | `.dclg.xml` | Format XML de document natif IA |
 | **Jetons de document** | `.tokens.json` | Représentation au niveau des jetons |
 | **Segments RAG** | `.chunks.json` | Segments pour applications RAG |
 
@@ -380,7 +381,7 @@ Pour HTML et Markdown, basculez entre vue rendue et code source :
 
 - **JSON** : pretty-print avec indentation
 - **Texte brut** : affichage tel quel
-- **DocTags / jetons** : affichage brut
+- **DocTags / DocLang / jetons** : affichage brut
 
 <figure markdown="span">
   ![Aperçu JSON](../../assets/screenshots/export/preview-json.png){ loading=lazy }

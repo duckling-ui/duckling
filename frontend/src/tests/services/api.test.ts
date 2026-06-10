@@ -76,11 +76,12 @@ describe('API Service', () => {
         'pdf', 'docx', 'pptx', 'xlsx', 'html', 'md', 'csv', 'image', 'audio', 'vtt', 'xml', 'asciidoc'
       ];
 
-      const expectedOutputFormats = ['markdown', 'html', 'json', 'doctags', 'text'];
+      const expectedOutputFormats = ['markdown', 'html', 'json', 'doctags', 'doclang', 'text'];
 
       // Verify format IDs match expected
       expect(expectedInputFormats.length).toBeGreaterThan(0);
-      expect(expectedOutputFormats.length).toBe(5);
+      expect(expectedOutputFormats.length).toBe(6);
+      expect(expectedOutputFormats).toContain('doclang');
     });
   });
 

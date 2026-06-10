@@ -392,6 +392,11 @@
         "description": "Mit Tags versehene Dokument-Tokens zur KI-Verarbeitung",
         "icon": "#"
       },
+      "doclang": {
+        "name": "DocLang",
+        "description": "KI-natives XML-Dokumentformat mit Struktur, Layout und Geometrie",
+        "icon": "DL"
+      },
       "text": {
         "name": "Einfacher Text",
         "description": "Einfacher Text ohne Formatierung",

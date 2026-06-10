@@ -332,6 +332,7 @@ Generate document chunks optimized for Retrieval-Augmented Generation.
 | **JSON** | `.json` | Full document structure (lossless) |
 | **Plain Text** | `.txt` | Simple text without formatting |
 | **DocTags** | `.doctags` | Tagged document format |
+| **DocLang** | `.dclg.xml` | AI-native XML document format |
 | **Document Tokens** | `.tokens.json` | Token-level representation |
 | **RAG Chunks** | `.chunks.json` | Chunks for RAG applications |
 
@@ -380,7 +381,7 @@ For HTML and Markdown formats, toggle between rendered and raw views:
 
 - **JSON**: Automatically pretty-printed with proper indentation
 - **Plain Text**: Displayed as-is
-- **DocTags/Tokens**: Raw format display
+- **DocTags/DocLang/Tokens**: Raw format display
 
 <figure markdown="span">
   ![JSON Preview](../assets/screenshots/export/preview-json.png){ loading=lazy }

@@ -338,6 +338,7 @@ def load_history_document(job_id: str):
             "json": ".json",
             "text": ".txt",
             "doctags": ".doctags",
+            "doclang": ".dclg.xml",
             "document_tokens": ".tokens.json",
             "chunks": ".chunks.json"
         }
@@ -438,6 +439,7 @@ def load_history_document(job_id: str):
         "json": ".json",
         "text": ".txt",
         "doctags": ".doctags",
+        "doclang": ".dclg.xml",
         "document_tokens": ".tokens.json",
         "chunks": ".chunks.json"
     }

@@ -9,6 +9,14 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 
 ## [Unveröffentlicht]
 
+### Hinzugefügt
+
+- **DocLang-Export**: Konvertierungen als `.dclg.xml` über Docling `export_to_doclang()`; Export-Panel, Einstellungen und `GET /api/export/{job_id}/doclang`. Erfordert `docling>=2.70.0`.
+
+### Geändert
+
+- **Docling-Abhängigkeit**: Mindestversion `docling>=2.70.0`.
+
 ### Dokumentation
 
 - **Bereitstellung**: [deployment/index.md](deployment/index.md), [deployment/production.md](deployment/production.md), [deployment/scaling.md](deployment/scaling.md) und [deployment/security.md](deployment/security.md) vollständig übersetzt (Mermaid-Beschriftungen lokalisiert); Deployment-Startseite: vollständige Übersicht und bereinigte Checkliste.
