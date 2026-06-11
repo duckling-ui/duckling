@@ -120,9 +120,9 @@ When building local images with `--load` (no `--push`), Buildx does not support 
 
 When a pull request is merged to `main`, the [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) GitHub Actions workflow runs automatically. It enforces deterministic safe versions of `jaraco.context` and `wheel` inside backend images during build (including cleanup of stale vulnerable metadata artifacts), then:
 
-1. Builds multi-platform images (linux/amd64, linux/arm64)
+1. Builds multi-platform images (linux/amd64, linux/arm64) once and tags for both registries
 2. Pushes to **Docker Hub** as `{DOCKERHUB_USERNAME}/duckling-backend` and `{DOCKERHUB_USERNAME}/duckling-frontend`
-3. Pushes to **GitHub Container Registry** as `ghcr.io/{owner}/duckling-backend` and `ghcr.io/{owner}/duckling-frontend`
+3. Pushes the same manifests to **GitHub Container Registry** as `ghcr.io/{owner}/duckling-backend` and `ghcr.io/{owner}/duckling-frontend`
 
 After the pushes complete, the workflow installs Trivy on the GitHub Actions runner, `docker pull`s the freshly published tags, and runs `trivy image` directly (instead of `docker run aquasec/trivy`) so scans use the same Docker Hub + GHCR logins as the build/push steps.
 

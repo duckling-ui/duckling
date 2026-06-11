@@ -11,6 +11,8 @@ def _read(path: str) -> str:
 def test_backend_dockerfile_upgrades_os_packages_for_trivy():
     dockerfile = _read("backend/Dockerfile")
     assert "apt-get upgrade -y --no-install-recommends" in dockerfile
+    assert "FROM python-deps AS production" in dockerfile
+    assert "apt-get purge -y --auto-remove build-essential" in dockerfile
 
 
 def test_frontend_dockerfile_runs_as_non_root():
@@ -50,6 +52,9 @@ def test_publish_workflow_supports_manual_and_prerelease_tags():
     assert "set_docs_default:" in workflow
     assert "Resolve version and docs options" in workflow
     assert "needs.publish.outputs.publish_docs == 'true'" in workflow
+    assert "--also-registry ghcr.io/" in workflow
+    assert "Free runner disk space" in workflow
+    assert "BUILDKIT_MAX_PARALLELISM=1" in workflow
     assert "Skipping mike set-default" in _read(".github/workflows/deploy-docs-version.yml")
 
 
@@ -90,6 +95,12 @@ def test_backend_dockerfile_enforces_cve_fix_versions():
     assert "remove_legacy_metadata" in script
     assert "remove_legacy_ensurepip_wheels" not in script
     assert "importlib.import_module(\"pip\")" in script
+
+
+def test_docker_build_script_supports_dual_registry_push():
+    script = _read("scripts/docker-build.sh")
+    assert "--also-registry" in script
+    assert "build_tag_args" in script
 
 
 def test_docker_build_script_forces_plain_progress_logging():

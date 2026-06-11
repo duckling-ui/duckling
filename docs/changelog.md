@@ -17,6 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Publish CI disk (multi-arch)**: one build pushes to Docker Hub + GHCR, runner disk cleanup, sequential platform builds, `python-deps` stage purges compilers after pip.
+
 - **Docs deploy version injection**: publish/deploy workflows use `scripts/get_version.py` instead of broad `sed` on `mkdocs.yml` (fixes i18n `fallback_to_default` type errors for prerelease versions).
 
 - **Backend Docker OS package hardening**: `backend/Dockerfile` runs `apt-get upgrade` on Bookworm for Trivy gates (`libgnutls30`, `openssl`/`libssl3`).

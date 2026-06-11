@@ -20,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Publish CI disk exhaustion (multi-arch)**: Single `docker-build.sh` invocation pushes to Docker Hub and GHCR (`--also-registry`), frees runner disk before build, builds platforms sequentially (`BUILDKIT_MAX_PARALLELISM=1`), and uses a `python-deps` stage that purges `build-essential` after pip (still publishes `linux/amd64` + `linux/arm64`).
+
 - **Docs deploy version injection**: Replaced broad `sed` on `mkdocs.yml` in publish/deploy workflows with `scripts/get_version.py` so prerelease versions (e.g. `0.0.14-doclang-beta.3`) no longer corrupt i18n `fallback_to_default: true`.
 
 - **Backend Docker OS package hardening**: `backend/Dockerfile` now runs `apt-get upgrade` on the Bookworm base image so Trivy publish gates pick up Debian security fixes (for example `libgnutls30`, `libssl3`/`openssl`).

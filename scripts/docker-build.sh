@@ -28,6 +28,7 @@
 #   ./scripts/docker-build.sh                    # Build only
 #   ./scripts/docker-build.sh --push             # Build and push to Docker Hub
 #   ./scripts/docker-build.sh --push --registry ghcr.io/username  # Push to custom registry
+#   ./scripts/docker-build.sh --push --registry user --also-registry ghcr.io/org  # One build, two registries
 #   ./scripts/docker-build.sh --version 1.0.0   # Build with specific version tag
 #   ./scripts/docker-build.sh --skip-docs       # Skip documentation build
 #
@@ -42,6 +43,7 @@ set -euo pipefail
 
 # Default values
 REGISTRY=""
+ALSO_REGISTRIES=()
 VERSION="latest"
 PUSH=false
 PLATFORMS="${DUCKLING_BUILD_PLATFORMS:-linux/amd64,linux/arm64}"
@@ -59,6 +61,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --registry)
             REGISTRY="$2/"
+            shift 2
+            ;;
+        --also-registry)
+            ALSO_REGISTRIES+=("$2/")
             shift 2
             ;;
         --version)
@@ -112,6 +118,17 @@ die() {
     exit 1
 }
 
+build_tag_args() {
+    local image_name="$1"
+    TAG_ARGS=()
+    TAG_ARGS+=(-t "${REGISTRY}${image_name}:${VERSION}")
+    TAG_ARGS+=(-t "${REGISTRY}${image_name}:latest")
+    for reg in "${ALSO_REGISTRIES[@]}"; do
+        TAG_ARGS+=(-t "${reg}${image_name}:${VERSION}")
+        TAG_ARGS+=(-t "${reg}${image_name}:latest")
+    done
+}
+
 echo -e "${GREEN}=== Duckling Docker Build ===${NC}"
 echo "Registry: ${REGISTRY:-local}"
 echo "Version: $VERSION"
@@ -119,6 +136,9 @@ echo "Push: $PUSH"
 echo "SBOM: $ENABLE_SBOM"
 echo "Provenance: $ENABLE_PROVENANCE"
 echo "Platforms: $PLATFORMS"
+if [ "${#ALSO_REGISTRIES[@]}" -gt 0 ]; then
+    echo "Also push to: ${ALSO_REGISTRIES[*]}"
+fi
 echo "Buildx progress: plain"
 echo ""
 
@@ -225,6 +245,7 @@ BACKEND_LABELS=(
     --label "org.opencontainers.image.title=duckling-backend"
     --label "org.opencontainers.image.version=${VERSION}"
 )
+build_tag_args duckling-backend
 if [ "$BUILD_MULTI_PLATFORM" = true ]; then
     run_cmd docker buildx build \
         --platform $PLATFORMS \
@@ -232,8 +253,7 @@ if [ "$BUILD_MULTI_PLATFORM" = true ]; then
         --target production \
         "${BACKEND_LABELS[@]}" \
         "${BUILDX_FLAGS[@]+"${BUILDX_FLAGS[@]}"}" \
-        -t "${REGISTRY}duckling-backend:${VERSION}" \
-        -t "${REGISTRY}duckling-backend:latest" \
+        "${TAG_ARGS[@]+"${TAG_ARGS[@]}"}" \
         "${BUILDX_OUTPUT_FLAGS[@]+"${BUILDX_OUTPUT_FLAGS[@]}"}" \
         ./backend
 else
@@ -241,8 +261,7 @@ else
         --progress=plain \
         --target production \
         "${BACKEND_LABELS[@]}" \
-        -t "${REGISTRY}duckling-backend:${VERSION}" \
-        -t "${REGISTRY}duckling-backend:latest" \
+        "${TAG_ARGS[@]+"${TAG_ARGS[@]}"}" \
         ./backend
 fi
 echo -e "${GREEN}✓ Backend image built (finished $(date -u +"%Y-%m-%dT%H:%M:%SZ"))${NC}"
@@ -254,6 +273,7 @@ FRONTEND_LABELS=(
     --label "org.opencontainers.image.title=duckling-frontend"
     --label "org.opencontainers.image.version=${VERSION}"
 )
+build_tag_args duckling-frontend
 if [ "$BUILD_MULTI_PLATFORM" = true ]; then
     run_cmd docker buildx build \
         --platform $PLATFORMS \
@@ -261,16 +281,15 @@ if [ "$BUILD_MULTI_PLATFORM" = true ]; then
         --target production \
         "${FRONTEND_LABELS[@]}" \
         "${BUILDX_FLAGS[@]+"${BUILDX_FLAGS[@]}"}" \
-        -t "${REGISTRY}duckling-frontend:${VERSION}" \
-        -t "${REGISTRY}duckling-frontend:latest" \
+        "${TAG_ARGS[@]+"${TAG_ARGS[@]}"}" \
         "${BUILDX_OUTPUT_FLAGS[@]+"${BUILDX_OUTPUT_FLAGS[@]}"}" \
         ./frontend
 else
     run_cmd docker build \
         --progress=plain \
         --target production \
-        -t "${REGISTRY}duckling-frontend:${VERSION}" \
-        -t "${REGISTRY}duckling-frontend:latest" \
+        "${FRONTEND_LABELS[@]}" \
+        "${TAG_ARGS[@]+"${TAG_ARGS[@]}"}" \
         ./frontend
 fi
 echo -e "${GREEN}✓ Frontend image built (finished $(date -u +"%Y-%m-%dT%H:%M:%SZ"))${NC}"
@@ -278,10 +297,16 @@ echo -e "${GREEN}✓ Frontend image built (finished $(date -u +"%Y-%m-%dT%H:%M:%
 # Push if requested (for non-multi-platform builds)
 if [ "$PUSH" = true ] && [ "$BUILD_MULTI_PLATFORM" = false ]; then
     echo -e "${YELLOW}Pushing images...${NC}"
-    run_cmd docker push "${REGISTRY}duckling-backend:${VERSION}"
-    run_cmd docker push "${REGISTRY}duckling-backend:latest"
-    run_cmd docker push "${REGISTRY}duckling-frontend:${VERSION}"
-    run_cmd docker push "${REGISTRY}duckling-frontend:latest"
+    for image in duckling-backend duckling-frontend; do
+        run_cmd docker push "${REGISTRY}${image}:${VERSION}"
+        run_cmd docker push "${REGISTRY}${image}:latest"
+        for reg in "${ALSO_REGISTRIES[@]}"; do
+            run_cmd docker tag "${REGISTRY}${image}:${VERSION}" "${reg}${image}:${VERSION}"
+            run_cmd docker tag "${REGISTRY}${image}:latest" "${reg}${image}:latest"
+            run_cmd docker push "${reg}${image}:${VERSION}"
+            run_cmd docker push "${reg}${image}:latest"
+        done
+    done
     echo -e "${GREEN}✓ Images pushed${NC}"
 fi
 

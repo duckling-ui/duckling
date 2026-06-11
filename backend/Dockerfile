@@ -28,6 +28,15 @@ RUN apt-get update && apt-get upgrade -y --no-install-recommends \
   tesseract-ocr \
   && rm -rf /var/lib/apt/lists/*
 
+# Python dependencies for production; drop compilers after pip to reduce CI disk use.
+FROM base AS python-deps
+COPY requirements.txt .
+COPY scripts/harden_python_packages.py scripts/harden_python_packages.py
+RUN pip install -r requirements.txt \
+  && python scripts/harden_python_packages.py \
+  && apt-get purge -y --auto-remove build-essential \
+  && rm -rf /var/lib/apt/lists/* /tmp/* /root/.cache
+
 # Development stage
 FROM base AS development
 
@@ -45,14 +54,8 @@ EXPOSE 5001
 
 CMD ["python", "duckling.py"]
 
-# Production stage
-FROM base AS production
-
-# Copy requirements and install (includes MkDocs for /api/docs/build)
-COPY requirements.txt .
-COPY scripts/harden_python_packages.py scripts/harden_python_packages.py
-RUN pip install -r requirements.txt \
-  && python scripts/harden_python_packages.py
+# Production stage (reuses python-deps; no second pip install)
+FROM python-deps AS production
 
 # Copy application code
 COPY . .
