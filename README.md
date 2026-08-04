@@ -13,6 +13,8 @@
 
 A modern, user-friendly browser-based graphical interface for [Docling](https://github.com/docling-project/docling) - the powerful document conversion library by IBM.
 
+**Current release:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) — DocLang (`.dclg.xml`) export (DocLang spec 0.7 via Docling 2.118+), Docker/CI hardening, and full docs localization updates. See [CHANGELOG.md](CHANGELOG.md).
+
 ![Duckling Screenshot](docs/screenshot.png)
 
 ## Features
@@ -21,7 +23,7 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
 - **URL-Based Conversion**: Convert documents directly from URLs with automatic image extraction for HTML pages
 - **Multi-file and folder upload**: Convert multiple files or URLs at once from one drop zone—choose a folder, use **Choose files…**, or drag and drop; unsupported extensions are skipped client-side, and the API rejects a batch if nothing can be converted
 - **Multi-Format Support**: Convert PDFs, Word docs, PowerPoints, Excel files, HTML, Markdown, images, and more
-- **Multiple Export Formats**: Export to Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks, or plain text
+- **Multiple Export Formats**: Export to Markdown, HTML, JSON, DocTags, DocLang, Document Tokens, RAG Chunks, or plain text
 - **Image & Table Extraction**: Extract embedded images and tables with CSV export
 - **Image Preview Gallery**: View extracted images as thumbnails with full-size lightbox viewer
 - **RAG-Ready Chunking**: Generate document chunks optimized for RAG applications
@@ -58,6 +60,7 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
 | JSON | `.json` | Full document structure |
 | Plain Text | `.txt` | Simple text without formatting |
 | DocTags | `.doctags` | Tagged document format |
+| DocLang | `.dclg.xml` | AI-native XML document format ([doclang.ai](https://doclang.ai)) |
 | Document Tokens | `.tokens.json` | Token-level representation |
 | RAG Chunks | `.chunks.json` | Chunks for RAG applications |
 
@@ -168,7 +171,9 @@ Access the application at `http://localhost:3000`
 
 If the script exits early with a Docker daemon error, start Docker Desktop (or your Docker engine) first; the build script now performs a daemon health check before running `buildx`. The script stays compatible with macOS `/bin/bash` 3.2 (empty optional `buildx` flag arrays do not error under `set -u`). On pull requests, the **Tests** workflow runs a **Docker build script (publish parity)** job (`bash -n`, regression tests, and Bash expansions matching `publish-docker.yml` on `ubuntu-latest`).
 
-When PRs are merged to `main`, images are automatically published to Docker Hub and GitHub Container Registry. The backend Docker image build enforces deterministic safe versions for `jaraco.context`/`wheel` during image creation and removes stale vulnerable metadata artifacts to keep Trivy publish gates green. The publish workflow installs Trivy on the runner, `docker pull`s the pushed tags, and runs `trivy image` (not `docker run aquasec/trivy`) so registry authentication matches the workflow logins.
+When PRs are merged to `main`, images are automatically published to Docker Hub and GitHub Container Registry. Prerelease tags (`v*-beta*`, `v*-alpha*`, `v*a`) and manual **Publish Docker Images** workflow runs can publish from feature branches without merging to `main`; see [Prerelease and beta publishing](docs/getting-started/docker.md#prerelease-and-beta-publishing-manual-or-tag). The backend Docker image build enforces secure minimum versions for `jaraco.context` and `wheel` during image creation to keep Trivy publish gates green. See [Docker Deployment Guide](docs/getting-started/docker.md) for details and required secrets.
+
+Published images now include supply-chain security gates in CI:
 
 Pull requests run a publish-rehearsal Docker job that builds local `linux/amd64` images with publish-parity flags, exports them with `docker save`, installs Trivy CLI on the runner, and runs gates via `trivy --input` tar scanning before merge. See [Docker Deployment Guide](docs/getting-started/docker.md) for details and required secrets.
 
@@ -205,7 +210,9 @@ Settings can be configured through the UI or via the API. All settings are organ
 | `enabled` | Enable/disable OCR | `true` |
 | `backend` | OCR engine (easyocr, tesseract, ocrmac, rapidocr) | `easyocr` |
 | `language` | Primary language for recognition | `en` |
-| `force_full_page_ocr` | OCR entire page vs detected regions | `false` |
+| `mode` | Docling OCR region mode (`default` / `full_page` / `layout_regions` / `pdf_aware_layout_regions`) | `default` |
+| `scale` | OCR render scale (72 DPI × scale) | `3.0` |
+| `force_full_page_ocr` | Deprecated shim → `mode=full_page` | `false` |
 | `use_gpu` | Enable GPU acceleration (EasyOCR) | `false` |
 | `confidence_threshold` | Minimum confidence for results | `0.5` |
 

@@ -120,17 +120,38 @@ When building local images with `--load` (no `--push`), Buildx does not support 
 
 When a pull request is merged to `main`, the [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) GitHub Actions workflow runs automatically. It enforces deterministic safe versions of `jaraco.context` and `wheel` inside backend images during build (including cleanup of stale vulnerable metadata artifacts), then:
 
-1. Builds multi-platform images (linux/amd64, linux/arm64)
+1. Builds multi-platform images (linux/amd64, linux/arm64) once and tags for both registries
 2. Pushes to **Docker Hub** as `{DOCKERHUB_USERNAME}/duckling-backend` and `{DOCKERHUB_USERNAME}/duckling-frontend`
-3. Pushes to **GitHub Container Registry** as `ghcr.io/{owner}/duckling-backend` and `ghcr.io/{owner}/duckling-frontend`
+3. Pushes the same manifests to **GitHub Container Registry** as `ghcr.io/{owner}/duckling-backend` and `ghcr.io/{owner}/duckling-frontend`
 
 After the pushes complete, the workflow installs Trivy on the GitHub Actions runner, `docker pull`s the freshly published tags, and runs `trivy image` directly (instead of `docker run aquasec/trivy`) so scans use the same Docker Hub + GHCR logins as the build/push steps.
 
-The frontend production image is based on `nginx:1.29-alpine3.22` and runs `apk upgrade --no-cache` during image build to keep Alpine package CVE exposure lower during Trivy gate checks.
+The backend image runs `apt-get upgrade` on the Debian Bookworm base before installing system packages, and the frontend production image is based on `nginx:1.29-alpine3.22` and runs `apk upgrade --no-cache` during image build, so OS package CVE exposure stays lower during Trivy gate checks.
 
 Before merge, PR CI runs a publish rehearsal job in `.github/workflows/test.yml` that builds local `linux/amd64` images with `--sbom`/`--provenance`, exports them with `docker save`, installs Trivy CLI on the runner, and executes Trivy HIGH/CRITICAL gates using `--input` tar scanning, so Docker security failures are caught pre-merge without requiring daemon access from inside a Trivy container.
 
 Images are tagged with the version from `frontend/package.json` and `latest`.
+
+### Prerelease and beta publishing (manual or tag)
+
+Stable releases still publish on merge to `main`. For feature branches and betas (for example `v0.0.14-doclang-beta`), use one of:
+
+**Option 1 — Manual workflow (recommended)**
+
+1. Open [Publish Docker Images](https://github.com/duckling-ui/duckling/actions/workflows/publish-docker.yml) → **Run workflow**.
+2. Select branch **`feature/doclang-export`** (or the branch that contains the updated workflow).
+3. Set **ref** to your tag or branch (e.g. `v0.0.14-doclang-beta`).
+4. Set **version** to the image label (e.g. `0.0.14-doclang-beta`). If omitted, the workflow derives it from the tag name or `frontend/package.json`.
+5. Enable **publish_docs** only if you want docs on gh-pages / duckling-ui.org.
+6. Leave **set_docs_default** off for betas so `latest` docs stay on the stable release.
+
+**Option 2 — Push a prerelease tag**
+
+Pushing tags matching `v*-beta*`, `v*-alpha*`, or `v*a` (e.g. `v0.0.14-doclang-beta`) triggers the publish workflow automatically when the tag commit includes this workflow definition. Docs are not deployed unless you run the manual workflow with **publish_docs** enabled.
+
+**Docs only for a tagged version**
+
+Use [Deploy Docs Version](https://github.com/duckling-ui/duckling/actions/workflows/deploy-docs-version.yml) with version `0.0.14-doclang-beta` (no `v` prefix). Leave **set_docs_default** off for betas.
 
 **Required repository secrets** (Settings → Secrets and variables → Actions):
 

@@ -131,11 +131,12 @@ DEFAULT_CONVERSION_SETTINGS = {
     "ocr": {
         "enabled": True,
         "language": "en",
-        "force_full_page_ocr": False,
         "backend": "ocrmac",  # ocrmac (macOS native), easyocr, tesseract, rapidocr
+        "mode": "default",  # Docling OcrMode: default, full_page, layout_regions, pdf_aware_layout_regions
+        "scale": 3.0,  # OCR render scale (72 DPI × scale); Docling default is 3.0
+        "force_full_page_ocr": False,  # Deprecated shim → mode=full_page when True
         "use_gpu": False,
         "confidence_threshold": 0.5,
-        "bitmap_area_threshold": 0.05
     },
     "tables": {
         "enabled": True,
@@ -193,7 +194,8 @@ SUPPORTED_OUTPUT_FORMATS = [
     {"id": "json", "name": "JSON", "extension": ".json", "mime_type": "application/json"},
     {"id": "text", "name": "Plain Text", "extension": ".txt", "mime_type": "text/plain"},
     {"id": "doctags", "name": "DocTags", "extension": ".doctags", "mime_type": "text/plain"},
-    {"id": "document_tokens", "name": "Document Tokens", "extension": ".tokens", "mime_type": "application/json"},
+    {"id": "doclang", "name": "DocLang", "extension": ".dclg.xml", "mime_type": "application/xml"},
+    {"id": "document_tokens", "name": "Document Tokens", "extension": ".tokens.json", "mime_type": "application/json"},
 ]
 
 # OCR backend options

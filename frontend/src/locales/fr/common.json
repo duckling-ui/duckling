@@ -117,7 +117,21 @@
       },
       "forceFullPage": {
         "label": "Forcer l'OCR pleine page",
-        "description": "Appliquer l'OCR à toute la page au lieu des seules zones détectées"
+        "description": "Raccourci obsolète pour mode=full_page — OCR sur toute la page au lieu des zones détectées"
+      },
+      "mode": {
+        "label": "Mode OCR",
+        "description": "Régions du document envoyées à l'OCR par Docling",
+        "options": {
+          "default": "Par défaut (Docling)",
+          "full_page": "Page entière",
+          "layout_regions": "Régions de mise en page",
+          "pdf_aware_layout_regions": "Régions PDF-aware"
+        }
+      },
+      "scale": {
+        "label": "Échelle OCR",
+        "description": "Échelle de rendu avant OCR (72 DPI × échelle ; défaut 3.0 ≈ 216 DPI)"
       },
       "useGpu": {
         "label": "Utiliser le GPU",
@@ -388,6 +402,11 @@
         "name": "DocTags",
         "description": "Tokens de document étiquetés pour le traitement par IA",
         "icon": "#"
+      },
+      "doclang": {
+        "name": "DocLang",
+        "description": "Format XML de document natif IA avec structure, mise en page et géométrie préservées",
+        "icon": "DL"
       },
       "text": {
         "name": "Texte brut",

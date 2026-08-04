@@ -4,6 +4,7 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 0.0.14  | :white_check_mark:                |
 | 0.0.13  | :white_check_mark:                |
 | 0.0.12  | :white_check_mark:                |
 | 0.0.10a  | :white_check_mark:                |
@@ -18,15 +19,23 @@
 
 ## Security Audit Summary
 
-Last audit: March 3, 2026
+Last audit: March 3, 2026 (product surface notes updated through 2026-08-04 for the 0.0.14 stable release)
 
 ### Product surface notes
 
+- **2026-08-04**: Aligned with Docling **2.118.0** / docling-core **2.90.x** (`<3`): OCR uses `OcrMode` + `scale`; `bitmap_area_threshold` removed from Docling and Duckling defaults. DocLang export via `export_to_doclang()` continues to emit `.dclg.xml` (`application/xml`) matching Docling CLI; serializer follows DocLang spec **0.7**.
+- **2026-08-04**: Converter OCR option construction filters kwargs to fields accepted by the installed Docling OCR model (`extra="forbid"`), so settings such as `bitmap_area_threshold` do not break current `OcrMacOptions` (and similar) when Docling removes those fields.
+- **2026-08-04**: **0.0.14** stable release promotes the DocLang export beta and related Docker/CI hardening. DocLang remains an **export-only** format (`.dclg.xml` via Docling `export_to_doclang()`); upload/input of DocLang is still unsupported. Supported-version table now lists 0.0.14.
+- **2026-06-10**: Backend Docker OS hardening: `backend/Dockerfile` runs `apt-get upgrade` on the Bookworm base so publish Trivy gates pick up Debian security fixes for packages such as `libgnutls30` and `openssl`/`libssl3`.
+- **2026-06-10**: Docker image hardening: `backend/scripts/harden_python_packages.py` replaces Dockerfile `--no-deps` force-reinstall so `pip`/`wheel` remain functional at runtime (OCR auto-install, settings) while stale dist-info cleanup still supports Trivy gates.
+- **2026-06-04**: Prerelease CI: `publish-docker.yml` accepts manual `workflow_dispatch` and prerelease tag pushes; optional docs deploy does not set mike `latest` unless `set_docs_default` is enabled.
+- **2026-06-04**: DocLang export: Duckling emits DocLang XML (`.dclg.xml`) derived from parsed document content via Docling's `export_to_doclang()`; same trust model as other export formats (server-generated output from user-uploaded documents). This release does not accept DocLang as an upload/input format.
+- **2026-05-01**: Container supply-chain hardening follow-up: backend image build now explicitly runs `pip install --upgrade "jaraco.context>=6.1.0" "wheel>=0.46.2"` after `requirements.txt` install in `backend/Dockerfile`, preventing stale vulnerable preinstalled versions from surviving into published images. Pull request CI continues to run **Docker build script (publish parity)** checks for workflow safety.
+- **2026-04-29**: Docker publish scan gate fix: backend requirements now pin `jaraco.context>=6.1.0` and `wheel>=0.46.2` to resolve Trivy-reported high vulnerabilities in Python packaging components.
 - **2026-05-01**: Publish workflow scan reliability: `.github/workflows/publish-docker.yml` now runs Trivy on the GitHub Actions runner (after `docker pull` of the published Docker Hub + GHCR tags) instead of `docker run aquasec/trivy`, fixing nested-container failures (`Cannot connect to the Docker daemon…`, `GHCR … UNAUTHORIZED`) when scanning registry-hosted images after merge.
 - **2026-05-01**: Container supply-chain hardening follow-up: backend image build now uses deterministic pins (`jaraco.context==6.1.0`, `wheel==0.46.2`) and explicitly force-reinstalls/verifies them in `backend/Dockerfile`, with cleanup of stale vulnerable metadata artifacts from Python paths, preventing stale package metadata from surviving into published images. Pull request CI runs both **Docker build script (publish parity)** checks and a **Docker publish rehearsal (PR gate)** job that builds local images and executes Trivy HIGH/CRITICAL scan gates pre-merge.
 - **2026-05-01**: Build reliability: local Docker exporter (`--load`) does not support SBOM/provenance attestations; `scripts/docker-build.sh` now auto-disables `--sbom`/`--provenance` in non-push local-load mode, avoiding manifest-list export failures while keeping publish-path attestations intact. PR rehearsal Trivy scans now run on runner-installed Trivy CLI against `docker save` archives via `--input`, avoiding in-container daemon access issues for local image tags.
 - **2026-05-01**: Frontend container baseline update: production frontend image now pins `nginx:1.29-alpine3.22` and runs `apk upgrade --no-cache` to reduce Alpine OS-package CVE exposure found by Trivy in older `nginx:1.27-alpine` images (OpenSSL/libxml/musl/zlib/libpng/libexpat families).
-- **2026-04-29**: Docker publish scan gate fix: backend requirements now pin `jaraco.context>=6.1.0` and `wheel>=0.46.2` to resolve Trivy-reported high vulnerabilities in Python packaging components.
 - **2026-04-29**: Docker hardening update: frontend image now runs as non-root (`USER nginxuser`), production/prebuilt compose add read-only rootfs + `cap_drop: ["ALL"]` + `no-new-privileges` + scoped `tmpfs` mounts, and publish CI adds Trivy gating, Syft SBOM artifacts, provenance-enabled builds, and keyless Cosign signing.
 - **2026-04-08**: Documentation only: the Quick Start guide clarifies folder drag-and-drop and folder vs **Choose files…** selection; upload endpoints and server-side validation are unchanged.
 - **2026-04-08**: Documentation only: French **Features** page translation and removal of a duplicate statistics subsection in English features; no application or API change.

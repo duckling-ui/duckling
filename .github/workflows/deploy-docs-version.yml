@@ -1,6 +1,6 @@
-# Manually deploy docs for a specific version (backfill older versions).
+# Manually deploy docs for a specific version (backfill or prerelease docs).
 # Run from Actions > Deploy Docs Version > Run workflow.
-# Use version without 'v' prefix (e.g. 0.0.9, 0.0.8).
+# Version is without the 'v' prefix (e.g. 0.0.9, 0.0.14-doclang-beta).
 # Older tags may fail if mkdocs structure changed significantly.
 name: Deploy Docs Version
 permissions:
@@ -10,9 +10,13 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version to deploy (e.g. 0.0.9)"
+        description: "Version to deploy (e.g. 0.0.9 or 0.0.14-doclang-beta)"
         required: true
         type: string
+      set_docs_default:
+        description: "Set mike 'latest' alias to this version (off for betas)"
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -28,15 +32,15 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
-          cache: 'pip'
+          python-version: "3.13"
+          cache: pip
           cache-dependency-path: backend/requirements.txt
 
       - name: Install docs dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt
-          pip install mike  # Ensure mike is present (older tags may lack it in requirements)
+          pip install mike
 
       - name: Inject PostHog API key
         run: |
@@ -46,8 +50,7 @@ jobs:
 
       - name: Set version in mkdocs.yml for correct version selector
         run: |
-          VERSION="${{ github.event.inputs.version }}"
-          sed -i "s/\(default:\s*\)[0-9.]\+/\1$VERSION/" mkdocs.yml
+          python scripts/get_version.py "${{ github.event.inputs.version }}"
 
       - name: Fetch gh-pages for mike
         run: |
@@ -62,7 +65,11 @@ jobs:
         run: |
           VERSION="${{ github.event.inputs.version }}"
           mike deploy --push --alias-type redirect "$VERSION"
-          mike set-default --push latest
+          if [ "${{ github.event.inputs.set_docs_default }}" = "true" ]; then
+            mike set-default --push latest
+          else
+            echo "Skipping mike set-default (prerelease / version-only deploy)"
+          fi
 
   deploy:
     needs: build

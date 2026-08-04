@@ -41,7 +41,7 @@ Duckling provides an intuitive web interface for converting documents using IBM'
 
     ---
 
-    Export to Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks, or plain text
+    Export to Markdown, HTML, JSON, DocTags, DocLang, Document Tokens, RAG Chunks, or plain text
     </a>
 
 -   <a href="user-guide/features/#table-extraction" class="card-link" markdown="1" aria-label="User guide: Image and table extraction section">
@@ -152,6 +152,7 @@ Access the application at `http://localhost:3000`
 | JSON | `.json` | Full document structure |
 | Plain Text | `.txt` | Simple text without formatting |
 | DocTags | `.doctags` | Tagged document format |
+| DocLang | `.dclg.xml` | AI-native XML document format |
 | Document Tokens | `.tokens.json` | Token-level representation |
 | RAG Chunks | `.chunks.json` | Chunks for RAG applications |
 

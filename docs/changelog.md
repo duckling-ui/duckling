@@ -5,11 +5,51 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-**Latest release:** [0.0.12](https://github.com/duckling-ui/duckling/releases/tag/v0.0.12) (2026-04-17)
+**Latest release:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) (2026-08-04)
 
 ## [Unreleased]
 
+### Planned
+
+- User authentication
+- Cloud storage integration
+- Conversion templates
+- API rate limiting
+- WebSocket for real-time updates
+- Dark/light theme toggle
+- Keyboard shortcuts
+- Accessibility improvements (WCAG 2.1)
+
+## [0.0.14] - 2026-08-04
+
+### Added
+
+- **Prerelease publish workflows**: `publish-docker.yml` supports `workflow_dispatch` (manual ref/version, optional docs) and auto-publish on prerelease tags (`v*-beta*`, `v*-alpha*`, `v*a`). `deploy-docs-version.yml` adds optional `set_docs_default` (off by default for betas).
+
+- **DocLang export**: Export conversions to `.dclg.xml` via Docling `export_to_doclang()`; UI export panel, settings, and `GET /api/export/{job_id}/doclang`. Requires `docling>=2.70.0` and `docling-core>=2.70.0`.
+
+### Fixed
+
+- **OcrMac / Docling OCR options**: Converter drops OCR kwargs unsupported by the installed Docling version (e.g. `bitmap_area_threshold` on current `OcrMacOptions`).
+- **Docling 2.118 OCR settings**: Uses `mode` (`OcrMode`) and `scale`; `force_full_page_ocr` is a shim for `full_page`. Pins `docling>=2.118.0`, `docling-core>=2.90.0,<3`.
+- **Document Tokens extension**: Settings API examples and format metadata use `.tokens.json` (matches downloads).
+- **French quickstart**: Removed duplicated DocLang export section.
+
+- **Publish CI disk (multi-arch)**: one build pushes to Docker Hub + GHCR, runner disk cleanup, sequential platform builds, `python-deps` stage purges compilers after pip.
+
+- **Docs deploy version injection**: publish/deploy workflows use `scripts/get_version.py` instead of broad `sed` on `mkdocs.yml` (fixes i18n `fallback_to_default` type errors for prerelease versions).
+
+- **Backend Docker OS package hardening**: `backend/Dockerfile` runs `apt-get upgrade` on Bookworm for Trivy gates (`libgnutls30`, `openssl`/`libssl3`).
+
+- **Docker image Python hardening**: `backend/scripts/harden_python_packages.py` upgrades `jaraco.context`/`wheel` with dependencies intact and verifies `pip` runtime (replaces Dockerfile `--no-deps` heredoc).
+
+### Changed
+
+- **Docling dependency**: Minimum versions `docling>=2.70.0` and `docling-core>=2.70.0` (explicit core pin; DocLang needs `export_to_doclang` on `DoclingDocument`).
+
 ### Documentation
+
+- **DocLang documentation coverage**: Quick Start, Settings API, User Guide tips, French homepage export table, localized Docling hub links, and `#doclang-dclgxml` anchors in all `formats.md` locales.
 
 - **UI localization**: Batch results text now uses locale strings (`frontend/src/App.tsx`, `frontend/src/locales/*/common.json`) so the batch-complete view is translated in all supported UI languages.
 - **Language switcher**: [javascripts/language-selector.js](javascripts/language-selector.js) fixes locale links (same-page switch, preserve hash) for standalone docs and `/api/docs/site/<lang>/...`, including malformed `..fr/` links and menu items without `hreflang`.
@@ -26,16 +66,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **German**: `de/architecture/index.md` and `de/user-guide/index.md` fully German (including technology stack table); title typo **Benutzerhandbuch** fixed on the user-guide index.
 - **Docling hub / screenshots README**: localized `docling/index.md` “update” sections and `de|fr|es/images/README.md`.
 
-### Planned
+## [0.0.13] - 2026-05-05
 
-- User authentication
-- Cloud storage integration
-- Conversion templates
-- API rate limiting
-- WebSocket for real-time updates
-- Dark/light theme toggle
-- Keyboard shortcuts
-- Accessibility improvements (WCAG 2.1)
+### Security
+
+- Docker image and publish-workflow hardening. See root `CHANGELOG.md` and the [v0.0.13 release](https://github.com/duckling-ui/duckling/releases/tag/v0.0.13). DocLang and follow-ups are under 0.0.14.
 
 ## [0.0.12] - 2026-04-17
 
@@ -343,7 +378,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maximum file size limits
 - Secure filename handling
 
-[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.12...HEAD
+[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.14...HEAD
+[0.0.14]: https://github.com/duckling-ui/duckling/compare/v0.0.13...v0.0.14
+[0.0.13]: https://github.com/duckling-ui/duckling/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.12
 [0.0.10a]: https://github.com/duckling-ui/duckling/compare/v0.0.10...v0.0.10a
 [0.0.10]: https://github.com/duckling-ui/duckling/compare/v0.0.9...v0.0.10

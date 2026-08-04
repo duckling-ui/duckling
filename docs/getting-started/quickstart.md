@@ -81,10 +81,17 @@ Once complete, choose your export format:
   <figcaption>Conversion complete with export options</figcaption>
 </figure>
 
-- **Markdown** - Great for documentation
-- **HTML** - Web-ready output
-- **JSON** - Full document structure
-- **Plain Text** - Simple text extraction
+- **Markdown** — Great for documentation
+- **HTML** — Web-ready output
+- **JSON** — Full document structure
+- **Plain Text** — Simple text extraction
+- **DocTags** — Tagged document format for structured pipelines
+- **DocLang** — AI-native XML (`.dclg.xml`) for LLM and agent workflows; see [Supported formats](../user-guide/formats.md#doclang-dclgxml)
+- **Document Tokens** — Token-level JSON representation
+- **RAG Chunks** — Chunked output for retrieval applications
+
+!!! note "DocLang availability"
+    DocLang requires Docling 2.70.0+ and docling-core 2.70.0+. After upgrading dependencies, **re-convert** the document — the export panel only shows formats that were generated for that job.
 
 ## Basic Configuration
 

@@ -240,7 +240,7 @@ GET /api/convert/{job_id}/status
   "progress": 100,
   "message": "Conversion completed successfully",
   "confidence": 0.92,
-  "formats_available": ["markdown", "html", "json", "text", "doctags"],
+  "formats_available": ["markdown", "html", "json", "text", "doctags", "doclang"],
   "images_count": 3,
   "tables_count": 2,
   "chunks_count": 0,
@@ -275,10 +275,10 @@ GET /api/convert/{job_id}/result
   "job_id": "550e8400-e29b-41d4-a716-446655440000",
   "status": "completed",
   "confidence": 0.92,
-  "formats_available": ["markdown", "html", "json", "text", "doctags", "document_tokens"],
+  "formats_available": ["markdown", "html", "json", "text", "doctags", "doclang", "document_tokens"],
   "result": {
     "markdown_preview": "# Titre du document\n\nAperçu du contenu…",
-    "formats_available": ["markdown", "html", "json", "text", "doctags"],
+    "formats_available": ["markdown", "html", "json", "text", "doctags", "doclang"],
     "page_count": 5,
     "images_count": 3,
     "tables_count": 2,
@@ -435,10 +435,17 @@ GET /api/export/{job_id}/{format}
 - `json`
 - `text`
 - `doctags`
+- `doclang` — XML DocLang (`.dclg.xml`, `application/xml`) ; voir [Formats pris en charge — DocLang](../user-guide/formats.md#doclang-dclgxml)
 - `document_tokens`
 - `chunks`
 
 **Réponse :** téléchargement de fichier avec le type MIME approprié
+
+Exemple :
+
+```bash
+curl -OJ http://localhost:5001/api/export/{job_id}/doclang
+```
 
 ---
 

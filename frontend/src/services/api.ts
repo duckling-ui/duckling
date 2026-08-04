@@ -245,10 +245,11 @@ export const updateOcrSettings = async (
     enabled: boolean;
     language: string;
     backend: string;
+    mode: string;
+    scale: number;
     force_full_page_ocr: boolean;
     use_gpu: boolean;
     confidence_threshold: number;
-    bitmap_area_threshold: number;
   }>,
   autoInstall = false
 ): Promise<{ message: string; ocr: Record<string, unknown> }> => {

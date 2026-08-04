@@ -149,6 +149,7 @@ class FileManager:
             "html": ".html",
             "json": ".json",
             "doctags": ".doctags",
+            "doclang": ".dclg.xml",
             "text": ".txt"
         }
 

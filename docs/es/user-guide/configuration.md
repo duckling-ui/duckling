@@ -44,10 +44,11 @@ El OCR (reconocimiento óptico de caracteres) extrae texto de imágenes y docume
 | `enabled` | boolean | `true` | Activar o desactivar el OCR |
 | `backend` | string | `"easyocr"` | Motor OCR a usar |
 | `language` | string | `"en"` | Idioma principal de reconocimiento |
-| `force_full_page_ocr` | boolean | `false` | OCR en toda la página frente a regiones detectadas |
-| `use_gpu` | boolean | `false` | Aceleración por GPU (solo EasyOCR) |
-| `confidence_threshold` | float | `0.5` | Confianza mínima de los resultados (0–1) |
-| `bitmap_area_threshold` | float | `0.05` | Ratio mínimo de área para OCR de mapas de bits (0–1) |
+| `mode` | string | `"default"` | Docling `OcrMode`: `default`, `full_page`, `layout_regions`, `pdf_aware_layout_regions` |
+| `scale` | float | `3.0` | Escala de renderizado antes del OCR (72 DPI × scale) |
+| `force_full_page_ocr` | boolean | `false` | Compatibilidad heredada → `mode=full_page` |
+| `use_gpu` | boolean | `false` | Aceleración GPU (solo EasyOCR) |
+| `confidence_threshold` | float | `0.5` | Confianza mínima (0–1) |
 
 ### Motores OCR
 
@@ -352,10 +353,11 @@ Defina el formato de salida predeterminado.
     "enabled": true,
     "backend": "easyocr",
     "language": "en",
+    "mode": "default",
+    "scale": 3.0,
     "force_full_page_ocr": false,
     "use_gpu": false,
-    "confidence_threshold": 0.5,
-    "bitmap_area_threshold": 0.05
+    "confidence_threshold": 0.5
   },
   "tables": {
     "enabled": true,

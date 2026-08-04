@@ -120,7 +120,21 @@
       },
       "forceFullPage": {
         "label": "OCR für ganze Seite erzwingen",
-        "description": "OCR auf die gesamte Seite anwenden statt nur auf erkannte Textbereiche"
+        "description": "Veraltete Kurzform für mode=full_page — OCR auf die gesamte Seite statt erkannte Textbereiche"
+      },
+      "mode": {
+        "label": "OCR-Modus",
+        "description": "Welche Dokumentregionen Docling an die OCR übergibt",
+        "options": {
+          "default": "Standard (Docling)",
+          "full_page": "Ganze Seite",
+          "layout_regions": "Layout-Regionen",
+          "pdf_aware_layout_regions": "PDF-aware Layout-Regionen"
+        }
+      },
+      "scale": {
+        "label": "OCR-Skalierung",
+        "description": "Render-Skalierung vor OCR (72 DPI × Skala; Standard 3.0 ≈ 216 DPI)"
       },
       "useGpu": {
         "label": "GPU verwenden",
@@ -391,6 +405,11 @@
         "name": "DocTags",
         "description": "Mit Tags versehene Dokument-Tokens zur KI-Verarbeitung",
         "icon": "#"
+      },
+      "doclang": {
+        "name": "DocLang",
+        "description": "KI-natives XML-Dokumentformat mit Struktur, Layout und Geometrie",
+        "icon": "DL"
       },
       "text": {
         "name": "Einfacher Text",

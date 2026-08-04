@@ -1057,7 +1057,8 @@ def get_conversion_result(job_id: str):
             "html": ".html",
             "json": ".json",
             "text": ".txt",
-            "doctags": ".doctags"
+            "doctags": ".doctags",
+            "doclang": ".dclg.xml",
         }
         for fmt, ext in format_extensions.items():
             if list(output_dir.glob(f"*{ext}")):
@@ -1481,12 +1482,12 @@ def export_document(job_id: str, format_type: str):
 
     Args:
         job_id: The job identifier
-        format_type: Output format (markdown, html, json, doctags, text, document_tokens, chunks)
+        format_type: Output format (markdown, html, json, doctags, doclang, text, document_tokens, chunks)
 
     Returns:
         File download
     """
-    valid_formats = ["markdown", "html", "json", "doctags", "text", "document_tokens", "chunks"]
+    valid_formats = ["markdown", "html", "json", "doctags", "doclang", "text", "document_tokens", "chunks"]
     if format_type not in valid_formats:
         raise BadRequest(f"Invalid format. Valid formats: {', '.join(valid_formats)}")
 
@@ -1520,6 +1521,7 @@ def export_document(job_id: str, format_type: str):
         "html": "text/html",
         "json": "application/json",
         "doctags": "text/plain",
+        "doclang": "application/xml",
         "text": "text/plain",
         "document_tokens": "application/json",
         "chunks": "application/json"
@@ -1546,7 +1548,7 @@ def get_export_content(job_id: str, format_type: str):
     Returns:
         JSON with content
     """
-    valid_formats = ["markdown", "html", "json", "doctags", "text", "document_tokens", "chunks"]
+    valid_formats = ["markdown", "html", "json", "doctags", "doclang", "text", "document_tokens", "chunks"]
     if format_type not in valid_formats:
         raise BadRequest(f"Invalid format. Valid formats: {', '.join(valid_formats)}")
 

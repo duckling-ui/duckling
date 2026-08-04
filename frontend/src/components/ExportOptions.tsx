@@ -82,6 +82,11 @@ const FORMAT_INFO: Record<
     icon: "#",
     descriptionKey: "export.formats.doctags.description",
   },
+  doclang: {
+    nameKey: "export.formats.doclang.name",
+    icon: "DL",
+    descriptionKey: "export.formats.doclang.description",
+  },
   text: {
     nameKey: "export.formats.text.name",
     icon: "Aa",

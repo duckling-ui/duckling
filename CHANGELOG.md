@@ -5,20 +5,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-**Latest release:** [0.0.12](https://github.com/duckling-ui/duckling/releases/tag/v0.0.12) (2026-04-17)
+**Latest release:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) (2026-08-04)
 
 ## [Unreleased]
 
+### Planned
+
+- User authentication
+- Cloud storage integration
+- Conversion templates
+- API rate limiting
+- WebSocket for real-time updates
+- Dark/light theme toggle
+- Keyboard shortcuts
+- Accessibility improvements (WCAG 2.1)
+
+## [0.0.14] - 2026-08-04
+
 ### Security
 
+- **Docker CI vulnerability gate fix**: Backend Python requirements now pin `jaraco.context>=6.1.0` and `wheel>=0.46.2` to resolve Trivy-reported high vulnerabilities (`CVE-2026-23949`, `CVE-2026-24049`) during image publish scanning.
 - **Publish workflow Trivy reliability**: `.github/workflows/publish-docker.yml` now installs Trivy on the GitHub Actions runner, `docker pull`s the freshly pushed Docker Hub + GHCR tags, and runs `trivy image` directly (instead of `docker run aquasec/trivy`), so scans use the workflow’s registry logins and do not fail with missing Docker socket / GHCR auth inside a nested container.
 - **Frontend runtime base refresh**: `frontend/Dockerfile` now uses `nginx:1.29-alpine3.22` for the production stage and runs `apk upgrade --no-cache` so Alpine OS packages are refreshed to current patch revisions during build (OpenSSL/libxml/musl/zlib/libpng/libexpat family) for Trivy gates.
-- **Docker CI vulnerability gate fix**: Backend image builds now use deterministic pins (`backend/requirements.txt`: `jaraco.context==6.1.0`, `wheel==0.46.2`) and force-reinstall/verify these versions in `backend/Dockerfile`, plus cleanup of stale vulnerable metadata artifacts (`*.dist-info`, legacy ensurepip wheel bundles) so Trivy publish scans do not fail on stale package metadata (`CVE-2026-23949`, `CVE-2026-24049`).
 - **Docker image hardening**: Frontend production image now explicitly runs as non-root (`USER nginxuser`), backend healthcheck no longer depends on `curl`, and production/prebuilt compose defaults now enforce `read_only`, `cap_drop: ["ALL"]`, `security_opt: ["no-new-privileges:true"]`, and scoped `tmpfs` writable paths.
 - **Read-only runtime fix**: Backend SQLite history DB path now uses writable Docker volume storage (`/app/data/history.db`) so history records and document-path metadata continue working with `read_only: true`.
 - **Container supply chain hardening**: Publish workflow now enables build provenance, generates SBOM artifacts (Syft SPDX), scans release images with Trivy (fails on HIGH/CRITICAL), and signs published images with keyless Cosign.
 
+### Fixed
+
+- **OcrMac options on current Docling**: `_get_ocr_options` now instantiates OCR engine options through `_instantiate_ocr_options`, which drops kwargs (such as `bitmap_area_threshold`) that the installed Docling model no longer accepts under `extra="forbid"`—fixes CI failures against current `docling>=2.70.0` resolves (e.g. 2.118+).
+- **Docling OCR API alignment (2.116+/2.118)**: OCR settings now use Docling `OcrMode` (`mode`) and `scale`; `force_full_page_ocr` is retained as a deprecated shim that maps to `mode=full_page`. Removed `bitmap_area_threshold` from defaults/API (gone from Docling `OcrOptions`). Requirements pin `docling>=2.118.0` and `docling-core>=2.90.0,<3.0.0` (DocLang serializer **0.7**).
+- **Document Tokens extension metadata**: `SUPPORTED_OUTPUT_FORMATS` and settings API docs now advertise `.tokens.json` to match on-disk export filenames (converter/history/frontend).
+- **French quickstart**: Removed a duplicated DocLang export bullet list and availability note in `docs/fr/getting-started/quickstart.md`.
+
+- **Publish CI disk exhaustion (multi-arch)**: Single `docker-build.sh` invocation pushes to Docker Hub and GHCR (`--also-registry`), frees runner disk before build, builds platforms sequentially (`BUILDKIT_MAX_PARALLELISM=1`), and uses a `python-deps` stage that purges `build-essential` after pip (still publishes `linux/amd64` + `linux/arm64`).
+
+- **Docs deploy version injection**: Replaced broad `sed` on `mkdocs.yml` in publish/deploy workflows with `scripts/get_version.py` so prerelease versions (e.g. `0.0.14-doclang-beta.3`) no longer corrupt i18n `fallback_to_default: true`.
+
+- **Backend Docker OS package hardening**: `backend/Dockerfile` now runs `apt-get upgrade` on the Bookworm base image so Trivy publish gates pick up Debian security fixes (for example `libgnutls30`, `libssl3`/`openssl`).
+
+- **Docker image Python hardening**: Replaced Dockerfile `--no-deps` force-reinstall heredoc with `backend/scripts/harden_python_packages.py` that upgrades `jaraco.context`/`wheel` with dependencies intact, cleans stale dist-info for Trivy, and verifies `pip`/`wheel` still work at runtime.
+
 ### Changed
+
+- **Docling dependency**: Minimum version raised to `docling>=2.70.0` and `docling-core>=2.70.0` (DocLang export; `docling` alone can still resolve an older `docling-core` without `export_to_doclang`).
 
 - **Docker build visibility**: `scripts/docker-build.sh` now forces plain BuildKit progress output (`BUILDKIT_PROGRESS=plain`), prints executed Docker commands, bootstraps buildx once before backend builds, timestamps major steps, and supports `--platform` / `DUCKLING_BUILD_PLATFORMS` for fast single-arch local builds (avoids multi-day `linux/arm64` QEMU builds on some hosts).
 - **Docker build script reliability**: `scripts/docker-build.sh` now fails fast if the Docker daemon is unavailable and fixes boolean CLI flag handling so `--sbom`, `--provenance`, and `--push` are only passed when explicitly enabled.
@@ -27,11 +57,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Prerelease publish workflows**: `publish-docker.yml` supports `workflow_dispatch` (manual ref/version, optional docs) and auto-publish on prerelease tags (`v*-beta*`, `v*-alpha*`, `v*a`). `deploy-docs-version.yml` adds optional `set_docs_default` (off by default for betas).
+
+- **DocLang export format**: Export conversions to `.dclg.xml` via Docling's `export_to_doclang()` API; available in the export panel, settings default-format list, and `GET /api/export/{job_id}/doclang`. Requires `docling>=2.70.0` and `docling-core>=2.70.0`.
+
 - **Container hardening tests**: Added `tests/test_docker_hardening.py` and updated `tests/TEST_SUITE_SUMMARY.md` to guard non-root runtime, compose hardening flags, and publish workflow security gates.
 - **CI: Docker build script parity**: The `docker-build-script` job in `.github/workflows/test.yml` runs `tests/test_docker_hardening.py`, `bash -n scripts/docker-build.sh`, and ubuntu-latest Bash checks that mirror `publish-docker.yml` flag handling (`--sbom` / `--provenance` / `--push`) plus the empty optional-flags case.
 - **CI: Docker publish rehearsal on PRs**: The `docker-publish-rehearsal` job in `.github/workflows/test.yml` builds `linux/amd64` backend/frontend images with publish-parity flags (`--sbom`, `--provenance`), exports them via `docker save`, installs Trivy CLI on the runner, and runs HIGH/CRITICAL gates with `trivy image --input` tar scanning (daemon-independent, no nested Docker daemon dependency) before merge.
 
 ### Documentation
+
+- **DocLang documentation coverage**: Quick Start export steps, Settings API examples, User Guide tips, French homepage export table, localized Docling hub cross-links, and stable `#doclang-dclgxml` anchors in all `formats.md` locales document DocLang export end-to-end.
 
 - **UI localization**: Batch results header and counters in `frontend/src/App.tsx` now use i18n keys (`conversion.batchCompleteTitle`, `batchSucceeded`, `batchFailed`, `convertedFilesTitle`) so the “Batch Conversion Complete” view is translated in `en`/`de`/`fr`/`es`.
 - **Language switcher (MkDocs)**: `docs/javascripts/language-selector.js` rewrites Material language dropdown `href`s to absolute paths so switching locale keeps the same page (and hash). Locale detection now works even when dropdown links are malformed (for example `..fr/`) or rendered without `hreflang`; works for standalone `mkdocs serve` and in-app docs under `/api/docs/site/<lang>/...`.
@@ -48,16 +84,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Contributing (de/fr/es)**: Full localization of all pages under `docs/{de,fr,es}/contributing/`; explicit `{#commit-messages}` and `{#dco-sign-off}` heading anchors on localized [code-style](docs/de/contributing/code-style.md) for stable links from contributing index pages.
 - **Docling hub / images README**: Localized “update” sections on `docs/{de,fr,es}/docling/index.md` and screenshot contributor notes on `docs/{de,fr,es}/images/README.md`.
 
-### Planned
+## [0.0.13] - 2026-05-05
 
-- User authentication
-- Cloud storage integration
-- Conversion templates
-- API rate limiting
-- WebSocket for real-time updates
-- Dark/light theme toggle
-- Keyboard shortcuts
-- Accessibility improvements (WCAG 2.1)
+### Security
+
+- Docker image and publish-workflow hardening (non-root frontend, compose read-only defaults, Trivy HIGH/CRITICAL gates, Syft SBOM, Cosign signing, and Trivy runner-based scan reliability). See the [v0.0.13 GitHub release](https://github.com/duckling-ui/duckling/releases/tag/v0.0.13). Subsequent DocLang beta and hardening follow-ups are listed under 0.0.14.
 
 ## [0.0.12] - 2026-04-17
 
@@ -596,7 +627,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maximum file size limits (100MB default)
 - Secure filename handling
 
-[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.12...HEAD
+[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.14...HEAD
+[0.0.14]: https://github.com/duckling-ui/duckling/compare/v0.0.13...v0.0.14
+[0.0.13]: https://github.com/duckling-ui/duckling/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.12
 [0.0.10a]: https://github.com/duckling-ui/duckling/compare/v0.0.10...v0.0.10a
 [0.0.10]: https://github.com/duckling-ui/duckling/compare/v0.0.9...v0.0.10

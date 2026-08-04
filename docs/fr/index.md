@@ -41,7 +41,7 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
 
     ---
 
-    Exportez vers Markdown, HTML, JSON, DocTags, Document Tokens, RAG Chunks ou texte brut
+    Exportez vers Markdown, HTML, JSON, DocTags, DocLang, Document Tokens, RAG Chunks ou texte brut
     </a>
 
 -   <a href="user-guide/features/#extraction-des-tableaux" class="card-link" markdown="1" aria-label="Guide utilisateur : section Extraction d'images et tableaux">
@@ -86,6 +86,19 @@ Duckling fournit une interface Web intuitive pour convertir des documents avec D
 
 </div>
 
+
+### Formats d'export
+
+| Format | Extension | Description |
+|--------|-----------|-------------|
+| Markdown | `.md` | Texte formaté avec titres, listes et liens |
+| HTML | `.html` | Format prêt pour le web |
+| JSON | `.json` | Structure complète du document |
+| Texte brut | `.txt` | Texte simple sans mise en forme |
+| DocTags | `.doctags` | Format de document étiqueté |
+| DocLang | `.dclg.xml` | Format XML de document natif IA |
+| Document Tokens | `.tokens.json` | Représentation au niveau des jetons |
+| RAG Chunks | `.chunks.json` | Segments pour applications RAG |
 
 ## Démarrage rapide
 

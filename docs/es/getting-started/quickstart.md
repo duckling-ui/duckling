@@ -85,6 +85,13 @@ Cuando termine, elija el formato de exportación:
 - **HTML** – Salida lista para la web
 - **JSON** – Estructura completa del documento
 - **Texto plano** – Extracción de texto sencilla
+- **DocTags** – Formato de documento etiquetado para pipelines estructurados
+- **DocLang** – XML nativo para IA (`.dclg.xml`) para flujos LLM y agentes; ver [Formatos compatibles](../../user-guide/formats.md#doclang-dclgxml)
+- **Document Tokens** – Representación a nivel de tokens (JSON)
+- **RAG Chunks** – Fragmentos para aplicaciones de recuperación
+
+!!! note "Disponibilidad de DocLang"
+    DocLang requiere Docling 2.70.0+ y docling-core 2.70.0+. Tras actualizar dependencias, **vuelva a convertir** el documento: el panel de exportación solo muestra formatos generados para ese trabajo.
 
 ## Configuración básica
 

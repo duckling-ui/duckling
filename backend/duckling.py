@@ -250,6 +250,7 @@ def create_app(config_class=None):
                 {"id": "html", "name": "HTML", "extension": ".html"},
                 {"id": "json", "name": "JSON", "extension": ".json"},
                 {"id": "doctags", "name": "DocTags", "extension": ".doctags"},
+                {"id": "doclang", "name": "DocLang", "extension": ".dclg.xml"},
                 {"id": "text", "name": "Plain Text", "extension": ".txt"}
             ]
         })

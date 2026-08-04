@@ -5,9 +5,30 @@ Toutes les modifications notables de ce projet seront documentées dans ce fichi
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0.html).
 
-**Dernière version :** [0.0.12](https://github.com/duckling-ui/duckling/releases/tag/v0.0.12) (2026-04-17)
+**Dernière version :** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) (2026-08-04)
 
 ## [Non publié]
+
+### Prévu
+
+- Authentification des utilisateurs
+- Intégration du stockage cloud
+- Modèles de conversion
+- Limitation du débit de l'API
+- WebSocket pour les mises à jour en temps réel
+- Bascule thème sombre/clair
+- Raccourcis clavier
+- Améliorations d'accessibilité (WCAG 2.1)
+
+## [0.0.14] - 2026-08-04
+
+### Ajouté
+
+- **Export DocLang** : conversions en `.dclg.xml` via `export_to_doclang()` de Docling ; panneau d’export, paramètres et `GET /api/export/{job_id}/doclang`. Nécessite `docling>=2.70.0`.
+
+### Modifié
+
+- **Dépendance Docling** : version minimale `docling>=2.70.0`.
 
 ### Documentation
 
@@ -23,16 +44,11 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 - **Contribuer** : toutes les pages sous [contributing/](contributing/index.md) traduites ; ancres stables `{#commit-messages}` et `{#dco-sign-off}` dans [contributing/code-style.md](contributing/code-style.md).
 - **Docling / captures** : section de mise à jour dans [docling/index.md](docling/index.md) ; [images/README.md](images/README.md) entièrement en français.
 
-### Prévu
+## [0.0.13] - 2026-05-05
 
-- Authentification des utilisateurs
-- Intégration du stockage cloud
-- Modèles de conversion
-- Limitation du débit de l'API
-- WebSocket pour les mises à jour en temps réel
-- Bascule thème sombre/clair
-- Raccourcis clavier
-- Améliorations d'accessibilité (WCAG 2.1)
+### Sécurité
+
+- Durcissement Docker et workflow de publication. Voir `CHANGELOG.md` à la racine et [v0.0.13](https://github.com/duckling-ui/duckling/releases/tag/v0.0.13). DocLang et suites sous 0.0.14.
 
 ## [0.0.12] - 2026-04-17
 
@@ -336,7 +352,9 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 - Limites de taille maximale des fichiers
 - Gestion sécurisée des noms de fichiers
 
-[Non publié]: https://github.com/duckling-ui/duckling/compare/v0.0.12...HEAD
+[Non publié]: https://github.com/duckling-ui/duckling/compare/v0.0.14...HEAD
+[0.0.14]: https://github.com/duckling-ui/duckling/compare/v0.0.13...v0.0.14
+[0.0.13]: https://github.com/duckling-ui/duckling/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.12
 [0.0.10a]: https://github.com/duckling-ui/duckling/compare/v0.0.10...v0.0.10a
 [0.0.10]: https://github.com/duckling-ui/duckling/compare/v0.0.9...v0.0.10

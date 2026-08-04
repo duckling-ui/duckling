@@ -117,6 +117,27 @@ Format de document balisé pour l’analyse sémantique.
 </document>
 ```
 
+#### DocLang (`.dclg.xml`) {#doclang-dclgxml}
+
+Format XML de document natif IA selon la [norme ouverte DocLang](https://doclang.ai). Duckling exporte DocLang via l’API `export_to_doclang()` de Docling. Le format préserve structure, rôles sémantiques, mise en page et géométrie des boîtes englobantes pour les pipelines LLM et agents.
+
+```xml
+<doclang>
+  <heading level="1">
+    <location value="48"/><location value="40"/>
+    <location value="420"/><location value="72"/>
+    Titre du document
+  </heading>
+  <text>Ceci est un paragraphe...</text>
+  <table>
+    <ched/>Colonne 1<ched/>Colonne 2<nl/>
+    <fcel/>Donnée 1<fcel/>Donnée 2<nl/>
+  </table>
+</doclang>
+```
+
+Nécessite Docling 2.118.0+ et docling-core 2.90.0+ (`<3`) avec la spécification DocLang **0.7** via `export_to_doclang()` (voir `backend/requirements.txt`). Si DocLang manque après conversion, mettez à jour les dépendances et reconvertissez — les jobs existants n’ont pas de fichier DocLang. Duckling écrit `.dclg.xml` (comme la CLI Docling) ; la spécification accepte aussi `.dclg`.
+
 #### Document Tokens (`.tokens.json`)
 
 Représentation au niveau des jetons pour les applications NLP.
@@ -163,6 +184,7 @@ Fragments de document optimisés pour la génération augmentée par récupérat
 | Pipelines NLP / ML | Document Tokens |
 | Applications RAG | RAG Chunks |
 | Analyse sémantique | DocTags |
+| Échange natif IA / RAG entreprise | DocLang |
 
 ## Paramètre de format de l’API
 
@@ -177,6 +199,9 @@ curl http://localhost:5001/api/export/{job_id}/json
 
 # Télécharger en HTML
 curl http://localhost:5001/api/export/{job_id}/html
+
+# Télécharger en DocLang
+curl http://localhost:5001/api/export/{job_id}/doclang
 ```
 
 ## Types MIME
@@ -188,3 +213,4 @@ curl http://localhost:5001/api/export/{job_id}/html
 | JSON | `application/json` |
 | Texte brut | `text/plain` |
 | DocTags | `application/xml` |
+| DocLang | `application/xml` |

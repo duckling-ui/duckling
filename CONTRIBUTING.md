@@ -14,6 +14,12 @@ When you change upload or batch behavior in the UI, update [docs/getting-started
 
 Material’s **navigation.integrate** sidebar TOC uses each page’s Markdown headings (`##` / `###` up to `toc_depth`). For localized docs (for example [docs/fr/user-guide/features.md](docs/fr/user-guide/features.md)), translate those headings so the sidebar matches the locale, not only the paragraph text. Keep [formats](docs/de/user-guide/formats.md) and [screenshots](docs/de/user-guide/screenshots.md) in sync across `docs/{de,fr,es}/user-guide/` (including `===` tab titles and figure captions; asset paths `../../assets/...`).
 
+When adding a new **output export format**, register it consistently: `backend/config.py` (`SUPPORTED_OUTPUT_FORMATS`), conversion export in `backend/services/converter.py`, export/history/file-manager extension maps, `backend/routes/convert.py` valid formats and MIME types, legacy `/api/formats` in `backend/duckling.py`, frontend `FORMAT_INFO` in `ExportOptions.tsx`, `getExtension()` in `useConversion.ts`, all four `frontend/src/locales/*/common.json` entries, and [docs/user-guide/formats.md](docs/user-guide/formats.md) plus localized mirrors. See the DocLang export change set (stable in **0.0.14**) as a reference.
+
+When wiring Docling OCR engine options in `backend/services/converter.py`, use `_resolve_ocr_mode` / `_instantiate_ocr_options` so settings map to current Docling `OcrMode` + `scale`, and kwargs removed in newer Docling releases (for example `bitmap_area_threshold`) are dropped instead of raising pydantic `extra_forbidden` errors. Keep `backend/requirements.txt` on current stable floors (`docling>=2.118.0`, `docling-core>=2.90.0,<3.0.0`).
+
+When cutting a stable release, bump `frontend/package.json` (and lockfile), `frontend/src/App.tsx` (`APP_VERSION`), `mkdocs.yml` mike `default`, `scripts/get_version.py` fallback, `.github/workflows/deploy-docs.yml` fallback, `docs/versions.json`, roll `[Unreleased]` into `CHANGELOG.md` / `docs/**/changelog.md`, and update `SECURITY.md` supported versions. Keep `tests/test_get_version.py` version-agreement assertions in sync.
+
 ## How to Contribute
 
 ### Reporting Bugs
@@ -305,9 +311,9 @@ Container publishing is security-gated. The publish workflow now:
 - enables build provenance during `buildx` publish
 - signs release images using keyless Cosign
 
-To avoid merge-only validation loops, pull requests run **Docker publish rehearsal (PR gate)** in `.github/workflows/test.yml`, which builds local `linux/amd64` images with publish-parity flags (`--sbom`, `--provenance`), exports them with `docker save`, installs Trivy CLI on the runner, and enforces Trivy HIGH/CRITICAL scan gates via `--input` tar scanning before merge.
+If image scan gates fail on Python packaging CVEs, update and pin secure minimum versions in `backend/requirements.txt` (for example, `jaraco.context` and `wheel`) and add/adjust regression assertions in `tests/test_docker_hardening.py`.
 
-If image scan gates fail on Python packaging CVEs, update deterministic safe pins in `backend/requirements.txt` (for example, `jaraco.context==...` and `wheel==...`), ensure `backend/Dockerfile` force-reinstall/verification and legacy metadata cleanup logic stays aligned, and add/adjust regression assertions in `tests/test_docker_hardening.py`.
+To avoid merge-only validation loops, pull requests run **Docker publish rehearsal (PR gate)** in `.github/workflows/test.yml`, which builds local `linux/amd64` images with publish-parity flags (`--sbom`, `--provenance`), exports them with `docker save`, installs Trivy CLI on the runner, and enforces Trivy HIGH/CRITICAL scan gates via `--input` tar scanning before merge.
 
 When changing Dockerfiles, compose runtime settings, or publish automation, update:
 
@@ -325,6 +331,8 @@ Changing that script should keep the **Docker build script (publish parity)** jo
 `scripts/docker-build.sh` uses `set -u` and must keep working on macOS `/bin/bash` 3.2: for arrays that may be empty (for example optional `buildx` flags), expand with `${name[@]+"${name[@]}"}` instead of `"${name[@]}"` alone. Changing that script should keep the **Docker build script (publish parity)** job green in `.github/workflows/test.yml` (it mirrors the flag logic used by `.github/workflows/publish-docker.yml` on `ubuntu-latest`).
 
 Buildx with local Docker exporter (`--load`) cannot emit SBOM/provenance attestations. Keep the script behavior that auto-disables `--sbom`/`--provenance` in non-push `--load` mode (with a warning) to prevent CI/local manifest-list export failures.
+
+**Prerelease / beta publishes** (not merged to `main`): use Actions → **Publish Docker Images** → Run workflow, select the feature branch, set `ref` (tag or branch), `version` (image tag label), optional `publish_docs`, and `set_docs_default` only for stable releases. Pushing tags matching `v*-beta*`, `v*-alpha*`, or `v*a` also triggers Docker publish when the tagged commit includes the workflow. See [docs/getting-started/docker.md](docs/getting-started/docker.md#prerelease-and-beta-publishing-manual-or-tag).
 
 ## Getting Help
 

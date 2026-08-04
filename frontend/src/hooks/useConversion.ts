@@ -632,6 +632,7 @@ function getExtension(format: string): string {
     html: 'html',
     json: 'json',
     doctags: 'doctags',
+    doclang: 'dclg.xml',
     text: 'txt',
     document_tokens: 'tokens.json',
     chunks: 'chunks.json',

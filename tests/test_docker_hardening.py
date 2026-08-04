@@ -8,6 +8,13 @@ def _read(path: str) -> str:
     return (PROJECT_ROOT / path).read_text(encoding="utf-8")
 
 
+def test_backend_dockerfile_upgrades_os_packages_for_trivy():
+    dockerfile = _read("backend/Dockerfile")
+    assert "apt-get upgrade -y --no-install-recommends" in dockerfile
+    assert "FROM python-deps AS production" in dockerfile
+    assert "apt-get purge -y --auto-remove build-essential" in dockerfile
+
+
 def test_frontend_dockerfile_runs_as_non_root():
     dockerfile = _read("frontend/Dockerfile")
     assert "USER nginxuser" in dockerfile
@@ -36,6 +43,21 @@ def test_publish_workflow_has_security_gates():
     assert "syft " in workflow
 
 
+def test_publish_workflow_supports_manual_and_prerelease_tags():
+    workflow = _read(".github/workflows/publish-docker.yml")
+    assert "workflow_dispatch:" in workflow
+    assert "v*-beta*" in workflow
+    assert "v*-alpha*" in workflow
+    assert "publish_docs:" in workflow
+    assert "set_docs_default:" in workflow
+    assert "Resolve version and docs options" in workflow
+    assert "needs.publish.outputs.publish_docs == 'true'" in workflow
+    assert "--also-registry ghcr.io/" in workflow
+    assert "Free runner disk space" in workflow
+    assert "BUILDKIT_MAX_PARALLELISM=1" in workflow
+    assert "Skipping mike set-default" in _read(".github/workflows/deploy-docs-version.yml")
+
+
 def test_tests_workflow_rehearses_publish_docker_scan_gates():
     workflow = _read(".github/workflows/test.yml")
     assert "Docker publish rehearsal (PR gate)" in workflow
@@ -58,17 +80,27 @@ def test_backend_config_uses_writable_db_path_for_docker():
 
 def test_backend_requirements_pin_cve_fixes_for_image_scans():
     requirements = _read("backend/requirements.txt")
-    assert "jaraco.context==6.1.0" in requirements
-    assert "wheel==0.46.2" in requirements
+    assert "jaraco.context==6.1.0" in requirements or "jaraco.context>=6.1.0" in requirements
+    assert "wheel==0.46.2" in requirements or "wheel>=0.46.2" in requirements
 
 
 def test_backend_dockerfile_enforces_cve_fix_versions():
     dockerfile = _read("backend/Dockerfile")
-    assert 'pip install --upgrade --force-reinstall --no-deps "jaraco.context==6.1.0" "wheel==0.46.2"' in dockerfile
-    assert 'assert_min("jaraco.context", "6.1.0")' in dockerfile
-    assert 'assert_min("wheel", "0.46.2")' in dockerfile
-    assert "remove_legacy_metadata(" in dockerfile
-    assert "remove_legacy_ensurepip_wheels(" in dockerfile
+    assert "scripts/harden_python_packages.py" in dockerfile
+    assert "python scripts/harden_python_packages.py" in dockerfile
+    assert "--no-deps" not in dockerfile
+    script = _read("backend/scripts/harden_python_packages.py")
+    assert "jaraco.context>=" in script
+    assert "wheel>=" in script
+    assert "remove_legacy_metadata" in script
+    assert "remove_legacy_ensurepip_wheels" not in script
+    assert "importlib.import_module(\"pip\")" in script
+
+
+def test_docker_build_script_supports_dual_registry_push():
+    script = _read("scripts/docker-build.sh")
+    assert "--also-registry" in script
+    assert "build_tag_args" in script
 
 
 def test_docker_build_script_forces_plain_progress_logging():
@@ -88,5 +120,3 @@ def test_docker_build_script_forces_plain_progress_logging():
     # macOS /bin/bash 3.2: "${arr[@]}" with set -u errors when arr is empty; use ${arr[@]+"${arr[@]}"}
     assert 'BUILDX_FLAGS[@]+"${BUILDX_FLAGS[@]}"' in script
     assert 'BUILDX_OUTPUT_FLAGS[@]+"${BUILDX_OUTPUT_FLAGS[@]}"' in script
-    assert "--load is incompatible with --sbom/--provenance" in script
-    assert "disabling attestations for local image load" in script

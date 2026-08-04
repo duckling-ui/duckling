@@ -50,3 +50,6 @@ Duckling provides a comprehensive interface for document conversion with advance
 !!! tip "RAG Chunking"
     Enable chunking in settings to generate document chunks optimized for retrieval-augmented generation. Chunks include metadata like headings and page numbers.
 
+!!! tip "DocLang export"
+    Duckling can export [DocLang](https://doclang.ai) (`.dclg.xml`) — an AI-native XML format with structure, layout, and geometry preserved. See [Supported formats — DocLang](formats.md#doclang-dclgxml). Requires Docling 2.70.0+; re-convert after upgrading dependencies.
+

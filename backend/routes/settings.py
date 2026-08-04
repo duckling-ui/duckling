@@ -692,9 +692,26 @@ def get_ocr_settings():
         "available_languages": OCR_LANGUAGES,
         "available_backends": OCR_BACKENDS,
         "options": {
+            "mode": {
+                "description": "Which document regions to feed to OCR (Docling OcrMode)",
+                "default": "default",
+                "values": [
+                    "default",
+                    "full_page",
+                    "layout_regions",
+                    "pdf_aware_layout_regions",
+                ],
+            },
+            "scale": {
+                "description": "Image scale multiplier before OCR (72 DPI × scale; Docling default 3.0)",
+                "default": 3.0,
+                "min": 0.1,
+                "max": 8.0,
+            },
             "force_full_page_ocr": {
-                "description": "OCR the entire page instead of just detected text regions",
-                "default": False
+                "description": "Deprecated shim: when true, sets mode to full_page (prefer mode=full_page)",
+                "default": False,
+                "deprecated": True,
             },
             "use_gpu": {
                 "description": "Use GPU acceleration for OCR (EasyOCR only)",
@@ -703,12 +720,6 @@ def get_ocr_settings():
             "confidence_threshold": {
                 "description": "Minimum confidence threshold for OCR results",
                 "default": 0.5,
-                "min": 0.0,
-                "max": 1.0
-            },
-            "bitmap_area_threshold": {
-                "description": "Minimum area ratio for bitmap regions to trigger OCR",
-                "default": 0.05,
                 "min": 0.0,
                 "max": 1.0
             }
@@ -778,6 +789,22 @@ def update_ocr_settings():
         if not isinstance(ocr_settings["force_full_page_ocr"], bool):
             return jsonify({"error": "force_full_page_ocr must be a boolean"}), 400
 
+    if "mode" in ocr_settings:
+        valid_modes = [
+            "default",
+            "full_page",
+            "layout_regions",
+            "pdf_aware_layout_regions",
+        ]
+        if ocr_settings["mode"] not in valid_modes:
+            return jsonify({"error": f"mode must be one of: {', '.join(valid_modes)}"}), 400
+
+    if "scale" in ocr_settings:
+        if not isinstance(ocr_settings["scale"], (int, float)):
+            return jsonify({"error": "scale must be a number"}), 400
+        if not 0.1 <= float(ocr_settings["scale"]) <= 8.0:
+            return jsonify({"error": "scale must be between 0.1 and 8.0"}), 400
+
     if "use_gpu" in ocr_settings:
         if not isinstance(ocr_settings["use_gpu"], bool):
             return jsonify({"error": "use_gpu must be a boolean"}), 400
@@ -787,6 +814,9 @@ def update_ocr_settings():
             return jsonify({"error": "confidence_threshold must be a number"}), 400
         if not 0 <= ocr_settings["confidence_threshold"] <= 1:
             return jsonify({"error": "confidence_threshold must be between 0 and 1"}), 400
+
+    # Legacy no-op: bitmap_area_threshold was removed from Docling OcrOptions (2.116+)
+    ocr_settings = {k: v for k, v in ocr_settings.items() if k != "bitmap_area_threshold"}
 
     # Update OCR settings
     current_settings["ocr"] = {

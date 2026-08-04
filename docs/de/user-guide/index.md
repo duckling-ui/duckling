@@ -50,3 +50,6 @@ Duckling bietet eine umfassende Oberfläche zur Dokumentkonvertierung mit Funkti
 !!! tip "RAG-Segmentierung"
     Aktivieren Sie die Segmentierung in den Einstellungen, um Dokumentabschnitte für Retrieval-Augmented Generation zu erzeugen. Die Segmente enthalten Metadaten wie Überschriften und Seitenzahlen.
 
+!!! tip "DocLang-Export"
+    Duckling kann [DocLang](https://doclang.ai) (`.dclg.xml`) exportieren — ein KI-natives XML-Format mit Struktur, Layout und Geometrie. Siehe [Unterstützte Formate — DocLang](formats.md#doclang-dclgxml). Erfordert Docling 2.70.0+; nach einem Dependency-Upgrade erneut konvertieren.
+

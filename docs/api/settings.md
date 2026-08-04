@@ -18,11 +18,12 @@ GET /api/settings
   "ocr": {
     "enabled": true,
     "language": "en",
-    "force_full_page_ocr": false,
     "backend": "easyocr",
+    "mode": "default",
+    "scale": 3.0,
+    "force_full_page_ocr": false,
     "use_gpu": false,
-    "confidence_threshold": 0.5,
-    "bitmap_area_threshold": 0.05
+    "confidence_threshold": 0.5
   },
   "tables": {
     "enabled": true,
@@ -119,7 +120,11 @@ GET /api/settings/formats
   "output_formats": [
     {"id": "markdown", "name": "Markdown", "extension": ".md", "mime_type": "text/markdown"},
     {"id": "html", "name": "HTML", "extension": ".html", "mime_type": "text/html"},
-    {"id": "json", "name": "JSON", "extension": ".json", "mime_type": "application/json"}
+    {"id": "json", "name": "JSON", "extension": ".json", "mime_type": "application/json"},
+    {"id": "text", "name": "Plain Text", "extension": ".txt", "mime_type": "text/plain"},
+    {"id": "doctags", "name": "DocTags", "extension": ".doctags", "mime_type": "text/plain"},
+    {"id": "doclang", "name": "DocLang", "extension": ".dclg.xml", "mime_type": "application/xml"},
+    {"id": "document_tokens", "name": "Document Tokens", "extension": ".tokens.json", "mime_type": "application/json"}
   ]
 }
 ```
@@ -154,11 +159,12 @@ Content-Type: application/json
   "ocr": {
     "enabled": true,
     "language": "en",
-    "force_full_page_ocr": false,
     "backend": "easyocr",
+    "mode": "default",
+    "scale": 3.0,
+    "force_full_page_ocr": false,
     "use_gpu": false,
-    "confidence_threshold": 0.5,
-    "bitmap_area_threshold": 0.05
+    "confidence_threshold": 0.5
   },
   "available_languages": [
     {"code": "en", "name": "English"},

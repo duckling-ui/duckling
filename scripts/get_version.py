@@ -84,10 +84,10 @@ def get_version_from_github() -> Optional[str]:
     return None
 
 
-def update_mkdocs_yml(version: str) -> bool:
-    """Update version in mkdocs.yml."""
+def update_mkdocs_yml(version: str, mkdocs_path: Optional[Path] = None) -> bool:
+    """Update mike default version under extra.version in mkdocs.yml."""
     root_dir = Path(__file__).parent.parent
-    mkdocs_yml = root_dir / "mkdocs.yml"
+    mkdocs_yml = mkdocs_path or (root_dir / "mkdocs.yml")
 
     if not mkdocs_yml.exists():
         print(f"Error: mkdocs.yml not found at {mkdocs_yml}", file=sys.stderr)
@@ -135,17 +135,20 @@ def update_mkdocs_yml(version: str) -> bool:
 
 def main():
     """Main entry point."""
-    # Try package.json first
-    version = get_version_from_package_json()
+    if len(sys.argv) > 1:
+        version = sys.argv[1].lstrip("v")
+    else:
+        # Try package.json first
+        version = get_version_from_package_json()
 
-    # Fall back to GitHub if package.json doesn't have version
-    if not version:
-        version = get_version_from_github()
+        # Fall back to GitHub if package.json doesn't have version
+        if not version:
+            version = get_version_from_github()
 
-    # If still no version, use default
-    if not version:
-        print("Warning: Could not determine version, using default '0.0.13'", file=sys.stderr)
-        version = "0.0.13"
+        # If still no version, use default
+        if not version:
+            print("Warning: Could not determine version, using default '0.0.14'", file=sys.stderr)
+            version = "0.0.14"
 
     # Update mkdocs.yml (mike generates versions.json during deploy)
     mkdocs_updated = update_mkdocs_yml(version)

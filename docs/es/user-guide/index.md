@@ -50,3 +50,6 @@ Duckling ofrece una interfaz completa para convertir documentos, con funciones a
 !!! tip "Fragmentación RAG"
     Activa la fragmentación en la configuración para generar trozos de documento optimizados para RAG. Los fragmentos incluyen metadatos como encabezados y números de página.
 
+!!! tip "Exportación DocLang"
+    Duckling puede exportar [DocLang](https://doclang.ai) (`.dclg.xml`): un formato XML nativo para IA que conserva estructura, diseño y geometría. Vea [Formatos compatibles — DocLang](formats.md#doclang-dclgxml). Requiere Docling 2.70.0+; vuelva a convertir tras actualizar dependencias.
+
