@@ -30,7 +30,13 @@ from unittest.mock import Mock, patch, MagicMock
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from services.converter import ConverterService, ConversionJob, ConversionStatus
+from services.converter import (
+    ConverterService,
+    ConversionJob,
+    ConversionStatus,
+    _instantiate_ocr_options,
+    _resolve_ocr_mode,
+)
 
 
 class TestConversionJob:
@@ -145,13 +151,14 @@ class TestConverterService:
             "ocr": {
                 "backend": "ocrmac",
                 "language": "en",
+                "mode": "default",
+                "scale": 3.0,
                 "force_full_page_ocr": False,
-                "bitmap_area_threshold": 0.05,
             }
         })
 
         # OcrMacOptions.lang should be locale-style (e.g., en-US), not "en"
-        assert getattr(opts, "lang", None) in (["en-US"], ["en-US"])
+        assert getattr(opts, "lang", None) == ["en-US"]
 
     def test_ocrmac_unknown_language_falls_back_to_default(self):
         """Unsupported OcrMac language should not raise; it should fall back."""
@@ -160,11 +167,43 @@ class TestConverterService:
             "ocr": {
                 "backend": "ocrmac",
                 "language": "xx",
+                "mode": "default",
+                "scale": 3.0,
                 "force_full_page_ocr": False,
-                "bitmap_area_threshold": 0.05,
             }
         })
         assert getattr(opts, "lang", None) == []
+
+    def test_force_full_page_shim_maps_to_ocr_mode(self):
+        """Legacy force_full_page_ocr should resolve to Docling OcrMode.FULL_PAGE."""
+        from docling.datamodel.pipeline_options import OcrMode
+
+        assert _resolve_ocr_mode({"force_full_page_ocr": True}) == OcrMode.FULL_PAGE
+        assert _resolve_ocr_mode({"mode": "layout_regions"}) == OcrMode.LAYOUT_REGIONS
+        assert _resolve_ocr_mode({"mode": "default"}) == OcrMode.DEFAULT
+
+    def test_instantiate_ocr_options_drops_unsupported_fields(self):
+        """Newer Docling OCR models forbid extras like bitmap_area_threshold."""
+        from pydantic import BaseModel, ConfigDict
+
+        class FakeOcrMacOptions(BaseModel):
+            model_config = ConfigDict(extra="forbid")
+            lang: list
+            mode: str = "default"
+            scale: float = 3.0
+
+        opts = _instantiate_ocr_options(
+            FakeOcrMacOptions,
+            lang=["en-US"],
+            mode="full_page",
+            scale=2.0,
+            bitmap_area_threshold=0.05,
+            force_full_page_ocr=True,
+        )
+        assert opts.lang == ["en-US"]
+        assert opts.mode == "full_page"
+        assert opts.scale == 2.0
+        assert not hasattr(opts, "bitmap_area_threshold")
 
     def test_relativize_cached_artifact_path_keeps_subdirectories(self):
         """Cached artifact metadata should preserve nested folders like images/."""

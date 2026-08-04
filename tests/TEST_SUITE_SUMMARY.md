@@ -3,7 +3,7 @@
 This repository contains multiple test suites:
 
 - **Root (pytest)**: Lightweight repository checks and documentation structure tests in `tests/`
-  - `tests/test_docs.py`: Verifies MkDocs documentation structure (including DocLang coverage in Quick Start, formats, API, and Docling hub pages; can optionally run `mkdocs build`)
+  - `tests/test_docs.py`: Verifies MkDocs documentation structure (including DocLang coverage in Quick Start, formats, API, and Docling hub pages; settings API examples use `.tokens.json` for Document Tokens; French quickstart DocLang section is not duplicated; can optionally run `mkdocs build`)
   - `tests/test_get_version.py`: Ensures `scripts/get_version.py` updates only `extra.version.default` (does not corrupt i18n `fallback_to_default`), docs workflows avoid broad `sed` on mkdocs.yml, and release version sources agree on **0.0.14** (`package.json`, `App.tsx`, `mkdocs.yml`, changelog)
   - `tests/test_docs_build.py`: Static regression test ensuring backend docs rebuild prefers the repo-local `./venv` MkDocs environment (for required plugins like `mkdocs-static-i18n`)
   - `tests/test_github_templates.py`: Ensures `.github/` issue and PR templates exist and include required policy pointers
@@ -12,7 +12,8 @@ This repository contains multiple test suites:
   - `backend/tests/conftest.py` stubs the app singleton’s `converter_service.start_conversion` (autouse) so convert endpoints are tested without spawning Docling worker threads (prevents segfaults on some platforms)
   - Includes regression tests for history reload endpoint validation and error handling in `backend/tests/test_api.py`
   - `backend/tests/test_harden_python_packages.py`: Docker image hardening script keeps pip runtime working (no `--no-deps`, no ensurepip wheel deletion)
-  - `backend/tests/test_api.py`: DocLang export format listed on `/api/formats` and `/api/settings/formats` (`test_output_formats_includes_doclang`, `test_settings_formats_includes_doclang`)
+  - `backend/tests/test_api.py`: DocLang export format listed on `/api/formats` and `/api/settings/formats` (`test_output_formats_includes_doclang`, `test_settings_formats_includes_doclang`); Document Tokens extension is `.tokens.json` (`test_settings_formats_document_tokens_extension_matches_on_disk`)
+  - `backend/tests/test_converter.py`: OcrMac language normalization, `force_full_page_ocr` → `OcrMode.FULL_PAGE` shim, and `_instantiate_ocr_options` dropping fields forbidden by newer Docling OCR models (`bitmap_area_threshold`)
   - `POST /api/convert/batch`: mixed valid/rejected files (202) and all-rejected batches (400)
   - History reconciliation tests in `backend/tests/test_history.py` (`create_entry_from_disk`, `reconcile_from_disk`) and `backend/tests/test_api.py` (`POST /api/history/reconcile`)
 - **Frontend (Vitest)**: UI and hook tests in `frontend/src/tests/`

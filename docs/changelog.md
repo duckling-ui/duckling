@@ -30,6 +30,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **OcrMac / Docling OCR options**: Converter drops OCR kwargs unsupported by the installed Docling version (e.g. `bitmap_area_threshold` on current `OcrMacOptions`).
+- **Docling 2.118 OCR settings**: Uses `mode` (`OcrMode`) and `scale`; `force_full_page_ocr` is a shim for `full_page`. Pins `docling>=2.118.0`, `docling-core>=2.90.0,<3`.
+- **Document Tokens extension**: Settings API examples and format metadata use `.tokens.json` (matches downloads).
+- **French quickstart**: Removed duplicated DocLang export section.
+
 - **Publish CI disk (multi-arch)**: one build pushes to Docker Hub + GHCR, runner disk cleanup, sequential platform builds, `python-deps` stage purges compilers after pip.
 
 - **Docs deploy version injection**: publish/deploy workflows use `scripts/get_version.py` instead of broad `sed` on `mkdocs.yml` (fixes i18n `fallback_to_default` type errors for prerelease versions).

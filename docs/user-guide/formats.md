@@ -136,7 +136,7 @@ AI-native XML document format from the [DocLang open standard](https://doclang.a
 </doclang>
 ```
 
-Requires Docling 2.70.0 and docling-core 2.70.0 or newer (see `backend/requirements.txt`). If DocLang is missing after conversion, upgrade dependencies and convert again — existing jobs converted before the upgrade will not have a DocLang file on disk.
+Requires Docling 2.118.0+ and docling-core 2.90.0+ (`<3`) with DocLang spec **0.7** support via `export_to_doclang()` (see `backend/requirements.txt`). If DocLang is missing after conversion, upgrade dependencies and convert again — existing jobs converted before the upgrade will not have a DocLang file on disk. Duckling writes `.dclg.xml` (same as the Docling CLI); the DocLang spec also accepts the shorter `.dclg` extension.
 
 #### Document Tokens (`.tokens.json`)
 

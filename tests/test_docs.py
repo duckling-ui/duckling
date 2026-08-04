@@ -238,6 +238,28 @@ def test_doclang_documented_in_user_facing_guides():
     assert "{#doclang-dclgxml}" in formats
 
 
+def test_settings_api_docs_document_tokens_extension():
+    """Settings API examples must advertise .tokens.json (on-disk export suffix)."""
+    for rel_path in (
+        "docs/api/settings.md",
+        "docs/de/api/settings.md",
+        "docs/fr/api/settings.md",
+        "docs/es/api/settings.md",
+    ):
+        content = (PROJECT_ROOT / rel_path).read_text(encoding="utf-8")
+        assert '"extension": ".tokens.json"' in content, rel_path
+        # Avoid false positive: ".tokens" is a prefix of ".tokens.json"
+        without_correct = content.replace('"extension": ".tokens.json"', "")
+        assert '"extension": ".tokens"' not in without_correct, rel_path
+
+
+def test_french_quickstart_doclang_section_not_duplicated():
+    """French quickstart must list DocLang exports once (no duplicated bullet block)."""
+    content = (PROJECT_ROOT / "docs/fr/getting-started/quickstart.md").read_text(encoding="utf-8")
+    assert content.count("**DocLang**") == 1
+    assert content.count('!!! note "Disponibilité DocLang"') == 1
+
+
 def test_docs_assets_exist():
     """Test that documentation assets exist."""
     required_assets = [

@@ -16,6 +16,8 @@ Material’s **navigation.integrate** sidebar TOC uses each page’s Markdown he
 
 When adding a new **output export format**, register it consistently: `backend/config.py` (`SUPPORTED_OUTPUT_FORMATS`), conversion export in `backend/services/converter.py`, export/history/file-manager extension maps, `backend/routes/convert.py` valid formats and MIME types, legacy `/api/formats` in `backend/duckling.py`, frontend `FORMAT_INFO` in `ExportOptions.tsx`, `getExtension()` in `useConversion.ts`, all four `frontend/src/locales/*/common.json` entries, and [docs/user-guide/formats.md](docs/user-guide/formats.md) plus localized mirrors. See the DocLang export change set (stable in **0.0.14**) as a reference.
 
+When wiring Docling OCR engine options in `backend/services/converter.py`, use `_resolve_ocr_mode` / `_instantiate_ocr_options` so settings map to current Docling `OcrMode` + `scale`, and kwargs removed in newer Docling releases (for example `bitmap_area_threshold`) are dropped instead of raising pydantic `extra_forbidden` errors. Keep `backend/requirements.txt` on current stable floors (`docling>=2.118.0`, `docling-core>=2.90.0,<3.0.0`).
+
 When cutting a stable release, bump `frontend/package.json` (and lockfile), `frontend/src/App.tsx` (`APP_VERSION`), `mkdocs.yml` mike `default`, `scripts/get_version.py` fallback, `.github/workflows/deploy-docs.yml` fallback, `docs/versions.json`, roll `[Unreleased]` into `CHANGELOG.md` / `docs/**/changelog.md`, and update `SECURITY.md` supported versions. Keep `tests/test_get_version.py` version-agreement assertions in sync.
 
 ## How to Contribute

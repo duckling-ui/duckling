@@ -338,12 +338,64 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     onChange={(language) => ocr.updateOcr({ language })}
                     disabled={ocr.isUpdating || !ocr.ocr?.enabled}
                   />
+                  <SelectSetting
+                    label={t("settings.ocr.mode.label")}
+                    description={t("settings.ocr.mode.description")}
+                    value={ocr.ocr?.mode ?? "default"}
+                    options={[
+                      {
+                        value: "default",
+                        label: t("settings.ocr.mode.options.default"),
+                      },
+                      {
+                        value: "full_page",
+                        label: t("settings.ocr.mode.options.full_page"),
+                      },
+                      {
+                        value: "layout_regions",
+                        label: t("settings.ocr.mode.options.layout_regions"),
+                      },
+                      {
+                        value: "pdf_aware_layout_regions",
+                        label: t(
+                          "settings.ocr.mode.options.pdf_aware_layout_regions"
+                        ),
+                      },
+                    ]}
+                    onChange={(mode) =>
+                      ocr.updateOcr({
+                        mode: mode as
+                          | "default"
+                          | "full_page"
+                          | "layout_regions"
+                          | "pdf_aware_layout_regions",
+                        force_full_page_ocr: mode === "full_page",
+                      })
+                    }
+                    disabled={ocr.isUpdating || !ocr.ocr?.enabled}
+                  />
+                  <SliderSetting
+                    label={t("settings.ocr.scale.label")}
+                    description={t("settings.ocr.scale.description")}
+                    value={ocr.ocr?.scale ?? 3}
+                    min={0.5}
+                    max={6}
+                    step={0.5}
+                    onChange={(scale) => ocr.updateOcr({ scale })}
+                    disabled={ocr.isUpdating || !ocr.ocr?.enabled}
+                  />
                   <ToggleSetting
                     label={t("settings.ocr.forceFullPage.label")}
                     description={t("settings.ocr.forceFullPage.description")}
-                    checked={ocr.ocr?.force_full_page_ocr ?? false}
+                    checked={Boolean(
+                      ocr.ocr?.force_full_page_ocr ||
+                        ocr.ocr?.mode === "full_page"
+                    )}
                     onChange={(force_full_page_ocr) =>
-                      ocr.updateOcr({ force_full_page_ocr })
+                      ocr.updateOcr({
+                        force_full_page_ocr,
+                        mode: force_full_page_ocr ? "full_page" : "default",
+                      })
                     }
                     disabled={ocr.isUpdating || !ocr.ocr?.enabled}
                   />

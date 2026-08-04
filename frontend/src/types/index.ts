@@ -46,11 +46,15 @@ export interface FormatsResponse {
 export interface OcrSettings {
   enabled: boolean;
   language: string;
-  force_full_page_ocr: boolean;
   backend: 'easyocr' | 'tesseract' | 'ocrmac' | 'rapidocr';
+  mode: 'default' | 'full_page' | 'layout_regions' | 'pdf_aware_layout_regions';
+  scale: number;
+  /** @deprecated Prefer mode=full_page; still accepted as a shim */
+  force_full_page_ocr: boolean;
   use_gpu: boolean;
   confidence_threshold: number;
-  bitmap_area_threshold: number;
+  /** @deprecated Removed from Docling OcrOptions (2.116+); ignored by backend */
+  bitmap_area_threshold?: number;
 }
 
 export interface TableSettings {

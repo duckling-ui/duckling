@@ -42,6 +42,7 @@ from docling.datamodel.pipeline_options import (
     TesseractCliOcrOptions,
     OcrMacOptions,
     RapidOcrOptions,
+    OcrMode,
     TableStructureOptions,
     TableFormerMode,
     AcceleratorOptions,
@@ -204,6 +205,47 @@ def _normalize_ocr_language(backend: str, language: str) -> List[str]:
     print(f"[OCR] Warning: Unsupported OcrMac language '{language}'. Falling back to default Vision language.")
     return []
 
+
+def _instantiate_ocr_options(option_cls, **kwargs):
+    """
+    Construct Docling OCR options, omitting kwargs the installed model rejects.
+
+    Newer Docling releases removed fields such as ``bitmap_area_threshold`` from
+    ``OcrOptions`` (2.116+) while keeping ``extra="forbid"``. Duckling may still
+    receive legacy settings; drop unsupported keys so current PyPI resolves cleanly.
+    """
+    fields = getattr(option_cls, "model_fields", None)
+    if fields is None:
+        fields = getattr(option_cls, "__fields__", {}) or {}
+    allowed = set(fields)
+    filtered = {key: value for key, value in kwargs.items() if key in allowed}
+    dropped = sorted(set(kwargs) - set(filtered))
+    if dropped:
+        print(
+            f"[OCR] Omitting unsupported {option_cls.__name__} fields "
+            f"for this Docling version: {', '.join(dropped)}"
+        )
+    return option_cls(**filtered)
+
+
+def _resolve_ocr_mode(ocr_settings: Dict[str, Any]) -> "OcrMode":
+    """Map Duckling OCR settings to Docling ``OcrMode`` (2.116+).
+
+    ``force_full_page_ocr`` remains as a UX/API shim for older clients and maps to
+    ``OcrMode.FULL_PAGE``. Prefer the explicit ``mode`` setting when full-page is off.
+    """
+    if ocr_settings.get("force_full_page_ocr"):
+        return OcrMode.FULL_PAGE
+
+    mode_str = str(ocr_settings.get("mode", "default") or "default").strip().lower()
+    mode_map = {
+        "full_page": OcrMode.FULL_PAGE,
+        "layout_regions": OcrMode.LAYOUT_REGIONS,
+        "pdf_aware_layout_regions": OcrMode.PDF_AWARE_LAYOUT_REGIONS,
+        "default": OcrMode.DEFAULT,
+    }
+    return mode_map.get(mode_str, OcrMode.DEFAULT)
+
 # Device mapping
 DEVICE_MAP = {
     "auto": AcceleratorDevice.AUTO,
@@ -280,53 +322,66 @@ class ConverterService:
         ocr_settings = settings.get("ocr", {})
         backend = ocr_settings.get("backend", "easyocr")
         language = ocr_settings.get("language", "en")
-        force_full_page_ocr = ocr_settings.get("force_full_page_ocr", False)
-        bitmap_area_threshold = ocr_settings.get("bitmap_area_threshold", 0.05)
+        ocr_mode = _resolve_ocr_mode(ocr_settings)
+        try:
+            ocr_scale = float(ocr_settings.get("scale", 3.0))
+        except (TypeError, ValueError):
+            ocr_scale = 3.0
+        if ocr_scale <= 0:
+            ocr_scale = 3.0
 
-        print(f"[OCR] Configuring OCR backend: {backend}, language: {language}, force_full_page: {force_full_page_ocr}")
+        print(
+            f"[OCR] Configuring OCR backend: {backend}, language: {language}, "
+            f"mode: {ocr_mode.value}, scale: {ocr_scale}"
+        )
 
         # Map language code
         easyocr_lang = EASYOCR_LANGUAGE_MAP.get(language, "en")
+        common_kwargs = {
+            "mode": ocr_mode,
+            "scale": ocr_scale,
+        }
 
         try:
             if backend == "easyocr":
                 print(f"[OCR] Creating EasyOCR options with lang={easyocr_lang}")
-                return EasyOcrOptions(
+                return _instantiate_ocr_options(
+                    EasyOcrOptions,
                     lang=[easyocr_lang],
-                    force_full_page_ocr=force_full_page_ocr,
                     use_gpu=ocr_settings.get("use_gpu", False),
                     confidence_threshold=ocr_settings.get("confidence_threshold", 0.5),
-                    bitmap_area_threshold=bitmap_area_threshold,
+                    **common_kwargs,
                 )
             elif backend == "tesseract":
                 print(f"[OCR] Creating Tesseract options with lang={language}")
-                return TesseractOcrOptions(
+                return _instantiate_ocr_options(
+                    TesseractOcrOptions,
                     lang=[language],  # Tesseract uses standard language codes
-                    force_full_page_ocr=force_full_page_ocr,
-                    bitmap_area_threshold=bitmap_area_threshold,
+                    **common_kwargs,
                 )
             elif backend == "ocrmac":
                 ocrmac_lang = _normalize_ocr_language("ocrmac", language)
                 print(f"[OCR] Creating OcrMac options with lang={ocrmac_lang or '[default]'} (from {language})")
-                return OcrMacOptions(
+                return _instantiate_ocr_options(
+                    OcrMacOptions,
                     lang=ocrmac_lang,
-                    force_full_page_ocr=force_full_page_ocr,
-                    bitmap_area_threshold=bitmap_area_threshold,
+                    **common_kwargs,
                 )
             elif backend == "rapidocr":
                 print(f"[OCR] Creating RapidOCR options with lang={language}")
-                return RapidOcrOptions(
+                return _instantiate_ocr_options(
+                    RapidOcrOptions,
                     lang=[language],
-                    force_full_page_ocr=force_full_page_ocr,
-                    bitmap_area_threshold=bitmap_area_threshold,
+                    **common_kwargs,
                 )
             else:
                 # Default to EasyOCR
                 print(f"[OCR] Unknown backend '{backend}', defaulting to EasyOCR")
-                return EasyOcrOptions(
+                return _instantiate_ocr_options(
+                    EasyOcrOptions,
                     lang=[easyocr_lang],
-                    force_full_page_ocr=force_full_page_ocr,
                     use_gpu=False,
+                    **common_kwargs,
                 )
         except Exception as e:
             print(f"[OCR] Error creating OCR options for {backend}: {e}")

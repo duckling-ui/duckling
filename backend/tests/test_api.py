@@ -104,6 +104,16 @@ class TestSettingsFormatsEndpoint:
         assert doclang["extension"] == ".dclg.xml"
         assert doclang["mime_type"] == "application/xml"
 
+    def test_settings_formats_document_tokens_extension_matches_on_disk(self, client):
+        """Document Tokens extension must match converter/history .tokens.json filenames."""
+        response = client.get("/api/settings/formats")
+        assert response.status_code == 200
+        data = json.loads(response.data)
+
+        tokens = next(f for f in data["output_formats"] if f["id"] == "document_tokens")
+        assert tokens["extension"] == ".tokens.json"
+        assert tokens["mime_type"] == "application/json"
+
 
 class TestConvertEndpoint:
     """Tests for conversion endpoints."""

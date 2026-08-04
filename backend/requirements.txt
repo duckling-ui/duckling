@@ -14,8 +14,8 @@ pymdown-extensions>=10.21.2
 flask==3.1.3
 psutil>=5.9.0
 flask-cors==6.0.0
-docling>=2.70.0  # 2.50.0+ enrichment models; 2.70.0+ required for DocLang export (export_to_doclang)
-docling-core>=2.70.0  # export_to_doclang() lives in docling-core; docling 2.70 alone may resolve core 2.61.x
+docling>=2.118.0  # latest stable; OcrMode/scale (2.116+); DocLang export needs core with export_to_doclang
+docling-core>=2.90.0,<3.0.0  # DocLang 0.7 serializer; docling 2.118 pins core>=2.90,<3
 sqlalchemy==2.0.36
 python-dotenv==1.0.0
 pytest==7.4.3

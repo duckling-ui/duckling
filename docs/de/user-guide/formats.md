@@ -136,7 +136,7 @@ KI-natives XML-Dokumentformat des [DocLang-Open-Standards](https://doclang.ai). 
 </doclang>
 ```
 
-Erfordert Docling 2.70.0 oder neuer (siehe `backend/requirements.txt`).
+Erfordert Docling 2.118.0+ und docling-core 2.90.0+ (`<3`) mit DocLang-Spec **0.7** über `export_to_doclang()` (siehe `backend/requirements.txt`). Fehlt DocLang nach der Konvertierung, Abhängigkeiten aktualisieren und erneut konvertieren — ältere Jobs haben keine DocLang-Datei. Duckling schreibt `.dclg.xml` (wie die Docling-CLI); die Spec erlaubt auch `.dclg`.
 
 #### Document Tokens (`.tokens.json`)
 

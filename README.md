@@ -13,7 +13,7 @@
 
 A modern, user-friendly browser-based graphical interface for [Docling](https://github.com/docling-project/docling) - the powerful document conversion library by IBM.
 
-**Current release:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) — DocLang (`.dclg.xml`) export, Docker/CI hardening, and full docs localization updates. See [CHANGELOG.md](CHANGELOG.md).
+**Current release:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) — DocLang (`.dclg.xml`) export (DocLang spec 0.7 via Docling 2.118+), Docker/CI hardening, and full docs localization updates. See [CHANGELOG.md](CHANGELOG.md).
 
 ![Duckling Screenshot](docs/screenshot.png)
 
@@ -210,7 +210,9 @@ Settings can be configured through the UI or via the API. All settings are organ
 | `enabled` | Enable/disable OCR | `true` |
 | `backend` | OCR engine (easyocr, tesseract, ocrmac, rapidocr) | `easyocr` |
 | `language` | Primary language for recognition | `en` |
-| `force_full_page_ocr` | OCR entire page vs detected regions | `false` |
+| `mode` | Docling OCR region mode (`default` / `full_page` / `layout_regions` / `pdf_aware_layout_regions`) | `default` |
+| `scale` | OCR render scale (72 DPI × scale) | `3.0` |
+| `force_full_page_ocr` | Deprecated shim → `mode=full_page` | `false` |
 | `use_gpu` | Enable GPU acceleration (EasyOCR) | `false` |
 | `confidence_threshold` | Minimum confidence for results | `0.5` |
 

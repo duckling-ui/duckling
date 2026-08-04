@@ -117,7 +117,21 @@
       },
       "forceFullPage": {
         "label": "Forzar OCR de página completa",
-        "description": "Aplica OCR a toda la página en lugar de solo las regiones detectadas"
+        "description": "Atajo heredado de mode=full_page — OCR en toda la página en lugar de solo las regiones detectadas"
+      },
+      "mode": {
+        "label": "Modo OCR",
+        "description": "Qué regiones del documento envía Docling al OCR",
+        "options": {
+          "default": "Predeterminado (Docling)",
+          "full_page": "Página completa",
+          "layout_regions": "Regiones de diseño",
+          "pdf_aware_layout_regions": "Regiones PDF-aware"
+        }
+      },
+      "scale": {
+        "label": "Escala OCR",
+        "description": "Escala de renderizado antes del OCR (72 DPI × escala; predeterminado 3.0 ≈ 216 DPI)"
       },
       "useGpu": {
         "label": "Usar GPU",

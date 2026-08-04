@@ -287,6 +287,8 @@ jobs:
     name: Rsync Documentation to Website
     needs: [publish, docs]
     if: needs.publish.outputs.publish_docs == 'true'
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - name: Checkout gh-pages

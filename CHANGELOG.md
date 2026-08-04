@@ -33,6 +33,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **OcrMac options on current Docling**: `_get_ocr_options` now instantiates OCR engine options through `_instantiate_ocr_options`, which drops kwargs (such as `bitmap_area_threshold`) that the installed Docling model no longer accepts under `extra="forbid"`—fixes CI failures against current `docling>=2.70.0` resolves (e.g. 2.118+).
+- **Docling OCR API alignment (2.116+/2.118)**: OCR settings now use Docling `OcrMode` (`mode`) and `scale`; `force_full_page_ocr` is retained as a deprecated shim that maps to `mode=full_page`. Removed `bitmap_area_threshold` from defaults/API (gone from Docling `OcrOptions`). Requirements pin `docling>=2.118.0` and `docling-core>=2.90.0,<3.0.0` (DocLang serializer **0.7**).
+- **Document Tokens extension metadata**: `SUPPORTED_OUTPUT_FORMATS` and settings API docs now advertise `.tokens.json` to match on-disk export filenames (converter/history/frontend).
+- **French quickstart**: Removed a duplicated DocLang export bullet list and availability note in `docs/fr/getting-started/quickstart.md`.
+
 - **Publish CI disk exhaustion (multi-arch)**: Single `docker-build.sh` invocation pushes to Docker Hub and GHCR (`--also-registry`), frees runner disk before build, builds platforms sequentially (`BUILDKIT_MAX_PARALLELISM=1`), and uses a `python-deps` stage that purges `build-essential` after pip (still publishes `linux/amd64` + `linux/arm64`).
 
 - **Docs deploy version injection**: Replaced broad `sed` on `mkdocs.yml` in publish/deploy workflows with `scripts/get_version.py` so prerelease versions (e.g. `0.0.14-doclang-beta.3`) no longer corrupt i18n `fallback_to_default: true`.

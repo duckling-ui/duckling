@@ -136,7 +136,7 @@ Formato XML de documento nativo para IA del [estándar abierto DocLang](https://
 </doclang>
 ```
 
-Requiere Docling 2.70.0 o superior (véase `backend/requirements.txt`).
+Requiere Docling 2.118.0+ y docling-core 2.90.0+ (`<3`) con la especificación DocLang **0.7** mediante `export_to_doclang()` (véase `backend/requirements.txt`). Si falta DocLang tras la conversión, actualice dependencias y vuelva a convertir — los trabajos antiguos no tienen archivo DocLang. Duckling escribe `.dclg.xml` (como la CLI de Docling); la especificación también acepta `.dclg`.
 
 #### Document Tokens (`.tokens.json`)
 
