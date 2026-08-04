@@ -5,9 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-**Latest release:** [0.0.12](https://github.com/duckling-ui/duckling/releases/tag/v0.0.12) (2026-04-17)
+**Latest release:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) (2026-08-04)
 
 ## [Unreleased]
+
+### Planned
+
+- User authentication
+- Cloud storage integration
+- Conversion templates
+- API rate limiting
+- WebSocket for real-time updates
+- Dark/light theme toggle
+- Keyboard shortcuts
+- Accessibility improvements (WCAG 2.1)
+
+## [0.0.14] - 2026-08-04
 
 ### Security
 
@@ -66,16 +79,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Contributing (de/fr/es)**: Full localization of all pages under `docs/{de,fr,es}/contributing/`; explicit `{#commit-messages}` and `{#dco-sign-off}` heading anchors on localized [code-style](docs/de/contributing/code-style.md) for stable links from contributing index pages.
 - **Docling hub / images README**: Localized “update” sections on `docs/{de,fr,es}/docling/index.md` and screenshot contributor notes on `docs/{de,fr,es}/images/README.md`.
 
-### Planned
+## [0.0.13] - 2026-05-05
 
-- User authentication
-- Cloud storage integration
-- Conversion templates
-- API rate limiting
-- WebSocket for real-time updates
-- Dark/light theme toggle
-- Keyboard shortcuts
-- Accessibility improvements (WCAG 2.1)
+### Security
+
+- Docker image and publish-workflow hardening (non-root frontend, compose read-only defaults, Trivy HIGH/CRITICAL gates, Syft SBOM, Cosign signing, and Trivy runner-based scan reliability). See the [v0.0.13 GitHub release](https://github.com/duckling-ui/duckling/releases/tag/v0.0.13). Subsequent DocLang beta and hardening follow-ups are listed under 0.0.14.
 
 ## [0.0.12] - 2026-04-17
 
@@ -614,7 +622,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maximum file size limits (100MB default)
 - Secure filename handling
 
-[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.12...HEAD
+[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.14...HEAD
+[0.0.14]: https://github.com/duckling-ui/duckling/compare/v0.0.13...v0.0.14
+[0.0.13]: https://github.com/duckling-ui/duckling/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.12
 [0.0.10a]: https://github.com/duckling-ui/duckling/compare/v0.0.10...v0.0.10a
 [0.0.10]: https://github.com/duckling-ui/duckling/compare/v0.0.9...v0.0.10

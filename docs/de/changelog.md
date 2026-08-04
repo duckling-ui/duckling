@@ -5,9 +5,22 @@ Alle bemerkenswerten Änderungen an diesem Projekt werden in dieser Datei dokume
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spec/v2.0.0.html).
 
-**Neueste Version:** [0.0.12](https://github.com/duckling-ui/duckling/releases/tag/v0.0.12) (2026-04-17)
+**Neueste Version:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) (2026-08-04)
 
 ## [Unveröffentlicht]
+
+### Geplant
+
+- Benutzerauthentifizierung
+- Cloud-Speicher-Integration
+- Konvertierungsvorlagen
+- API-Ratenbegrenzung
+- WebSocket für Echtzeit-Updates
+- Dunkel-/Hell-Theme-Umschalter
+- Tastaturkürzel
+- Barrierefreiheitsverbesserungen (WCAG 2.1)
+
+## [0.0.14] - 2026-08-04
 
 ### Hinzugefügt
 
@@ -32,16 +45,11 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 - **Mitwirken**: Alle Seiten unter [contributing/](contributing/index.md) übersetzt; stabile Anker `{#commit-messages}` und `{#dco-sign-off}` in [contributing/code-style.md](contributing/code-style.md).
 - **Docling / Screenshots**: [docling/index.md](docling/index.md) um Abschnitt „Seiten aktualisieren“ ergänzt; [images/README.md](images/README.md) für Screenshots vollständig auf Deutsch.
 
-### Geplant
+## [0.0.13] - 2026-05-05
 
-- Benutzerauthentifizierung
-- Cloud-Speicher-Integration
-- Konvertierungsvorlagen
-- API-Ratenbegrenzung
-- WebSocket für Echtzeit-Updates
-- Dunkel-/Hell-Theme-Umschalter
-- Tastaturkürzel
-- Barrierefreiheitsverbesserungen (WCAG 2.1)
+### Sicherheit
+
+- Docker-Härtung und Publish-Workflow. Siehe Root-`CHANGELOG.md` und [v0.0.13](https://github.com/duckling-ui/duckling/releases/tag/v0.0.13). DocLang und Folgeänderungen unter 0.0.14.
 
 ## [0.0.12] - 2026-04-17
 
@@ -345,7 +353,9 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 - Maximale Dateigrößenlimits
 - Sichere Dateinamenbehandlung
 
-[Unveröffentlicht]: https://github.com/duckling-ui/duckling/compare/v0.0.12...HEAD
+[Unveröffentlicht]: https://github.com/duckling-ui/duckling/compare/v0.0.14...HEAD
+[0.0.14]: https://github.com/duckling-ui/duckling/compare/v0.0.13...v0.0.14
+[0.0.13]: https://github.com/duckling-ui/duckling/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.12
 [0.0.10a]: https://github.com/duckling-ui/duckling/compare/v0.0.10...v0.0.10a
 [0.0.10]: https://github.com/duckling-ui/duckling/compare/v0.0.9...v0.0.10

@@ -13,6 +13,8 @@
 
 A modern, user-friendly browser-based graphical interface for [Docling](https://github.com/docling-project/docling) - the powerful document conversion library by IBM.
 
+**Current release:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) — DocLang (`.dclg.xml`) export, Docker/CI hardening, and full docs localization updates. See [CHANGELOG.md](CHANGELOG.md).
+
 ![Duckling Screenshot](docs/screenshot.png)
 
 ## Features

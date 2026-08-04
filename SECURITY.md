@@ -4,6 +4,7 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 0.0.14  | :white_check_mark:                |
 | 0.0.13  | :white_check_mark:                |
 | 0.0.12  | :white_check_mark:                |
 | 0.0.10a  | :white_check_mark:                |
@@ -18,10 +19,11 @@
 
 ## Security Audit Summary
 
-Last audit: March 3, 2026
+Last audit: March 3, 2026 (product surface notes updated through 2026-08-04 for the 0.0.14 stable release)
 
 ### Product surface notes
 
+- **2026-08-04**: **0.0.14** stable release promotes the DocLang export beta and related Docker/CI hardening. DocLang remains an **export-only** format (`.dclg.xml` via Docling `export_to_doclang()`); upload/input of DocLang is still unsupported. Supported-version table now lists 0.0.14.
 - **2026-06-10**: Backend Docker OS hardening: `backend/Dockerfile` runs `apt-get upgrade` on the Bookworm base so publish Trivy gates pick up Debian security fixes for packages such as `libgnutls30` and `openssl`/`libssl3`.
 - **2026-06-10**: Docker image hardening: `backend/scripts/harden_python_packages.py` replaces Dockerfile `--no-deps` force-reinstall so `pip`/`wheel` remain functional at runtime (OCR auto-install, settings) while stale dist-info cleanup still supports Trivy gates.
 - **2026-06-04**: Prerelease CI: `publish-docker.yml` accepts manual `workflow_dispatch` and prerelease tag pushes; optional docs deploy does not set mike `latest` unless `set_docs_default` is enabled.
