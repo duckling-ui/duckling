@@ -460,6 +460,14 @@ export interface EnrichmentSettingsResponse {
     formula_enrichment: boolean;
     picture_classification: boolean;
     picture_description: boolean;
+    chart_extraction: boolean;
+    picture_description_preset?: string | null;
+    picture_description_custom_config?: Record<string, unknown> | null;
+    code_formula_preset?: string | null;
+    code_formula_custom_config?: Record<string, unknown> | null;
+    picture_classification_preset?: string | null;
+    layout_preset?: string | null;
+    table_structure_preset?: string | null;
   };
   models_status: Record<string, EnrichmentModelStatus>;
   options: Record<string, {
@@ -508,6 +516,14 @@ export const updateEnrichmentSettings = async (
     formula_enrichment: boolean;
     picture_classification: boolean;
     picture_description: boolean;
+    chart_extraction: boolean;
+    picture_description_preset?: string | null;
+    picture_description_custom_config?: Record<string, unknown> | null;
+    code_formula_preset?: string | null;
+    code_formula_custom_config?: Record<string, unknown> | null;
+    picture_classification_preset?: string | null;
+    layout_preset?: string | null;
+    table_structure_preset?: string | null;
   }>
 ): Promise<{ message: string; enrichment: Record<string, unknown> }> => {
   const response = await api.put('/settings/enrichment', settings);

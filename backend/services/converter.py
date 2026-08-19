@@ -1114,8 +1114,8 @@ class ConverterService:
                     else:
                         dclx_path.write_text(str(dclx_content), encoding="utf-8")
                     job.output_paths["dclx"] = str(dclx_path)
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.debug("DCLX export skipped/failed: %s", e)
 
                 # YAML (if supported by this Docling version)
                 try:
@@ -1133,8 +1133,8 @@ class ConverterService:
                         except Exception:
                             yaml_path.write_text(json.dumps(doc_dict, indent=2, default=str), encoding="utf-8")
                     job.output_paths["yaml"] = str(yaml_path)
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.debug("YAML export skipped/failed: %s", e)
 
                 # HTML split-by-page (best effort fallback to normal HTML)
                 try:
@@ -1144,8 +1144,8 @@ class ConverterService:
                     html_split = doc.export_to_html(split_page=True)
                     html_split_path.write_text(str(html_split), encoding="utf-8")
                     job.output_paths["html_split_page"] = str(html_split_path)
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.debug("HTML split-page export skipped/failed: %s", e)
 
                 # VTT
                 try:
@@ -1155,8 +1155,8 @@ class ConverterService:
                     vtt_content = doc.export_to_vtt()
                     vtt_path.write_text(str(vtt_content), encoding="utf-8")
                     job.output_paths["vtt"] = str(vtt_path)
-                except Exception:
-                    pass
+                except Exception as e:
+                    logger.debug("VTT export skipped/failed: %s", e)
 
                 # Document tokens
                 try:
