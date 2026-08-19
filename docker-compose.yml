@@ -5,6 +5,15 @@
 #   With pre-built images: docker-compose -f docker-compose.prebuilt.yml up -d
 
 services:
+  redis:
+    image: redis:7-alpine
+    container_name: duckling-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - duckling-network
+
   backend:
     build:
       context: ./backend
@@ -28,6 +37,16 @@ services:
       - SECRET_KEY=dev-secret-key-change-in-production
       - FLASK_HOST=0.0.0.0
       - FLASK_PORT=5001
+      - DUCKLING_ENGINE_KIND=${DUCKLING_ENGINE_KIND:-local}
+      - DUCKLING_RQ_REDIS_URL=${DUCKLING_RQ_REDIS_URL:-redis://redis:6379/0}
+      - DUCKLING_LOG_LEVEL=${DUCKLING_LOG_LEVEL:-INFO}
+      - DUCKLING_LOG_FORMAT=${DUCKLING_LOG_FORMAT:-text}
+      - DUCKLING_ENABLE_REMOTE_SERVICES=${DUCKLING_ENABLE_REMOTE_SERVICES:-false}
+      - DUCKLING_ALLOW_CUSTOM_VLM_CONFIG=${DUCKLING_ALLOW_CUSTOM_VLM_CONFIG:-false}
+      - DUCKLING_API_KEY=${DUCKLING_API_KEY:-}
+    depends_on:
+      redis:
+        condition: service_started
     healthcheck:
       test:
         [
@@ -56,6 +75,24 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - duckling-network
+
+  rq-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+    image: duckling-worker:latest
+    container_name: duckling-rq-worker
+    command: ["python", "worker.py", "--engine", "rq"]
+    environment:
+      - DUCKLING_ENGINE_KIND=rq
+      - DUCKLING_RQ_REDIS_URL=${DUCKLING_RQ_REDIS_URL:-redis://redis:6379/0}
+    depends_on:
+      redis:
+        condition: service_started
     restart: unless-stopped
     networks:
       - duckling-network

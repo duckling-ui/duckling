@@ -40,6 +40,7 @@ from services.file_manager import file_manager
 from services.history import history_service
 from config import DEFAULT_CONVERSION_SETTINGS, OUTPUT_FOLDER, BACKEND_DIR
 from routes.settings import load_settings
+from models.conversion_options import merge_settings
 from utils.security import validate_job_id, get_validated_output_dir, validate_url_safe_for_request
 
 logger = logging.getLogger(__name__)
@@ -55,12 +56,36 @@ def load_user_settings() -> dict:
     return load_settings()
 
 
+def _apply_job_options(settings: dict, payload: dict) -> dict:
+    """Apply per-job options supported by parity plan."""
+    page_range = payload.get("page_range")
+    if isinstance(page_range, str):
+        try:
+            page_range = json.loads(page_range)
+        except Exception:
+            page_range = None
+    if isinstance(page_range, list) and len(page_range) == 2:
+        settings["page_range"] = page_range
+    to_formats = payload.get("to_formats")
+    if isinstance(to_formats, str):
+        try:
+            to_formats = json.loads(to_formats)
+        except Exception:
+            to_formats = None
+    if isinstance(to_formats, list) and to_formats:
+        settings["requested_output_formats"] = to_formats
+    return settings
+
+
 # Allowed extensions for URL downloads (same as file uploads)
 ALLOWED_EXTENSIONS = {
     '.pdf', '.docx', '.pptx', '.xlsx', '.html', '.htm',
     '.md', '.markdown', '.csv', '.png', '.jpg', '.jpeg',
     '.tiff', '.tif', '.gif', '.webp', '.bmp', '.wav', '.mp3',
-    '.vtt', '.xml', '.asciidoc', '.adoc', '.txt'
+    '.vtt', '.xml', '.asciidoc', '.adoc', '.txt',
+    '.odt', '.ods', '.odp', '.epub', '.tex', '.latex',
+    '.eml', '.msg', '.dclx', '.mp4', '.mov', '.mkv',
+    '.doc', '.ppt', '.xls'
 }
 
 # Maximum URL download size (100MB)
@@ -512,22 +537,16 @@ def upload_and_convert():
         raise BadRequest(f"File type not allowed. Allowed types: {', '.join(file_manager.upload_folder.parent.name)}")
 
     # Load saved user settings as the base (not defaults)
-    settings = load_user_settings()
+    settings = merge_settings(load_user_settings())
 
     # Override with any settings provided in the request
     if "settings" in request.form:
         try:
             request_settings = json.loads(request.form["settings"])
-            # Deep merge request settings on top of user settings
-            def deep_merge(base, updates):
-                for key, value in updates.items():
-                    if key in base and isinstance(base[key], dict) and isinstance(value, dict):
-                        deep_merge(base[key], value)
-                    else:
-                        base[key] = value
-            deep_merge(settings, request_settings)
+            settings = merge_settings({**settings, **request_settings})
         except json.JSONDecodeError:
             pass
+    settings = _apply_job_options(settings, request.form)
 
     print(f"[convert] Using OCR backend: {settings.get('ocr', {}).get('backend', 'unknown')}")
 
@@ -613,17 +632,12 @@ def convert_from_url():
         raise BadRequest("Empty URL provided")
 
     # Load saved user settings as the base
-    settings = load_user_settings()
+    settings = merge_settings(load_user_settings())
 
     # Override with any settings provided in the request
     if "settings" in data:
-        def deep_merge(base, updates):
-            for key, value in updates.items():
-                if key in base and isinstance(base[key], dict) and isinstance(value, dict):
-                    deep_merge(base[key], value)
-                else:
-                    base[key] = value
-        deep_merge(settings, data["settings"])
+        settings = merge_settings({**settings, **data["settings"]})
+    settings = _apply_job_options(settings, data)
 
     print(f"[convert/url] Converting from URL: {url}")
     print(f"[convert/url] Using OCR backend: {settings.get('ocr', {}).get('backend', 'unknown')}")
@@ -722,17 +736,12 @@ def convert_from_urls_batch():
         raise BadRequest("URLs must be a non-empty array")
 
     # Load saved user settings as the base
-    settings = load_user_settings()
+    settings = merge_settings(load_user_settings())
 
     # Override with any settings provided in the request
     if "settings" in data:
-        def deep_merge(base, updates):
-            for key, value in updates.items():
-                if key in base and isinstance(base[key], dict) and isinstance(value, dict):
-                    deep_merge(base[key], value)
-                else:
-                    base[key] = value
-        deep_merge(settings, data["settings"])
+        settings = merge_settings({**settings, **data["settings"]})
+    settings = _apply_job_options(settings, data)
 
     print(f"[convert/url/batch] Converting {len(urls)} URLs")
     print(f"[convert/url/batch] Using OCR backend: {settings.get('ocr', {}).get('backend', 'unknown')}")
@@ -856,21 +865,16 @@ def upload_and_convert_batch():
         raise BadRequest("No files selected")
 
     # Load saved user settings as the base (not defaults)
-    settings = load_user_settings()
+    settings = merge_settings(load_user_settings())
 
     # Override with any settings provided in the request
     if "settings" in request.form:
         try:
             request_settings = json.loads(request.form["settings"])
-            def deep_merge(base, updates):
-                for key, value in updates.items():
-                    if key in base and isinstance(base[key], dict) and isinstance(value, dict):
-                        deep_merge(base[key], value)
-                    else:
-                        base[key] = value
-            deep_merge(settings, request_settings)
+            settings = merge_settings({**settings, **request_settings})
         except json.JSONDecodeError:
             pass
+    settings = _apply_job_options(settings, request.form)
 
     print(f"[convert/batch] Using OCR backend: {settings.get('ocr', {}).get('backend', 'unknown')}")
 
@@ -957,6 +961,28 @@ def upload_and_convert_batch():
         "jobs": jobs,
         "total": len(jobs),
         "message": f"Started {len(processing_jobs)} conversions"
+    }), 202
+
+
+@convert_bp.route("/convert/batch/connectors", methods=["POST"])
+def convert_with_connectors():
+    """Accept connector-based batch requests (jobkit integration point)."""
+    if not request.is_json:
+        raise BadRequest("Content-Type must be application/json")
+    data = request.get_json() or {}
+    sources = data.get("sources")
+    target = data.get("target")
+    if not isinstance(sources, list) or not sources:
+        raise BadRequest("sources must be a non-empty array")
+    if not isinstance(target, dict) or not target.get("kind"):
+        raise BadRequest("target.kind is required")
+
+    return jsonify({
+        "status": "accepted",
+        "message": "Connector batch request accepted",
+        "sources_count": len(sources),
+        "target_kind": target.get("kind"),
+        "note": "Connector execution requires RQ/Ray worker integration.",
     }), 202
 
 
@@ -1055,10 +1081,16 @@ def get_conversion_result(job_id: str):
         format_extensions = {
             "markdown": ".md",
             "html": ".html",
+            "html_split_page": ".split.html",
             "json": ".json",
+            "yaml": ".yaml",
             "text": ".txt",
             "doctags": ".doctags",
             "doclang": ".dclg.xml",
+            "dclx": ".dclx",
+            "vtt": ".vtt",
+            "document_tokens": ".tokens.json",
+            "chunks": ".chunks.json",
         }
         for fmt, ext in format_extensions.items():
             if list(output_dir.glob(f"*{ext}")):
@@ -1487,7 +1519,7 @@ def export_document(job_id: str, format_type: str):
     Returns:
         File download
     """
-    valid_formats = ["markdown", "html", "json", "doctags", "doclang", "text", "document_tokens", "chunks"]
+    valid_formats = ["markdown", "html", "html_split_page", "json", "yaml", "doctags", "doclang", "dclx", "vtt", "text", "document_tokens", "chunks"]
     if format_type not in valid_formats:
         raise BadRequest(f"Invalid format. Valid formats: {', '.join(valid_formats)}")
 
@@ -1522,6 +1554,10 @@ def export_document(job_id: str, format_type: str):
         "json": "application/json",
         "doctags": "text/plain",
         "doclang": "application/xml",
+        "dclx": "application/octet-stream",
+        "yaml": "application/yaml",
+        "html_split_page": "text/html",
+        "vtt": "text/vtt",
         "text": "text/plain",
         "document_tokens": "application/json",
         "chunks": "application/json"
@@ -1548,7 +1584,7 @@ def get_export_content(job_id: str, format_type: str):
     Returns:
         JSON with content
     """
-    valid_formats = ["markdown", "html", "json", "doctags", "doclang", "text", "document_tokens", "chunks"]
+    valid_formats = ["markdown", "html", "html_split_page", "json", "yaml", "doctags", "doclang", "dclx", "vtt", "text", "document_tokens", "chunks"]
     if format_type not in valid_formats:
         raise BadRequest(f"Invalid format. Valid formats: {', '.join(valid_formats)}")
 

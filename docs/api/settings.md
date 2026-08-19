@@ -1,3 +1,20 @@
+## Pipeline and PDF Settings
+
+Duckling includes parity-oriented endpoints for advanced Docling configuration:
+
+- `GET/PUT /api/settings/pipeline` for `standard`, `vlm`, and `asr` pipeline selection.
+- `GET/PUT /api/settings/pdf` for `pdf_backend`, `image_export_mode`, and heading hierarchy options.
+
+## Advanced Chunking Settings
+
+`GET/PUT /api/settings/chunking` supports:
+
+- `chunker` (`hybrid` or `hierarchical`)
+- `tokenizer`
+- `use_markdown_tables`
+- `use_markdown_images`
+- `image_placeholder`
+- `include_raw_text`
 # Settings API
 
 Endpoints for managing conversion settings.

@@ -25,6 +25,7 @@
 import uuid
 import threading
 import json
+import logging
 import base64
 import io
 import queue
@@ -57,7 +58,7 @@ except ImportError:
 
 import shutil
 
-from config import OUTPUT_FOLDER, DEFAULT_CONVERSION_SETTINGS
+from config import OUTPUT_FOLDER, DEFAULT_CONVERSION_SETTINGS, SERVER_CONFIG
 from utils.security import validate_job_id, get_validated_output_dir
 from utils.content_store import (
     compute_file_hash,
@@ -68,6 +69,8 @@ from utils.content_store import (
     save_metadata,
     load_metadata,
 )
+from services.chunker_factory import build_chunker
+logger = logging.getLogger(__name__)
 
 
 # Language code mapping for EasyOCR
@@ -296,6 +299,9 @@ class ConversionJob:
         self.cpu_usage_avg_during_conversion: Optional[float] = None
         self.performance_device_used: Optional[str] = None  # cpu, cuda, mps, auto
         self.images_classify_enabled: Optional[bool] = None
+        self.engine: str = (SERVER_CONFIG.get("engine", {}) or {}).get("kind", "local")
+        self.page_range = (self.settings or {}).get("page_range")
+        self.requested_output_formats = (self.settings or {}).get("requested_output_formats")
 
 
 class ConverterService:
@@ -437,31 +443,44 @@ class ConverterService:
         if settings_hash in self._converters:
             return self._converters[settings_hash]
 
-        # Build pipeline options with enrichment features
-        pipeline_options = PdfPipelineOptions(
-            do_ocr=ocr_enabled,
-            do_table_structure=table_enabled,
-            generate_page_images=image_settings.get("generate_page_images", False),
-            generate_picture_images=image_settings.get("generate_picture_images", True),
-            generate_table_images=image_settings.get("generate_table_images", True),
-            images_scale=image_settings.get("images_scale", 1.0),
-            accelerator_options=self._get_accelerator_options(settings),
-            # Enrichment options
-            do_code_enrichment=enrichment_settings.get("code_enrichment", False),
-            do_formula_enrichment=enrichment_settings.get("formula_enrichment", False),
-            do_picture_classification=enrichment_settings.get("picture_classification", False),
-            do_picture_description=enrichment_settings.get("picture_description", False),
-        )
+        pdf_settings = settings.get("pdf", {})
+        pipeline_settings = settings.get("pipeline", {})
+        pipeline_kwargs = {
+            "do_ocr": ocr_enabled,
+            "do_table_structure": table_enabled,
+            "generate_page_images": image_settings.get("generate_page_images", False),
+            "generate_picture_images": image_settings.get("generate_picture_images", True),
+            "generate_table_images": image_settings.get("generate_table_images", True),
+            "images_scale": image_settings.get("images_scale", 1.0),
+            "accelerator_options": self._get_accelerator_options(settings),
+            "do_code_enrichment": enrichment_settings.get("code_enrichment", False),
+            "do_formula_enrichment": enrichment_settings.get("formula_enrichment", False),
+            "do_picture_classification": enrichment_settings.get("picture_classification", False),
+            "do_picture_description": enrichment_settings.get("picture_description", False),
+            "do_chart_extraction": enrichment_settings.get("chart_extraction", False),
+            "do_pdf_heading_hierarchy": pdf_settings.get("do_pdf_heading_hierarchy", False),
+            "image_export_mode": pdf_settings.get("image_export_mode", "placeholder"),
+            "pdf_backend": pdf_settings.get("pdf_backend", "docling_parse"),
+        }
+        fields = getattr(PdfPipelineOptions, "model_fields", None)
+        allowed_fields = set(fields.keys()) if fields else set()
+        if allowed_fields:
+            pipeline_kwargs = {k: v for k, v in pipeline_kwargs.items() if k in allowed_fields}
+        pipeline_options = PdfPipelineOptions(**pipeline_kwargs)
 
         # Log enrichment settings
         if any([enrichment_settings.get("code_enrichment"),
                 enrichment_settings.get("formula_enrichment"),
                 enrichment_settings.get("picture_classification"),
                 enrichment_settings.get("picture_description")]):
-            print(f"[converter] Enrichment enabled - code: {enrichment_settings.get('code_enrichment', False)}, "
-                  f"formula: {enrichment_settings.get('formula_enrichment', False)}, "
-                  f"pic_class: {enrichment_settings.get('picture_classification', False)}, "
-                  f"pic_desc: {enrichment_settings.get('picture_description', False)}")
+            logger.info(
+                "Enrichment enabled code=%s formula=%s pic_class=%s pic_desc=%s chart=%s",
+                enrichment_settings.get("code_enrichment", False),
+                enrichment_settings.get("formula_enrichment", False),
+                enrichment_settings.get("picture_classification", False),
+                enrichment_settings.get("picture_description", False),
+                enrichment_settings.get("chart_extraction", False),
+            )
 
         # Set document timeout if specified
         timeout = perf_settings.get("document_timeout")
@@ -470,11 +489,11 @@ class ConverterService:
 
         # Configure OCR options if enabled
         if ocr_enabled:
-            print(f"[converter] OCR is enabled, configuring OCR options...")
+            logger.info("OCR is enabled; configuring OCR options")
             pipeline_options.ocr_options = self._get_ocr_options(settings)
-            print(f"[converter] OCR options configured: {type(pipeline_options.ocr_options).__name__}")
+            logger.info("OCR options configured: %s", type(pipeline_options.ocr_options).__name__)
         else:
-            print(f"[converter] OCR is disabled")
+            logger.info("OCR is disabled")
 
         # Configure table structure options
         if table_enabled:
@@ -489,17 +508,17 @@ class ConverterService:
             pipeline_options=pipeline_options,
         )
 
-        print(f"[converter] Creating DocumentConverter...")
+        pipeline_kind = pipeline_settings.get("kind", "standard")
+        logger.info("Creating DocumentConverter with pipeline=%s", pipeline_kind)
 
         # Create converter with format options for all supported formats
-        converter = DocumentConverter(
-            format_options={
-                InputFormat.PDF: pdf_format_option,
-                InputFormat.IMAGE: image_format_option,
-            }
-        )
+        format_options = {
+            InputFormat.PDF: pdf_format_option,
+            InputFormat.IMAGE: image_format_option,
+        }
+        converter = DocumentConverter(format_options=format_options)
 
-        print(f"[converter] DocumentConverter created successfully")
+        logger.info("DocumentConverter created successfully")
 
         # Cache the converter
         self._converters[settings_hash] = converter
@@ -733,19 +752,16 @@ class ConverterService:
             return chunks
 
         try:
-            max_tokens = chunking_settings.get("max_tokens", 512)
-            merge_peers = chunking_settings.get("merge_peers", True)
-
-            chunker = HybridChunker(
-                merge_peers=merge_peers,
-            )
+            chunker = build_chunker(chunking_settings)
 
             for i, chunk in enumerate(chunker.chunk(doc)):
-                chunk_data = {
+                chunk_data: Dict[str, Any] = {
                     "id": i + 1,
                     "text": chunk.text,
                     "meta": {}
                 }
+                if hasattr(chunk, "raw_text"):
+                    chunk_data["raw_text"] = getattr(chunk, "raw_text")
 
                 if hasattr(chunk, 'meta'):
                     # Extract relevant metadata
@@ -753,10 +769,12 @@ class ConverterService:
                         chunk_data["meta"]["headings"] = chunk.meta.headings
                     if hasattr(chunk.meta, 'page'):
                         chunk_data["meta"]["page"] = chunk.meta.page
+                    if hasattr(chunk.meta, "has_image"):
+                        chunk_data["meta"]["has_image"] = chunk.meta.has_image
 
                 chunks.append(chunk_data)
         except Exception as e:
-            print(f"Error generating chunks: {e}")
+            logger.exception("Error generating chunks: %s", e)
 
         return chunks
 
@@ -772,25 +790,26 @@ class ConverterService:
         settings = settings or {}
         chunking_settings = settings.get("chunking", {})
         # For on-demand generation, always generate (ignore enabled flag)
-        max_tokens = chunking_settings.get("max_tokens", 512)
-        merge_peers = chunking_settings.get("merge_peers", True)
-
         try:
-            chunker = HybridChunker(merge_peers=merge_peers)
+            chunker = build_chunker(chunking_settings)
             for i, chunk in enumerate(chunker.chunk(doc)):
-                chunk_data = {
+                chunk_data: Dict[str, Any] = {
                     "id": i + 1,
                     "text": chunk.text,
                     "meta": {}
                 }
+                if hasattr(chunk, "raw_text"):
+                    chunk_data["raw_text"] = getattr(chunk, "raw_text")
                 if hasattr(chunk, 'meta'):
                     if hasattr(chunk.meta, 'headings'):
                         chunk_data["meta"]["headings"] = chunk.meta.headings
                     if hasattr(chunk.meta, 'page'):
                         chunk_data["meta"]["page"] = chunk.meta.page
+                    if hasattr(chunk.meta, "has_image"):
+                        chunk_data["meta"]["has_image"] = chunk.meta.has_image
                 chunks.append(chunk_data)
         except Exception as e:
-            print(f"Error generating chunks: {e}")
+            logger.exception("Error generating chunks: %s", e)
 
         return chunks
 
@@ -880,7 +899,11 @@ class ConverterService:
                 # Get converter with job-specific settings
                 converter = self._get_converter(job.settings)
                 job.progress = 30
-                result = converter.convert(job.input_path)
+                page_range = job.settings.get("page_range")
+                if page_range and isinstance(page_range, (list, tuple)) and len(page_range) == 2:
+                    result = converter.convert(job.input_path, page_range=tuple(page_range))
+                else:
+                    result = converter.convert(job.input_path)
             except Exception as ocr_error:
                 error_str = str(ocr_error)
                 print(f"[converter] Conversion error: {error_str}")
@@ -908,7 +931,10 @@ class ConverterService:
                     try:
                         converter = self._get_converter(fallback_settings)
                         job.progress = 30
-                        result = converter.convert(job.input_path)
+                        if page_range and isinstance(page_range, (list, tuple)) and len(page_range) == 2:
+                            result = converter.convert(job.input_path, page_range=tuple(page_range))
+                        else:
+                            result = converter.convert(job.input_path)
                         job.ocr_backend_used = "none"
                         job.settings = fallback_settings  # Use effective settings for content hash
                         job.message = "Converted without OCR (OCR initialization failed)"
@@ -967,16 +993,22 @@ class ConverterService:
                 job.message = "Generating output formats..."
 
                 # Export to different formats
+                requested_formats = set(job.settings.get("requested_output_formats") or [])
+                def should_export(fmt: str) -> bool:
+                    return not requested_formats or fmt in requested_formats
                 # Markdown
-                md_path = output_base / f"{Path(job.original_filename).stem}.md"
-                md_content = doc.export_to_markdown()
-                md_path.write_text(md_content, encoding="utf-8")
-                job.output_paths["markdown"] = str(md_path)
+                if should_export("markdown"):
+                    md_path = output_base / f"{Path(job.original_filename).stem}.md"
+                    md_content = doc.export_to_markdown()
+                    md_path.write_text(md_content, encoding="utf-8")
+                    job.output_paths["markdown"] = str(md_path)
 
                 job.progress = 75
 
                 # HTML
                 try:
+                    if not should_export("html"):
+                        raise RuntimeError("skip")
                     html_path = output_base / f"{Path(job.original_filename).stem}.html"
                     html_content = doc.export_to_html()
                     html_path.write_text(html_content, encoding="utf-8")
@@ -988,6 +1020,8 @@ class ConverterService:
 
                 # JSON (full document structure)
                 try:
+                    if not should_export("json"):
+                        raise RuntimeError("skip")
                     json_path = output_base / f"{Path(job.original_filename).stem}.json"
                     json_content = doc.export_to_dict()
                     with open(json_path, 'w', encoding='utf-8') as f:
@@ -1000,6 +1034,8 @@ class ConverterService:
 
                 # Plain text
                 try:
+                    if not should_export("text"):
+                        raise RuntimeError("skip")
                     txt_path = output_base / f"{Path(job.original_filename).stem}.txt"
                     txt_content = doc.export_to_text()
                     txt_path.write_text(txt_content, encoding="utf-8")
@@ -1009,6 +1045,8 @@ class ConverterService:
 
                 # DocTags
                 try:
+                    if not should_export("doctags"):
+                        raise RuntimeError("skip")
                     doctags_path = output_base / f"{Path(job.original_filename).stem}.doctags"
                     doctags_content = doc.export_to_doctags()
                     doctags_path.write_text(str(doctags_content), encoding="utf-8")
@@ -1018,6 +1056,8 @@ class ConverterService:
 
                 # DocLang
                 try:
+                    if not should_export("doclang"):
+                        raise RuntimeError("skip")
                     doclang_path = output_base / f"{Path(job.original_filename).stem}.dclg.xml"
                     doclang_content = doc.export_to_doclang()
                     doclang_path.write_text(str(doclang_content), encoding="utf-8")
@@ -1025,8 +1065,65 @@ class ConverterService:
                 except Exception as e:
                     print(f"DocLang export failed: {e}")
 
+                # DCLX (if supported by this Docling version)
+                try:
+                    if not should_export("dclx"):
+                        raise RuntimeError("skip")
+                    dclx_path = output_base / f"{Path(job.original_filename).stem}.dclx"
+                    dclx_content = doc.export_to_dclx()
+                    if isinstance(dclx_content, bytes):
+                        dclx_path.write_bytes(dclx_content)
+                    else:
+                        dclx_path.write_text(str(dclx_content), encoding="utf-8")
+                    job.output_paths["dclx"] = str(dclx_path)
+                except Exception:
+                    pass
+
+                # YAML (if supported by this Docling version)
+                try:
+                    if not should_export("yaml"):
+                        raise RuntimeError("skip")
+                    yaml_path = output_base / f"{Path(job.original_filename).stem}.yaml"
+                    if hasattr(doc, "export_to_yaml"):
+                        yaml_content = doc.export_to_yaml()
+                        yaml_path.write_text(str(yaml_content), encoding="utf-8")
+                    else:
+                        doc_dict = doc.export_to_dict()
+                        try:
+                            import yaml  # type: ignore
+                            yaml_path.write_text(yaml.safe_dump(doc_dict, allow_unicode=True), encoding="utf-8")
+                        except Exception:
+                            yaml_path.write_text(json.dumps(doc_dict, indent=2, default=str), encoding="utf-8")
+                    job.output_paths["yaml"] = str(yaml_path)
+                except Exception:
+                    pass
+
+                # HTML split-by-page (best effort fallback to normal HTML)
+                try:
+                    if not should_export("html_split_page"):
+                        raise RuntimeError("skip")
+                    html_split_path = output_base / f"{Path(job.original_filename).stem}.split.html"
+                    html_split = doc.export_to_html(split_page=True)
+                    html_split_path.write_text(str(html_split), encoding="utf-8")
+                    job.output_paths["html_split_page"] = str(html_split_path)
+                except Exception:
+                    pass
+
+                # VTT
+                try:
+                    if not should_export("vtt"):
+                        raise RuntimeError("skip")
+                    vtt_path = output_base / f"{Path(job.original_filename).stem}.vtt"
+                    vtt_content = doc.export_to_vtt()
+                    vtt_path.write_text(str(vtt_content), encoding="utf-8")
+                    job.output_paths["vtt"] = str(vtt_path)
+                except Exception:
+                    pass
+
                 # Document tokens
                 try:
+                    if not should_export("document_tokens"):
+                        raise RuntimeError("skip")
                     tokens_path = output_base / f"{Path(job.original_filename).stem}.tokens.json"
                     tokens_content = doc.export_to_document_tokens()
                     with open(tokens_path, 'w', encoding='utf-8') as f:
@@ -1042,7 +1139,7 @@ class ConverterService:
                 job.chunks = self._generate_chunks(doc, job.settings)
 
                 # Save chunks if generated
-                if job.chunks:
+                if job.chunks and should_export("chunks"):
                     chunks_path = output_base / f"{Path(job.original_filename).stem}.chunks.json"
                     with open(chunks_path, 'w', encoding='utf-8') as f:
                         json.dump(job.chunks, f, indent=2)

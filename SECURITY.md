@@ -24,6 +24,7 @@ Last audit: March 3, 2026 (product surface notes updated through 2026-08-04 for 
 ### Product surface notes
 
 - **2026-08-04**: Aligned with Docling **2.118.0** / docling-core **2.90.x** (`<3`): OCR uses `OcrMode` + `scale`; `bitmap_area_threshold` removed from Docling and Duckling defaults. DocLang export via `export_to_doclang()` continues to emit `.dclg.xml` (`application/xml`) matching Docling CLI; serializer follows DocLang spec **0.7**.
+- **2026-08-19**: Added optional API authentication with `DUCKLING_API_KEY` (`X-Api-Key`), structured logging toggle (`DUCKLING_LOG_FORMAT=text|json`), and server config-file loading (`DUCKLING_CONFIG_FILE`). Compose stacks now include Redis and worker scaffolding for RQ/Ray-oriented deployment patterns.
 - **2026-08-04**: Converter OCR option construction filters kwargs to fields accepted by the installed Docling OCR model (`extra="forbid"`), so settings such as `bitmap_area_threshold` do not break current `OcrMacOptions` (and similar) when Docling removes those fields.
 - **2026-08-04**: **0.0.14** stable release promotes the DocLang export beta and related Docker/CI hardening. DocLang remains an **export-only** format (`.dclg.xml` via Docling `export_to_doclang()`); upload/input of DocLang is still unsupported. Supported-version table now lists 0.0.14.
 - **2026-06-10**: Backend Docker OS hardening: `backend/Dockerfile` runs `apt-get upgrade` on the Bookworm base so publish Trivy gates pick up Debian security fixes for packages such as `libgnutls30` and `openssl`/`libssl3`.

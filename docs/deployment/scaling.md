@@ -1,3 +1,15 @@
+## RQ/Ray worker topology
+
+Duckling now includes compose-level scaffolding for:
+
+- `redis` service
+- `rq-worker` service (`python worker.py --engine rq`)
+
+Use environment variables to choose engine mode:
+
+- `DUCKLING_ENGINE_KIND=local|rq|ray`
+- `DUCKLING_RQ_REDIS_URL`
+- `DUCKLING_RAY_ADDRESS`
 # Scaling
 
 Guide for scaling Duckling for high-traffic deployments.

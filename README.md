@@ -27,6 +27,9 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
 - **Image & Table Extraction**: Extract embedded images and tables with CSV export
 - **Image Preview Gallery**: View extracted images as thumbnails with full-size lightbox viewer
 - **RAG-Ready Chunking**: Generate document chunks optimized for RAG applications
+- **Expanded Chunking Controls**: Hybrid/hierarchical chunking, tokenizer selection, markdown image/table chunk options, and raw text inclusion
+- **Pipeline Controls**: Standard, VLM, and ASR-ready pipeline settings with PDF backend and heading hierarchy options
+- **Enterprise Deployment Modes**: Optional API-key auth, structured JSON logs, Redis service, and worker process scaffolding for RQ/Ray
 - **Advanced OCR**: Multiple OCR backends with GPU acceleration support
 - **Real-Time Progress**: Watch your document conversion progress in real-time
 - **Conversion History**: Access previously converted documents and reload them without re-conversion

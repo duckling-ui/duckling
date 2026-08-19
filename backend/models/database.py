@@ -82,6 +82,10 @@ class Conversion(Base):
     performance_device_used = Column(String(20), nullable=True)  # cpu, cuda, mps, auto
     images_classify_enabled = Column(String(10), nullable=True)  # "true" | "false"
     content_hash = Column(String(64), nullable=True)  # Content-addressed dedup hash
+    engine = Column(String(20), nullable=True)
+    external_task_id = Column(String(128), nullable=True)
+    page_range = Column(String(64), nullable=True)
+    requested_output_formats = Column(Text, nullable=True)
 
     def to_dict(self):
         """Convert model to dictionary."""
@@ -107,6 +111,10 @@ class Conversion(Base):
             "performance_device_used": self.performance_device_used,
             "images_classify_enabled": self.images_classify_enabled,
             "content_hash": self.content_hash,
+            "engine": self.engine,
+            "external_task_id": self.external_task_id,
+            "page_range": self.page_range,
+            "requested_output_formats": json.loads(self.requested_output_formats) if self.requested_output_formats else None,
         }
 
     def set_settings(self, settings_dict):

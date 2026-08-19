@@ -45,6 +45,7 @@ import type {
 } from '../types';
 
 const API_BASE = '/api';
+const API_KEY = import.meta.env.VITE_API_KEY as string | undefined;
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -52,6 +53,10 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+if (API_KEY) {
+  api.defaults.headers.common['X-Api-Key'] = API_KEY;
+}
 
 // Health check
 export const checkHealth = async (): Promise<{ status: string; service: string }> => {
@@ -68,12 +73,19 @@ export const getFormats = async (): Promise<FormatsResponse> => {
 // Conversion
 export const uploadAndConvert = async (
   file: File,
-  settings?: Partial<ConversionSettings>
+  settings?: Partial<ConversionSettings>,
+  options?: { page_range?: [number, number]; to_formats?: string[] }
 ): Promise<ConversionJob> => {
   const formData = new FormData();
   formData.append('file', file);
   if (settings) {
     formData.append('settings', JSON.stringify(settings));
+  }
+  if (options?.page_range) {
+    formData.append('page_range', JSON.stringify(options.page_range));
+  }
+  if (options?.to_formats) {
+    formData.append('to_formats', JSON.stringify(options.to_formats));
   }
 
   const response = await api.post('/convert', formData, {
@@ -117,11 +129,13 @@ export const uploadAndConvertBatch = async (
 // URL conversion
 export const convertFromUrl = async (
   url: string,
-  settings?: Partial<ConversionSettings>
+  settings?: Partial<ConversionSettings>,
+  options?: { page_range?: [number, number]; to_formats?: string[] }
 ): Promise<ConversionJob & { source_url: string }> => {
   const response = await api.post('/convert/url', {
     url,
     settings,
+    ...options,
   });
   return response.data;
 };

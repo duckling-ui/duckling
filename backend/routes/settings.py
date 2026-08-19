@@ -40,6 +40,7 @@ from config import (
     ACCELERATOR_DEVICES,
     TABLE_MODES,
     OCR_LANGUAGES,
+    SERVER_CONFIG,
 )
 from models.database import UserSettings, get_db_session
 
@@ -460,7 +461,16 @@ def load_settings() -> dict:
         with get_db_session() as db_session:
             user_settings = db_session.query(UserSettings).filter_by(session_id=session_id).first()
             if user_settings:
-                return user_settings.get_settings()
+                stored = user_settings.get_settings()
+                merged = json.loads(json.dumps(DEFAULT_CONVERSION_SETTINGS))
+                def deep_merge(base, updates):
+                    for key, value in updates.items():
+                        if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+                            deep_merge(base[key], value)
+                        else:
+                            base[key] = value
+                deep_merge(merged, stored)
+                return merged
     except Exception as e:
         # Log error but don't fail - fall back to defaults
         print(f"[settings] Error loading settings from database: {e}")
@@ -1575,6 +1585,14 @@ def get_chunking_settings():
             "merge_peers": {
                 "description": "Merge undersized chunks with similar metadata",
                 "default": True
+            },
+            "chunker": {
+                "description": "Chunker strategy: hybrid or hierarchical",
+                "default": "hybrid"
+            },
+            "tokenizer": {
+                "description": "Tokenizer model name for chunk sizing",
+                "default": "sentence-transformers/all-MiniLM-L6-v2"
             }
         }
     })
@@ -1595,6 +1613,8 @@ def update_chunking_settings():
             return jsonify({"error": "max_tokens must be an integer"}), 400
         if not 64 <= chunking_settings["max_tokens"] <= 8192:
             return jsonify({"error": "max_tokens must be between 64 and 8192"}), 400
+    if "chunker" in chunking_settings and chunking_settings["chunker"] not in ["hybrid", "hierarchical"]:
+        return jsonify({"error": "chunker must be hybrid or hierarchical"}), 400
 
     current_settings["chunking"] = {
         **current_settings.get("chunking", {}),
@@ -1608,6 +1628,63 @@ def update_chunking_settings():
         })
     else:
         return jsonify({"error": "Failed to save settings"}), 500
+
+
+@settings_bp.route("/settings/pipeline", methods=["GET"])
+def get_pipeline_settings():
+    """Get pipeline settings."""
+    settings = load_settings()
+    return jsonify({
+        "pipeline": settings.get("pipeline", DEFAULT_CONVERSION_SETTINGS["pipeline"]),
+        "options": {
+            "kind": ["standard", "vlm", "asr"],
+            "enable_remote_services": SERVER_CONFIG.get("enable_remote_services", False),
+            "allow_custom_vlm_config": SERVER_CONFIG.get("allow_custom_vlm_config", False),
+        },
+    })
+
+
+@settings_bp.route("/settings/pipeline", methods=["PUT"])
+def update_pipeline_settings():
+    """Update pipeline settings."""
+    if not request.is_json:
+        return jsonify({"error": "Content-Type must be application/json"}), 400
+    pipeline_settings = request.get_json()
+    current_settings = load_settings()
+    if "kind" in pipeline_settings and pipeline_settings["kind"] not in ["standard", "vlm", "asr"]:
+        return jsonify({"error": "Invalid pipeline kind"}), 400
+    current_settings["pipeline"] = {
+        **current_settings.get("pipeline", {}),
+        **pipeline_settings,
+    }
+    if save_settings(current_settings):
+        return jsonify({"message": "Pipeline settings updated", "pipeline": current_settings["pipeline"]})
+    return jsonify({"error": "Failed to save settings"}), 500
+
+
+@settings_bp.route("/settings/pdf", methods=["GET"])
+def get_pdf_settings():
+    """Get PDF pipeline settings."""
+    settings = load_settings()
+    return jsonify({
+        "pdf": settings.get("pdf", DEFAULT_CONVERSION_SETTINGS["pdf"]),
+    })
+
+
+@settings_bp.route("/settings/pdf", methods=["PUT"])
+def update_pdf_settings():
+    """Update PDF pipeline settings."""
+    if not request.is_json:
+        return jsonify({"error": "Content-Type must be application/json"}), 400
+    pdf_settings = request.get_json()
+    current_settings = load_settings()
+    current_settings["pdf"] = {
+        **current_settings.get("pdf", {}),
+        **pdf_settings,
+    }
+    if save_settings(current_settings):
+        return jsonify({"message": "PDF settings updated", "pdf": current_settings["pdf"]})
+    return jsonify({"error": "Failed to save settings"}), 500
 
 
 @settings_bp.route("/settings/output", methods=["GET"])

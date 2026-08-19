@@ -18,6 +18,12 @@ docling>=2.118.0  # latest stable; OcrMode/scale (2.116+); DocLang export needs 
 docling-core>=2.90.0,<3.0.0  # DocLang 0.7 serializer; docling 2.118 pins core>=2.90,<3
 sqlalchemy==2.0.36
 python-dotenv==1.0.0
+PyYAML>=6.0.2
+rq>=1.16.2
+redis>=5.0.8
+# Optional orchestration dependencies for parity with docling-serve worker modes.
+ray>=2.49.0
+docling-jobkit>=0.7.0
 pytest==7.4.3
 pytest-cov==4.1.0
 werkzeug==3.1.6
