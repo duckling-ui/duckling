@@ -61,7 +61,11 @@ describe("DropZone", () => {
 
     expect(screen.getByText("PDF")).toBeInTheDocument();
     expect(screen.getByText("DOCX")).toBeInTheDocument();
+    expect(screen.getByText("ODT")).toBeInTheDocument();
+    expect(screen.getByText("EPUB")).toBeInTheDocument();
     expect(screen.getByText("Markdown")).toBeInTheDocument();
+    expect(screen.getByText("DCLX")).toBeInTheDocument();
+    expect(screen.getByText("MP4")).toBeInTheDocument();
   });
 
   it("shows file size limit", () => {

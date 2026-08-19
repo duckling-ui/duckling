@@ -52,16 +52,16 @@ interface DropZoneProps {
 const FORMAT_CATEGORIES = [
   {
     nameKey: "documents",
-    formats: ["PDF", "DOCX", "PPTX", "XLSX"],
+    formats: ["PDF", "DOCX", "PPTX", "XLSX", "ODT", "EPUB", "EML"],
     color: "primary",
   },
-  { nameKey: "web", formats: ["HTML", "Markdown"], color: "blue" },
+  { nameKey: "web", formats: ["HTML", "Markdown", "AsciiDoc", "XML"], color: "blue" },
   {
     nameKey: "images",
     formats: ["PNG", "JPG", "TIFF", "WebP"],
     color: "purple",
   },
-  { nameKey: "data", formats: ["XML", "AsciiDoc"], color: "green" },
+  { nameKey: "data", formats: ["DCLX", "VTT", "WAV", "MP3", "MP4"], color: "green" },
 ];
 
 // URL validation regex

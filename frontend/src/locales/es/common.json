@@ -401,7 +401,7 @@
     "convertAll": "Convertir todo",
     "loading": "Cargando...",
     "pressEnter": "Pulsa Enter para enviar o haz clic en Convertir",
-    "supportedHint": "Compatible: PDF, DOCX, PPTX, XLSX, HTML, Markdown, Imágenes y más",
+    "supportedHint": "Compatible: PDF, DOCX, PPTX, XLSX, ODT, EPUB, EML/MSG, HTML, Markdown, AsciiDoc, XML, DCLX, VTT, Imágenes, Audio, Video y más",
     "maxFileSize": "Tamaño máximo: 100MB por archivo",
     "maxDownloadSize": "Tamaño máximo de descarga: 100MB por URL",
     "errorEnterUrl": "Introduce una URL",
