@@ -28,6 +28,7 @@ import tempfile
 from pathlib import Path
 import sys
 import importlib.util
+from sqlalchemy import create_engine
 
 # Add backend to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -436,6 +437,47 @@ class TestContentHashColumnMigration:
             ), "Column content_hash should exist"
             conn.close()
 
+        finally:
+            if Path(db_path).exists():
+                Path(db_path).unlink()
+
+
+class TestAutoSchemaBackfill:
+    """Tests for SQLite auto schema backfill in models.database."""
+
+    def test_auto_backfill_adds_orchestration_columns(self):
+        """Auto backfill should add new conversions columns in legacy SQLite DBs."""
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp_db:
+            db_path = tmp_db.name
+
+        try:
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE conversions (
+                    id VARCHAR(36) PRIMARY KEY,
+                    filename VARCHAR(255) NOT NULL
+                )
+            """)
+            conn.commit()
+            conn.close()
+
+            from models import database as db_module
+
+            original_engine = db_module.engine
+            temp_engine = create_engine(f"sqlite:///{db_path}")
+            db_module.engine = temp_engine
+            try:
+                db_module._ensure_sqlite_conversions_columns()
+            finally:
+                db_module.engine = original_engine
+                temp_engine.dispose()
+
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            for col in ("engine", "external_task_id", "page_range", "requested_output_formats"):
+                assert check_column_exists(cursor, "conversions", col), f"Column {col} should exist"
+            conn.close()
         finally:
             if Path(db_path).exists():
                 Path(db_path).unlink()
