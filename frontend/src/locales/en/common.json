@@ -77,6 +77,8 @@
       "ocr": "OCR (Optical Character Recognition)",
       "tables": "Table Extraction",
       "images": "Image Handling",
+      "pipeline": "Pipeline",
+      "pdf": "PDF Pipeline Options",
       "performance": "Performance",
       "chunking": "RAG / Chunking",
       "enrichment": "Document Enrichment",
@@ -200,6 +202,30 @@
         "description": "Maximum processing time (0 = no limit)"
       }
     },
+    "pipeline": {
+      "kind": {
+        "label": "Pipeline Kind",
+        "description": "Select standard, VLM, or ASR document processing pipeline"
+      },
+      "vlmPreset": {
+        "label": "VLM Preset",
+        "description": "Preset ID used when Pipeline Kind is VLM"
+      }
+    },
+    "pdf": {
+      "backend": {
+        "label": "PDF Backend",
+        "description": "Docling PDF backend selection"
+      },
+      "imageExportMode": {
+        "label": "Image Export Mode",
+        "description": "How images are represented in exports"
+      },
+      "headingHierarchy": {
+        "label": "Infer Heading Hierarchy",
+        "description": "Infer heading levels using bookmarks/numbering/style signals"
+      }
+    },
     "chunking": {
       "enable": {
         "label": "Enable Chunking",
@@ -230,6 +256,26 @@
       "pictureDescription": {
         "label": "Picture Description",
         "description": "Generate AI captions for images (slower)"
+      },
+      "chartExtraction": {
+        "label": "Chart Extraction",
+        "description": "Extract numeric data from charts when available"
+      },
+      "pictureDescriptionPreset": {
+        "label": "Picture Description Preset",
+        "description": "Preset model config for image caption generation"
+      },
+      "codeFormulaPreset": {
+        "label": "Code/Formula Preset",
+        "description": "Preset for code and formula enrichment models"
+      },
+      "layoutPreset": {
+        "label": "Layout Preset",
+        "description": "Preset for document layout detection"
+      },
+      "tableStructurePreset": {
+        "label": "Table Structure Preset",
+        "description": "Preset for table structure model"
       },
       "warning": "⚠️ Enrichment features may require additional model downloads and significantly increase processing time.",
       "preDownload": {
@@ -370,6 +416,13 @@
     "pickerSkippedUnsupported": "{{count}} file(s) in this folder were skipped (not an allowed type in the file picker, e.g. legacy Word .doc).",
     "allFilesUnsupportedByPicker": "No files in this selection are allowed types. Supported examples include .docx and .xlsx—not legacy .doc. Convert .doc files to .docx if needed.",
     "tooManyFilesUnexpected": "Too many files were selected at once. Try a smaller set."
+    ,
+    "pageRange": {
+      "title": "Optional page range",
+      "description": "Process only a subset of pages (start/end, 1-based)",
+      "startPlaceholder": "Start page",
+      "endPlaceholder": "End page"
+    }
   },
   "export": {
     "completeTitle": "Conversion Complete!",

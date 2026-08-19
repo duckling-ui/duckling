@@ -147,9 +147,15 @@ class FileManager:
         ext_map = {
             "markdown": ".md",
             "html": ".html",
+            "html_split_page": ".split.html",
             "json": ".json",
+            "yaml": ".yaml",
             "doctags": ".doctags",
             "doclang": ".dclg.xml",
+            "dclx": ".dclx",
+            "vtt": ".vtt",
+            "document_tokens": ".tokens.json",
+            "chunks": ".chunks.json",
             "text": ".txt"
         }
 

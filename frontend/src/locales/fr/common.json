@@ -77,6 +77,8 @@
       "ocr": "OCR (reconnaissance optique de caractères)",
       "tables": "Extraction de tableaux",
       "images": "Gestion des images",
+      "pipeline": "Pipeline",
+      "pdf": "Options du pipeline PDF",
       "performance": "Performances",
       "chunking": "RAG / Segmentation",
       "enrichment": "Enrichissement du document",
@@ -200,6 +202,30 @@
         "description": "Temps de traitement maximal (0 = illimité)"
       }
     },
+    "pipeline": {
+      "kind": {
+        "label": "Type de pipeline",
+        "description": "Choisissez un pipeline standard, VLM ou ASR"
+      },
+      "vlmPreset": {
+        "label": "Préréglage VLM",
+        "description": "ID du préréglage utilisé quand le pipeline est VLM"
+      }
+    },
+    "pdf": {
+      "backend": {
+        "label": "Backend PDF",
+        "description": "Sélection du backend PDF Docling"
+      },
+      "imageExportMode": {
+        "label": "Mode d'export des images",
+        "description": "Comment les images sont représentées dans les exports"
+      },
+      "headingHierarchy": {
+        "label": "Inférer la hiérarchie des titres",
+        "description": "Inférer les niveaux de titre à partir des signets/numérotation/style"
+      }
+    },
     "chunking": {
       "enable": {
         "label": "Activer la segmentation",
@@ -230,6 +256,26 @@
       "pictureDescription": {
         "label": "Description d'images",
         "description": "Générer des légendes IA (plus lent)"
+      },
+      "chartExtraction": {
+        "label": "Extraction de graphiques",
+        "description": "Extraire des données numériques des graphiques si disponible"
+      },
+      "pictureDescriptionPreset": {
+        "label": "Préréglage de description d'image",
+        "description": "Préréglage de configuration du modèle de légende d'image"
+      },
+      "codeFormulaPreset": {
+        "label": "Préréglage code/formule",
+        "description": "Préréglage pour les modèles d'enrichissement code et formule"
+      },
+      "layoutPreset": {
+        "label": "Préréglage de mise en page",
+        "description": "Préréglage pour la détection de mise en page du document"
+      },
+      "tableStructurePreset": {
+        "label": "Préréglage structure de tableau",
+        "description": "Préréglage du modèle de structure de tableau"
       },
       "warning": "⚠️ Les fonctionnalités d'enrichissement peuvent nécessiter des téléchargements de modèles supplémentaires et augmenter fortement le temps de traitement.",
       "preDownload": {
@@ -369,7 +415,13 @@
     "allSkippedTooLarge": "Tous les fichiers dépassent la taille maximale (100 Mo par fichier).",
     "pickerSkippedUnsupported": "{{count}} fichier(s) de ce dossier ont été ignorés (type non autorisé par le sélecteur, ex. ancien Word .doc).",
     "allFilesUnsupportedByPicker": "Aucun fichier de cette sélection n’est d’un type autorisé. Par ex. .docx et .xlsx sont pris en charge, pas l’ancien .doc. Convertissez le .doc en .docx si besoin.",
-    "tooManyFilesUnexpected": "Trop de fichiers ont été sélectionnés en une fois. Essayez un ensemble plus petit."
+    "tooManyFilesUnexpected": "Trop de fichiers ont été sélectionnés en une fois. Essayez un ensemble plus petit.",
+    "pageRange": {
+      "title": "Plage de pages facultative",
+      "description": "Traiter seulement un sous-ensemble de pages (début/fin, indexées à partir de 1)",
+      "startPlaceholder": "Page de début",
+      "endPlaceholder": "Page de fin"
+    }
   },
   "export": {
     "completeTitle": "Conversion terminée !",

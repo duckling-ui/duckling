@@ -417,8 +417,14 @@ export interface BatchConversionResponse {
 // Component Props Types
 
 export interface DropZoneProps {
-  onFilesAccepted: (files: File[]) => void;
-  onUrlsSubmitted?: (urls: string[]) => void;
+  onFilesAccepted: (
+    files: File[],
+    options?: { page_range?: [number, number] }
+  ) => void;
+  onUrlsSubmitted?: (
+    urls: string[],
+    options?: { page_range?: [number, number] }
+  ) => void;
   isUploading: boolean;
   disabled?: boolean;
 }

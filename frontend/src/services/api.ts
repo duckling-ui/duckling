@@ -38,6 +38,8 @@ import type {
   ImageSettingsResponse,
   PerformanceSettingsResponse,
   ChunkingSettingsResponse,
+  PipelineSettings,
+  PdfSettings,
   ExtractedImage,
   ExtractedTable,
   DocumentChunk,
@@ -99,7 +101,8 @@ export const uploadAndConvert = async (
 // Batch conversion
 export const uploadAndConvertBatch = async (
   files: File[],
-  settings?: Partial<ConversionSettings>
+  settings?: Partial<ConversionSettings>,
+  options?: { page_range?: [number, number]; to_formats?: string[] }
 ): Promise<BatchConversionResponse> => {
   const formData = new FormData();
   files.forEach((file) => {
@@ -107,6 +110,12 @@ export const uploadAndConvertBatch = async (
   });
   if (settings) {
     formData.append('settings', JSON.stringify(settings));
+  }
+  if (options?.page_range) {
+    formData.append('page_range', JSON.stringify(options.page_range));
+  }
+  if (options?.to_formats) {
+    formData.append('to_formats', JSON.stringify(options.to_formats));
   }
 
   try {
@@ -143,11 +152,13 @@ export const convertFromUrl = async (
 // Batch URL conversion
 export const convertFromUrlsBatch = async (
   urls: string[],
-  settings?: Partial<ConversionSettings>
+  settings?: Partial<ConversionSettings>,
+  options?: { page_range?: [number, number]; to_formats?: string[] }
 ): Promise<BatchConversionResponse & { jobs: (BatchConversionResponse['jobs'][0] & { url?: string })[] }> => {
   const response = await api.post('/convert/url/batch', {
     urls,
     settings,
+    ...options,
   });
   return response.data;
 };
@@ -400,6 +411,37 @@ export const updateChunkingSettings = async (
   }>
 ): Promise<{ message: string; chunking: Record<string, unknown> }> => {
   const response = await api.put('/settings/chunking', settings);
+  return response.data;
+};
+
+export const getPipelineSettings = async (): Promise<{
+  pipeline: PipelineSettings;
+  options: {
+    kind: string[];
+    enable_remote_services: boolean;
+    allow_custom_vlm_config: boolean;
+  };
+}> => {
+  const response = await api.get('/settings/pipeline');
+  return response.data;
+};
+
+export const updatePipelineSettings = async (
+  settings: Partial<PipelineSettings>
+): Promise<{ message: string; pipeline: PipelineSettings }> => {
+  const response = await api.put('/settings/pipeline', settings);
+  return response.data;
+};
+
+export const getPdfSettings = async (): Promise<{ pdf: PdfSettings }> => {
+  const response = await api.get('/settings/pdf');
+  return response.data;
+};
+
+export const updatePdfSettings = async (
+  settings: Partial<PdfSettings>
+): Promise<{ message: string; pdf: PdfSettings }> => {
+  const response = await api.put('/settings/pdf', settings);
   return response.data;
 };
 

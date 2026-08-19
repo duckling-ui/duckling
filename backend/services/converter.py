@@ -49,6 +49,7 @@ from docling.datamodel.pipeline_options import (
     AcceleratorOptions,
     AcceleratorDevice,
 )
+import docling.datamodel.pipeline_options as pipeline_options_module
 
 try:
     from docling.chunking import HybridChunker
@@ -434,7 +435,7 @@ class ConverterService:
         enrichment_settings = settings.get("enrichment", {})
 
         ocr_enabled = ocr_settings.get("enabled", True)
-        table_enabled = table_settings.get("enabled", True)
+        table_enabled = table_settings.get("enabled", True) and table_settings.get("structure_extraction", True)
 
         # Create a settings hash for caching
         settings_key = json.dumps(settings, sort_keys=True)
@@ -445,6 +446,9 @@ class ConverterService:
 
         pdf_settings = settings.get("pdf", {})
         pipeline_settings = settings.get("pipeline", {})
+        picture_classification_enabled = bool(
+            enrichment_settings.get("picture_classification", False) or image_settings.get("classify", False)
+        )
         pipeline_kwargs = {
             "do_ocr": ocr_enabled,
             "do_table_structure": table_enabled,
@@ -455,13 +459,16 @@ class ConverterService:
             "accelerator_options": self._get_accelerator_options(settings),
             "do_code_enrichment": enrichment_settings.get("code_enrichment", False),
             "do_formula_enrichment": enrichment_settings.get("formula_enrichment", False),
-            "do_picture_classification": enrichment_settings.get("picture_classification", False),
+            "do_picture_classification": picture_classification_enabled,
             "do_picture_description": enrichment_settings.get("picture_description", False),
             "do_chart_extraction": enrichment_settings.get("chart_extraction", False),
             "do_pdf_heading_hierarchy": pdf_settings.get("do_pdf_heading_hierarchy", False),
             "image_export_mode": pdf_settings.get("image_export_mode", "placeholder"),
             "pdf_backend": pdf_settings.get("pdf_backend", "docling_parse"),
         }
+        heading_opts = pdf_settings.get("pdf_heading_hierarchy_options") or {}
+        if heading_opts:
+            pipeline_kwargs["pdf_heading_hierarchy_options"] = heading_opts
         fields = getattr(PdfPipelineOptions, "model_fields", None)
         allowed_fields = set(fields.keys()) if fields else set()
         if allowed_fields:
@@ -499,23 +506,54 @@ class ConverterService:
         if table_enabled:
             pipeline_options.table_structure_options = self._get_table_options(settings)
 
-        # Create format options for PDF and images (both use OCR)
-        pdf_format_option = PdfFormatOption(
-            pipeline_options=pipeline_options,
-        )
-
-        image_format_option = ImageFormatOption(
-            pipeline_options=pipeline_options,
-        )
-
         pipeline_kind = pipeline_settings.get("kind", "standard")
         logger.info("Creating DocumentConverter with pipeline=%s", pipeline_kind)
 
-        # Create converter with format options for all supported formats
-        format_options = {
-            InputFormat.PDF: pdf_format_option,
-            InputFormat.IMAGE: image_format_option,
-        }
+        # Create format options for PDF/images; try specialized pipeline kinds when available.
+        format_options = {}
+        if pipeline_kind in {"vlm", "asr"}:
+            logger.info("Requested pipeline kind=%s; attempting dynamic Docling pipeline support", pipeline_kind)
+        if pipeline_kind == "vlm":
+            vlm_pipeline_cls = getattr(pipeline_options_module, "VlmPipelineOptions", None)
+            vlm_format_cls = getattr(pipeline_options_module, "VlmFormatOption", None)
+            if vlm_pipeline_cls and vlm_format_cls:
+                vlm_preset = pipeline_settings.get("vlm_preset")
+                vlm_custom = pipeline_settings.get("vlm_custom_config")
+                if vlm_custom and SERVER_CONFIG.get("allow_custom_vlm_config", False):
+                    try:
+                        vlm_pipeline_options = vlm_pipeline_cls(**vlm_custom)
+                    except Exception:
+                        logger.exception("Invalid vlm_custom_config; falling back to preset/default")
+                        vlm_pipeline_options = vlm_pipeline_cls.from_preset(vlm_preset or "default")
+                else:
+                    vlm_pipeline_options = vlm_pipeline_cls.from_preset(vlm_preset or "default")
+                format_options[InputFormat.PDF] = vlm_format_cls(pipeline_options=vlm_pipeline_options)
+                format_options[InputFormat.IMAGE] = vlm_format_cls(pipeline_options=vlm_pipeline_options)
+            else:
+                logger.warning("Docling VLM classes unavailable; falling back to standard pipeline")
+        elif pipeline_kind == "asr":
+            asr_pipeline_cls = getattr(pipeline_options_module, "AsrPipelineOptions", None)
+            asr_format_cls = getattr(pipeline_options_module, "AsrFormatOption", None)
+            if asr_pipeline_cls and asr_format_cls:
+                asr_pipeline_options = asr_pipeline_cls()
+                for maybe_fmt in ("AUDIO", "VIDEO"):
+                    input_format = getattr(InputFormat, maybe_fmt, None)
+                    if input_format is not None:
+                        format_options[input_format] = asr_format_cls(pipeline_options=asr_pipeline_options)
+            else:
+                logger.warning("Docling ASR classes unavailable; falling back to standard pipeline")
+
+        if not format_options:
+            pdf_format_option = PdfFormatOption(
+                pipeline_options=pipeline_options,
+            )
+            image_format_option = ImageFormatOption(
+                pipeline_options=pipeline_options,
+            )
+            format_options = {
+                InputFormat.PDF: pdf_format_option,
+                InputFormat.IMAGE: image_format_option,
+            }
         converter = DocumentConverter(format_options=format_options)
 
         logger.info("DocumentConverter created successfully")
@@ -1452,11 +1490,27 @@ class ConverterService:
             ".bmp": "image",
             ".wav": "audio",
             ".mp3": "audio",
+            ".mp4": "video",
+            ".mov": "video",
+            ".mkv": "video",
             ".vtt": "vtt",
             ".xml": "xml",
             ".asciidoc": "asciidoc",
             ".adoc": "asciidoc",
-            ".json": "json"
+            ".json": "json",
+            ".odt": "odt",
+            ".ods": "ods",
+            ".odp": "odp",
+            ".epub": "epub",
+            ".tex": "latex",
+            ".latex": "latex",
+            ".eml": "email",
+            ".msg": "email",
+            ".dclx": "dclx",
+            ".doc": "doc",
+            ".ppt": "ppt",
+            ".xls": "xls",
+            ".txt": "text",
         }
         return format_map.get(ext)
 

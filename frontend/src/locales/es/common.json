@@ -77,6 +77,8 @@
       "ocr": "OCR (reconocimiento óptico de caracteres)",
       "tables": "Extracción de tablas",
       "images": "Manejo de imágenes",
+      "pipeline": "Pipeline",
+      "pdf": "Opciones del pipeline PDF",
       "performance": "Rendimiento",
       "chunking": "RAG / Fragmentado",
       "enrichment": "Enriquecimiento del documento",
@@ -200,6 +202,30 @@
         "description": "Tiempo máximo de procesamiento (0 = sin límite)"
       }
     },
+    "pipeline": {
+      "kind": {
+        "label": "Tipo de pipeline",
+        "description": "Selecciona un pipeline de procesamiento estándar, VLM o ASR"
+      },
+      "vlmPreset": {
+        "label": "Preset VLM",
+        "description": "ID del preset usado cuando el tipo de pipeline es VLM"
+      }
+    },
+    "pdf": {
+      "backend": {
+        "label": "Backend PDF",
+        "description": "Selección del backend PDF de Docling"
+      },
+      "imageExportMode": {
+        "label": "Modo de exportación de imágenes",
+        "description": "Cómo se representan las imágenes en las exportaciones"
+      },
+      "headingHierarchy": {
+        "label": "Inferir jerarquía de encabezados",
+        "description": "Inferir niveles de encabezado usando marcadores/numeración/estilo"
+      }
+    },
     "chunking": {
       "enable": {
         "label": "Habilitar fragmentado",
@@ -230,6 +256,26 @@
       "pictureDescription": {
         "label": "Descripción de imágenes",
         "description": "Genera leyendas con IA para imágenes (más lento)"
+      },
+      "chartExtraction": {
+        "label": "Extracción de gráficos",
+        "description": "Extraer datos numéricos de gráficos cuando esté disponible"
+      },
+      "pictureDescriptionPreset": {
+        "label": "Preset de descripción de imágenes",
+        "description": "Preset de configuración del modelo para subtítulos de imágenes"
+      },
+      "codeFormulaPreset": {
+        "label": "Preset de código/fórmula",
+        "description": "Preset para modelos de enriquecimiento de código y fórmulas"
+      },
+      "layoutPreset": {
+        "label": "Preset de diseño",
+        "description": "Preset para detección de diseño del documento"
+      },
+      "tableStructurePreset": {
+        "label": "Preset de estructura de tablas",
+        "description": "Preset para el modelo de estructura de tablas"
       },
       "warning": "⚠️ Las funciones de enriquecimiento pueden requerir descargas adicionales de modelos y aumentar significativamente el tiempo de procesamiento.",
       "preDownload": {
@@ -369,7 +415,13 @@
     "allSkippedTooLarge": "Todos los archivos superan el tamaño máximo (100MB por archivo).",
     "pickerSkippedUnsupported": "{{count}} archivo(s) de esta carpeta se omitieron (tipo no permitido en el selector, p. ej. Word .doc antiguo).",
     "allFilesUnsupportedByPicker": "Ningún archivo de esta selección es un tipo permitido. Por ejemplo se admiten .docx y .xlsx, no el .doc clásico. Convierte .doc a .docx si hace falta.",
-    "tooManyFilesUnexpected": "Se seleccionaron demasiados archivos a la vez. Prueba con un conjunto más pequeño."
+    "tooManyFilesUnexpected": "Se seleccionaron demasiados archivos a la vez. Prueba con un conjunto más pequeño.",
+    "pageRange": {
+      "title": "Rango de páginas opcional",
+      "description": "Procesar solo un subconjunto de páginas (inicio/fin, basado en 1)",
+      "startPlaceholder": "Página inicial",
+      "endPlaceholder": "Página final"
+    }
   },
   "export": {
     "completeTitle": "¡Conversión completa!",

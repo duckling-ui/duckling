@@ -37,8 +37,14 @@ import { DROPZONE_ACCEPT } from "../utils/supportedUploadFormats";
 import { filterSupportedFiles, MAX_UPLOAD_BYTES } from "../utils/fileFilter";
 
 interface DropZoneProps {
-  onFilesAccepted: (files: File[]) => void;
-  onUrlsSubmitted?: (urls: string[]) => void;
+  onFilesAccepted: (
+    files: File[],
+    options?: { page_range?: [number, number] },
+  ) => void;
+  onUrlsSubmitted?: (
+    urls: string[],
+    options?: { page_range?: [number, number] },
+  ) => void;
   isUploading: boolean;
   disabled?: boolean;
 }
@@ -76,6 +82,22 @@ export default function DropZone({
   const filesOnlyInputRef = useRef<HTMLInputElement>(null);
   const [inputMode, setInputMode] = useState<"file" | "url">("file");
   const [urlsInput, setUrlsInput] = useState("");
+  const [pageRangeStart, setPageRangeStart] = useState<string>("");
+  const [pageRangeEnd, setPageRangeEnd] = useState<string>("");
+
+  const getPageRangeOption = useCallback((): { page_range?: [number, number] } => {
+    const start = Number(pageRangeStart);
+    const end = Number(pageRangeEnd);
+    if (
+      Number.isInteger(start) &&
+      Number.isInteger(end) &&
+      start > 0 &&
+      end >= start
+    ) {
+      return { page_range: [start, end] };
+    }
+    return {};
+  }, [pageRangeEnd, pageRangeStart]);
 
   const onInputModeTabsKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
@@ -128,9 +150,9 @@ export default function DropZone({
         );
         return;
       }
-      onFilesAccepted(accepted);
+      onFilesAccepted(accepted, getPageRangeOption());
     },
-    [onFilesAccepted, t],
+    [getPageRangeOption, onFilesAccepted, t],
   );
 
   const onDrop = useCallback(
@@ -210,10 +232,10 @@ export default function DropZone({
     }
 
     if (onUrlsSubmitted) {
-      onUrlsSubmitted(lines);
+      onUrlsSubmitted(lines, getPageRangeOption());
       setUrlsInput("");
     }
-  }, [urlsInput, onUrlsSubmitted, t]);
+  }, [getPageRangeOption, urlsInput, onUrlsSubmitted, t]);
 
   const {
     getRootProps,
@@ -305,6 +327,33 @@ export default function DropZone({
               {t("dropzone.urls")}
             </span>
           </button>
+        </div>
+      </div>
+
+      <div className="mb-3 rounded-lg border border-dark-700 bg-dark-900/60 p-3">
+        <p className="text-sm font-medium text-dark-200">{t("dropzone.pageRange.title")}</p>
+        <p className="text-xs text-dark-500 mb-2">
+          {t("dropzone.pageRange.description")}
+        </p>
+        <div className="grid grid-cols-2 gap-2">
+          <input
+            type="number"
+            min={1}
+            value={pageRangeStart}
+            onChange={(e) => setPageRangeStart(e.target.value)}
+            placeholder={t("dropzone.pageRange.startPlaceholder")}
+            className="w-full rounded-md border border-dark-700 bg-dark-800 px-3 py-2 text-sm text-dark-100"
+            disabled={isUploading}
+          />
+          <input
+            type="number"
+            min={1}
+            value={pageRangeEnd}
+            onChange={(e) => setPageRangeEnd(e.target.value)}
+            placeholder={t("dropzone.pageRange.endPlaceholder")}
+            className="w-full rounded-md border border-dark-700 bg-dark-800 px-3 py-2 text-sm text-dark-100"
+            disabled={isUploading}
+          />
         </div>
       </div>
 
