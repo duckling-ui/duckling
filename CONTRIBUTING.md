@@ -317,6 +317,8 @@ If image scan gates fail on Python packaging CVEs, update and pin secure minimum
 
 Ray and docling-jobkit are **not** part of default `backend/requirements.txt` (they live in `backend/requirements-orchestration.txt`) because Ray bundles Java JARs that can fail Trivy publish gates until upstream releases patched versions. Do not add Ray back to the default Docker image requirements without validating Trivy scan results.
 
+When GitHub Dependabot reports npm/PyPI alerts, bump direct dependencies in `frontend/package.json` / `backend/requirements.txt`, regenerate `frontend/package-lock.json`, and add npm `overrides` for stubborn transitive packages if needed. Verify with `npm audit` (frontend) and backend tests before merge.
+
 To avoid merge-only validation loops, pull requests run **Docker publish rehearsal (PR gate)** in `.github/workflows/test.yml`, which builds local `linux/amd64` images with publish-parity flags (`--sbom`, `--provenance`), exports them with `docker save`, installs Trivy CLI on the runner, and enforces Trivy HIGH/CRITICAL scan gates via `--input` tar scanning before merge.
 
 When changing Dockerfiles, compose runtime settings, or publish automation, update:

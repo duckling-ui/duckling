@@ -94,6 +94,22 @@ def test_backend_requirements_exclude_ray_from_default_image():
     assert "docling-jobkit>=" in orchestration
 
 
+def test_backend_requirements_pin_dependabot_security_fixes():
+    requirements = _read("backend/requirements.txt")
+    assert "python-dotenv>=" in requirements
+    assert "python-dotenv==1.0.0" not in requirements
+    assert "pytest>=" in requirements
+    assert "pytest==7.4.3" not in requirements
+
+
+def test_frontend_lockfile_pins_patched_runtime_deps():
+    lockfile = _read("frontend/package-lock.json")
+    assert '"node_modules/axios"' in lockfile
+    assert '"version": "1.19.0"' in lockfile or '"version": "1.19.' in lockfile
+    assert '"node_modules/vitest"' in lockfile
+    assert '"version": "4.1.' in lockfile
+
+
 def test_backend_dockerfile_enforces_cve_fix_versions():
     dockerfile = _read("backend/Dockerfile")
     assert "scripts/harden_python_packages.py" in dockerfile

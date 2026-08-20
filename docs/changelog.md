@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 - Docker publish Trivy gate: Ray and docling-jobkit moved to optional `backend/requirements-orchestration.txt` (not installed in default API/worker images) because Ray bundles Java JARs with HIGH findings until upstream releases patched Jackson/httpcore versions.
+- Dependabot remediation: frontend lockfile refresh (`axios`, `vitest`, `vite`, `postcss`) plus npm overrides for transitive CVEs; backend minimum bumps for `python-dotenv` and `pytest`/`pytest-cov`.
 
 ### Planned
 
