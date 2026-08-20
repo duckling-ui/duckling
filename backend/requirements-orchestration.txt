@@ -1,0 +1,8 @@
+# Optional orchestration extras for advanced worker deployments.
+# Install in addition to requirements.txt when enabling Ray or jobkit connectors:
+#   pip install -r requirements.txt -r requirements-orchestration.txt
+#
+# Ray bundles Java components (ray_dist.jar) that can fail Trivy image gates until
+# upstream releases patched versions. Keep Ray out of the default API/worker image.
+ray>=2.49.0
+docling-jobkit>=0.7.0

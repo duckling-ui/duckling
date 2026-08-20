@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Extended conversion settings schema with pipeline, PDF, enrichment preset placeholders, and richer chunking controls.
 - Updated chunk generation to use a chunker factory and include raw text/image metadata when available.
 - Updated frontend API client to support API key headers and per-job conversion options (`page_range`, `to_formats`).
+- Moved Ray and docling-jobkit out of default `backend/requirements.txt` into optional `backend/requirements-orchestration.txt` so Docker publish Trivy gates are not blocked by Ray's bundled Java JAR CVEs; RQ/Redis remain in the default image.
 
 ### Planned
 

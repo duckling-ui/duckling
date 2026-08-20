@@ -10,6 +10,18 @@ Use environment variables to choose engine mode:
 - `DUCKLING_ENGINE_KIND=local|rq|ray`
 - `DUCKLING_RQ_REDIS_URL`
 - `DUCKLING_RAY_ADDRESS`
+
+### Optional orchestration dependencies
+
+Default Docker/API images install `backend/requirements.txt` only (includes `rq` + `redis` for queue mode). **Ray and docling-jobkit are optional** and live in `backend/requirements-orchestration.txt` because Ray bundles Java components (`ray_dist.jar`) that can fail Trivy publish gates until upstream ships patched Jackson/httpcore versions.
+
+Install Ray/jobkit extras only when you need those modes:
+
+```bash
+pip install -r backend/requirements.txt -r backend/requirements-orchestration.txt
+```
+
+When `ray` is not installed, the Ray orchestrator adapter falls back to local in-process execution.
 # Scaling
 
 Guide for scaling Duckling for high-traffic deployments.

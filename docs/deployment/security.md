@@ -278,7 +278,7 @@ source venv/bin/activate
 pip-audit
 ```
 
-When Docker publish workflows enforce Trivy scan gates, keep packaging-related Python dependencies in `backend/requirements.txt` at secure minimum versions (including `jaraco.context` and `wheel`) to avoid known high-severity CVEs during image scans.
+When Docker publish workflows enforce Trivy scan gates, keep packaging-related Python dependencies in `backend/requirements.txt` at secure minimum versions (including `jaraco.context` and `wheel`) to avoid known high-severity CVEs during image scans. Keep Ray out of the default backend image requirements (use optional `backend/requirements-orchestration.txt`) because Ray ships Java JARs that can fail Trivy until upstream patches land.
 
 ### Node.js Dependencies
 
