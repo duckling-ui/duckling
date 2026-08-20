@@ -80,6 +80,8 @@
       "ocr": "OCR (Optische Zeichenerkennung)",
       "tables": "Tabellenextraktion",
       "images": "Bildverarbeitung",
+      "pipeline": "Pipeline",
+      "pdf": "PDF-Pipeline-Optionen",
       "performance": "Leistung",
       "chunking": "RAG / Chunking",
       "enrichment": "Dokument-Anreicherung",
@@ -203,6 +205,30 @@
         "description": "Maximale Verarbeitungszeit (0 = unbegrenzt)"
       }
     },
+    "pipeline": {
+      "kind": {
+        "label": "Pipeline-Art",
+        "description": "Standard-, VLM- oder ASR-Verarbeitungspipeline auswählen"
+      },
+      "vlmPreset": {
+        "label": "VLM-Voreinstellung",
+        "description": "Voreinstellungs-ID bei Pipeline-Art VLM"
+      }
+    },
+    "pdf": {
+      "backend": {
+        "label": "PDF-Backend",
+        "description": "Auswahl des Docling-PDF-Backends"
+      },
+      "imageExportMode": {
+        "label": "Bild-Exportmodus",
+        "description": "Wie Bilder in Exporten dargestellt werden"
+      },
+      "headingHierarchy": {
+        "label": "Überschriftenhierarchie ableiten",
+        "description": "Überschriftenebenen aus Lesezeichen/Nummerierung/Stil ableiten"
+      }
+    },
     "chunking": {
       "enable": {
         "label": "Chunking aktivieren",
@@ -233,6 +259,26 @@
       "pictureDescription": {
         "label": "Bildbeschreibung",
         "description": "KI-Bildunterschriften erzeugen (langsamer)"
+      },
+      "chartExtraction": {
+        "label": "Diagramm-Extraktion",
+        "description": "Numerische Daten aus Diagrammen extrahieren (falls verfügbar)"
+      },
+      "pictureDescriptionPreset": {
+        "label": "Voreinstellung Bildbeschreibung",
+        "description": "Voreinstellung für Modellkonfiguration der Bildbeschriftung"
+      },
+      "codeFormulaPreset": {
+        "label": "Voreinstellung Code/Formel",
+        "description": "Voreinstellung für Code- und Formel-Anreicherung"
+      },
+      "layoutPreset": {
+        "label": "Layout-Voreinstellung",
+        "description": "Voreinstellung für Dokument-Layout-Erkennung"
+      },
+      "tableStructurePreset": {
+        "label": "Tabellenstruktur-Voreinstellung",
+        "description": "Voreinstellung für Tabellenstrukturmodell"
       },
       "warning": "⚠️ Anreicherungsfunktionen können zusätzliche Modelldownloads erfordern und die Verarbeitungszeit deutlich erhöhen.",
       "preDownload": {
@@ -358,7 +404,7 @@
     "convertAll": "Alle konvertieren",
     "loading": "Laden…",
     "pressEnter": "Enter drücken zum Absenden oder auf Konvertieren klicken",
-    "supportedHint": "Unterstützt: PDF, DOCX, PPTX, XLSX, HTML, Markdown, Bilder und mehr",
+    "supportedHint": "Unterstützt: PDF, DOCX, PPTX, XLSX, ODT, EPUB, EML/MSG, HTML, Markdown, AsciiDoc, XML, DCLX, VTT, Bilder, Audio, Video und mehr",
     "maxFileSize": "Maximale Dateigröße: 100MB pro Datei",
     "maxDownloadSize": "Maximale Download-Größe: 100MB pro URL",
     "errorEnterUrl": "Bitte eine URL eingeben",
@@ -372,7 +418,13 @@
     "allSkippedTooLarge": "Alle ausgewählten Dateien überschreiten die maximale Größe (100MB pro Datei).",
     "pickerSkippedUnsupported": "{{count}} Datei(en) in diesem Ordner wurden übersprungen (vom Dialog nicht unterstützter Typ, z. B. altes Word .doc).",
     "allFilesUnsupportedByPicker": "Keine Datei in dieser Auswahl hat einen erlaubten Typ. Z. B. .docx und .xlsx sind erlaubt, nicht das alte .doc. Konvertieren Sie .doc ggf. nach .docx.",
-    "tooManyFilesUnexpected": "Es wurden auf einmal zu viele Dateien ausgewählt. Versuchen Sie eine kleinere Auswahl."
+    "tooManyFilesUnexpected": "Es wurden auf einmal zu viele Dateien ausgewählt. Versuchen Sie eine kleinere Auswahl.",
+    "pageRange": {
+      "title": "Optionaler Seitenbereich",
+      "description": "Nur einen Teil der Seiten verarbeiten (Start/Ende, 1-basiert)",
+      "startPlaceholder": "Startseite",
+      "endPlaceholder": "Endseite"
+    }
   },
   "export": {
     "completeTitle": "Konvertierung abgeschlossen!",

@@ -18,6 +18,8 @@ When adding a new **output export format**, register it consistently: `backend/c
 
 When wiring Docling OCR engine options in `backend/services/converter.py`, use `_resolve_ocr_mode` / `_instantiate_ocr_options` so settings map to current Docling `OcrMode` + `scale`, and kwargs removed in newer Docling releases (for example `bitmap_area_threshold`) are dropped instead of raising pydantic `extra_forbidden` errors. Keep `backend/requirements.txt` on current stable floors (`docling>=2.118.0`, `docling-core>=2.90.0,<3.0.0`).
 
+When adding pipeline/chunking settings for docling-serve parity, update all of these together to avoid drift: `backend/config.py` defaults, `backend/routes/settings.py` GET/PUT validators, `backend/services/converter.py` runtime wiring, `frontend/src/types/index.ts`, `frontend/src/components/SettingsPanel.tsx`, and locale strings.
+
 When cutting a stable release, bump `frontend/package.json` (and lockfile), `frontend/src/App.tsx` (`APP_VERSION`), `mkdocs.yml` mike `default`, `scripts/get_version.py` fallback, `.github/workflows/deploy-docs.yml` fallback, `docs/versions.json`, roll `[Unreleased]` into `CHANGELOG.md` / `docs/**/changelog.md`, and update `SECURITY.md` supported versions. Keep `tests/test_get_version.py` version-agreement assertions in sync.
 
 ## How to Contribute
@@ -312,6 +314,8 @@ Container publishing is security-gated. The publish workflow now:
 - signs release images using keyless Cosign
 
 If image scan gates fail on Python packaging CVEs, update and pin secure minimum versions in `backend/requirements.txt` (for example, `jaraco.context` and `wheel`) and add/adjust regression assertions in `tests/test_docker_hardening.py`.
+
+Ray and docling-jobkit are **not** part of default `backend/requirements.txt` (they live in `backend/requirements-orchestration.txt`) because Ray bundles Java JARs that can fail Trivy publish gates until upstream releases patched versions. Do not add Ray back to the default Docker image requirements without validating Trivy scan results.
 
 To avoid merge-only validation loops, pull requests run **Docker publish rehearsal (PR gate)** in `.github/workflows/test.yml`, which builds local `linux/amd64` images with publish-parity flags (`--sbom`, `--provenance`), exports them with `docker save`, installs Trivy CLI on the runner, and enforces Trivy HIGH/CRITICAL scan gates via `--input` tar scanning before merge.
 

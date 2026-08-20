@@ -40,6 +40,10 @@ import {
   updatePerformanceSettings,
   getChunkingSettings,
   updateChunkingSettings,
+  getPipelineSettings,
+  updatePipelineSettings,
+  getPdfSettings,
+  updatePdfSettings,
   getEnrichmentSettings,
   updateEnrichmentSettings,
   getFormats,
@@ -374,6 +378,51 @@ export function useEnrichmentSettings() {
   };
 }
 
+export function usePipelineSettings() {
+  const queryClient = useQueryClient();
+  const pipelineQuery = useQuery({
+    queryKey: ['settings', 'pipeline'],
+    queryFn: getPipelineSettings,
+  });
+  const updateMutation = useMutation({
+    mutationFn: updatePipelineSettings,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['settings'] });
+      queryClient.invalidateQueries({ queryKey: ['settings', 'pipeline'] });
+    },
+  });
+  return {
+    pipeline: pipelineQuery.data?.pipeline,
+    options: pipelineQuery.data?.options,
+    isLoading: pipelineQuery.isLoading,
+    error: pipelineQuery.error,
+    updatePipeline: updateMutation.mutate,
+    isUpdating: updateMutation.isPending,
+  };
+}
+
+export function usePdfSettings() {
+  const queryClient = useQueryClient();
+  const pdfQuery = useQuery({
+    queryKey: ['settings', 'pdf'],
+    queryFn: getPdfSettings,
+  });
+  const updateMutation = useMutation({
+    mutationFn: updatePdfSettings,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['settings'] });
+      queryClient.invalidateQueries({ queryKey: ['settings', 'pdf'] });
+    },
+  });
+  return {
+    pdf: pdfQuery.data?.pdf,
+    isLoading: pdfQuery.isLoading,
+    error: pdfQuery.error,
+    updatePdf: updateMutation.mutate,
+    isUpdating: updateMutation.isPending,
+  };
+}
+
 // Formats hook
 export function useFormats() {
   const formatsQuery = useQuery({
@@ -396,6 +445,8 @@ export function useAllSettings() {
   const tables = useTableSettings();
   const images = useImageSettings();
   const enrichment = useEnrichmentSettings();
+  const pipeline = usePipelineSettings();
+  const pdf = usePdfSettings();
   const output = useOutputSettings();
   const performance = usePerformanceSettings();
   const chunking = useChunkingSettings();
@@ -406,6 +457,8 @@ export function useAllSettings() {
     tables,
     images,
     enrichment,
+    pipeline,
+    pdf,
     output,
     performance,
     chunking,
@@ -415,6 +468,8 @@ export function useAllSettings() {
       tables.isLoading ||
       images.isLoading ||
       enrichment.isLoading ||
+      pipeline.isLoading ||
+      pdf.isLoading ||
       output.isLoading ||
       performance.isLoading ||
       chunking.isLoading,

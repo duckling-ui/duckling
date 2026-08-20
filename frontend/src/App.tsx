@@ -75,16 +75,16 @@ export default function App() {
   });
 
   const handleFilesAcceptedUnified = useCallback(
-    (files: File[]) => {
-      uploadFiles(files);
+    (files: File[], options?: { page_range?: [number, number] }) => {
+      uploadFiles(files, undefined, options);
     },
     [uploadFiles],
   );
 
   /** URL tab: hand off URL conversion to useConversion state machine. */
   const handleUrlsSubmittedUnified = useCallback(
-    (urls: string[]) => {
-      startUrlConversion(urls);
+    (urls: string[], options?: { page_range?: [number, number] }) => {
+      startUrlConversion(urls, undefined, options);
     },
     [startUrlConversion],
   );

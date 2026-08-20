@@ -84,6 +84,16 @@ def test_backend_requirements_pin_cve_fixes_for_image_scans():
     assert "wheel==0.46.2" in requirements or "wheel>=0.46.2" in requirements
 
 
+def test_backend_requirements_exclude_ray_from_default_image():
+    """Ray ships Java JARs that can fail Trivy publish gates; keep it optional."""
+    requirements = _read("backend/requirements.txt")
+    assert "ray>=" not in requirements
+    assert "docling-jobkit>=" not in requirements
+    orchestration = _read("backend/requirements-orchestration.txt")
+    assert "ray>=" in orchestration
+    assert "docling-jobkit>=" in orchestration
+
+
 def test_backend_dockerfile_enforces_cve_fix_versions():
     dockerfile = _read("backend/Dockerfile")
     assert "scripts/harden_python_packages.py" in dockerfile

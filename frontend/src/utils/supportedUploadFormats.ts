@@ -55,6 +55,21 @@ export const CONVERT_ALLOWED_EXTENSIONS: ReadonlySet<string> = new Set([
   "txt",
   "asciidoc",
   "adoc",
+  "odt",
+  "ods",
+  "odp",
+  "epub",
+  "tex",
+  "latex",
+  "eml",
+  "msg",
+  "dclx",
+  "mp4",
+  "mov",
+  "mkv",
+  "doc",
+  "ppt",
+  "xls",
 ]);
 
 /**
@@ -101,4 +116,11 @@ export const DROPZONE_ACCEPT: Accept = {
   "application/xml": [".xml", ".XML"],
   "application/json": [".json", ".JSON"],
   "text/plain": [".txt", ".asciidoc", ".adoc", ".TXT", ".ASCIIDOC", ".ADOC"],
+  "application/epub+zip": [".epub", ".EPUB"],
+  "application/vnd.oasis.opendocument.text": [".odt", ".ODT"],
+  "application/vnd.oasis.opendocument.spreadsheet": [".ods", ".ODS"],
+  "application/vnd.oasis.opendocument.presentation": [".odp", ".ODP"],
+  "text/x-tex": [".tex", ".latex", ".TEX", ".LATEX"],
+  "message/rfc822": [".eml", ".EML", ".msg", ".MSG"],
+  "video/*": [".mp4", ".mov", ".mkv", ".MP4", ".MOV", ".MKV"],
 };

@@ -1,3 +1,12 @@
+### Advanced Chunking Controls
+
+Chunking settings now support additional parity-oriented controls:
+
+- Chunker strategy (`hybrid` or `hierarchical`)
+- Tokenizer selection
+- Markdown table/image serialization
+- Image placeholders
+- Optional `raw_text` in chunk payloads
 # Features
 
 Duckling provides a comprehensive set of features for document conversion.

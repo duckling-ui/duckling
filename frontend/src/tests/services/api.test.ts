@@ -73,14 +73,14 @@ describe('API Service', () => {
   describe('Formats', () => {
     it('should have correct format structure', () => {
       const expectedInputFormats = [
-        'pdf', 'docx', 'pptx', 'xlsx', 'html', 'md', 'csv', 'image', 'audio', 'vtt', 'xml', 'asciidoc'
+        'pdf', 'docx', 'pptx', 'xlsx', 'html', 'md', 'csv', 'image', 'audio', 'video', 'vtt', 'xml', 'asciidoc', 'epub', 'latex', 'email', 'odt', 'ods', 'odp', 'dclx'
       ];
 
-      const expectedOutputFormats = ['markdown', 'html', 'json', 'doctags', 'doclang', 'text'];
+      const expectedOutputFormats = ['markdown', 'html', 'html_split_page', 'json', 'yaml', 'doctags', 'doclang', 'dclx', 'vtt', 'text', 'document_tokens'];
 
       // Verify format IDs match expected
       expect(expectedInputFormats.length).toBeGreaterThan(0);
-      expect(expectedOutputFormats.length).toBe(6);
+      expect(expectedOutputFormats.length).toBe(11);
       expect(expectedOutputFormats).toContain('doclang');
     });
   });

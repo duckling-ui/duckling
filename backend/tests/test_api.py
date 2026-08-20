@@ -87,6 +87,16 @@ class TestFormatsEndpoint:
         assert doclang["name"] == "DocLang"
         assert doclang["extension"] == ".dclg.xml"
 
+    def test_output_formats_include_parity_formats(self, client):
+        """Test legacy formats endpoint lists parity export formats."""
+        response = client.get("/api/formats")
+        assert response.status_code == 200
+        data = json.loads(response.data)
+        output_ids = [f["id"] for f in data["output_formats"]]
+        assert "yaml" in output_ids
+        assert "vtt" in output_ids
+        assert "dclx" in output_ids
+
 
 class TestSettingsFormatsEndpoint:
     """Tests for settings formats endpoint."""
@@ -201,6 +211,31 @@ class TestConvertEndpoint:
         assert result.get("error")
         assert len(result.get("jobs", [])) == 2
         assert all(j["status"] == "rejected" for j in result["jobs"])
+
+    def test_convert_batch_connectors_validation(self, client):
+        """Connector batch endpoint validates required fields."""
+        response = client.post(
+            "/api/convert/batch/connectors",
+            data=json.dumps({"sources": [], "target": {}}),
+            content_type="application/json",
+        )
+        assert response.status_code == 400
+
+    def test_convert_batch_connectors_accepts_valid_payload(self, client):
+        response = client.post(
+            "/api/convert/batch/connectors",
+            data=json.dumps(
+                {
+                    "sources": [{"kind": "s3", "bucket": "incoming", "prefix": "docs/"}],
+                    "target": {"kind": "s3", "bucket": "converted", "prefix": "results/"},
+                    "options": {},
+                }
+            ),
+            content_type="application/json",
+        )
+        assert response.status_code == 202
+        result = json.loads(response.data)
+        assert result["status"] == "accepted"
 
 
 class TestSettingsEndpoint:

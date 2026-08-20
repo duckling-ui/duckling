@@ -25,6 +25,7 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from server_config import get_server_config
 
 # Load .env file from the backend directory
 BACKEND_DIR_FOR_ENV = Path(__file__).parent.absolute()
@@ -84,12 +85,22 @@ class Config:
         "pdf", "docx", "pptx", "xlsx", "html", "htm",
         "md", "markdown", "MD", "csv", "png", "jpg", "jpeg",
         "tiff", "tif", "gif", "webp", "bmp",
-        "wav", "mp3", "vtt", "xml", "json", "txt", "asciidoc", "adoc"
+        "wav", "mp3", "vtt", "xml", "json", "txt", "asciidoc", "adoc",
+        "odt", "ods", "odp", "epub", "tex", "latex", "eml", "msg", "dclx",
+        "mp4", "mov", "mkv", "doc", "ppt", "xls"
     }
 
     # Database
     SQLALCHEMY_DATABASE_URI = DATABASE_URL
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    API_KEY = os.getenv("DUCKLING_API_KEY", "")
+    CONFIG_FILE = os.getenv("DUCKLING_CONFIG_FILE", "")
+    ENGINE_KIND = os.getenv("DUCKLING_ENGINE_KIND", "local")
+    RQ_REDIS_URL = os.getenv("DUCKLING_RQ_REDIS_URL", "redis://redis:6379/0")
+    RAY_ADDRESS = os.getenv("DUCKLING_RAY_ADDRESS", "")
+    LOG_LEVEL = os.getenv("DUCKLING_LOG_LEVEL", "INFO")
+    LOG_FORMAT = os.getenv("DUCKLING_LOG_FORMAT", "text")
+    CORS_ORIGINS = get_server_config(BACKEND_DIR.parent).get("cors_origins", ["http://localhost:3000", "http://localhost:5173"])
 
 
 class DevelopmentConfig(Config):
@@ -128,6 +139,23 @@ def get_config():
 
 # Default conversion settings - comprehensive settings for all Docling features
 DEFAULT_CONVERSION_SETTINGS = {
+    "pipeline": {
+        "kind": "standard",  # standard, vlm, asr
+        "vlm_preset": "default",
+        "vlm_custom_config": None,
+        "force_backend_text": False,
+    },
+    "pdf": {
+        "pdf_backend": "docling_parse",
+        "image_export_mode": "placeholder",  # placeholder, embedded, referenced
+        "do_pdf_heading_hierarchy": False,
+        "pdf_heading_hierarchy_options": {
+            "use_bookmarks": True,
+            "use_numbering": True,
+            "use_style": True,
+            "max_level": 6,
+        },
+    },
     "ocr": {
         "enabled": True,
         "language": "en",
@@ -156,7 +184,15 @@ DEFAULT_CONVERSION_SETTINGS = {
         "code_enrichment": False,  # Enhance code blocks with language detection
         "formula_enrichment": False,  # Extract LaTeX from mathematical formulas
         "picture_classification": False,  # Classify images (figure, chart, etc.)
-        "picture_description": False  # Generate captions using vision-language models
+        "picture_description": False,  # Generate captions using vision-language models
+        "chart_extraction": False,
+        "picture_description_preset": None,
+        "picture_description_custom_config": None,
+        "code_formula_preset": None,
+        "code_formula_custom_config": None,
+        "picture_classification_preset": None,
+        "layout_preset": None,
+        "table_structure_preset": None,
     },
     "output": {
         "default_format": "markdown"
@@ -168,9 +204,16 @@ DEFAULT_CONVERSION_SETTINGS = {
     },
     "chunking": {
         "enabled": False,
+        "chunker": "hybrid",  # hybrid, hierarchical
+        "chunking_preset": None,
         "max_tokens": 512,
-        "merge_peers": True
-    }
+        "merge_peers": True,
+        "tokenizer": "sentence-transformers/all-MiniLM-L6-v2",
+        "use_markdown_tables": False,
+        "use_markdown_images": False,
+        "image_placeholder": "[image]",
+        "include_raw_text": False,
+    },
 }
 
 # Supported input formats
@@ -183,6 +226,16 @@ SUPPORTED_INPUT_FORMATS = [
     {"id": "md", "name": "Markdown", "extensions": [".md", ".markdown", ".MD"], "icon": "document"},
     {"id": "image", "name": "Image", "extensions": [".png", ".jpg", ".jpeg", ".tiff", ".tif", ".gif", ".webp", ".bmp"], "icon": "image"},
     {"id": "asciidoc", "name": "AsciiDoc", "extensions": [".asciidoc", ".adoc"], "icon": "document"},
+    {"id": "email", "name": "Email", "extensions": [".eml", ".msg"], "icon": "document"},
+    {"id": "epub", "name": "EPUB", "extensions": [".epub"], "icon": "document"},
+    {"id": "latex", "name": "LaTeX", "extensions": [".tex", ".latex"], "icon": "document"},
+    {"id": "odt", "name": "OpenDocument Text", "extensions": [".odt"], "icon": "document"},
+    {"id": "ods", "name": "OpenDocument Spreadsheet", "extensions": [".ods"], "icon": "spreadsheet"},
+    {"id": "odp", "name": "OpenDocument Presentation", "extensions": [".odp"], "icon": "presentation"},
+    {"id": "dclx", "name": "Docling Exchange", "extensions": [".dclx"], "icon": "document"},
+    {"id": "audio", "name": "Audio", "extensions": [".wav", ".mp3"], "icon": "audio"},
+    {"id": "video", "name": "Video", "extensions": [".mp4", ".mov", ".mkv"], "icon": "video"},
+    {"id": "vtt", "name": "WebVTT", "extensions": [".vtt"], "icon": "document"},
     {"id": "xml_pubmed", "name": "PubMed XML", "extensions": [".xml"], "icon": "document"},
     {"id": "xml_uspto", "name": "USPTO Patent XML", "extensions": [".xml"], "icon": "document"},
 ]
@@ -195,6 +248,10 @@ SUPPORTED_OUTPUT_FORMATS = [
     {"id": "text", "name": "Plain Text", "extension": ".txt", "mime_type": "text/plain"},
     {"id": "doctags", "name": "DocTags", "extension": ".doctags", "mime_type": "text/plain"},
     {"id": "doclang", "name": "DocLang", "extension": ".dclg.xml", "mime_type": "application/xml"},
+    {"id": "dclx", "name": "DCLX", "extension": ".dclx", "mime_type": "application/octet-stream"},
+    {"id": "yaml", "name": "YAML", "extension": ".yaml", "mime_type": "application/yaml"},
+    {"id": "html_split_page", "name": "HTML (Split by Page)", "extension": ".html", "mime_type": "text/html"},
+    {"id": "vtt", "name": "WebVTT", "extension": ".vtt", "mime_type": "text/vtt"},
     {"id": "document_tokens", "name": "Document Tokens", "extension": ".tokens.json", "mime_type": "application/json"},
 ]
 
@@ -251,4 +308,6 @@ OCR_LANGUAGES = [
     {"code": "fi", "name": "Finnish"},
     {"code": "no", "name": "Norwegian"},
 ]
+
+SERVER_CONFIG = get_server_config(BACKEND_DIR.parent)
 

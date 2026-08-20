@@ -23,10 +23,11 @@
 """SQLite database models for conversion history."""
 
 import json
+import logging
 import os
 import threading
 from datetime import datetime
-from sqlalchemy import create_engine, Column, String, Float, DateTime, Text, Integer
+from sqlalchemy import create_engine, Column, String, Float, DateTime, Text, Integer, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.pool import StaticPool
@@ -54,6 +55,24 @@ _init_lock = threading.Lock()
 _initialized = False
 
 Base = declarative_base()
+logger = logging.getLogger(__name__)
+
+
+_CONVERSIONS_SQLITE_COLUMN_TYPES = {
+    "document_json_path": "VARCHAR(500)",
+    "processing_duration_seconds": "REAL",
+    "ocr_backend_used": "VARCHAR(50)",
+    "page_count": "INTEGER",
+    "source_type": "VARCHAR(20)",
+    "cpu_usage_avg_during_conversion": "REAL",
+    "performance_device_used": "VARCHAR(20)",
+    "images_classify_enabled": "VARCHAR(10)",
+    "content_hash": "VARCHAR(64)",
+    "engine": "VARCHAR(20)",
+    "external_task_id": "VARCHAR(128)",
+    "page_range": "VARCHAR(64)",
+    "requested_output_formats": "TEXT",
+}
 
 
 class Conversion(Base):
@@ -82,6 +101,10 @@ class Conversion(Base):
     performance_device_used = Column(String(20), nullable=True)  # cpu, cuda, mps, auto
     images_classify_enabled = Column(String(10), nullable=True)  # "true" | "false"
     content_hash = Column(String(64), nullable=True)  # Content-addressed dedup hash
+    engine = Column(String(20), nullable=True)
+    external_task_id = Column(String(128), nullable=True)
+    page_range = Column(String(64), nullable=True)
+    requested_output_formats = Column(Text, nullable=True)
 
     def to_dict(self):
         """Convert model to dictionary."""
@@ -107,6 +130,10 @@ class Conversion(Base):
             "performance_device_used": self.performance_device_used,
             "images_classify_enabled": self.images_classify_enabled,
             "content_hash": self.content_hash,
+            "engine": self.engine,
+            "external_task_id": self.external_task_id,
+            "page_range": self.page_range,
+            "requested_output_formats": json.loads(self.requested_output_formats) if self.requested_output_formats else None,
         }
 
     def set_settings(self, settings_dict):
@@ -162,10 +189,33 @@ def init_db():
         try:
             # create_all already uses checkfirst=True by default
             Base.metadata.create_all(engine)
+            _ensure_sqlite_conversions_columns()
             _initialized = True
         except Exception:
             # Table might already exist from another process, that's OK
             _initialized = True
+
+
+def _ensure_sqlite_conversions_columns():
+    """Backfill newly added conversions columns for legacy SQLite databases."""
+    if not str(engine.url).startswith("sqlite"):
+        return
+
+    with engine.begin() as conn:
+        table_info = conn.execute(text("PRAGMA table_info(conversions)")).fetchall()
+        if not table_info:
+            return
+
+        existing = {row[1] for row in table_info}
+        for column_name, column_type in _CONVERSIONS_SQLITE_COLUMN_TYPES.items():
+            if column_name in existing:
+                continue
+            conn.execute(
+                text(
+                    f"ALTER TABLE conversions ADD COLUMN {column_name} {column_type}"
+                )
+            )
+            logger.info("Added missing conversions.%s column", column_name)
 
 
 @contextmanager

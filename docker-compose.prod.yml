@@ -2,6 +2,13 @@
 # Usage: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 
 services:
+  redis:
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
   backend:
     build:
       target: production
@@ -17,6 +24,11 @@ services:
       - FLASK_DEBUG=false
       - DEBUG=False
       - SECRET_KEY=${SECRET_KEY:-please-change-this-secret-key}
+      - DUCKLING_ENGINE_KIND=${DUCKLING_ENGINE_KIND:-rq}
+      - DUCKLING_RQ_REDIS_URL=${DUCKLING_RQ_REDIS_URL:-redis://redis:6379/0}
+      - DUCKLING_LOG_LEVEL=${DUCKLING_LOG_LEVEL:-INFO}
+      - DUCKLING_LOG_FORMAT=${DUCKLING_LOG_FORMAT:-json}
+      - DUCKLING_API_KEY=${DUCKLING_API_KEY:-}
     deploy:
       resources:
         limits:
@@ -44,4 +56,22 @@ services:
         reservations:
           cpus: '0.1'
           memory: 64M
+
+  rq-worker:
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      - DUCKLING_ENGINE_KIND=rq
+      - DUCKLING_RQ_REDIS_URL=${DUCKLING_RQ_REDIS_URL:-redis://redis:6379/0}
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '0.5'
+          memory: 1G
 

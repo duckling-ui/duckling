@@ -34,10 +34,12 @@ from flask import Flask, jsonify, send_from_directory, abort, request
 from flask_cors import CORS
 
 from config import get_config
+from logging_config import configure_logging
 from models.database import init_db
 from routes import convert_bp, settings_bp, history_bp
 
 logger = logging.getLogger(__name__)
+configure_logging()
 
 # Docs directories - handle both Docker and local environments
 BACKEND_DIR = Path(__file__).parent.absolute()
@@ -191,11 +193,25 @@ def create_app(config_class=None):
     # Enable CORS for frontend communication
     CORS(app, resources={
         r"/api/*": {
-            "origins": ["http://localhost:3000", "http://localhost:5173"],
+            "origins": getattr(config_class, "CORS_ORIGINS", ["http://localhost:3000", "http://localhost:5173"]),
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization"]
+            "allow_headers": ["Content-Type", "Authorization", "X-Api-Key"]
         }
     })
+
+    @app.before_request
+    def require_api_key():
+        api_key = app.config.get("API_KEY", "")
+        if not api_key:
+            return None
+        path = request.path or ""
+        if path == "/api/health" or path.startswith("/api/docs/site"):
+            return None
+        if path.startswith("/api/"):
+            provided = request.headers.get("X-Api-Key", "")
+            if provided != api_key:
+                return jsonify({"error": "Unauthorized", "message": "Invalid API key"}), 401
+        return None
 
     # Initialize database
     with app.app_context():
@@ -241,9 +257,17 @@ def create_app(config_class=None):
                 {"id": "csv", "name": "CSV", "extensions": [".csv"]},
                 {"id": "image", "name": "Image", "extensions": [".png", ".jpg", ".jpeg", ".tiff", ".tif", ".gif", ".webp", ".bmp"]},
                 {"id": "audio", "name": "Audio", "extensions": [".wav", ".mp3"]},
+                {"id": "video", "name": "Video", "extensions": [".mp4", ".mov", ".mkv"]},
                 {"id": "vtt", "name": "WebVTT", "extensions": [".vtt"]},
                 {"id": "xml", "name": "XML", "extensions": [".xml"]},
-                {"id": "asciidoc", "name": "AsciiDoc", "extensions": [".asciidoc", ".adoc"]}
+                {"id": "asciidoc", "name": "AsciiDoc", "extensions": [".asciidoc", ".adoc"]},
+                {"id": "odt", "name": "OpenDocument Text", "extensions": [".odt"]},
+                {"id": "ods", "name": "OpenDocument Spreadsheet", "extensions": [".ods"]},
+                {"id": "odp", "name": "OpenDocument Presentation", "extensions": [".odp"]},
+                {"id": "epub", "name": "EPUB", "extensions": [".epub"]},
+                {"id": "latex", "name": "LaTeX", "extensions": [".tex", ".latex"]},
+                {"id": "email", "name": "Email", "extensions": [".eml", ".msg"]},
+                {"id": "dclx", "name": "DCLX", "extensions": [".dclx"]}
             ],
             "output_formats": [
                 {"id": "markdown", "name": "Markdown", "extension": ".md"},
@@ -251,6 +275,10 @@ def create_app(config_class=None):
                 {"id": "json", "name": "JSON", "extension": ".json"},
                 {"id": "doctags", "name": "DocTags", "extension": ".doctags"},
                 {"id": "doclang", "name": "DocLang", "extension": ".dclg.xml"},
+                {"id": "dclx", "name": "DCLX", "extension": ".dclx"},
+                {"id": "yaml", "name": "YAML", "extension": ".yaml"},
+                {"id": "html_split_page", "name": "HTML (Split by Page)", "extension": ".html"},
+                {"id": "vtt", "name": "WebVTT", "extension": ".vtt"},
                 {"id": "text", "name": "Plain Text", "extension": ".txt"}
             ]
         })

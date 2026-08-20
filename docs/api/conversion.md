@@ -1,3 +1,17 @@
+### Advanced per-job options
+
+Duckling conversion endpoints also accept parity-oriented job options:
+
+- `page_range`: two-element array `[start, end]` (1-based pages)
+- `to_formats`: explicit output format list for this job
+
+### Connector batch endpoint
+
+For enterprise workflow integration, Duckling exposes:
+
+- `POST /api/convert/batch/connectors`
+
+This endpoint accepts `sources`, `target`, and `options` payloads aligned to connector-based batch orchestration patterns.
 # Conversion API
 
 Endpoints for uploading and converting documents.

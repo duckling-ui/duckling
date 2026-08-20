@@ -81,8 +81,15 @@ export interface PerformanceSettings {
 
 export interface ChunkingSettings {
   enabled: boolean;
+  chunker: 'hybrid' | 'hierarchical';
+  chunking_preset?: string | null;
   max_tokens: number;
   merge_peers: boolean;
+  tokenizer: string;
+  use_markdown_tables: boolean;
+  use_markdown_images: boolean;
+  image_placeholder: string;
+  include_raw_text: boolean;
 }
 
 export interface EnrichmentSettings {
@@ -90,6 +97,33 @@ export interface EnrichmentSettings {
   formula_enrichment: boolean;
   picture_classification: boolean;
   picture_description: boolean;
+  chart_extraction: boolean;
+  picture_description_preset?: string | null;
+  picture_description_custom_config?: Record<string, unknown> | null;
+  code_formula_preset?: string | null;
+  code_formula_custom_config?: Record<string, unknown> | null;
+  picture_classification_preset?: string | null;
+  layout_preset?: string | null;
+  table_structure_preset?: string | null;
+}
+
+export interface PipelineSettings {
+  kind: 'standard' | 'vlm' | 'asr';
+  vlm_preset: string;
+  vlm_custom_config?: Record<string, unknown> | null;
+  force_backend_text: boolean;
+}
+
+export interface PdfSettings {
+  pdf_backend: string;
+  image_export_mode: 'placeholder' | 'embedded' | 'referenced';
+  do_pdf_heading_hierarchy: boolean;
+  pdf_heading_hierarchy_options: {
+    use_bookmarks: boolean;
+    use_numbering: boolean;
+    use_style: boolean;
+    max_level: number;
+  };
 }
 
 export interface OutputSettings {
@@ -97,6 +131,8 @@ export interface OutputSettings {
 }
 
 export interface ConversionSettings {
+  pipeline: PipelineSettings;
+  pdf: PdfSettings;
   ocr: OcrSettings;
   tables: TableSettings;
   images: ImageSettings;
@@ -381,8 +417,14 @@ export interface BatchConversionResponse {
 // Component Props Types
 
 export interface DropZoneProps {
-  onFilesAccepted: (files: File[]) => void;
-  onUrlsSubmitted?: (urls: string[]) => void;
+  onFilesAccepted: (
+    files: File[],
+    options?: { page_range?: [number, number] }
+  ) => void;
+  onUrlsSubmitted?: (
+    urls: string[],
+    options?: { page_range?: [number, number] }
+  ) => void;
   isUploading: boolean;
   disabled?: boolean;
 }

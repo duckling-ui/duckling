@@ -39,6 +39,8 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   useSlideOver({ isOpen, onClose, panelRef });
   const {
+    pipeline,
+    pdf,
     ocr,
     tables,
     images,
@@ -532,6 +534,67 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 </SettingsSection>
 
                 {/* Performance Settings */}
+                <SettingsSection title={t("settings.sections.pipeline")} icon="layers">
+                  <SelectSetting
+                    label={t("settings.pipeline.kind.label")}
+                    description={t("settings.pipeline.kind.description")}
+                    value={pipeline?.pipeline?.kind ?? "standard"}
+                    options={[
+                      { value: "standard", label: "Standard" },
+                      { value: "vlm", label: "VLM" },
+                      { value: "asr", label: "ASR" },
+                    ]}
+                    onChange={(kind) => pipeline?.updatePipeline?.({ kind: kind as "standard" | "vlm" | "asr" })}
+                    disabled={pipeline?.isUpdating}
+                  />
+                  <SelectSetting
+                    label={t("settings.pipeline.vlmPreset.label")}
+                    description={t("settings.pipeline.vlmPreset.description")}
+                    value={pipeline?.pipeline?.vlm_preset ?? "default"}
+                    options={[
+                      { value: "default", label: "default" },
+                      { value: "granite_docling", label: "granite_docling" },
+                    ]}
+                    onChange={(vlm_preset) => pipeline?.updatePipeline?.({ vlm_preset })}
+                    disabled={pipeline?.isUpdating || pipeline?.pipeline?.kind !== "vlm"}
+                  />
+                </SettingsSection>
+
+                <SettingsSection title={t("settings.sections.pdf")} icon="document">
+                  <SelectSetting
+                    label={t("settings.pdf.backend.label")}
+                    description={t("settings.pdf.backend.description")}
+                    value={pdf?.pdf?.pdf_backend ?? "docling_parse"}
+                    options={[
+                      { value: "docling_parse", label: "docling_parse" },
+                      { value: "dlparse_v2", label: "dlparse_v2" },
+                      { value: "pypdfium2", label: "pypdfium2" },
+                    ]}
+                    onChange={(pdf_backend) => pdf?.updatePdf?.({ pdf_backend })}
+                    disabled={pdf?.isUpdating}
+                  />
+                  <SelectSetting
+                    label={t("settings.pdf.imageExportMode.label")}
+                    description={t("settings.pdf.imageExportMode.description")}
+                    value={pdf?.pdf?.image_export_mode ?? "placeholder"}
+                    options={[
+                      { value: "placeholder", label: "placeholder" },
+                      { value: "embedded", label: "embedded" },
+                      { value: "referenced", label: "referenced" },
+                    ]}
+                    onChange={(image_export_mode) => pdf?.updatePdf?.({ image_export_mode: image_export_mode as "placeholder" | "embedded" | "referenced" })}
+                    disabled={pdf?.isUpdating}
+                  />
+                  <ToggleSetting
+                    label={t("settings.pdf.headingHierarchy.label")}
+                    description={t("settings.pdf.headingHierarchy.description")}
+                    checked={pdf?.pdf?.do_pdf_heading_hierarchy ?? false}
+                    onChange={(do_pdf_heading_hierarchy) => pdf?.updatePdf?.({ do_pdf_heading_hierarchy })}
+                    disabled={pdf?.isUpdating}
+                  />
+                </SettingsSection>
+
+                {/* Performance Settings */}
                 <SettingsSection
                   title={t("settings.sections.performance")}
                   icon="bolt"
@@ -659,6 +722,77 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     }
                     onChange={(picture_description) =>
                       enrichment.updateEnrichment({ picture_description })
+                    }
+                    disabled={enrichment.isUpdating}
+                  />
+                  <ToggleSetting
+                    label={t("settings.enrichment.chartExtraction.label")}
+                    description={t("settings.enrichment.chartExtraction.description")}
+                    checked={enrichment.enrichment?.chart_extraction ?? false}
+                    onChange={(chart_extraction) =>
+                      enrichment.updateEnrichment({ chart_extraction })
+                    }
+                    disabled={enrichment.isUpdating}
+                  />
+                  <SelectSetting
+                    label={t("settings.enrichment.pictureDescriptionPreset.label")}
+                    description={t("settings.enrichment.pictureDescriptionPreset.description")}
+                    value={enrichment.enrichment?.picture_description_preset ?? ""}
+                    options={[
+                      { value: "", label: "None (default behavior)" },
+                      { value: "default", label: "default" },
+                    ]}
+                    onChange={(picture_description_preset) =>
+                      enrichment.updateEnrichment({
+                        picture_description_preset:
+                          picture_description_preset || null,
+                      })
+                    }
+                    disabled={enrichment.isUpdating}
+                  />
+                  <SelectSetting
+                    label={t("settings.enrichment.codeFormulaPreset.label")}
+                    description={t("settings.enrichment.codeFormulaPreset.description")}
+                    value={enrichment.enrichment?.code_formula_preset ?? ""}
+                    options={[
+                      { value: "", label: "None (default behavior)" },
+                      { value: "default", label: "default" },
+                    ]}
+                    onChange={(code_formula_preset) =>
+                      enrichment.updateEnrichment({
+                        code_formula_preset: code_formula_preset || null,
+                      })
+                    }
+                    disabled={enrichment.isUpdating}
+                  />
+                  <SelectSetting
+                    label={t("settings.enrichment.layoutPreset.label")}
+                    description={t("settings.enrichment.layoutPreset.description")}
+                    value={enrichment.enrichment?.layout_preset ?? ""}
+                    options={[
+                      { value: "", label: "None (default behavior)" },
+                      { value: "default", label: "default" },
+                    ]}
+                    onChange={(layout_preset) =>
+                      enrichment.updateEnrichment({
+                        layout_preset: layout_preset || null,
+                      })
+                    }
+                    disabled={enrichment.isUpdating}
+                  />
+                  <SelectSetting
+                    label={t("settings.enrichment.tableStructurePreset.label")}
+                    description={t("settings.enrichment.tableStructurePreset.description")}
+                    value={enrichment.enrichment?.table_structure_preset ?? ""}
+                    options={[
+                      { value: "", label: "None (default behavior)" },
+                      { value: "default", label: "default" },
+                    ]}
+                    onChange={(table_structure_preset) =>
+                      enrichment.updateEnrichment({
+                        table_structure_preset:
+                          table_structure_preset || null,
+                      })
                     }
                     disabled={enrichment.isUpdating}
                   />

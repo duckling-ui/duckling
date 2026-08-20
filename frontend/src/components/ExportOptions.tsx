@@ -72,6 +72,11 @@ const FORMAT_INFO: Record<
     icon: "</>",
     descriptionKey: "export.formats.html.description",
   },
+  html_split_page: {
+    nameKey: "export.formats.html.name",
+    icon: "</>",
+    descriptionKey: "export.formats.html.description",
+  },
   json: {
     nameKey: "export.formats.json.name",
     icon: "{}",
@@ -86,6 +91,21 @@ const FORMAT_INFO: Record<
     nameKey: "export.formats.doclang.name",
     icon: "DL",
     descriptionKey: "export.formats.doclang.description",
+  },
+  dclx: {
+    nameKey: "export.formats.doclang.name",
+    icon: "DX",
+    descriptionKey: "export.formats.doclang.description",
+  },
+  yaml: {
+    nameKey: "export.formats.json.name",
+    icon: "Y",
+    descriptionKey: "export.formats.json.description",
+  },
+  vtt: {
+    nameKey: "export.formats.text.name",
+    icon: "VTT",
+    descriptionKey: "export.formats.text.description",
   },
   text: {
     nameKey: "export.formats.text.name",

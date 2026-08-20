@@ -38,6 +38,8 @@ import type {
   ImageSettingsResponse,
   PerformanceSettingsResponse,
   ChunkingSettingsResponse,
+  PipelineSettings,
+  PdfSettings,
   ExtractedImage,
   ExtractedTable,
   DocumentChunk,
@@ -45,6 +47,7 @@ import type {
 } from '../types';
 
 const API_BASE = '/api';
+const API_KEY = import.meta.env.VITE_API_KEY as string | undefined;
 
 const api = axios.create({
   baseURL: API_BASE,
@@ -52,6 +55,10 @@ const api = axios.create({
     'Content-Type': 'application/json',
   },
 });
+
+if (API_KEY) {
+  api.defaults.headers.common['X-Api-Key'] = API_KEY;
+}
 
 // Health check
 export const checkHealth = async (): Promise<{ status: string; service: string }> => {
@@ -68,12 +75,19 @@ export const getFormats = async (): Promise<FormatsResponse> => {
 // Conversion
 export const uploadAndConvert = async (
   file: File,
-  settings?: Partial<ConversionSettings>
+  settings?: Partial<ConversionSettings>,
+  options?: { page_range?: [number, number]; to_formats?: string[] }
 ): Promise<ConversionJob> => {
   const formData = new FormData();
   formData.append('file', file);
   if (settings) {
     formData.append('settings', JSON.stringify(settings));
+  }
+  if (options?.page_range) {
+    formData.append('page_range', JSON.stringify(options.page_range));
+  }
+  if (options?.to_formats) {
+    formData.append('to_formats', JSON.stringify(options.to_formats));
   }
 
   const response = await api.post('/convert', formData, {
@@ -87,7 +101,8 @@ export const uploadAndConvert = async (
 // Batch conversion
 export const uploadAndConvertBatch = async (
   files: File[],
-  settings?: Partial<ConversionSettings>
+  settings?: Partial<ConversionSettings>,
+  options?: { page_range?: [number, number]; to_formats?: string[] }
 ): Promise<BatchConversionResponse> => {
   const formData = new FormData();
   files.forEach((file) => {
@@ -95,6 +110,12 @@ export const uploadAndConvertBatch = async (
   });
   if (settings) {
     formData.append('settings', JSON.stringify(settings));
+  }
+  if (options?.page_range) {
+    formData.append('page_range', JSON.stringify(options.page_range));
+  }
+  if (options?.to_formats) {
+    formData.append('to_formats', JSON.stringify(options.to_formats));
   }
 
   try {
@@ -117,11 +138,13 @@ export const uploadAndConvertBatch = async (
 // URL conversion
 export const convertFromUrl = async (
   url: string,
-  settings?: Partial<ConversionSettings>
+  settings?: Partial<ConversionSettings>,
+  options?: { page_range?: [number, number]; to_formats?: string[] }
 ): Promise<ConversionJob & { source_url: string }> => {
   const response = await api.post('/convert/url', {
     url,
     settings,
+    ...options,
   });
   return response.data;
 };
@@ -129,11 +152,13 @@ export const convertFromUrl = async (
 // Batch URL conversion
 export const convertFromUrlsBatch = async (
   urls: string[],
-  settings?: Partial<ConversionSettings>
+  settings?: Partial<ConversionSettings>,
+  options?: { page_range?: [number, number]; to_formats?: string[] }
 ): Promise<BatchConversionResponse & { jobs: (BatchConversionResponse['jobs'][0] & { url?: string })[] }> => {
   const response = await api.post('/convert/url/batch', {
     urls,
     settings,
+    ...options,
   });
   return response.data;
 };
@@ -389,6 +414,37 @@ export const updateChunkingSettings = async (
   return response.data;
 };
 
+export const getPipelineSettings = async (): Promise<{
+  pipeline: PipelineSettings;
+  options: {
+    kind: string[];
+    enable_remote_services: boolean;
+    allow_custom_vlm_config: boolean;
+  };
+}> => {
+  const response = await api.get('/settings/pipeline');
+  return response.data;
+};
+
+export const updatePipelineSettings = async (
+  settings: Partial<PipelineSettings>
+): Promise<{ message: string; pipeline: PipelineSettings }> => {
+  const response = await api.put('/settings/pipeline', settings);
+  return response.data;
+};
+
+export const getPdfSettings = async (): Promise<{ pdf: PdfSettings }> => {
+  const response = await api.get('/settings/pdf');
+  return response.data;
+};
+
+export const updatePdfSettings = async (
+  settings: Partial<PdfSettings>
+): Promise<{ message: string; pdf: PdfSettings }> => {
+  const response = await api.put('/settings/pdf', settings);
+  return response.data;
+};
+
 // Enrichment settings
 export interface EnrichmentModelStatus {
   model_id: string;
@@ -404,6 +460,14 @@ export interface EnrichmentSettingsResponse {
     formula_enrichment: boolean;
     picture_classification: boolean;
     picture_description: boolean;
+    chart_extraction: boolean;
+    picture_description_preset?: string | null;
+    picture_description_custom_config?: Record<string, unknown> | null;
+    code_formula_preset?: string | null;
+    code_formula_custom_config?: Record<string, unknown> | null;
+    picture_classification_preset?: string | null;
+    layout_preset?: string | null;
+    table_structure_preset?: string | null;
   };
   models_status: Record<string, EnrichmentModelStatus>;
   options: Record<string, {
@@ -452,6 +516,14 @@ export const updateEnrichmentSettings = async (
     formula_enrichment: boolean;
     picture_classification: boolean;
     picture_description: boolean;
+    chart_extraction: boolean;
+    picture_description_preset?: string | null;
+    picture_description_custom_config?: Record<string, unknown> | null;
+    code_formula_preset?: string | null;
+    code_formula_custom_config?: Record<string, unknown> | null;
+    picture_classification_preset?: string | null;
+    layout_preset?: string | null;
+    table_structure_preset?: string | null;
   }>
 ): Promise<{ message: string; enrichment: Record<string, unknown> }> => {
   const response = await api.put('/settings/enrichment', settings);

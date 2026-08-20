@@ -16,9 +16,13 @@ from config import OUTPUT_FOLDER
 def _document_affecting_settings(settings: dict) -> dict:
     """Extract only settings that affect the Docling document output."""
     return {
+        "pipeline": settings.get("pipeline") or {},
+        "pdf": settings.get("pdf") or {},
         "ocr": settings.get("ocr") or {},
         "tables": settings.get("tables") or {},
         "images": settings.get("images") or {},
+        "enrichment": settings.get("enrichment") or {},
+        "page_range": settings.get("page_range") or None,
     }
 
 

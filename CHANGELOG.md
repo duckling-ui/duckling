@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added foundational docling-serve parity scaffolding across pipeline settings, chunking options, connector batch endpoint shape, and deployment worker topology.
+- Added backend server config loader (`DUCKLING_CONFIG_FILE`) and structured logging bootstrap (`DUCKLING_LOG_FORMAT=json`).
+- Added optional API key enforcement (`DUCKLING_API_KEY` via `X-Api-Key`).
+- Added expanded input/output format surface (including `yaml`, `vtt`, `dclx`, `html_split_page`) with best-effort exports.
+- Added Redis + worker service definitions in compose files and worker entry-point scaffolding.
+
+### Changed
+
+- Extended conversion settings schema with pipeline, PDF, enrichment preset placeholders, and richer chunking controls.
+- Updated chunk generation to use a chunker factory and include raw text/image metadata when available.
+- Updated frontend API client to support API key headers and per-job conversion options (`page_range`, `to_formats`).
+- Moved Ray and docling-jobkit out of default `backend/requirements.txt` into optional `backend/requirements-orchestration.txt` so Docker publish Trivy gates are not blocked by Ray's bundled Java JAR CVEs; RQ/Redis remain in the default image.
+
 ### Planned
 
 - User authentication
