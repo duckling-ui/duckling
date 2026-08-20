@@ -17,13 +17,13 @@ flask-cors==6.0.0
 docling>=2.118.0  # latest stable; OcrMode/scale (2.116+); DocLang export needs core with export_to_doclang
 docling-core>=2.90.0,<3.0.0  # DocLang 0.7 serializer; docling 2.118 pins core>=2.90,<3
 sqlalchemy==2.0.36
-python-dotenv==1.0.0
+python-dotenv>=1.1.0,<2
 PyYAML>=6.0.2
 # Lightweight queue client for local/RQ orchestration modes (no Ray Java runtime).
 rq>=1.16.2
 redis>=5.0.8
-pytest==7.4.3
-pytest-cov==4.1.0
+pytest>=8.3.5,<9
+pytest-cov>=5.0.0,<7
 werkzeug==3.1.6
 gunicorn==23.0.0
 # pymdown-extensions 10.21.2+ requires markdown>=3.6 (was 3.5.1; conflict broke pip on CI)

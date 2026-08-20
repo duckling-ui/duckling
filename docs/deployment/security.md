@@ -280,6 +280,8 @@ pip-audit
 
 When Docker publish workflows enforce Trivy scan gates, keep packaging-related Python dependencies in `backend/requirements.txt` at secure minimum versions (including `jaraco.context` and `wheel`) to avoid known high-severity CVEs during image scans. Keep Ray out of the default backend image requirements (use optional `backend/requirements-orchestration.txt`) because Ray ships Java JARs that can fail Trivy until upstream patches land.
 
+For GitHub Dependabot/npm audit findings, bump direct frontend/backend dependencies and regenerate `frontend/package-lock.json`; use npm `overrides` for transitive packages when upstream pins lag (for example `minimatch`, `js-yaml`, `ws`, `nanoid`, `form-data`).
+
 ### Node.js Dependencies
 
 ```bash

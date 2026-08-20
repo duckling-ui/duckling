@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated frontend API client to support API key headers and per-job conversion options (`page_range`, `to_formats`).
 - Moved Ray and docling-jobkit out of default `backend/requirements.txt` into optional `backend/requirements-orchestration.txt` so Docker publish Trivy gates are not blocked by Ray's bundled Java JAR CVEs; RQ/Redis remain in the default image.
 
+### Security
+
+- Remediated GitHub Dependabot alerts: bumped frontend deps (`axios` 1.19+, `vitest` 4.1.11+, `vite`/`postcss` patches) with npm overrides for transitive CVEs; backend bumps `python-dotenv>=1.1.0` and `pytest>=8.3.5`/`pytest-cov>=5`.
+
 ### Planned
 
 - User authentication
