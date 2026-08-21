@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Documentation
 
-- Expanded user guide, API reference, deployment, and Docker docs for docling-serve parity: pipeline/VLM/ASR, advanced chunking, expanded formats, `page_range`/`to_formats`, API key auth, server config file, and Redis/worker topology. Added [Server Configuration](deployment/server-config.md).
+- Expanded user guide, API reference, deployment, and Docker docs for docling-serve parity: pipeline/VLM/ASR, advanced chunking, expanded formats, `page_range`/`to_formats`, API key auth, server config file, and Redis/worker topology. Added [Server Configuration](deployment/server-config.md). Localized **de/fr/es** mirrors updated for API, user guide, deployment, and Docker guides.
 
 ### Planned
 

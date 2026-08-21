@@ -10,7 +10,7 @@ http://localhost:5001/api
 
 ## Autenticación
 
-Por ahora la API no requiere autenticación. En entornos de producción, considere añadir un middleware de autenticación.
+Con `DUCKLING_API_KEY`, enviar `X-Api-Key` en `/api/*` (excepto health/docs). Ver [Configuración del servidor](../deployment/server-config.md). UI: `VITE_API_KEY`.
 
 ## Secciones
 
@@ -50,6 +50,9 @@ Por ahora la API no requiere autenticación. En entornos de producción, conside
 |----------|--------|-------------|
 | `/convert` | POST | Subir y convertir un documento |
 | `/convert/batch` | POST | Convertir varios documentos por lotes |
+| `/convert/url` | POST | Convertir documento desde URL |
+| `/convert/url/batch` | POST | Lote desde URLs |
+| `/convert/batch/connectors` | POST | Batch conectores (validación) |
 | `/convert/{job_id}/status` | GET | Obtener el estado de la conversión |
 | `/convert/{job_id}/result` | GET | Obtener el resultado de la conversión |
 | `/convert/{job_id}/images` | GET | Listar imágenes extraídas |
@@ -70,7 +73,10 @@ Por ahora la API no requiere autenticación. En entornos de producción, conside
 | `/settings/tables` | GET/PUT | Ajustes de tablas |
 | `/settings/images` | GET/PUT | Ajustes de imágenes |
 | `/settings/performance` | GET/PUT | Ajustes de rendimiento |
-| `/settings/chunking` | GET/PUT | Ajustes de fragmentación (chunks) |
+| `/settings/chunking` | GET/PUT | Fragmentación híbrida/jerárquica |
+| `/settings/pipeline` | GET/PUT | Pipeline standard/vlm/asr |
+| `/settings/pdf` | GET/PUT | PDF y exportación |
+| `/settings/enrichment` | GET/PUT | Enriquecimiento y modelos |
 
 ### Endpoints de historial
 

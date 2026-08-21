@@ -2,6 +2,31 @@
 
 Anleitung zur Skalierung von Duckling für Deployments mit hohem Traffic.
 
+## RQ/Ray-Worker-Topologie
+
+Duckling enthält Compose-Scaffolding für:
+
+- `redis`-Dienst
+- `rq-worker`-Dienst (`python worker.py --engine rq`)
+
+Engine-Modus per Umgebungsvariable:
+
+- `DUCKLING_ENGINE_KIND=local|rq|ray`
+- `DUCKLING_RQ_REDIS_URL`
+- `DUCKLING_RAY_ADDRESS`
+
+### Optionale Orchestrierungs-Abhängigkeiten
+
+Standard-Docker/API-Images installieren nur `backend/requirements.txt` (inkl. `rq` + `redis`). **Ray und docling-jobkit** liegen in `backend/requirements-orchestration.txt` (Ray-JARs können Trivy-Gates blockieren).
+
+```bash
+pip install -r backend/requirements.txt -r backend/requirements-orchestration.txt
+```
+
+Ohne installiertes `ray` fällt der Ray-Adapter auf lokale In-Prozess-Ausführung zurück. Konvertierungen laufen standardmäßig im API-Prozess (`local`).
+
+Siehe auch [Server-Konfiguration](server-config.md).
+
 ## Architektur für Skalierung
 
 ```mermaid

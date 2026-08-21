@@ -3,7 +3,38 @@
 Endpunkte zur Verwaltung der Konvertierungseinstellungen.
 
 !!! note "Sitzungsbasierte Speicherung"
-    Einstellungen werden pro Benutzersitzung in der Datenbank gespeichert. Die Einstellungen jedes Benutzers sind isoliert und beeinträchtigen andere Benutzer nicht — Duckling ist damit für Mehrbenutzer-Betrieb geeignet.
+    Einstellungen werden pro Benutzersitzung in der Datenbank gespeichert.     Die Einstellungen jedes Benutzers sind isoliert und beeinträchtigen andere Benutzer nicht — Duckling ist damit für Mehrbenutzer-Betrieb geeignet.
+
+Bereitstellungsoptionen (`DUCKLING_API_KEY`, Orchestrierung, Logging) siehe [Server-Konfiguration](../deployment/server-config.md).
+
+## Pipeline- und PDF-Einstellungen
+
+- `GET/PUT /api/settings/pipeline` — Pipeline-Art `standard`, `vlm` oder `asr`; VLM-Voreinstellung
+- `GET/PUT /api/settings/pdf` — PDF-Backend, Bild-Exportmodus, Überschriftenhierarchie
+
+| Feld | Werte | Hinweise |
+|------|-------|----------|
+| `kind` | `standard`, `vlm`, `asr` | ASR für Audio/Video, wenn Docling ASR verfügbar |
+| `vlm_preset` | Docling-Preset | Bei `kind=vlm` |
+| `pdf_backend` | `docling_parse`, `pypdfium2` | PDF-Parser |
+| `image_export_mode` | `placeholder`, `embedded`, `referenced` | Bilddarstellung in Exporten |
+
+## Erweiterte Chunking-Einstellungen
+
+`GET/PUT /api/settings/chunking` unterstützt hybriden und hierarchischen Docling-Chunker:
+
+| Feld | Standard | Beschreibung |
+|------|----------|--------------|
+| `chunker` | `hybrid` | `hybrid` oder `hierarchical` |
+| `tokenizer` | `sentence-transformers/all-MiniLM-L6-v2` | Hugging-Face-Tokenizer |
+| `use_markdown_tables` | `false` | Tabellen als Markdown in Chunks |
+| `use_markdown_images` | `false` | Bilder als Markdown in Chunks |
+| `image_placeholder` | `[image]` | Platzhaltertext für Bilder |
+| `include_raw_text` | `false` | Feld `raw_text` pro Chunk |
+
+Die UI zeigt `enabled`, `max_tokens` und `merge_peers`; erweiterte Felder sind über die API verfügbar.
+
+---
 
 ## Alle Einstellungen abrufen
 

@@ -3,7 +3,35 @@
 Points de terminaison pour gérer les paramètres de conversion.
 
 !!! note "Stockage basé sur les sessions"
-    Les paramètres sont stockés par session utilisateur dans la base de données. Les paramètres de chaque utilisateur sont isolés et n'affectent pas les autres utilisateurs, ce qui rend Duckling sûr pour les déploiements multi-utilisateurs.
+    Les paramètres sont stockés par session utilisateur dans la base de données.     Les paramètres de chaque utilisateur sont isolés et n'affectent pas les autres utilisateurs, ce qui rend Duckling sûr pour les déploiements multi-utilisateurs.
+
+Options de déploiement (`DUCKLING_API_KEY`, orchestration, logging) : [Configuration serveur](../deployment/server-config.md).
+
+## Paramètres pipeline et PDF
+
+- `GET/PUT /api/settings/pipeline` — type `standard`, `vlm` ou `asr` ; preset VLM
+- `GET/PUT /api/settings/pdf` — backend PDF, mode d'export d'images, hiérarchie de titres
+
+| Champ | Valeurs | Notes |
+|-------|---------|-------|
+| `kind` | `standard`, `vlm`, `asr` | ASR pour audio/vidéo si Docling ASR disponible |
+| `vlm_preset` | preset Docling | Quand `kind=vlm` |
+| `pdf_backend` | `docling_parse`, `pypdfium2` | Parseur PDF |
+| `image_export_mode` | `placeholder`, `embedded`, `referenced` | Images dans les exports |
+
+## Paramètres de chunking avancés
+
+`GET/PUT /api/settings/chunking` — chunkers hybride et hiérarchique Docling :
+
+| Champ | Défaut | Description |
+|-------|--------|-------------|
+| `chunker` | `hybrid` | `hybrid` ou `hierarchical` |
+| `tokenizer` | `sentence-transformers/all-MiniLM-L6-v2` | Tokenizer Hugging Face |
+| `include_raw_text` | `false` | Champ `raw_text` par chunk |
+
+L'UI expose `enabled`, `max_tokens`, `merge_peers` ; champs avancés via API.
+
+---
 
 ## Obtenir tous les paramètres
 

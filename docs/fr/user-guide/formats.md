@@ -14,6 +14,15 @@ Référence complète des formats d’entrée et de sortie pris en charge par Du
 | Excel | `.xlsx` | Microsoft Excel | Extrait les tableaux et les données |
 | HTML | `.html`, `.htm` | Pages web | Préserve la structure et la mise en forme |
 | Markdown | `.md`, `.markdown` | Fichiers Markdown | Prise en charge complète de CommonMark |
+| CSV | `.csv` | Valeurs séparées par des virgules | Données tabulaires |
+| E-mail | `.eml`, `.msg` | Messages e-mail | Corps et pièces jointes |
+| EPUB | `.epub` | Livres numériques | Structure par chapitres |
+| LaTeX | `.tex`, `.latex` | Sources TeX | Meilleur effort |
+| OpenDocument | `.odt`, `.ods`, `.odp` | Formats LibreOffice | Texte, tableur, présentation |
+| DCLX | `.dclx` | Format d'échange Docling | Interchange Docling natif |
+| Audio | `.wav`, `.mp3` | Parole | Pipeline **ASR** recommandée |
+| Vidéo | `.mp4`, `.mov`, `.mkv` | Vidéo avec piste audio | Pipeline **ASR** |
+| WebVTT | `.vtt` | Sous-titres | Texte synchronisé |
 
 ### Images
 
@@ -116,6 +125,22 @@ Format de document balisé pour l’analyse sémantique.
   </section>
 </document>
 ```
+
+#### YAML (`.yaml`)
+
+Export structuré via le sérialiseur YAML de Docling (ou repli PyYAML).
+
+#### WebVTT (`.vtt`)
+
+Export de texte synchronisé pour transcriptions et sous-titres (surtout sortie ASR).
+
+#### DCLX (`.dclx`)
+
+Format d'échange Docling pour aller-retour entre outils Docling.
+
+#### HTML paginé (`.split.html`)
+
+Export HTML avec limites de page (`html_split_page`).
 
 #### DocLang (`.dclg.xml`) {#doclang-dclgxml}
 

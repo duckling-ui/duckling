@@ -54,6 +54,10 @@ graph TB
     Docling --> FileSystem
 ```
 
+## Orchestrierung
+
+Standardmäßig laufen Konvertierungen in-process (`DUCKLING_ENGINE_KIND=local`). Optionale Redis/RQ/Ray-Adapter und Connector-Batch erfordern Worker-Integration. Siehe [Server-Konfiguration](../deployment/server-config.md).
+
 ## Datenfluss
 
 ### Ablauf der Dokumentkonvertierung

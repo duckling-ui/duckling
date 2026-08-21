@@ -24,6 +24,14 @@ Duckling peut être déployé de plusieurs façons selon vos besoins :
 
     [:octicons-arrow-right-24: Guide montée en charge](scaling.md)
 
+-   :material-cog-outline:{ .lg .middle } __Configuration serveur__
+
+    ---
+
+    Clé API, moteur d'orchestration, logging, allowlists connecteurs
+
+    [:octicons-arrow-right-24: Configuration serveur](server-config.md)
+
 -   :material-shield-check:{ .lg .middle } __Sécurité__
 
     ---

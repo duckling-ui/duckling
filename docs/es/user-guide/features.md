@@ -2,6 +2,14 @@
 
 Duckling ofrece un conjunto completo de funciones para la conversión de documentos.
 
+## Modos pipeline (standard / VLM / ASR)
+
+**Ajustes → Pipeline** para elegir el pipeline Docling.
+
+## Chunking avanzado
+
+Opciones híbridas/jerárquicas vía API.
+
 ## Carga de documentos
 
 ### Arrastrar y soltar

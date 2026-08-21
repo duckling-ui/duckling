@@ -63,6 +63,24 @@ docker-compose up --build
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
+Produktions-Compose setzt `DUCKLING_LOG_FORMAT=json` und gehärtete Container-Defaults. Optional:
+
+```bash
+export DUCKLING_CONFIG_FILE=/path/to/duckling-server.yaml
+export DUCKLING_API_KEY=your-secret-key
+```
+
+### Redis- und Worker-Dienste
+
+Standard-`docker-compose.yml` definiert optionales Scaffolding:
+
+| Dienst | Zweck |
+|--------|-------|
+| `redis` | Queue-Backend für RQ-Orchestrierung |
+| `rq-worker` | `python worker.py --engine rq` (Standby bis Worker-Integration) |
+
+`DUCKLING_ENGINE_KIND=local|rq|ray`. Standard ist **local** (Konvertierung im API-Prozess). Siehe [Server-Konfiguration](../deployment/server-config.md) und [Skalierung](../deployment/scaling.md).
+
 ### Vorgefertigte Images
 
 ```bash

@@ -2,6 +2,30 @@
 
 Duckling propose un ensemble complet de fonctionnalités pour la conversion de documents.
 
+## Modes pipeline (standard / VLM / ASR)
+
+**Paramètres → Pipeline** choisit le pipeline Docling :
+
+| Mode | Usage |
+|------|-------|
+| **Standard** | Office, PDF, HTML — OCR, tableaux, mise en page |
+| **VLM** | PDF/images avec modèles vision-langage |
+| **ASR** | Audio/vidéo (parole vers texte) |
+
+En **VLM**, choisir un **preset VLM**. JSON VLM personnalisé via API si `allow_custom_vlm_config` est activé.
+
+## Contrôles de chunking avancés
+
+Options alignées docling-serve (ensemble via API ; toggles principaux dans l'UI) :
+
+- Stratégie `hybrid` ou `hierarchical`
+- Sélection du tokenizer
+- Sérialisation markdown tableaux/images
+- Placeholders d'images
+- Champ optionnel `raw_text` par chunk
+
+Activer dans **Paramètres → Chunking** ou exporter des chunks RAG.
+
 ## Téléversement de documents
 
 ### Glisser-déposer

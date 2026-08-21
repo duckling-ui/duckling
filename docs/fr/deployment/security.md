@@ -30,10 +30,26 @@ Avant un déploiement en production, vérifier :
 - [ ] Utiliser HTTPS en production (configurer via le reverse proxy)
 - [ ] Définir `MAX_CONTENT_LENGTH` adapté à votre cas d’usage
 - [ ] Examiner et restreindre les extensions de fichiers autorisées si nécessaire
-- [ ] Activer la limitation du débit (via reverse proxy ou middleware)
-- [ ] Mettre en place une surveillance des journaux pour les événements de sécurité
+- [ ] Définir `DUCKLING_API_KEY` (ou `api_key` dans [configuration serveur](server-config.md)) et TLS au reverse proxy
+- [ ] Définir `DUCKLING_LOG_FORMAT=json` pour des logs structurés
+- [ ] Configurer `DUCKLING_CONFIG_FILE` pour les paramètres de déploiement
 
 ---
+
+
+
+---
+
+## Authentification par clé API
+
+Si `DUCKLING_API_KEY` est défini, Duckling exige sur toutes les requêtes `/api/*` (sauf health et docs intégrées) l'en-tête :
+
+```http
+X-Api-Key: your-secret-key
+```
+
+Configuration via variable d'environnement ou `api_key` dans [Configuration serveur](server-config.md). Build frontend : `VITE_API_KEY`. **401 Unauthorized** si la clé est absente ou incorrecte.
+
 
 ## Variables d’environnement
 

@@ -10,7 +10,15 @@ http://localhost:5001/api
 
 ## Authentifizierung
 
-Derzeit ist für die API keine Authentifizierung erforderlich. Für Produktionsumgebungen sollten Sie eine Authentifizierungs-Middleware ergänzen.
+Ist `DUCKLING_API_KEY` gesetzt (Umgebungsvariable oder [Server-Konfigurationsdatei](../deployment/server-config.md)), erfordern alle `/api/*`-Routen außer Health und eingebetteten Docs den Header:
+
+```http
+X-Api-Key: your-api-key
+```
+
+Die React-UI liest `VITE_API_KEY` beim Build und sendet `X-Api-Key` automatisch.
+
+Ohne API-Schlüssel bleibt die API im lokalen Netz offen — in Produktion Zugriff über Reverse-Proxy einschränken.
 
 ## Abschnitte
 
@@ -50,6 +58,9 @@ Derzeit ist für die API keine Authentifizierung erforderlich. Für Produktionsu
 |----------|--------|-------------|
 | `/convert` | POST | Einzelnes Dokument hochladen und konvertieren |
 | `/convert/batch` | POST | Mehrere Dokumente stapelweise konvertieren |
+| `/convert/url` | POST | Dokument von URL konvertieren |
+| `/convert/url/batch` | POST | Stapel-Konvertierung aus URLs |
+| `/convert/batch/connectors` | POST | Connector-Batch-Anfrage (Validierung; Worker für Ausführung) |
 | `/convert/{job_id}/status` | GET | Konvertierungsstatus abrufen |
 | `/convert/{job_id}/result` | GET | Konvertierungsergebnis abrufen |
 | `/convert/{job_id}/images` | GET | Extrahierte Bilder auflisten |
@@ -70,7 +81,10 @@ Derzeit ist für die API keine Authentifizierung erforderlich. Für Produktionsu
 | `/settings/tables` | GET/PUT | Tabelleneinstellungen |
 | `/settings/images` | GET/PUT | Bildeinstellungen |
 | `/settings/performance` | GET/PUT | Leistungseinstellungen |
-| `/settings/chunking` | GET/PUT | Segmentierungseinstellungen |
+| `/settings/chunking` | GET/PUT | Segmentierung (hybrid/hierarchisch) |
+| `/settings/pipeline` | GET/PUT | Pipeline-Art (standard/vlm/asr) |
+| `/settings/pdf` | GET/PUT | PDF-Backend und Exportoptionen |
+| `/settings/enrichment` | GET/PUT | Anreicherungs-Schalter und Modellstatus |
 
 ### Verlaufs-Endpunkte
 

@@ -24,6 +24,14 @@ Duckling puede desplegarse de varias formas según sus necesidades:
 
     [:octicons-arrow-right-24: Guía de escalado](scaling.md)
 
+-   :material-cog-outline:{ .lg .middle } __Configuración del servidor__
+
+    ---
+
+    Clave API y orquestación
+
+    [:octicons-arrow-right-24: Configuración del servidor](server-config.md)
+
 -   :material-shield-check:{ .lg .middle } __Seguridad__
 
     ---

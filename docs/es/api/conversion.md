@@ -2,6 +2,23 @@
 
 Endpoints para subir y convertir documentos.
 
+## Opciones de job (paridad)
+
+Los endpoints aceptan sobreescrituras opcionales en el campo JSON `settings`:
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| `page_range` | `[start, end]` | Rango de páginas PDF (base 1) |
+| `to_formats` | `string[]` | Formatos de exportación, p. ej. `["markdown","yaml"]` |
+
+Con `DUCKLING_API_KEY`, enviar encabezado `X-Api-Key`. Detalles: [API Conversión (EN)](../../api/conversion.md).
+
+## Endpoint batch de conectores
+
+`POST /api/convert/batch/connectors` — valida `sources`, `target`, `options`; la ejecución requiere integración workers RQ/Ray.
+
+---
+
 ## Subir y convertir un solo documento
 
 ```http

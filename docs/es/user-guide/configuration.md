@@ -418,6 +418,12 @@ curl -X POST http://localhost:5001/api/settings/reset
 
 ---
 
+## Configuración del servidor (despliegue)
+
+`DUCKLING_*` y [Configuración del servidor](../deployment/server-config.md).
+
+---
+
 ## Solución de problemas
 
 ### El OCR no funciona

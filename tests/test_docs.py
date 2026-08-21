@@ -319,6 +319,12 @@ def test_parity_documentation_covers_key_topics():
     assert "DUCKLING_API_KEY" in server_cfg and "DUCKLING_CONFIG_FILE" in server_cfg
     assert "Pipeline settings" in configuration
 
+    for locale in ("de", "fr", "es"):
+        loc_conv = (PROJECT_ROOT / f"docs/{locale}/api/conversion.md").read_text(encoding="utf-8")
+        loc_srv = (PROJECT_ROOT / f"docs/{locale}/deployment/server-config.md").read_text(encoding="utf-8")
+        assert "page_range" in loc_conv or "Parité" in loc_conv or "Paridad" in loc_conv or "Paritäts" in loc_conv
+        assert "DUCKLING_API_KEY" in loc_srv
+
 
 @pytest.mark.skipif(
     not os.environ.get("TEST_MKDOCS_BUILD"),

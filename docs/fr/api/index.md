@@ -10,7 +10,15 @@ http://localhost:5001/api
 
 ## Authentification
 
-L’API n’exige pas d’authentification pour le moment. En production, envisagez d’ajouter un middleware d’authentification.
+Si `DUCKLING_API_KEY` est défini (variable d'environnement ou [fichier de configuration serveur](../deployment/server-config.md)), toutes les routes `/api/*` sauf health et docs intégrées exigent :
+
+```http
+X-Api-Key: your-api-key
+```
+
+L'UI React lit `VITE_API_KEY` au build et envoie `X-Api-Key` automatiquement.
+
+Sans clé API, l'API reste ouverte sur le réseau local — restreindre l'accès via reverse proxy en production.
 
 ## Sections
 
@@ -50,6 +58,9 @@ L’API n’exige pas d’authentification pour le moment. En production, envisa
 |----------|--------|-------------|
 | `/convert` | POST | Téléverser et convertir un document |
 | `/convert/batch` | POST | Convertir plusieurs documents par lot |
+| `/convert/url` | POST | Convertir un document depuis une URL |
+| `/convert/url/batch` | POST | Lot de conversions depuis des URLs |
+| `/convert/batch/connectors` | POST | Requête batch connecteurs (validation ; workers pour exécution) |
 | `/convert/{job_id}/status` | GET | Obtenir l’état de la conversion |
 | `/convert/{job_id}/result` | GET | Obtenir le résultat de la conversion |
 | `/convert/{job_id}/images` | GET | Lister les images extraites |
@@ -70,7 +81,10 @@ L’API n’exige pas d’authentification pour le moment. En production, envisa
 | `/settings/tables` | GET/PUT | Paramètres des tableaux |
 | `/settings/images` | GET/PUT | Paramètres des images |
 | `/settings/performance` | GET/PUT | Paramètres de performance |
-| `/settings/chunking` | GET/PUT | Paramètres de découpage (chunks) |
+| `/settings/chunking` | GET/PUT | Découpage (hybride/hiérarchique) |
+| `/settings/pipeline` | GET/PUT | Type de pipeline (standard/vlm/asr) |
+| `/settings/pdf` | GET/PUT | Backend PDF et options d'export |
+| `/settings/enrichment` | GET/PUT | Enrichissement et statut des modèles |
 
 ### Points de terminaison d’historique
 

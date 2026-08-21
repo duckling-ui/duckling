@@ -54,6 +54,10 @@ graph TB
     Docling --> FileSystem
 ```
 
+## Orchestration
+
+Par défaut les conversions s'exécutent in-process (`local`). Redis/RQ/Ray et le batch connecteurs nécessitent l'intégration workers. Voir [Configuration serveur](../deployment/server-config.md).
+
 ## Flux de données
 
 ### Flux de conversion de document
