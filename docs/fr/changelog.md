@@ -5,7 +5,7 @@ Toutes les modifications notables de ce projet seront documentées dans ce fichi
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0.html).
 
-**Dernière version :** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) (2026-08-04)
+**Dernière version :** [0.1.0](https://github.com/duckling-ui/duckling/releases/tag/v0.1.0) (2026-08-21)
 
 ## [Non publié]
 
@@ -19,6 +19,25 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 - Bascule thème sombre/clair
 - Raccourcis clavier
 - Améliorations d'accessibilité (WCAG 2.1)
+
+## [0.1.0] - 2026-08-21
+
+Première version mineure après la série 0.0.x : parité docling-serve pour conversion, chunking et pipeline ; formats élargis ; topologie de déploiement ; remédiation Dependabot.
+
+### Ajouté
+
+- **Parité docling-serve** : paramètres pipeline (standard/VLM/ASR), factory de chunking, formats élargis, options par job et réglages API/UI de bout en bout.
+- **Configuration serveur et auth** : `DUCKLING_CONFIG_FILE`, journalisation structurée, clé API optionnelle (`DUCKLING_API_KEY`).
+- **Topologie de déploiement** : services Redis/worker Compose, endpoint batch connecteur et adaptateurs d'orchestration (local/RQ/Ray).
+
+### Modifié
+
+- **Paramètres de conversion** : pipeline/PDF/préréglages d'enrichissement et contrôles de chunking ; client API frontend avec clé API et options par job.
+- **Orchestration** : Ray/docling-jobkit hors requirements backend par défaut ; RQ/Redis restent dans l'image standard.
+
+### Sécurité
+
+- **Remédiation Dependabot** : lockfile frontend (`axios`, `vitest`, `vite`, `postcss`) et overrides npm ; minimums backend pour `python-dotenv` et `pytest`/`pytest-cov`.
 
 ## [0.0.14] - 2026-08-04
 
@@ -352,7 +371,8 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 - Limites de taille maximale des fichiers
 - Gestion sécurisée des noms de fichiers
 
-[Non publié]: https://github.com/duckling-ui/duckling/compare/v0.0.14...HEAD
+[Non publié]: https://github.com/duckling-ui/duckling/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/duckling-ui/duckling/compare/v0.0.14...v0.1.0
 [0.0.14]: https://github.com/duckling-ui/duckling/compare/v0.0.13...v0.0.14
 [0.0.13]: https://github.com/duckling-ui/duckling/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.12

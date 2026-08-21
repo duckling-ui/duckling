@@ -5,14 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-**Latest release:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) (2026-08-04)
+**Latest release:** [0.1.0](https://github.com/duckling-ui/duckling/releases/tag/v0.1.0) (2026-08-21)
 
 ## [Unreleased]
-
-### Security
-
-- Docker publish Trivy gate: Ray and docling-jobkit moved to optional `backend/requirements-orchestration.txt` (not installed in default API/worker images) because Ray bundles Java JARs with HIGH findings until upstream releases patched Jackson/httpcore versions.
-- Dependabot remediation: frontend lockfile refresh (`axios`, `vitest`, `vite`, `postcss`) plus npm overrides for transitive CVEs; backend minimum bumps for `python-dotenv` and `pytest`/`pytest-cov`.
 
 ### Planned
 
@@ -24,6 +19,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dark/light theme toggle
 - Keyboard shortcuts
 - Accessibility improvements (WCAG 2.1)
+
+## [0.1.0] - 2026-08-21
+
+First minor release after 0.0.x: docling-serve parity for conversion, chunking, and pipeline settings; expanded formats; deployment topology; and security dependency remediation.
+
+### Added
+
+- **Docling-serve parity**: pipeline settings (standard/VLM/ASR), chunker factory (hybrid/hierarchical), expanded formats, per-job options, and settings UI/API wiring end-to-end.
+- **Server config and auth**: `DUCKLING_CONFIG_FILE`, structured logging (`DUCKLING_LOG_FORMAT=json`), optional API key (`DUCKLING_API_KEY` / `X-Api-Key`).
+- **Deployment topology**: Redis/worker compose services, connector batch request endpoint, and orchestration adapters (local/RQ/Ray) for distributed follow-up.
+
+### Changed
+
+- **Conversion settings**: pipeline/PDF/enrichment controls and richer chunking settings wired through converter and frontend.
+- **Orchestration packaging**: Ray/docling-jobkit moved out of default backend requirements so Docker Trivy gates stay green; RQ/Redis remain in the default image.
+
+### Security
+
+- **Dependabot remediation**: frontend lockfile refresh (`axios`, `vitest`, `vite`, `postcss`) plus npm overrides for transitive CVEs; backend minimum bumps for `python-dotenv` and `pytest`/`pytest-cov`.
+- Docker publish Trivy gate: Ray and docling-jobkit remain optional (not installed in default API/worker images) because Ray bundles Java JARs with HIGH findings until upstream patches land.
 
 ## [0.0.14] - 2026-08-04
 
@@ -383,7 +398,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maximum file size limits
 - Secure filename handling
 
-[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.14...HEAD
+[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/duckling-ui/duckling/compare/v0.0.14...v0.1.0
 [0.0.14]: https://github.com/duckling-ui/duckling/compare/v0.0.13...v0.0.14
 [0.0.13]: https://github.com/duckling-ui/duckling/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.12

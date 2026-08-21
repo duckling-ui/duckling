@@ -13,7 +13,7 @@
 
 A modern, user-friendly browser-based graphical interface for [Docling](https://github.com/docling-project/docling) - the powerful document conversion library by IBM.
 
-**Current release:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) — DocLang (`.dclg.xml`) export (DocLang spec 0.7 via Docling 2.118+), Docker/CI hardening, and full docs localization updates. See [CHANGELOG.md](CHANGELOG.md).
+**Current release:** [0.1.0](https://github.com/duckling-ui/duckling/releases/tag/v0.1.0) — docling-serve parity for conversion, chunking, and pipeline settings; expanded formats; optional API key auth; Redis/worker compose topology; and Dependabot/npm audit remediation. See [CHANGELOG.md](CHANGELOG.md).
 
 ![Duckling Screenshot](docs/screenshot.png)
 
@@ -29,7 +29,7 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
 - **RAG-Ready Chunking**: Generate document chunks optimized for RAG applications
 - **Expanded Chunking Controls**: Hybrid/hierarchical chunking, tokenizer selection, markdown image/table chunk options, and raw text inclusion
 - **Pipeline Controls**: Standard, VLM, and ASR-ready pipeline settings with PDF backend and heading hierarchy options
-- **Enterprise Deployment Modes**: Optional API-key auth, structured JSON logs, Redis service, and worker process scaffolding for RQ (default image) with optional Ray/jobkit extras via `backend/requirements-orchestration.txt`
+- **Enterprise Deployment Modes**: Optional API-key auth, structured JSON logs, Redis/worker compose services, and orchestration adapters (local/RQ/Ray) with optional Ray/jobkit extras via `backend/requirements-orchestration.txt`
 - **Advanced OCR**: Multiple OCR backends with GPU acceleration support
 - **Real-Time Progress**: Watch your document conversion progress in real-time
 - **Conversion History**: Access previously converted documents and reload them without re-conversion

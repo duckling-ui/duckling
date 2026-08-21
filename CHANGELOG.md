@@ -5,28 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-**Latest release:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) (2026-08-04)
+**Latest release:** [0.1.0](https://github.com/duckling-ui/duckling/releases/tag/v0.1.0) (2026-08-21)
 
 ## [Unreleased]
-
-### Added
-
-- Added foundational docling-serve parity scaffolding across pipeline settings, chunking options, connector batch endpoint shape, and deployment worker topology.
-- Added backend server config loader (`DUCKLING_CONFIG_FILE`) and structured logging bootstrap (`DUCKLING_LOG_FORMAT=json`).
-- Added optional API key enforcement (`DUCKLING_API_KEY` via `X-Api-Key`).
-- Added expanded input/output format surface (including `yaml`, `vtt`, `dclx`, `html_split_page`) with best-effort exports.
-- Added Redis + worker service definitions in compose files and worker entry-point scaffolding.
-
-### Changed
-
-- Extended conversion settings schema with pipeline, PDF, enrichment preset placeholders, and richer chunking controls.
-- Updated chunk generation to use a chunker factory and include raw text/image metadata when available.
-- Updated frontend API client to support API key headers and per-job conversion options (`page_range`, `to_formats`).
-- Moved Ray and docling-jobkit out of default `backend/requirements.txt` into optional `backend/requirements-orchestration.txt` so Docker publish Trivy gates are not blocked by Ray's bundled Java JAR CVEs; RQ/Redis remain in the default image.
-
-### Security
-
-- Remediated GitHub Dependabot alerts: bumped frontend deps (`axios` 1.19+, `vitest` 4.1.11+, `vite`/`postcss` patches) with npm overrides for transitive CVEs; backend bumps `python-dotenv>=1.1.0` and `pytest>=8.3.5`/`pytest-cov>=5`.
 
 ### Planned
 
@@ -38,6 +19,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dark/light theme toggle
 - Keyboard shortcuts
 - Accessibility improvements (WCAG 2.1)
+
+## [0.1.0] - 2026-08-21
+
+First minor release after the 0.0.x line: docling-serve parity for conversion, chunking, and pipeline settings; expanded formats; optional API key auth; and Dependabot/npm audit remediation.
+
+### Added
+
+- Added docling-serve parity across pipeline settings (standard/VLM/ASR), chunking options (hybrid/hierarchical chunker factory), expanded input/output formats (including `yaml`, `vtt`, `dclx`, `html_split_page`), and per-job conversion options (`page_range`, `to_formats`).
+- Added backend server config loader (`DUCKLING_CONFIG_FILE`) and structured logging bootstrap (`DUCKLING_LOG_FORMAT=json`).
+- Added optional API key enforcement (`DUCKLING_API_KEY` via `X-Api-Key`).
+- Added Redis + worker service definitions in compose files, connector batch request endpoint, and orchestration adapters (local/RQ/Ray) for distributed deployment follow-up.
+
+### Changed
+
+- Extended conversion settings schema with pipeline, PDF, enrichment controls, and richer chunking settings wired through backend converter and frontend settings UI.
+- Updated chunk generation to use a chunker factory and include raw text/image metadata when available.
+- Updated frontend API client to support API key headers and per-job conversion options.
+- Moved Ray and docling-jobkit out of default `backend/requirements.txt` into optional `backend/requirements-orchestration.txt` so Docker publish Trivy gates are not blocked by Ray's bundled Java JAR CVEs; RQ/Redis remain in the default image.
+
+### Security
+
+- Remediated GitHub Dependabot alerts: bumped frontend deps (`axios` 1.19+, `vitest` 4.1.11+, `vite`/`postcss` patches) with npm overrides for transitive CVEs; backend bumps `python-dotenv>=1.1.0` and `pytest>=8.3.5`/`pytest-cov>=5`.
 
 ## [0.0.14] - 2026-08-04
 
@@ -646,7 +649,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maximum file size limits (100MB default)
 - Secure filename handling
 
-[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.14...HEAD
+[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/duckling-ui/duckling/compare/v0.0.14...v0.1.0
 [0.0.14]: https://github.com/duckling-ui/duckling/compare/v0.0.13...v0.0.14
 [0.0.13]: https://github.com/duckling-ui/duckling/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.12
