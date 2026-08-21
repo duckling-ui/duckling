@@ -14,6 +14,15 @@ Referencia completa de los formatos de entrada y salida que admite Duckling.
 | Excel | `.xlsx` | Microsoft Excel | Extrae tablas y datos |
 | HTML | `.html`, `.htm` | Páginas web | Conserva estructura y formato |
 | Markdown | `.md`, `.markdown` | Archivos Markdown | Soporte completo de CommonMark |
+| CSV | `.csv` | CSV | Datos tabulares |
+| Correo | `.eml`, `.msg` | Email | Mensajes |
+| EPUB | `.epub` | E-books | Capítulos |
+| LaTeX | `.tex`, `.latex` | TeX | Mejor esfuerzo |
+| OpenDocument | `.odt`, `.ods`, `.odp` | LibreOffice | ODF |
+| DCLX | `.dclx` | Intercambio Docling | Nativo |
+| Audio | `.wav`, `.mp3` | Voz | **ASR** |
+| Vídeo | `.mp4`, `.mov`, `.mkv` | Vídeo | **ASR** |
+| WebVTT | `.vtt` | Subtítulos | Texto sincronizado |
 
 ### Imágenes
 
@@ -116,6 +125,22 @@ Formato de documento etiquetado para análisis semántico.
   </section>
 </document>
 ```
+
+#### YAML (`.yaml`)
+
+Export YAML.
+
+#### WebVTT (`.vtt`)
+
+Subtítulos.
+
+#### DCLX (`.dclx`)
+
+Intercambio Docling.
+
+#### HTML paginado
+
+`html_split_page`.
 
 #### DocLang (`.dclg.xml`) {#doclang-dclgxml}
 

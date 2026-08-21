@@ -418,6 +418,77 @@ curl -X POST http://localhost:5001/api/settings/reset
 
 ---
 
+## Server configuration (deploy-time)
+
+Per-session settings below are stored in Duckling's database. **Deploy-time** options (API key, orchestration engine, structured logging) use `DUCKLING_*` environment variables and optional `DUCKLING_CONFIG_FILE`.
+
+| Variable | Purpose |
+|----------|---------|
+| `DUCKLING_API_KEY` | Require `X-Api-Key` on API requests |
+| `DUCKLING_CONFIG_FILE` | JSON/YAML server config path |
+| `DUCKLING_LOG_FORMAT` | `text` or `json` logging |
+| `DUCKLING_ENGINE_KIND` | `local`, `rq`, or `ray` orchestration adapter |
+
+Full reference: [Server Configuration](../deployment/server-config.md).
+
+---
+
+## Pipeline settings
+
+Choose how Docling processes documents. Configure in **Settings → Pipeline** or via `GET/PUT /api/settings/pipeline`.
+
+| Setting | Values | Description |
+|---------|--------|-------------|
+| `kind` | `standard`, `vlm`, `asr` | Conversion pipeline |
+| `vlm_preset` | Docling preset name | Used when `kind=vlm` for PDF/image VLM pipelines |
+| `vlm_custom_config` | JSON object | Advanced VLM options (server must set `allow_custom_vlm_config`) |
+
+- **Standard** — default Docling PDF/document pipeline (OCR, tables, layout).
+- **VLM** — vision-language model pipeline for PDFs and images.
+- **ASR** — automatic speech recognition for audio/video inputs (`.wav`, `.mp3`, `.mp4`, etc.).
+
+---
+
+## PDF settings
+
+Configure in **Settings → PDF** or `GET/PUT /api/settings/pdf`.
+
+| Setting | Values | Description |
+|---------|--------|-------------|
+| `pdf_backend` | `docling_parse`, `pypdfium2` | PDF parsing backend |
+| `image_export_mode` | `placeholder`, `embedded`, `referenced` | How images appear in exports |
+| `do_pdf_heading_hierarchy` | boolean | Build heading hierarchy from PDF structure |
+
+---
+
+## Advanced chunking
+
+Beyond `enabled`, `max_tokens`, and `merge_peers` in the UI, the API supports docling-serve–aligned chunker options via `GET/PUT /api/settings/chunking`:
+
+| Setting | Description |
+|---------|-------------|
+| `chunker` | `hybrid` (default) or `hierarchical` |
+| `tokenizer` | Hugging Face tokenizer model id |
+| `use_markdown_tables` | Include tables as markdown inside chunks |
+| `use_markdown_images` | Include images as markdown inside chunks |
+| `image_placeholder` | Text substituted for images in chunk text |
+| `include_raw_text` | Add `raw_text` on each chunk object |
+
+See [Settings API](../api/settings.md) for examples.
+
+---
+
+## Per-job overrides
+
+When calling conversion APIs programmatically, you can override session settings for a single job:
+
+- **`page_range`** — `[start, end]` 1-based PDF pages (UI: drop zone page fields)
+- **`to_formats`** — export only selected formats for this job
+
+See [Conversion API](../api/conversion.md).
+
+---
+
 ## Troubleshooting
 
 ### OCR Not Working

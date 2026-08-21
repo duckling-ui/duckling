@@ -418,6 +418,42 @@ curl -X POST http://localhost:5001/api/settings/reset
 
 ---
 
+## Configuration serveur (déploiement)
+
+Les paramètres ci-dessous sont par session (base de données). **Déploiement** : `DUCKLING_*` et `DUCKLING_CONFIG_FILE`.
+
+| Variable | Rôle |
+|----------|------|
+| `DUCKLING_API_KEY` | En-tête `X-Api-Key` |
+| `DUCKLING_CONFIG_FILE` | Fichier JSON/YAML serveur |
+| `DUCKLING_LOG_FORMAT` | `text` ou `json` |
+| `DUCKLING_ENGINE_KIND` | `local`, `rq` ou `ray` |
+
+Référence : [Configuration serveur](../deployment/server-config.md).
+
+---
+
+## Paramètres pipeline
+
+**Paramètres → Pipeline** ou `GET/PUT /api/settings/pipeline` — types `standard`, `vlm`, `asr`.
+
+---
+
+## Paramètres PDF
+
+**Paramètres → PDF** ou `GET/PUT /api/settings/pdf` — backend, mode d'images, hiérarchie de titres.
+
+---
+
+## Surcharges par job
+
+- **`page_range`** — pages PDF (UI : zone de dépôt)
+- **`to_formats`** — formats d'export limités pour ce job
+
+Voir [API Conversion](../api/conversion.md).
+
+---
+
 ## Dépannage
 
 ### L'OCR ne fonctionne pas

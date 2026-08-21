@@ -1,15 +1,30 @@
-### Advanced Chunking Controls
-
-Chunking settings now support additional parity-oriented controls:
-
-- Chunker strategy (`hybrid` or `hierarchical`)
-- Tokenizer selection
-- Markdown table/image serialization
-- Image placeholders
-- Optional `raw_text` in chunk payloads
 # Features
 
 Duckling provides a comprehensive set of features for document conversion.
+
+## Pipeline modes (standard / VLM / ASR)
+
+**Settings → Pipeline** selects the Docling processing pipeline:
+
+| Mode | Best for |
+|------|----------|
+| **Standard** | Office documents, PDFs, HTML — OCR, tables, layout |
+| **VLM** | PDFs and images where vision-language models improve understanding |
+| **ASR** | Audio and video files (speech-to-text pipeline) |
+
+When **VLM** is selected, choose a **VLM preset** matching your Docling installation. Custom VLM JSON is available via API when the server enables `allow_custom_vlm_config`.
+
+## Advanced chunking controls
+
+Chunking settings support docling-serve–aligned options (full set via API; core toggles in the UI):
+
+- Chunker strategy (`hybrid` or `hierarchical`)
+- Tokenizer selection
+- Markdown table/image serialization in chunks
+- Image placeholders in chunk text
+- Optional `raw_text` field on chunk payloads
+
+Enable chunking in **Settings → Chunking** or export RAG chunks from the export panel after conversion.
 
 ## Document Upload
 

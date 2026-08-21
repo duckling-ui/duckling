@@ -9,6 +9,10 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 
 ## [Non publié]
 
+### Documentation
+
+- Documentation de parité docling-serve (pipeline/VLM/ASR, chunking, formats, clé API, configuration serveur, Redis/worker) dans le guide utilisateur, l'API, le déploiement et Docker ; page [Configuration serveur](deployment/server-config.md).
+
 ### Prévu
 
 - Authentification des utilisateurs

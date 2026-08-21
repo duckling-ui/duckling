@@ -2,6 +2,23 @@
 
 Points de terminaison pour téléverser et convertir des documents.
 
+## Options de job (parité)
+
+Les endpoints acceptent des surcharges optionnelles dans le champ JSON `settings` :
+
+| Champ | Type | Description |
+|-------|------|-------------|
+| `page_range` | `[start, end]` | Plage de pages PDF (base 1) |
+| `to_formats` | `string[]` | Formats d'export pour ce job, ex. `["markdown","yaml"]` |
+
+Avec `DUCKLING_API_KEY`, envoyer l'en-tête `X-Api-Key`. Détails : [API Conversion (EN)](../../api/conversion.md).
+
+## Endpoint batch connecteurs
+
+`POST /api/convert/batch/connectors` — valide `sources`, `target`, `options` ; l'exécution nécessite l'intégration workers RQ/Ray.
+
+---
+
 ## Téléverser et convertir un document unique
 
 ```http

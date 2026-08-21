@@ -9,6 +9,10 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 
 ## [Unveröffentlicht]
 
+### Dokumentation
+
+- Paritäts-Dokumentation (Pipeline/VLM/ASR, Chunking, Formate, API-Schlüssel, Server-Konfiguration, Redis/Worker) in Benutzerhandbuch, API, Bereitstellung und Docker; [Server-Konfiguration](deployment/server-config.md) ergänzt.
+
 ### Geplant
 
 - Benutzerauthentifizierung

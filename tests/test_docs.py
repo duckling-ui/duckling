@@ -86,6 +86,7 @@ def test_required_docs_sections_exist():
         "docs/deployment/index.md",
         "docs/deployment/production.md",
         "docs/deployment/scaling.md",
+        "docs/deployment/server-config.md",
         "docs/deployment/security.md",
         "docs/contributing/index.md",
         "docs/contributing/development.md",
@@ -123,6 +124,7 @@ def test_required_docs_sections_exist():
         "docs/es/deployment/index.md",
         "docs/es/deployment/production.md",
         "docs/es/deployment/scaling.md",
+        "docs/es/deployment/server-config.md",
         "docs/es/deployment/security.md",
         "docs/es/contributing/index.md",
         "docs/es/contributing/development.md",
@@ -160,6 +162,7 @@ def test_required_docs_sections_exist():
         "docs/fr/deployment/index.md",
         "docs/fr/deployment/production.md",
         "docs/fr/deployment/scaling.md",
+        "docs/fr/deployment/server-config.md",
         "docs/fr/deployment/security.md",
         "docs/fr/contributing/index.md",
         "docs/fr/contributing/development.md",
@@ -197,6 +200,7 @@ def test_required_docs_sections_exist():
         "docs/de/deployment/index.md",
         "docs/de/deployment/production.md",
         "docs/de/deployment/scaling.md",
+        "docs/de/deployment/server-config.md",
         "docs/de/deployment/security.md",
         "docs/de/contributing/index.md",
         "docs/de/contributing/development.md",
@@ -299,6 +303,27 @@ def test_language_selector_js_rewrites_locale_switcher():
     assert "parsePathContext" in text
     assert "INAPP_DOCS_RE" in text
     assert "hrefForPathContext" in text
+
+
+def test_parity_documentation_covers_key_topics():
+    """Docling-serve parity features are documented in user guide and API reference."""
+    conversion = (PROJECT_ROOT / "docs/api/conversion.md").read_text(encoding="utf-8")
+    settings = (PROJECT_ROOT / "docs/api/settings.md").read_text(encoding="utf-8")
+    server_cfg = (PROJECT_ROOT / "docs/deployment/server-config.md").read_text(encoding="utf-8")
+    configuration = (PROJECT_ROOT / "docs/user-guide/configuration.md").read_text(encoding="utf-8")
+
+    assert "page_range" in conversion and "to_formats" in conversion
+    assert "batch/connectors" in conversion
+    assert "/api/settings/pipeline" in settings
+    assert "chunker" in settings and "hierarchical" in settings
+    assert "DUCKLING_API_KEY" in server_cfg and "DUCKLING_CONFIG_FILE" in server_cfg
+    assert "Pipeline settings" in configuration
+
+    for locale in ("de", "fr", "es"):
+        loc_conv = (PROJECT_ROOT / f"docs/{locale}/api/conversion.md").read_text(encoding="utf-8")
+        loc_srv = (PROJECT_ROOT / f"docs/{locale}/deployment/server-config.md").read_text(encoding="utf-8")
+        assert "page_range" in loc_conv or "Parité" in loc_conv or "Paridad" in loc_conv or "Paritäts" in loc_conv
+        assert "DUCKLING_API_KEY" in loc_srv
 
 
 @pytest.mark.skipif(

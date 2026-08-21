@@ -63,6 +63,11 @@ docker-compose up --build
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 ```
 
+
+### Services Redis et worker
+
+Le `docker-compose.yml` par défaut inclut `redis` et `rq-worker`. Variable `DUCKLING_ENGINE_KIND=local|rq|ray`. Par défaut **local**. Voir [Configuration serveur](../deployment/server-config.md).
+
 ### Images préconstruites
 
 ```bash

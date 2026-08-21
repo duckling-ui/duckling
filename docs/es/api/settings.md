@@ -5,6 +5,19 @@ Endpoints para gestionar la configuración de conversión.
 !!! note "Almacenamiento basado en sesión"
     La configuración se almacena por sesión de usuario en la base de datos. La configuración de cada usuario está aislada y no afecta a otros usuarios, lo que hace que Duckling sea seguro en despliegues multiusuario.
 
+Opciones de despliegue: [Configuración del servidor](../deployment/server-config.md).
+
+## Ajustes pipeline y PDF
+
+- `GET/PUT /api/settings/pipeline` — standard/vlm/asr
+- `GET/PUT /api/settings/pdf` — backend PDF e imagen
+
+## Chunking avanzado
+
+Campos `chunker`, `tokenizer`, `include_raw_text` vía API.
+
+---
+
 ## Obtener toda la configuración
 
 ```http

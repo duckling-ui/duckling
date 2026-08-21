@@ -54,6 +54,10 @@ graph TB
     Docling --> FileSystem
 ```
 
+## Job processing and orchestration
+
+Conversions run through an in-process background queue by default (`DUCKLING_ENGINE_KIND=local`). Optional Redis, RQ, and Ray adapters support distributed deployment topologies; connector batch execution requires worker integration. See [Server Configuration](../deployment/server-config.md) and [Scaling](../deployment/scaling.md).
+
 ## Data Flow
 
 ### Document Conversion Flow

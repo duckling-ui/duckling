@@ -24,6 +24,14 @@ Duckling can be deployed in multiple ways depending on your needs:
 
     [:octicons-arrow-right-24: Scaling Guide](scaling.md)
 
+-   :material-cog-outline:{ .lg .middle } __Server Config__
+
+    ---
+
+    API key, orchestration engine, logging, connector allowlists
+
+    [:octicons-arrow-right-24: Server Config Guide](server-config.md)
+
 -   :material-shield-check:{ .lg .middle } __Security__
 
     ---

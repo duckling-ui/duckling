@@ -14,6 +14,15 @@ Vollständige Referenz zu den von Duckling unterstützten Eingabe- und Ausgabefo
 | Excel | `.xlsx` | Microsoft Excel | Extrahiert Tabellen und Daten |
 | HTML | `.html`, `.htm` | Webseiten | Struktur und Formatierung bleiben erhalten |
 | Markdown | `.md`, `.markdown` | Markdown-Dateien | Volle CommonMark-Unterstützung |
+| CSV | `.csv` | Komma-getrennte Werte | Tabellendaten |
+| E-Mail | `.eml`, `.msg` | E-Mail-Nachrichten | Text und Anhänge |
+| EPUB | `.epub` | E-Books | Kapitelstruktur |
+| LaTeX | `.tex`, `.latex` | TeX-Quellen | Best-effort |
+| OpenDocument | `.odt`, `.ods`, `.odp` | LibreOffice-Formate | Text, Tabelle, Präsentation |
+| DCLX | `.dclx` | Docling-Austauschformat | Native Docling-Interchange |
+| Audio | `.wav`, `.mp3` | Sprache | **ASR**-Pipeline empfohlen |
+| Video | `.mp4`, `.mov`, `.mkv` | Video mit Ton | **ASR**-Pipeline |
+| WebVTT | `.vtt` | Untertitel | Zeitbasierter Text |
 
 ### Bilder
 
@@ -116,6 +125,22 @@ Getaggtes Dokumentformat für semantische Analyse.
   </section>
 </document>
 ```
+
+#### YAML (`.yaml`)
+
+Strukturierter Export über Doclings YAML-Serializer (oder PyYAML-Fallback).
+
+#### WebVTT (`.vtt`)
+
+Zeitbasierter Textexport für Transkripte und Untertitel (besonders ASR-Ausgabe).
+
+#### DCLX (`.dclx`)
+
+Docling-Austauschformat zum Round-Trip zwischen Docling-Tools.
+
+#### HTML nach Seiten (`.split.html`)
+
+HTML-Export mit Seitengrenzen (`html_split_page`) für paginierte Webansichten.
 
 #### DocLang (`.dclg.xml`) {#doclang-dclgxml}
 

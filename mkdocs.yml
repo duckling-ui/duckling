@@ -116,6 +116,7 @@ plugins:
             Deployment: Despliegue
             Production: Producción
             Scaling: Escalado
+            "Server Config": Configuración del servidor
             Security: Seguridad
             Contributing: Contribuir
             "Development Setup": Configuración de desarrollo
@@ -153,6 +154,7 @@ plugins:
             Deployment: Déploiement
             Production: Production
             Scaling: Mise à l'échelle
+            "Server Config": Configuration serveur
             Security: Sécurité
             Contributing: Contribuer
             "Development Setup": Configuration du développement
@@ -190,6 +192,7 @@ plugins:
             Deployment: Bereitstellung
             Production: Produktion
             Scaling: Skalierung
+            "Server Config": Server-Konfiguration
             Security: Sicherheit
             Contributing: Mitwirken
             "Development Setup": Entwicklungsumgebung
@@ -291,6 +294,7 @@ nav:
       - deployment/index.md
       - Production: deployment/production.md
       - Scaling: deployment/scaling.md
+      - Server Config: deployment/server-config.md
       - Security: deployment/security.md
   - Contributing:
       - contributing/index.md

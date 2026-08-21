@@ -418,6 +418,67 @@ curl -X POST http://localhost:5001/api/settings/reset
 
 ---
 
+## Server-Konfiguration (Bereitstellung)
+
+Sitzungseinstellungen unten liegen in der Duckling-Datenbank. **Bereitstellungsoptionen** (API-Schlüssel, Orchestrierung, Logging) nutzen `DUCKLING_*` und optional `DUCKLING_CONFIG_FILE`.
+
+| Variable | Zweck |
+|----------|-------|
+| `DUCKLING_API_KEY` | `X-Api-Key` auf API-Anfragen |
+| `DUCKLING_CONFIG_FILE` | Pfad zu JSON/YAML-Serverkonfiguration |
+| `DUCKLING_LOG_FORMAT` | `text` oder `json` |
+| `DUCKLING_ENGINE_KIND` | `local`, `rq` oder `ray` |
+
+Vollständige Referenz: [Server-Konfiguration](../deployment/server-config.md).
+
+---
+
+## Pipeline-Einstellungen
+
+In **Einstellungen → Pipeline** oder per `GET/PUT /api/settings/pipeline`:
+
+| Einstellung | Werte | Beschreibung |
+|-------------|-------|--------------|
+| `kind` | `standard`, `vlm`, `asr` | Verarbeitungspipeline |
+| `vlm_preset` | Docling-Preset | Bei `kind=vlm` |
+
+---
+
+## PDF-Einstellungen
+
+In **Einstellungen → PDF** oder per `GET/PUT /api/settings/pdf`:
+
+| Einstellung | Werte | Beschreibung |
+|-------------|-------|--------------|
+| `pdf_backend` | `docling_parse`, `pypdfium2` | PDF-Parser |
+| `image_export_mode` | `placeholder`, `embedded`, `referenced` | Bilder in Exporten |
+| `do_pdf_heading_hierarchy` | boolean | Überschriftenhierarchie aus PDF |
+
+---
+
+## Erweitertes Chunking
+
+Über `enabled`, `max_tokens`, `merge_peers` in der UI hinaus unterstützt die API:
+
+| Einstellung | Beschreibung |
+|-------------|--------------|
+| `chunker` | `hybrid` oder `hierarchical` |
+| `tokenizer` | Hugging-Face-Tokenizer-ID |
+| `include_raw_text` | Feld `raw_text` pro Chunk |
+
+Siehe [Einstellungen-API](../api/settings.md).
+
+---
+
+## Pro-Job-Overrides
+
+- **`page_range`** — `[start, end]` für PDF-Seiten (UI: Ablagezone)
+- **`to_formats`** — nur ausgewählte Exportformate für diesen Job
+
+Siehe [Konvertierungs-API](../api/conversion.md).
+
+---
+
 ## Fehlerbehebung
 
 ### OCR funktioniert nicht

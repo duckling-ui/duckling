@@ -24,6 +24,14 @@ Duckling kann je nach Anforderung auf unterschiedliche Weise bereitgestellt werd
 
     [:octicons-arrow-right-24: Skalierungsanleitung](scaling.md)
 
+-   :material-cog-outline:{ .lg .middle } __Server-Konfiguration__
+
+    ---
+
+    API-Schlüssel, Orchestrierungs-Engine, Logging, Connector-Allowlists
+
+    [:octicons-arrow-right-24: Server-Konfiguration](server-config.md)
+
 -   :material-shield-check:{ .lg .middle } __Sicherheit__
 
     ---

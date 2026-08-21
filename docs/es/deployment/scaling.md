@@ -2,6 +2,10 @@
 
 Guía para escalar Duckling en despliegues de alto tráfico.
 
+## Topología workers RQ/Ray
+
+`redis`, `rq-worker`, `DUCKLING_ENGINE_KIND`. Ver [Configuración del servidor](server-config.md).
+
 ## Arquitectura para escalar
 
 ```mermaid

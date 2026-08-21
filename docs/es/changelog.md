@@ -9,6 +9,10 @@ y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2
 
 ## [Sin publicar]
 
+### Documentación
+
+- Docs paridad docling-serve y [Configuración del servidor](deployment/server-config.md).
+
 ### Planificado
 
 - Autenticación de usuarios

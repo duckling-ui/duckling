@@ -35,6 +35,15 @@ Antes de desplegar en producción, asegúrese de:
 
 ---
 
+
+---
+
+## Autenticación con clave API
+
+Enviar `X-Api-Key` cuando `DUCKLING_API_KEY` está definido.
+
+---
+
 ## Variables de entorno
 
 | Variable | Predeterminado | Descripción |

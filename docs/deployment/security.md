@@ -30,12 +30,28 @@ Before deploying to production, ensure:
 - [ ] Use HTTPS in production (configure via reverse proxy)
 - [ ] Set appropriate `MAX_CONTENT_LENGTH` for your use case
 - [ ] Review and restrict file upload extensions if needed
-- [ ] Enable rate limiting (via reverse proxy or middleware)
-- [ ] Set up log monitoring for security events
+- [ ] Set `DUCKLING_API_KEY` (or `api_key` in [server config file](server-config.md)) and terminate TLS at your reverse proxy
+- [ ] Set `DUCKLING_LOG_FORMAT=json` for structured production logs
+- [ ] Configure `DUCKLING_CONFIG_FILE` for centralized deploy settings
 
 ---
 
-## Environment Variables
+## API key authentication
+
+When `DUCKLING_API_KEY` is set, Duckling requires the header on all `/api/*` requests except health and embedded docs:
+
+```http
+X-Api-Key: your-secret-key
+```
+
+Configure via environment variable or `api_key` in [Server Configuration](server-config.md). The frontend build can set `VITE_API_KEY` so the UI sends the header automatically.
+
+**401 Unauthorized** is returned when the key is missing or wrong.
+
+!!! tip "Defense in depth"
+    Even with API key auth, place Duckling behind HTTPS and restrict network access. The API key protects programmatic access; it does not replace network-level controls.
+
+---
 
 | Variable | Default | Description |
 |----------|---------|-------------|

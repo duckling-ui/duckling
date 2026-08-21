@@ -14,6 +14,15 @@ Complete reference for input and output formats supported by Duckling.
 | Excel | `.xlsx` | Microsoft Excel | Extracts tables and data |
 | HTML | `.html`, `.htm` | Web pages | Preserves structure and formatting |
 | Markdown | `.md`, `.markdown` | Markdown files | Full CommonMark support |
+| CSV | `.csv` | Comma-separated values | Tabular data |
+| Email | `.eml`, `.msg` | Email messages | Body and attachments |
+| EPUB | `.epub` | E-books | Chapter structure preserved |
+| LaTeX | `.tex`, `.latex` | TeX sources | Best-effort parsing |
+| OpenDocument | `.odt`, `.ods`, `.odp` | LibreOffice formats | Text, spreadsheet, presentation |
+| DCLX | `.dclx` | Docling exchange format | Native Docling interchange |
+| Audio | `.wav`, `.mp3` | Speech audio | Use **ASR** pipeline for best results |
+| Video | `.mp4`, `.mov`, `.mkv` | Video with audio track | Use **ASR** pipeline |
+| WebVTT | `.vtt` | Subtitle/caption files | Timed text |
 
 ### Images
 
@@ -116,6 +125,22 @@ Tagged document format for semantic analysis.
   </section>
 </document>
 ```
+
+#### YAML (`.yaml`)
+
+Structured export using Docling's YAML serializer (or PyYAML fallback). Useful for config-driven pipelines.
+
+#### WebVTT (`.vtt`)
+
+Timed text export for transcripts and captions (especially from ASR pipeline output).
+
+#### DCLX (`.dclx`)
+
+Docling exchange format for round-tripping parsed documents between Docling tools.
+
+#### HTML split by page (`.split.html`)
+
+HTML export with page boundaries preserved (`html_split_page` format) for paginated web views.
 
 #### DocLang (`.dclg.xml`) {#doclang-dclgxml}
 

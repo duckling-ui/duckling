@@ -3,7 +3,7 @@
 This repository contains multiple test suites:
 
 - **Root (pytest)**: Lightweight repository checks and documentation structure tests in `tests/`
-  - `tests/test_docs.py`: Verifies MkDocs documentation structure (including DocLang coverage in Quick Start, formats, API, and Docling hub pages; settings API examples use `.tokens.json` for Document Tokens; French quickstart DocLang section is not duplicated; can optionally run `mkdocs build`)
+  - `tests/test_docs.py`: Verifies MkDocs documentation structure (including DocLang coverage in Quick Start, formats, API, and Docling hub pages; settings API examples use `.tokens.json` for Document Tokens; French quickstart DocLang section is not duplicated; `test_parity_documentation_covers_key_topics` guards pipeline/chunking/server-config doc coverage; can optionally run `mkdocs build`)
   - `tests/test_get_version.py`: Ensures `scripts/get_version.py` updates only `extra.version.default` (does not corrupt i18n `fallback_to_default`), docs workflows avoid broad `sed` on mkdocs.yml, and release version sources agree on **0.1.0** (`package.json`, `App.tsx`, `mkdocs.yml`, changelog)
   - `tests/test_docs_build.py`: Static regression test ensuring backend docs rebuild prefers the repo-local `./venv` MkDocs environment (for required plugins like `mkdocs-static-i18n`)
   - `tests/test_github_templates.py`: Ensures `.github/` issue and PR templates exist and include required policy pointers

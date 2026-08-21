@@ -2,6 +2,10 @@
 
 Guide pour faire évoluer Duckling dans des déploiements à fort trafic.
 
+## Topologie workers RQ/Ray
+
+Scaffolding Compose : services `redis` et `rq-worker` (`python worker.py --engine rq`). Variables `DUCKLING_ENGINE_KIND`, `DUCKLING_RQ_REDIS_URL`, `DUCKLING_RAY_ADDRESS`. Ray optionnel via `requirements-orchestration.txt`. Par défaut : exécution **local** dans l'API. Voir [Configuration serveur](server-config.md).
+
 ## Architecture à l’échelle
 
 ```mermaid
