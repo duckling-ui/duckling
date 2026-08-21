@@ -5,7 +5,7 @@ Alle bemerkenswerten Änderungen an diesem Projekt werden in dieser Datei dokume
 Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spec/v2.0.0.html).
 
-**Neueste Version:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) (2026-08-04)
+**Neueste Version:** [0.1.0](https://github.com/duckling-ui/duckling/releases/tag/v0.1.0) (2026-08-21)
 
 ## [Unveröffentlicht]
 
@@ -19,6 +19,25 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 - Dunkel-/Hell-Theme-Umschalter
 - Tastaturkürzel
 - Barrierefreiheitsverbesserungen (WCAG 2.1)
+
+## [0.1.0] - 2026-08-21
+
+Erstes Minor-Release nach der 0.0.x-Reihe: docling-serve-Parität, erweiterte Konvertierungs-/Chunking-Oberfläche, Worker-/Redis-Deployment und Dependabot-Abhilfe.
+
+### Hinzugefügt
+
+- **Docling-serve-Parität**: Pipeline-Einstellungen, Chunker-Factory, Connector-Batch-Endpunkt, Redis/Worker-Compose und optionale Orchestrierungs-Abhängigkeiten.
+- **Server-Konfiguration und Auth**: `DUCKLING_CONFIG_FILE`, strukturiertes Logging, optionaler API-Schlüssel (`DUCKLING_API_KEY`).
+- **Erweiterte Formate**: zusätzliche Ein-/Ausgabeformate (`yaml`, `vtt`, `dclx`, `html_split_page`).
+
+### Geändert
+
+- **Konvertierungseinstellungen**: Pipeline/PDF/Anreicherungs-Voreinstellungen und erweiterte Chunking-Steuerung; Frontend-API unterstützt API-Schlüssel und Job-Optionen.
+- **Orchestrierung**: Ray/docling-jobkit aus den Standard-Backend-Requirements verschoben; RQ/Redis bleiben im Standard-Image.
+
+### Sicherheit
+
+- **Dependabot-Abhilfe**: Frontend-Lockfile (`axios`, `vitest`, `vite`, `postcss`) und npm-Overrides; Backend-Mindestversionen für `python-dotenv` und `pytest`/`pytest-cov`.
 
 ## [0.0.14] - 2026-08-04
 
@@ -353,7 +372,8 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 - Maximale Dateigrößenlimits
 - Sichere Dateinamenbehandlung
 
-[Unveröffentlicht]: https://github.com/duckling-ui/duckling/compare/v0.0.14...HEAD
+[Unveröffentlicht]: https://github.com/duckling-ui/duckling/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/duckling-ui/duckling/compare/v0.0.14...v0.1.0
 [0.0.14]: https://github.com/duckling-ui/duckling/compare/v0.0.13...v0.0.14
 [0.0.13]: https://github.com/duckling-ui/duckling/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.12

@@ -53,24 +53,24 @@ def test_docs_workflows_use_get_version_not_broad_sed():
     assert 'sed -i "s/\\(default:' not in deploy
 
 
-def test_release_version_sources_agree_on_0_0_14():
-    """Stable 0.0.14 bump keeps package.json, UI constant, and mike default aligned."""
+def test_release_version_sources_agree_on_0_1_0():
+    """Stable 0.1.0 bump keeps package.json, UI constant, and mike default aligned."""
     import json
     import re
 
     package = json.loads((PROJECT_ROOT / "frontend/package.json").read_text(encoding="utf-8"))
-    assert package["version"] == "0.0.14"
+    assert package["version"] == "0.1.0"
 
     app = (PROJECT_ROOT / "frontend/src/App.tsx").read_text(encoding="utf-8")
-    assert 'const APP_VERSION = "0.0.14"' in app
+    assert 'const APP_VERSION = "0.1.0"' in app
 
     mkdocs = (PROJECT_ROOT / "mkdocs.yml").read_text(encoding="utf-8")
-    assert re.search(r"(?m)^\s+default:\s+0\.0\.14\s*$", mkdocs)
+    assert re.search(r"(?m)^\s+default:\s+0\.1\.0\s*$", mkdocs)
 
     get_version = (PROJECT_ROOT / "scripts/get_version.py").read_text(encoding="utf-8")
-    assert 'version = "0.0.14"' in get_version
+    assert 'version = "0.1.0"' in get_version
 
     changelog = (PROJECT_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
-    assert "**Latest release:** [0.0.14]" in changelog
-    assert "## [0.0.14] - 2026-08-04" in changelog
-    assert "DocLang export format" in changelog
+    assert "**Latest release:** [0.1.0]" in changelog
+    assert "## [0.1.0] - 2026-08-21" in changelog
+    assert "docling-serve parity" in changelog

@@ -13,7 +13,7 @@
 
 A modern, user-friendly browser-based graphical interface for [Docling](https://github.com/docling-project/docling) - the powerful document conversion library by IBM.
 
-**Current release:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) — DocLang (`.dclg.xml`) export (DocLang spec 0.7 via Docling 2.118+), Docker/CI hardening, and full docs localization updates. See [CHANGELOG.md](CHANGELOG.md).
+**Current release:** [0.1.0](https://github.com/duckling-ui/duckling/releases/tag/v0.1.0) — docling-serve parity foundations (pipeline/chunking/orchestration), expanded formats, optional API key auth, Redis worker scaffolding, and Dependabot/npm audit remediation. See [CHANGELOG.md](CHANGELOG.md).
 
 ![Duckling Screenshot](docs/screenshot.png)
 

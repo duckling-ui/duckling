@@ -5,9 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-**Latest release:** [0.0.14](https://github.com/duckling-ui/duckling/releases/tag/v0.0.14) (2026-08-04)
+**Latest release:** [0.1.0](https://github.com/duckling-ui/duckling/releases/tag/v0.1.0) (2026-08-21)
 
 ## [Unreleased]
+
+### Planned
+
+- User authentication
+- Cloud storage integration
+- Conversion templates
+- API rate limiting
+- WebSocket for real-time updates
+- Dark/light theme toggle
+- Keyboard shortcuts
+- Accessibility improvements (WCAG 2.1)
+
+## [0.1.0] - 2026-08-21
+
+First minor release after the 0.0.x line: docling-serve parity foundations, expanded conversion/chunking surface, deployment worker scaffolding, and Dependabot/npm audit remediation.
 
 ### Added
 
@@ -27,17 +42,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 
 - Remediated GitHub Dependabot alerts: bumped frontend deps (`axios` 1.19+, `vitest` 4.1.11+, `vite`/`postcss` patches) with npm overrides for transitive CVEs; backend bumps `python-dotenv>=1.1.0` and `pytest>=8.3.5`/`pytest-cov>=5`.
-
-### Planned
-
-- User authentication
-- Cloud storage integration
-- Conversion templates
-- API rate limiting
-- WebSocket for real-time updates
-- Dark/light theme toggle
-- Keyboard shortcuts
-- Accessibility improvements (WCAG 2.1)
 
 ## [0.0.14] - 2026-08-04
 
@@ -646,7 +650,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Maximum file size limits (100MB default)
 - Secure filename handling
 
-[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.0.14...HEAD
+[Unreleased]: https://github.com/duckling-ui/duckling/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/duckling-ui/duckling/compare/v0.0.14...v0.1.0
 [0.0.14]: https://github.com/duckling-ui/duckling/compare/v0.0.13...v0.0.14
 [0.0.13]: https://github.com/duckling-ui/duckling/compare/v0.0.12...v0.0.13
 [0.0.12]: https://github.com/duckling-ui/duckling/compare/v0.0.10a...v0.0.12
