@@ -190,6 +190,15 @@
         <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.1.0fr/deployment/security/"/>
     </url>
     <url>
+        <loc>https://duckling-ui.org/0.1.0/deployment/server-config/</loc>
+        <lastmod>2026-08-21</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.1.0/deployment/server-config/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.1.0de/deployment/server-config/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.1.0es/deployment/server-config/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.1.0fr/deployment/server-config/"/>
+    </url>
+    <url>
         <loc>https://duckling-ui.org/0.1.0/docling/</loc>
         <lastmod>2026-08-21</lastmod>
         <changefreq>daily</changefreq>
@@ -539,6 +548,15 @@
         <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.1.0de/deployment/security/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.1.0deployment/security/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.1.0fr/deployment/security/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.1.0/es/deployment/server-config/</loc>
+        <lastmod>2026-08-21</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.1.0/es/deployment/server-config/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.1.0de/deployment/server-config/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.1.0deployment/server-config/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.1.0fr/deployment/server-config/"/>
     </url>
     <url>
         <loc>https://duckling-ui.org/0.1.0/es/docling/</loc>
@@ -892,6 +910,15 @@
         <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.1.0es/deployment/security/"/>
     </url>
     <url>
+        <loc>https://duckling-ui.org/0.1.0/fr/deployment/server-config/</loc>
+        <lastmod>2026-08-21</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.1.0/fr/deployment/server-config/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.1.0de/deployment/server-config/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.1.0deployment/server-config/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.1.0es/deployment/server-config/"/>
+    </url>
+    <url>
         <loc>https://duckling-ui.org/0.1.0/fr/docling/</loc>
         <lastmod>2026-08-21</lastmod>
         <changefreq>daily</changefreq>
@@ -1241,6 +1268,15 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.1.0deployment/security/"/>
         <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.1.0es/deployment/security/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.1.0fr/deployment/security/"/>
+    </url>
+    <url>
+        <loc>https://duckling-ui.org/0.1.0/de/deployment/server-config/</loc>
+        <lastmod>2026-08-21</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://duckling-ui.org/0.1.0/de/deployment/server-config/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://duckling-ui.org/0.1.0deployment/server-config/"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://duckling-ui.org/0.1.0es/deployment/server-config/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://duckling-ui.org/0.1.0fr/deployment/server-config/"/>
     </url>
     <url>
         <loc>https://duckling-ui.org/0.1.0/de/docling/</loc>
