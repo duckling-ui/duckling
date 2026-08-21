@@ -22,13 +22,13 @@ und dieses Projekt folgt der [Semantischen Versionierung](https://semver.org/spe
 
 ## [0.1.0] - 2026-08-21
 
-Erstes Minor-Release nach der 0.0.x-Reihe: docling-serve-Parität, erweiterte Konvertierungs-/Chunking-Oberfläche, Worker-/Redis-Deployment und Dependabot-Abhilfe.
+Erstes Minor-Release nach der 0.0.x-Reihe: docling-serve-Parität für Konvertierung, Chunking und Pipeline-Einstellungen; erweiterte Formate; Deployment-Topologie; Dependabot-Abhilfe.
 
 ### Hinzugefügt
 
-- **Docling-serve-Parität**: Pipeline-Einstellungen, Chunker-Factory, Connector-Batch-Endpunkt, Redis/Worker-Compose und optionale Orchestrierungs-Abhängigkeiten.
+- **Docling-serve-Parität**: Pipeline-Einstellungen (standard/VLM/ASR), Chunker-Factory, erweiterte Formate, Job-Optionen und End-to-End-Einstellungen in API/UI.
 - **Server-Konfiguration und Auth**: `DUCKLING_CONFIG_FILE`, strukturiertes Logging, optionaler API-Schlüssel (`DUCKLING_API_KEY`).
-- **Erweiterte Formate**: zusätzliche Ein-/Ausgabeformate (`yaml`, `vtt`, `dclx`, `html_split_page`).
+- **Deployment-Topologie**: Redis/Worker-Compose, Connector-Batch-Endpunkt und Orchestrierungs-Adapter (local/RQ/Ray).
 
 ### Geändert
 

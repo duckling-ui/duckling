@@ -73,4 +73,4 @@ def test_release_version_sources_agree_on_0_1_0():
     changelog = (PROJECT_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     assert "**Latest release:** [0.1.0]" in changelog
     assert "## [0.1.0] - 2026-08-21" in changelog
-    assert "docling-serve parity" in changelog
+    assert "docling-serve parity for conversion" in changelog

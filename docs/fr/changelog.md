@@ -22,13 +22,13 @@ et ce projet adhère au [Versionnage Sémantique](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2026-08-21
 
-Première version mineure après la série 0.0.x : parité docling-serve, surface de conversion/chunking élargie, déploiement worker/Redis et remédiation Dependabot.
+Première version mineure après la série 0.0.x : parité docling-serve pour conversion, chunking et pipeline ; formats élargis ; topologie de déploiement ; remédiation Dependabot.
 
 ### Ajouté
 
-- **Parité docling-serve** : paramètres pipeline, factory de chunking, endpoint batch connecteur, services Redis/worker Compose et dépendances d'orchestration optionnelles.
+- **Parité docling-serve** : paramètres pipeline (standard/VLM/ASR), factory de chunking, formats élargis, options par job et réglages API/UI de bout en bout.
 - **Configuration serveur et auth** : `DUCKLING_CONFIG_FILE`, journalisation structurée, clé API optionnelle (`DUCKLING_API_KEY`).
-- **Formats élargis** : entrées/sorties supplémentaires (`yaml`, `vtt`, `dclx`, `html_split_page`).
+- **Topologie de déploiement** : services Redis/worker Compose, endpoint batch connecteur et adaptateurs d'orchestration (local/RQ/Ray).
 
 ### Modifié
 

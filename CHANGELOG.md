@@ -22,21 +22,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2026-08-21
 
-First minor release after the 0.0.x line: docling-serve parity foundations, expanded conversion/chunking surface, deployment worker scaffolding, and Dependabot/npm audit remediation.
+First minor release after the 0.0.x line: docling-serve parity for conversion, chunking, and pipeline settings; expanded formats; optional API key auth; and Dependabot/npm audit remediation.
 
 ### Added
 
-- Added foundational docling-serve parity scaffolding across pipeline settings, chunking options, connector batch endpoint shape, and deployment worker topology.
+- Added docling-serve parity across pipeline settings (standard/VLM/ASR), chunking options (hybrid/hierarchical chunker factory), expanded input/output formats (including `yaml`, `vtt`, `dclx`, `html_split_page`), and per-job conversion options (`page_range`, `to_formats`).
 - Added backend server config loader (`DUCKLING_CONFIG_FILE`) and structured logging bootstrap (`DUCKLING_LOG_FORMAT=json`).
 - Added optional API key enforcement (`DUCKLING_API_KEY` via `X-Api-Key`).
-- Added expanded input/output format surface (including `yaml`, `vtt`, `dclx`, `html_split_page`) with best-effort exports.
-- Added Redis + worker service definitions in compose files and worker entry-point scaffolding.
+- Added Redis + worker service definitions in compose files, connector batch request endpoint, and orchestration adapters (local/RQ/Ray) for distributed deployment follow-up.
 
 ### Changed
 
-- Extended conversion settings schema with pipeline, PDF, enrichment preset placeholders, and richer chunking controls.
+- Extended conversion settings schema with pipeline, PDF, enrichment controls, and richer chunking settings wired through backend converter and frontend settings UI.
 - Updated chunk generation to use a chunker factory and include raw text/image metadata when available.
-- Updated frontend API client to support API key headers and per-job conversion options (`page_range`, `to_formats`).
+- Updated frontend API client to support API key headers and per-job conversion options.
 - Moved Ray and docling-jobkit out of default `backend/requirements.txt` into optional `backend/requirements-orchestration.txt` so Docker publish Trivy gates are not blocked by Ray's bundled Java JAR CVEs; RQ/Redis remain in the default image.
 
 ### Security

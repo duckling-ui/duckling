@@ -22,17 +22,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2026-08-21
 
-First minor release after 0.0.x: docling-serve parity foundations, expanded conversion/chunking/deployment surface, and security dependency remediation.
+First minor release after 0.0.x: docling-serve parity for conversion, chunking, and pipeline settings; expanded formats; deployment topology; and security dependency remediation.
 
 ### Added
 
-- **Docling-serve parity scaffolding**: pipeline settings, chunker factory, connector batch endpoint shape, Redis/worker compose services, and optional orchestration deps (`backend/requirements-orchestration.txt`).
+- **Docling-serve parity**: pipeline settings (standard/VLM/ASR), chunker factory (hybrid/hierarchical), expanded formats, per-job options, and settings UI/API wiring end-to-end.
 - **Server config and auth**: `DUCKLING_CONFIG_FILE`, structured logging (`DUCKLING_LOG_FORMAT=json`), optional API key (`DUCKLING_API_KEY` / `X-Api-Key`).
-- **Expanded formats**: additional input/output surfaces including `yaml`, `vtt`, `dclx`, and `html_split_page` (best-effort exports).
+- **Deployment topology**: Redis/worker compose services, connector batch request endpoint, and orchestration adapters (local/RQ/Ray) for distributed follow-up.
 
 ### Changed
 
-- **Conversion settings**: pipeline/PDF/enrichment preset placeholders and richer chunking controls; frontend API client supports API key headers and per-job options (`page_range`, `to_formats`).
+- **Conversion settings**: pipeline/PDF/enrichment controls and richer chunking settings wired through converter and frontend.
 - **Orchestration packaging**: Ray/docling-jobkit moved out of default backend requirements so Docker Trivy gates stay green; RQ/Redis remain in the default image.
 
 ### Security
