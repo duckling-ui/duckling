@@ -10,7 +10,17 @@ http://localhost:5001/api
 
 ## Authentication
 
-Currently, the API does not require authentication. For production deployments, consider adding authentication middleware.
+When `DUCKLING_API_KEY` is set (environment variable or [server config file](../deployment/server-config.md)), all `/api/*` routes require the header:
+
+```http
+X-Api-Key: your-api-key
+```
+
+Exceptions: `/api/health` and embedded docs routes under `/api/docs/site`.
+
+The React UI reads `VITE_API_KEY` at build time and sends `X-Api-Key` automatically.
+
+When no API key is configured, the API remains open on the local network — restrict access with a reverse proxy in production.
 
 ## Sections
 
@@ -50,6 +60,9 @@ Currently, the API does not require authentication. For production deployments, 
 |----------|--------|-------------|
 | `/convert` | POST | Upload and convert a document |
 | `/convert/batch` | POST | Batch convert multiple documents |
+| `/convert/url` | POST | Convert a document from URL |
+| `/convert/url/batch` | POST | Batch convert from URLs |
+| `/convert/batch/connectors` | POST | Connector-based batch request (validation; worker integration for execution) |
 | `/convert/{job_id}/status` | GET | Get conversion status |
 | `/convert/{job_id}/result` | GET | Get conversion result |
 | `/convert/{job_id}/images` | GET | List extracted images |
@@ -70,7 +83,10 @@ Currently, the API does not require authentication. For production deployments, 
 | `/settings/tables` | GET/PUT | Table settings |
 | `/settings/images` | GET/PUT | Image settings |
 | `/settings/performance` | GET/PUT | Performance settings |
-| `/settings/chunking` | GET/PUT | Chunking settings |
+| `/settings/chunking` | GET/PUT | Chunking settings (hybrid/hierarchical) |
+| `/settings/pipeline` | GET/PUT | Pipeline kind (standard/vlm/asr) |
+| `/settings/pdf` | GET/PUT | PDF backend and export options |
+| `/settings/enrichment` | GET/PUT | Enrichment toggles and model status |
 
 ### History Endpoints
 

@@ -1,20 +1,71 @@
-### Advanced per-job options
-
-Duckling conversion endpoints also accept parity-oriented job options:
-
-- `page_range`: two-element array `[start, end]` (1-based pages)
-- `to_formats`: explicit output format list for this job
-
-### Connector batch endpoint
-
-For enterprise workflow integration, Duckling exposes:
-
-- `POST /api/convert/batch/connectors`
-
-This endpoint accepts `sources`, `target`, and `options` payloads aligned to connector-based batch orchestration patterns.
 # Conversion API
 
 Endpoints for uploading and converting documents.
+
+## Parity-oriented job options
+
+Conversion endpoints accept optional per-job overrides in the JSON `settings` payload (multipart field or JSON body):
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `page_range` | `[start, end]` | 1-based inclusive PDF page range (also available in the UI drop zone) |
+| `to_formats` | `string[]` | Limit exports for this job, e.g. `["markdown", "yaml", "doclang"]` |
+
+Allowed `to_formats` values match server output formats: `markdown`, `html`, `json`, `text`, `doctags`, `doclang`, `dclx`, `yaml`, `html_split_page`, `vtt`, `document_tokens`, and `chunks` (when chunking is enabled).
+
+### Example with page range and formats
+
+```bash
+curl -X POST http://localhost:5001/api/convert \
+  -H "X-Api-Key: YOUR_KEY" \
+  -F "file=@report.pdf" \
+  -F 'settings={"page_range":[1,10],"to_formats":["markdown","yaml"]}'
+```
+
+When `DUCKLING_API_KEY` is set, include `X-Api-Key` on all conversion requests.
+
+## Connector batch endpoint {#connector-batch-endpoint}
+
+Enterprise workflow integration endpoint:
+
+```http
+POST /api/convert/batch/connectors
+Content-Type: application/json
+```
+
+### Request body
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `sources` | array | Yes | Non-empty list of connector source descriptors |
+| `target` | object | Yes | Must include `kind` (target connector type) |
+| `options` | object | No | Connector-specific options |
+
+### Example
+
+```json
+{
+  "sources": [{"kind": "filesystem", "path": "/data/inbox/doc.pdf"}],
+  "target": {"kind": "filesystem", "path": "/data/out"},
+  "options": {}
+}
+```
+
+### Response (202 Accepted)
+
+```json
+{
+  "status": "accepted",
+  "message": "Connector batch request accepted",
+  "sources_count": 1,
+  "target_kind": "filesystem",
+  "note": "Connector execution requires RQ/Ray worker integration."
+}
+```
+
+The endpoint validates payload shape today. Full connector execution requires distributed worker integration — see [Server Configuration](../deployment/server-config.md) and [Scaling](../deployment/scaling.md).
+
+---
 
 ## Upload and Convert Single Document
 

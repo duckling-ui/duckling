@@ -18,7 +18,7 @@ When adding a new **output export format**, register it consistently: `backend/c
 
 When wiring Docling OCR engine options in `backend/services/converter.py`, use `_resolve_ocr_mode` / `_instantiate_ocr_options` so settings map to current Docling `OcrMode` + `scale`, and kwargs removed in newer Docling releases (for example `bitmap_area_threshold`) are dropped instead of raising pydantic `extra_forbidden` errors. Keep `backend/requirements.txt` on current stable floors (`docling>=2.118.0`, `docling-core>=2.90.0,<3.0.0`).
 
-When adding pipeline/chunking settings for docling-serve parity, update all of these together to avoid drift: `backend/config.py` defaults, `backend/routes/settings.py` GET/PUT validators, `backend/services/converter.py` runtime wiring, `frontend/src/types/index.ts`, `frontend/src/components/SettingsPanel.tsx`, and locale strings.
+When adding pipeline/chunking settings for docling-serve parity, update all of these together to avoid drift: `backend/config.py` defaults, `backend/routes/settings.py` GET/PUT validators, `backend/services/converter.py` runtime wiring, `frontend/src/types/index.ts`, `frontend/src/components/SettingsPanel.tsx`, locale strings, and user-facing docs (`docs/user-guide/configuration.md`, `docs/api/settings.md`, localized mirrors under `docs/{de,fr,es}/`).
 
 When cutting a stable release, bump `frontend/package.json` (and lockfile), `frontend/src/App.tsx` (`APP_VERSION`), `mkdocs.yml` mike `default`, `scripts/get_version.py` fallback, `.github/workflows/deploy-docs.yml` fallback, `docs/versions.json`, roll `[Unreleased]` into `CHANGELOG.md` / `docs/**/changelog.md`, and update `SECURITY.md` supported versions. Keep `tests/test_get_version.py` version-agreement assertions in sync.
 

@@ -23,7 +23,7 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
 - **URL-Based Conversion**: Convert documents directly from URLs with automatic image extraction for HTML pages
 - **Multi-file and folder upload**: Convert multiple files or URLs at once from one drop zone—choose a folder, use **Choose files…**, or drag and drop; unsupported extensions are skipped client-side, and the API rejects a batch if nothing can be converted
 - **Multi-Format Support**: Convert PDFs, Word docs, PowerPoints, Excel files, HTML, Markdown, images, and more
-- **Multiple Export Formats**: Export to Markdown, HTML, JSON, DocTags, DocLang, Document Tokens, RAG Chunks, or plain text
+- **Multiple Export Formats**: Export to Markdown, HTML, JSON, YAML, DocTags, DocLang, DCLX, WebVTT, HTML (split by page), Document Tokens, RAG Chunks, or plain text
 - **Image & Table Extraction**: Extract embedded images and tables with CSV export
 - **Image Preview Gallery**: View extracted images as thumbnails with full-size lightbox viewer
 - **RAG-Ready Chunking**: Generate document chunks optimized for RAG applications
@@ -49,6 +49,15 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
 | Excel | `.xlsx` | Microsoft Excel spreadsheets |
 | HTML | `.html`, `.htm` | Web pages |
 | Markdown | `.md`, `.markdown` | Markdown files |
+| CSV | `.csv` | Tabular data |
+| Email | `.eml`, `.msg` | Email messages |
+| EPUB | `.epub` | E-books |
+| LaTeX | `.tex`, `.latex` | TeX sources |
+| OpenDocument | `.odt`, `.ods`, `.odp` | LibreOffice formats |
+| DCLX | `.dclx` | Docling exchange format |
+| Audio | `.wav`, `.mp3` | Speech (use ASR pipeline) |
+| Video | `.mp4`, `.mov`, `.mkv` | Video with audio (ASR pipeline) |
+| WebVTT | `.vtt` | Timed text / captions |
 | Images | `.png`, `.jpg`, `.jpeg`, `.tiff`, `.gif`, `.webp`, `.bmp` | Direct image OCR |
 | AsciiDoc | `.asciidoc`, `.adoc` | Technical documentation |
 | PubMed XML | `.xml` | Scientific articles |
@@ -64,6 +73,10 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
 | Plain Text | `.txt` | Simple text without formatting |
 | DocTags | `.doctags` | Tagged document format |
 | DocLang | `.dclg.xml` | AI-native XML document format ([doclang.ai](https://doclang.ai)) |
+| DCLX | `.dclx` | Docling exchange format |
+| YAML | `.yaml` | Structured YAML export |
+| WebVTT | `.vtt` | Timed text / captions |
+| HTML (split by page) | `.split.html` | Paginated HTML export |
 | Document Tokens | `.tokens.json` | Token-level representation |
 | RAG Chunks | `.chunks.json` | Chunks for RAG applications |
 
@@ -120,7 +133,7 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
 
 ## Documentation (MkDocs)
 
-Duckling uses MkDocs + `mkdocs-static-i18n` for multilingual docs. Production docs at [duckling-ui.org](https://duckling-ui.org) are built with [mike](https://github.com/jimporter/mike) for multi-version support. With Material’s integrated TOC (`toc.integrate`), translate section headings in localized Markdown (for example `docs/fr/user-guide/features.md`) so the sidebar matches each locale. **Supported formats** and **Screenshots** are mirrored under `docs/{de,fr,es}/user-guide/formats.md` and `screenshots.md` (UI strings, captions, tab titles; image paths `../../assets/...`). Homepage feature tiles in `docs/{de,fr,es}/index.md` should link to those locale-specific heading anchors (for example `#glisser-deposer` on the French Features page), not English slugs. The `de`, `fr`, and `es` trees mirror the English layout (getting started, user guide, API, architecture, deployment, contributing, changelog): keep them in sync when you add or change docs.
+Duckling uses MkDocs + `mkdocs-static-i18n` for multilingual docs. **Docling-serve parity** (pipeline/VLM/ASR, advanced chunking, expanded formats, API key, server config) is documented in the [Configuration Guide](docs/user-guide/configuration.md), [Server Configuration](docs/deployment/server-config.md), and [API Reference](docs/api/index.md). Production docs at [duckling-ui.org](https://duckling-ui.org) are built with [mike](https://github.com/jimporter/mike) for multi-version support. With Material’s integrated TOC (`toc.integrate`), translate section headings in localized Markdown (for example `docs/fr/user-guide/features.md`) so the sidebar matches each locale. **Supported formats** and **Screenshots** are mirrored under `docs/{de,fr,es}/user-guide/formats.md` and `screenshots.md` (UI strings, captions, tab titles; image paths `../../assets/...`). Homepage feature tiles in `docs/{de,fr,es}/index.md` should link to those locale-specific heading anchors (for example `#glisser-deposer` on the French Features page), not English slugs. The `de`, `fr`, and `es` trees mirror the English layout (getting started, user guide, API, architecture, deployment, contributing, changelog): keep them in sync when you add or change docs.
 
 - Build (strict):
 

@@ -2,6 +2,23 @@
 
 Endpunkte zum Hochladen und Konvertieren von Dokumenten.
 
+## Paritäts-Joboptionen
+
+Konvertierungs-Endpunkte akzeptieren optionale Job-Overrides im JSON-Feld `settings`:
+
+| Feld | Typ | Beschreibung |
+|------|-----|--------------|
+| `page_range` | `[start, end]` | 1-basierter PDF-Seitenbereich |
+| `to_formats` | `string[]` | Exportformate für diesen Job, z. B. `["markdown","yaml"]` |
+
+Bei gesetztem `DUCKLING_API_KEY` Header `X-Api-Key` mitsenden. Details: [Konvertierungs-API (EN)](../../api/conversion.md).
+
+## Connector-Batch-Endpunkt
+
+`POST /api/convert/batch/connectors` — validiert `sources`, `target`, `options`; Ausführung erfordert RQ/Ray-Worker-Integration.
+
+---
+
 ## Einzelnes Dokument hochladen und konvertieren
 
 ```http

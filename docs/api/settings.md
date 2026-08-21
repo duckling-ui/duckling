@@ -1,26 +1,134 @@
-## Pipeline and PDF Settings
-
-Duckling includes parity-oriented endpoints for advanced Docling configuration:
-
-- `GET/PUT /api/settings/pipeline` for `standard`, `vlm`, and `asr` pipeline selection.
-- `GET/PUT /api/settings/pdf` for `pdf_backend`, `image_export_mode`, and heading hierarchy options.
-
-## Advanced Chunking Settings
-
-`GET/PUT /api/settings/chunking` supports:
-
-- `chunker` (`hybrid` or `hierarchical`)
-- `tokenizer`
-- `use_markdown_tables`
-- `use_markdown_images`
-- `image_placeholder`
-- `include_raw_text`
 # Settings API
 
 Endpoints for managing conversion settings.
 
 !!! note "Session-Based Storage"
     Settings are stored per-user session in the database. Each user's settings are isolated and don't affect other users, making Duckling safe for multi-user deployments.
+
+Deploy-time options (`DUCKLING_API_KEY`, orchestration engine, logging) are documented in [Server Configuration](../deployment/server-config.md).
+
+## Pipeline and PDF settings
+
+Duckling exposes docling-serve–aligned pipeline and PDF endpoints:
+
+- `GET/PUT /api/settings/pipeline` — `standard`, `vlm`, or `asr` pipeline kind; VLM preset selection
+- `GET/PUT /api/settings/pdf` — PDF backend, image export mode, heading hierarchy
+
+### Get pipeline settings
+
+```http
+GET /api/settings/pipeline
+```
+
+```json
+{
+  "pipeline": {
+    "kind": "standard",
+    "vlm_preset": "default",
+    "vlm_custom_config": null,
+    "force_backend_text": false
+  },
+  "options": {
+    "kind": ["standard", "vlm", "asr"],
+    "vlm_presets": ["default"],
+    "allow_custom_vlm_config": false
+  }
+}
+```
+
+### Update pipeline settings
+
+```http
+PUT /api/settings/pipeline
+Content-Type: application/json
+```
+
+```json
+{
+  "kind": "vlm",
+  "vlm_preset": "default"
+}
+```
+
+| Field | Values | Notes |
+|-------|--------|-------|
+| `kind` | `standard`, `vlm`, `asr` | ASR applies to audio/video inputs when Docling ASR classes are available |
+| `vlm_preset` | Docling preset name | Used when `kind=vlm` |
+| `vlm_custom_config` | object | Applied only when server flag `allow_custom_vlm_config` is enabled |
+
+### Get PDF settings
+
+```http
+GET /api/settings/pdf
+```
+
+```json
+{
+  "pdf": {
+    "pdf_backend": "docling_parse",
+    "image_export_mode": "placeholder",
+    "do_pdf_heading_hierarchy": false,
+    "pdf_heading_hierarchy_options": {
+      "use_bookmarks": true,
+      "use_numbering": true,
+      "use_style": true,
+      "max_level": 6
+    }
+  },
+  "options": {
+    "pdf_backend": ["docling_parse", "pypdfium2"],
+    "image_export_mode": ["placeholder", "embedded", "referenced"]
+  }
+}
+```
+
+### Update PDF settings
+
+```http
+PUT /api/settings/pdf
+Content-Type: application/json
+```
+
+```json
+{
+  "pdf_backend": "pypdfium2",
+  "image_export_mode": "embedded",
+  "do_pdf_heading_hierarchy": true
+}
+```
+
+## Advanced chunking settings
+
+`GET/PUT /api/settings/chunking` supports hybrid and hierarchical Docling chunkers:
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `enabled` | boolean | `false` | Generate `.chunks.json` during conversion |
+| `chunker` | string | `hybrid` | `hybrid` or `hierarchical` |
+| `max_tokens` | integer | `512` | Target chunk size |
+| `merge_peers` | boolean | `true` | Merge adjacent small chunks |
+| `tokenizer` | string | `sentence-transformers/all-MiniLM-L6-v2` | Hugging Face tokenizer id |
+| `use_markdown_tables` | boolean | `false` | Serialize tables as markdown in chunks |
+| `use_markdown_images` | boolean | `false` | Serialize images as markdown in chunks |
+| `image_placeholder` | string | `[image]` | Placeholder text for images in chunks |
+| `include_raw_text` | boolean | `false` | Include `raw_text` field on chunk objects |
+
+### Example
+
+```bash
+curl -X PUT http://localhost:5001/api/settings/chunking \
+  -H "Content-Type: application/json" \
+  -d '{
+    "enabled": true,
+    "chunker": "hierarchical",
+    "max_tokens": 768,
+    "include_raw_text": true
+  }'
+```
+
+The Settings UI exposes `enabled`, `max_tokens`, and `merge_peers`; advanced fields are available via API.
+
+---
 
 ## Get All Settings
 
