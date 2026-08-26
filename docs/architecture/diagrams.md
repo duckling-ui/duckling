@@ -238,7 +238,7 @@ graph LR
 
 For environments that don't support Mermaid rendering, static images are available:
 
-- [System Architecture](../arch.png)
+- [System Architecture](/arch.png)
 - [Detailed Layer View](../Detailed-Layer-View.png)
 - [Conversion Pipeline](../ConversionPipeline.png)
 - [Batch Processing](../BatchProcessing.png)

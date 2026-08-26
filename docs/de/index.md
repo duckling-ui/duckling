@@ -2,7 +2,7 @@
 
 Eine moderne, benutzerfreundliche Web-Oberfläche für [Docling](https://github.com/docling-project/docling) (IBM) – eine leistungsstarke Bibliothek zur Dokumentkonvertierung.
 
-![Duckling Screenshot](main-german.png)
+![Duckling Screenshot](/assets/screenshots/ui/main-german.png)
 
 ## Überblick
 

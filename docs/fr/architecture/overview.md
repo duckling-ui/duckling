@@ -4,7 +4,7 @@ Architecture et flux de données de Duckling à un niveau élevé.
 
 ## Schéma d’architecture
 
-![Architecture du système](../arch.png)
+![Architecture du système](/arch.png)
 
 ## Vue détaillée par couches
 

@@ -15,7 +15,7 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
 
 **Current release:** [0.1.0](https://github.com/duckling-ui/duckling/releases/tag/v0.1.0) — docling-serve parity for conversion, chunking, and pipeline settings; expanded formats; optional API key auth; Redis/worker compose topology; and Dependabot/npm audit remediation. See [CHANGELOG.md](CHANGELOG.md).
 
-![Duckling Screenshot](docs/screenshot.png)
+![Duckling Screenshot](docs/assets/screenshots/ui/main-english.png)
 
 ## Features
 
@@ -133,7 +133,7 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
 
 ## Documentation (MkDocs)
 
-Duckling uses MkDocs + `mkdocs-static-i18n` for multilingual docs. **Docling-serve parity** (pipeline/VLM/ASR, advanced chunking, expanded formats, API key, server config) is documented in the [Configuration Guide](docs/user-guide/configuration.md), [Server Configuration](docs/deployment/server-config.md), and [API Reference](docs/api/index.md). Production docs at [duckling-ui.org](https://duckling-ui.org) are built with [mike](https://github.com/jimporter/mike) for multi-version support. With Material’s integrated TOC (`toc.integrate`), translate section headings in localized Markdown (for example `docs/fr/user-guide/features.md`) so the sidebar matches each locale. **Supported formats** and **Screenshots** are mirrored under `docs/{de,fr,es}/user-guide/formats.md` and `screenshots.md` (UI strings, captions, tab titles; image paths `../../assets/...`). Homepage feature tiles in `docs/{de,fr,es}/index.md` should link to those locale-specific heading anchors (for example `#glisser-deposer` on the French Features page), not English slugs. The `de`, `fr`, and `es` trees mirror the English layout (getting started, user guide, API, architecture, deployment, contributing, changelog): keep them in sync when you add or change docs.
+Duckling uses MkDocs + `mkdocs-static-i18n` for multilingual docs. **Docling-serve parity** (pipeline/VLM/ASR, advanced chunking, expanded formats, API key, server config) is documented in the [Configuration Guide](docs/user-guide/configuration.md), [Server Configuration](docs/deployment/server-config.md), and [API Reference](docs/api/index.md). Production docs at [duckling-ui.org](https://duckling-ui.org) are built with [mike](https://github.com/jimporter/mike) for multi-version support. With Material’s integrated TOC (`toc.integrate`), translate section headings in localized Markdown (for example `docs/fr/user-guide/features.md`) so the sidebar matches each locale. **Supported formats** and **Screenshots** are mirrored under `docs/{de,fr,es}/user-guide/formats.md` and `screenshots.md` (UI strings, captions, tab titles; image paths `/assets/screenshots/...` with locale suffixes). Regenerate localized UI screenshots with `./scripts/capture-screenshots.sh` then `python3 scripts/normalize_doc_screenshot_paths.py` (Playwright; see [SCREENSHOT_GUIDE.md](docs/assets/screenshots/SCREENSHOT_GUIDE.md)). Homepage feature tiles in `docs/{de,fr,es}/index.md` should link to those locale-specific heading anchors (for example `#glisser-deposer` on the French Features page), not English slugs. The `de`, `fr`, and `es` trees mirror the English layout (getting started, user guide, API, architecture, deployment, contributing, changelog): keep them in sync when you add or change docs.
 
 - Build (strict):
 

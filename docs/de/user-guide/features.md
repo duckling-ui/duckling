@@ -33,7 +33,7 @@ Aktivieren unter **Einstellungen → Chunking** oder RAG-Chunks im Export-Panel.
 Ziehen Sie Dateien auf die Ablagezone für den sofortigen Upload. Die Oberfläche prüft Dateitypen und zeigt den Upload-Fortschritt.
 
 <figure markdown="span">
-  ![Leere Ablagezone](../../assets/screenshots/ui/dropzone-empty-de.png){ loading=lazy }
+  ![Leere Ablagezone](/assets/screenshots/ui/dropzone-empty-de.png){ loading=lazy }
   <figcaption>Ablagezone bereit zum Empfang von Dateien</figcaption>
 </figure>
 
@@ -115,7 +115,7 @@ Duckling kann OCR-Engines bei Auswahl automatisch installieren:
 4. Klicken Sie für die Installation per pip
 
 <figure markdown="span">
-  ![OCR-Einstellungen](../../assets/screenshots/settings/settings-ocr-de.png){ loading=lazy }
+  ![OCR-Einstellungen](/assets/screenshots/settings/settings-ocr-de.png){ loading=lazy }
   <figcaption>OCR-Einstellungen und Engine-Auswahl</figcaption>
 </figure>
 
@@ -127,7 +127,7 @@ Duckling kann OCR-Engines bei Auswahl automatisch installieren:
       - Windows: Download von [GitHub releases](https://github.com/UB-Mannheim/tesseract/wiki)
 
 <figure markdown="span">
-  ![Hinweis Tesseract](../../assets/screenshots/settings/settings-ocr-install-de.png){ loading=lazy }
+  ![Hinweis Tesseract](/assets/screenshots/settings/settings-ocr-install-de.png){ loading=lazy }
   <figcaption>Tesseract erfordert eine manuelle Systeminstallation</figcaption>
 </figure>
 
@@ -206,12 +206,12 @@ Nach der Konvertierung erscheinen extrahierte Bilder in einer Galerie:
 - **Herunterladen**: einzeln aus Galerie oder Lightbox
 
 <figure markdown="span">
-  ![Bildergalerie](../../assets/screenshots/features/images-gallery.png){ loading=lazy }
+  ![Bildergalerie](/assets/screenshots/features/images-gallery-de.png){ loading=lazy }
   <figcaption>Extrahierte Bilder als Miniaturen</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Lightbox](../../assets/screenshots/features/images-lightbox.png){ loading=lazy }
+  ![Lightbox](/assets/screenshots/features/images-lightbox.png){ loading=lazy }
   <figcaption>Vollbildansicht mit Navigation</figcaption>
 </figure>
 
@@ -241,7 +241,7 @@ Aktivieren Sie Anreicherungen unter **Einstellungen**, Abschnitt **Dokumenten-An
 4. Einstellungen werden automatisch gespeichert
 
 <figure markdown="span">
-  ![Anreicherungs-Einstellungen](../../assets/screenshots/settings/settings-enrichment.png){ loading=lazy }
+  ![Anreicherungs-Einstellungen](/assets/screenshots/settings/settings-enrichment-de.png){ loading=lazy }
   <figcaption>Panel Dokumenten-Anreicherung</figcaption>
 </figure>
 
@@ -249,7 +249,7 @@ Aktivieren Sie Anreicherungen unter **Einstellungen**, Abschnitt **Dokumenten-An
     Anreicherungen, besonders **Bildbeschreibung** und **Formel-Anreicherung**, verlängern die Laufzeit deutlich (Modell-Inferenz). Bei Aktivierung erscheint ein Hinweis.
 
 <figure markdown="span">
-  ![Hinweis Anreicherung](../../assets/screenshots/settings/settings-enrichment-warning.png){ loading=lazy }
+  ![Hinweis Anreicherung](/assets/screenshots/settings/settings-enrichment-warning-de.png){ loading=lazy }
   <figcaption>Hinweis bei langsamen Optionen</figcaption>
 </figure>
 
@@ -361,7 +361,7 @@ Erzeugen Sie Dokumentsegmente für Retrieval-Augmented Generation (RAG).
 | **RAG-Chunks** | `.chunks.json` | Segmente für RAG-Anwendungen |
 
 <figure markdown="span">
-  ![Exportformate](../../assets/screenshots/export/export-formats.png){ loading=lazy }
+  ![Exportformate](/assets/screenshots/export/export-formats-de.png){ loading=lazy }
   <figcaption>Verfügbare Exportformate</figcaption>
 </figure>
 
@@ -380,7 +380,7 @@ Das Export-Panel zeigt eine Live-Vorschau, die sich mit dem gewählten Format ak
 Bei HTML und Markdown zwischen gerendertem und Quelltext umschalten:
 
 <figure markdown="span">
-  ![Vorschau umschalten](../../assets/screenshots/export/preview-toggle.png){ loading=lazy }
+  ![Vorschau umschalten](/assets/screenshots/export/preview-toggle-de.png){ loading=lazy }
   <figcaption>Zwischen gerendeter und Roh-Vorschau wechseln</figcaption>
 </figure>
 
@@ -390,7 +390,7 @@ Bei HTML und Markdown zwischen gerendertem und Quelltext umschalten:
     - **Markdown**: Überschriften, fett/kursiv, Codeblöcke, Links
     - Ideal für die visuelle Prüfung
 
-    ![Markdown gerendert](../../assets/screenshots/export/preview-markdown-rendered.png){ loading=lazy }
+    ![Markdown gerendert](/assets/screenshots/export/preview-markdown-rendered-de.png){ loading=lazy }
 
 === "Rohmodus"
 
@@ -399,7 +399,7 @@ Bei HTML und Markdown zwischen gerendertem und Quelltext umschalten:
     - Markdown: Syntax (`#`, `**fett**`, usw.)
     - Nützlich zum Kopieren oder für Format-Debugging
 
-    ![Markdown Roh](../../assets/screenshots/export/preview-markdown-raw.png){ loading=lazy }
+    ![Markdown Roh](/assets/screenshots/export/preview-markdown-raw-de.png){ loading=lazy }
 
 #### Weitere Formate
 
@@ -408,7 +408,7 @@ Bei HTML und Markdown zwischen gerendertem und Quelltext umschalten:
 - **DocTags / DocLang / Tokens**: Rohanzeige
 
 <figure markdown="span">
-  ![JSON-Vorschau](../../assets/screenshots/export/preview-json.png){ loading=lazy }
+  ![JSON-Vorschau](/assets/screenshots/export/preview-json-de.png){ loading=lazy }
   <figcaption>Formatierte JSON-Ausgabe</figcaption>
 </figure>
 

@@ -77,6 +77,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed right-0 top-0 h-full w-full max-w-lg bg-dark-900 border-l border-dark-700 z-50 flex flex-col overflow-hidden"
+            data-testid="settings-panel"
           >
             {/* Header */}
             <div className="shrink-0 bg-dark-900/95 backdrop-blur-sm border-b border-dark-700 p-6 flex items-center justify-between">
@@ -88,6 +89,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 onClick={onClose}
                 className="p-2 hover:bg-dark-800 rounded-lg transition-colors"
                 aria-label={t("actions.close")}
+                data-testid="close-settings-panel"
               >
                 <svg
                   className="w-5 h-5 text-dark-400"
@@ -114,7 +116,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6"
               >
                 {/* OCR Settings */}
-                <SettingsSection title={t("settings.sections.ocr")} icon="eye">
+                <SettingsSection sectionId="ocr" title={t("settings.sections.ocr")} icon="eye">
                   <ToggleSetting
                     label={t("settings.ocr.enable.label")}
                     description={t("settings.ocr.enable.description")}
@@ -428,6 +430,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
                 {/* Table Settings */}
                 <SettingsSection
+                  sectionId="tables"
                   title={t("settings.sections.tables")}
                   icon="table"
                 >
@@ -471,6 +474,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
                 {/* Image Settings */}
                 <SettingsSection
+                  sectionId="images"
                   title={t("settings.sections.images")}
                   icon="image"
                 >
@@ -534,7 +538,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                 </SettingsSection>
 
                 {/* Performance Settings */}
-                <SettingsSection title={t("settings.sections.pipeline")} icon="layers">
+                <SettingsSection sectionId="pipeline" title={t("settings.sections.pipeline")} icon="layers">
                   <SelectSetting
                     label={t("settings.pipeline.kind.label")}
                     description={t("settings.pipeline.kind.description")}
@@ -560,7 +564,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                   />
                 </SettingsSection>
 
-                <SettingsSection title={t("settings.sections.pdf")} icon="document">
+                <SettingsSection sectionId="pdf" title={t("settings.sections.pdf")} icon="document">
                   <SelectSetting
                     label={t("settings.pdf.backend.label")}
                     description={t("settings.pdf.backend.description")}
@@ -596,6 +600,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
                 {/* Performance Settings */}
                 <SettingsSection
+                  sectionId="performance"
                   title={t("settings.sections.performance")}
                   icon="bolt"
                 >
@@ -640,6 +645,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
                 {/* RAG/Chunking Settings */}
                 <SettingsSection
+                  sectionId="chunking"
                   title={t("settings.sections.chunking")}
                   icon="puzzle"
                 >
@@ -678,6 +684,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
                 {/* Enrichment Settings */}
                 <SettingsSection
+                  sectionId="enrichment"
                   title={t("settings.sections.enrichment")}
                   icon="sparkles"
                 >
@@ -798,7 +805,10 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                   />
                   {(enrichment.enrichment?.picture_description ||
                     enrichment.enrichment?.formula_enrichment) && (
-                    <div className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                    <div
+                      className="p-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg"
+                      data-testid="settings-enrichment-warning"
+                    >
                       <p className="text-xs text-yellow-400">
                         {t("settings.enrichment.warning")}
                       </p>
@@ -958,6 +968,7 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 
                 {/* Output Settings */}
                 <SettingsSection
+                  sectionId="output"
                   title={t("settings.sections.output")}
                   icon="document"
                 >
@@ -1014,10 +1025,11 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
 interface SettingsSectionProps {
   title: string;
   icon: string;
+  sectionId?: string;
   children: React.ReactNode;
 }
 
-function SettingsSection({ title, icon, children }: SettingsSectionProps) {
+function SettingsSection({ title, icon, sectionId, children }: SettingsSectionProps) {
   const icons: Record<string, React.ReactNode> = {
     eye: (
       <path
@@ -1071,7 +1083,10 @@ function SettingsSection({ title, icon, children }: SettingsSectionProps) {
   };
 
   return (
-    <div className="bg-dark-800/50 rounded-xl p-5">
+    <div
+      className="bg-dark-800/50 rounded-xl p-5"
+      {...(sectionId ? { "data-section": sectionId } : {})}
+    >
       <div className="flex items-center gap-3 mb-4">
         <div className="w-8 h-8 rounded-lg bg-primary-500/20 flex items-center justify-center">
           <svg

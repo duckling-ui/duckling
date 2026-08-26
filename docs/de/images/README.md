@@ -1,36 +1,16 @@
 # Screenshots (Deutsch)
 
-Dieses Verzeichnis enthält Screenshots für die deutschsprachige Dokumentation.
-
-## Verzeichnisstruktur
-
-Screenshots in Unterordnern ablegen:
-
-- `ui/` — Oberfläche (Ablagezone, Kopfzeile, Verlauf)
-- `settings/` — Einstellungen
-- `export/` — Export und Vorschau
-- `features/` — Funktionen (Bilder, Tabellen, Segmente usw.)
-
-## Verwendung in der Dokumentation
-
-In Markdown relative Pfade verwenden:
+Screenshots für die deutschsprachige Dokumentation liegen unter **`docs/assets/screenshots/`** und werden mit absoluten Pfaden referenziert:
 
 ```markdown
-![Beschreibung](images/ui/dropzone-empty.png)
+![Leere Ablagezone](/assets/screenshots/ui/dropzone-empty-de.png)
 ```
 
-Aus Dateien unter `de/`:
+Anleitung: [SCREENSHOT_GUIDE.md](/assets/screenshots/SCREENSHOT_GUIDE.md)
 
-```markdown
-![Beschreibung](images/ui/dropzone-empty.png)
+Alle Sprachen neu erzeugen:
+
+```bash
+./scripts/capture-screenshots.sh
+python3 scripts/normalize_doc_screenshot_paths.py
 ```
-
-In Unterverzeichnissen den Pfad anpassen:
-
-```markdown
-![Beschreibung](../images/ui/dropzone-empty.png)
-```
-
-**Wichtig:** Vor den Aufnahmen die Oberfläche auf **Deutsch** stellen.
-
-Anleitung: [SCREENSHOT_GUIDE.md](../../assets/screenshots/SCREENSHOT_GUIDE.md).

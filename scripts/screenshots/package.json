@@ -1,0 +1,14 @@
+{
+  "name": "duckling-screenshots",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "capture": "playwright test",
+    "capture:ui": "playwright test --ui",
+    "install-browsers": "playwright install chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.51.0",
+    "typescript": "^5.2.2"
+  }
+}

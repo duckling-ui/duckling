@@ -367,9 +367,10 @@ export default function ExportOptions({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="w-full max-w-5xl mx-auto"
+      data-testid="export-options"
     >
       {/* Success header */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-8" data-testid="conversion-complete-header">
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -437,6 +438,7 @@ export default function ExportOptions({
         {tabs.map((tab) => (
           <button
             key={tab.id}
+            data-testid={`export-tab-${tab.id}`}
             onClick={() => setActiveTab(tab.id)}
             className={`
               px-4 py-2 rounded-lg font-medium text-sm whitespace-nowrap transition-colors
@@ -472,6 +474,7 @@ export default function ExportOptions({
               <ScrollableRegion
                 aria-label={t("export.scrollFormatList")}
                 className="space-y-2 max-h-96 overflow-y-auto"
+                data-testid="export-formats-list"
               >
                 {formatsAvailable.map((format) => {
                   const info = FORMAT_INFO[format];
@@ -480,6 +483,7 @@ export default function ExportOptions({
                   return (
                     <motion.button
                       key={format}
+                      data-format={format}
                       onClick={() => setSelectedFormat(format)}
                       className={`
                         w-full p-4 rounded-xl text-left transition-all duration-200
@@ -902,7 +906,10 @@ export default function ExportOptions({
             <div className="flex items-center gap-2">
               {/* Rendered/Raw toggle for HTML and Markdown */}
               {supportsRenderedView && (
-                <div className="flex items-center bg-dark-800 rounded-lg p-0.5">
+                <div
+                  className="flex items-center bg-dark-800 rounded-lg p-0.5"
+                  data-testid="export-preview-toggle"
+                >
                   <button
                     onClick={() => setPreviewMode("rendered")}
                     className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
@@ -926,6 +933,7 @@ export default function ExportOptions({
                 </div>
               )}
               <button
+                data-testid="export-preview-visibility"
                 onClick={() => setShowPreview(!showPreview)}
                 className="text-sm text-dark-400 hover:text-dark-200 transition-colors"
               >
@@ -950,6 +958,7 @@ export default function ExportOptions({
                   <ScrollableRegion
                     aria-label={t("export.previewContentRegion")}
                     className="bg-dark-950 rounded-xl p-4 max-h-[500px] overflow-y-auto"
+                    data-testid="export-preview-content"
                   >
                     {/* Rendered HTML view - use iframe to isolate styles */}
                     {selectedFormat === "html" && previewMode === "rendered" ? (

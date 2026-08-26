@@ -2,7 +2,7 @@
 
 Una interfaz gráfica moderna y fácil de usar para [Docling](https://github.com/docling-project/docling) - la potente biblioteca de conversión de documentos de IBM.
 
-![Captura de Duckling](main-spanish.png)
+![Captura de Duckling](/assets/screenshots/ui/main-spanish.png)
 
 ## Resumen
 

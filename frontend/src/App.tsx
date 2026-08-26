@@ -106,9 +106,12 @@ export default function App() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" data-testid="app-root">
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-dark-950/80 backdrop-blur-xl border-b border-dark-800">
+      <header
+        className="sticky top-0 z-30 bg-dark-950/80 backdrop-blur-xl border-b border-dark-800"
+        data-testid="app-header"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
@@ -210,6 +213,7 @@ export default function App() {
                 className="p-2.5 hover:bg-dark-800 rounded-lg transition-colors group"
                 title={t("actions.history")}
                 aria-label={t("actions.history")}
+                data-testid="open-history"
               >
                 <svg
                   className="w-5 h-5 text-dark-400 group-hover:text-dark-200"
@@ -232,6 +236,7 @@ export default function App() {
                 className="p-2.5 hover:bg-dark-800 rounded-lg transition-colors group"
                 title={t("actions.settings")}
                 aria-label={t("actions.settings")}
+                data-testid="open-settings"
               >
                 <svg
                   className="w-5 h-5 text-dark-400 group-hover:text-dark-200"

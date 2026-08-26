@@ -238,7 +238,7 @@ graph LR
 
 Pour les environnements sans rendu Mermaid, des images statiques sont disponibles :
 
-- [Architecture système](../arch.png)
+- [Architecture système](/arch.png)
 - [Vue détaillée par couches](../Detailed-Layer-View.png)
 - [Pipeline de conversion](../ConversionPipeline.png)
 - [Traitement par lots](../BatchProcessing.png)

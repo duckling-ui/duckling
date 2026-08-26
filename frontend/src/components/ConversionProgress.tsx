@@ -48,6 +48,7 @@ export default function ConversionProgress({
       initial={reduceMotion ? false : { opacity: 0, y: 20 }}
       animate={reduceMotion ? false : { opacity: 1, y: 0 }}
       className="w-full max-w-xl mx-auto"
+      data-testid="conversion-progress"
     >
       <div className="glass rounded-2xl p-8">
         {/* Header */}

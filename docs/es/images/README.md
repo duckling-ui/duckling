@@ -1,36 +1,16 @@
-# Capturas de pantalla (español)
+# Capturas (Español)
 
-Este directorio contiene capturas para la documentación en español.
-
-## Estructura de carpetas
-
-Organice las capturas en subcarpetas:
-
-- `ui/` — Interfaz principal (zona de entrega, cabecera, historial)
-- `settings/` — Panel de configuración
-- `export/` — Exportación y vista previa
-- `features/` — Funciones (imágenes, tablas, fragmentos, etc.)
-
-## Uso en la documentación
-
-Rutas relativas en Markdown:
+Las capturas de la documentación en español están en **`docs/assets/screenshots/`** y deben referenciarse con rutas absolutas:
 
 ```markdown
-![Descripción](images/ui/dropzone-empty.png)
+![Zona vacía](/assets/screenshots/ui/dropzone-empty-es.png)
 ```
 
-Desde archivos bajo `es/`:
+Guía completa: [SCREENSHOT_GUIDE.md](/assets/screenshots/SCREENSHOT_GUIDE.md)
 
-```markdown
-![Descripción](images/ui/dropzone-empty.png)
+Regenerar todos los idiomas:
+
+```bash
+./scripts/capture-screenshots.sh
+python3 scripts/normalize_doc_screenshot_paths.py
 ```
-
-En subcarpetas, ajuste la ruta:
-
-```markdown
-![Descripción](../images/ui/dropzone-empty.png)
-```
-
-**Importante:** ponga la interfaz en **Español** antes de capturar.
-
-Guía completa: [SCREENSHOT_GUIDE.md](../../assets/screenshots/SCREENSHOT_GUIDE.md).

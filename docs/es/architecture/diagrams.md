@@ -238,7 +238,7 @@ graph LR
 
 Si el entorno no admite el renderizado de Mermaid, hay imágenes estáticas:
 
-- [Arquitectura del sistema](../arch.png)
+- [Arquitectura del sistema](/arch.png)
 - [Vista detallada por capas](../Detailed-Layer-View.png)
 - [Canal de conversión](../ConversionPipeline.png)
 - [Procesamiento por lotes](../BatchProcessing.png)

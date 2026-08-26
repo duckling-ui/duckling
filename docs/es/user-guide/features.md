@@ -17,7 +17,7 @@ Opciones híbridas/jerárquicas vía API.
 Arrastra archivos a la zona de entrega para subirlos al instante. La interfaz valida los tipos de archivo y muestra el progreso de la subida.
 
 <figure markdown="span">
-  ![Zona de entrega vacía](../../assets/screenshots/ui/dropzone-empty-es.png){ loading=lazy }
+  ![Zona de entrega vacía](/assets/screenshots/ui/dropzone-empty-es.png){ loading=lazy }
   <figcaption>Zona de entrega lista para recibir archivos</figcaption>
 </figure>
 
@@ -99,7 +99,7 @@ Duckling puede instalar motores OCR al seleccionarlos:
 4. Haz clic para instalar con pip
 
 <figure markdown="span">
-  ![Configuración OCR](../../assets/screenshots/settings/settings-ocr-es.png){ loading=lazy }
+  ![Configuración OCR](/assets/screenshots/settings/settings-ocr-es.png){ loading=lazy }
   <figcaption>Configuración OCR y elección del motor</figcaption>
 </figure>
 
@@ -111,7 +111,7 @@ Duckling puede instalar motores OCR al seleccionarlos:
       - Windows: descarga desde [GitHub releases](https://github.com/UB-Mannheim/tesseract/wiki)
 
 <figure markdown="span">
-  ![Aviso Tesseract](../../assets/screenshots/settings/settings-ocr-install-es.png){ loading=lazy }
+  ![Aviso Tesseract](/assets/screenshots/settings/settings-ocr-install-es.png){ loading=lazy }
   <figcaption>Tesseract requiere instalación manual en el sistema</figcaption>
 </figure>
 
@@ -190,12 +190,12 @@ Tras la conversión, las imágenes extraídas se muestran en una galería:
 - **Descargar**: desde la galería o la lightbox
 
 <figure markdown="span">
-  ![Galería de imágenes](../../assets/screenshots/features/images-gallery.png){ loading=lazy }
+  ![Galería de imágenes](/assets/screenshots/features/images-gallery-es.png){ loading=lazy }
   <figcaption>Imágenes extraídas en miniatura</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Lightbox](../../assets/screenshots/features/images-lightbox.png){ loading=lazy }
+  ![Lightbox](/assets/screenshots/features/images-lightbox.png){ loading=lazy }
   <figcaption>Vista a pantalla completa con navegación</figcaption>
 </figure>
 
@@ -225,7 +225,7 @@ Activa los enriquecimientos en **Configuración**, sección **Enriquecimiento de
 4. Los ajustes se guardan automáticamente
 
 <figure markdown="span">
-  ![Configuración de enriquecimiento](../../assets/screenshots/settings/settings-enrichment.png){ loading=lazy }
+  ![Configuración de enriquecimiento](/assets/screenshots/settings/settings-enrichment-es.png){ loading=lazy }
   <figcaption>Panel de enriquecimiento de documentos</figcaption>
 </figure>
 
@@ -233,7 +233,7 @@ Activa los enriquecimientos en **Configuración**, sección **Enriquecimiento de
     Los enriquecimientos, sobre todo **Descripción de imágenes** y **Enriquecimiento de fórmulas**, aumentan mucho el tiempo (inferencia de modelos). Se muestra una advertencia si están activos.
 
 <figure markdown="span">
-  ![Advertencia de enriquecimiento](../../assets/screenshots/settings/settings-enrichment-warning.png){ loading=lazy }
+  ![Advertencia de enriquecimiento](/assets/screenshots/settings/settings-enrichment-warning-es.png){ loading=lazy }
   <figcaption>Advertencia con opciones lentas activadas</figcaption>
 </figure>
 
@@ -345,7 +345,7 @@ Genera fragmentos de documento optimizados para generación aumentada por recupe
 | **Fragmentos RAG** | `.chunks.json` | Fragmentos para aplicaciones RAG |
 
 <figure markdown="span">
-  ![Formatos de exportación](../../assets/screenshots/export/export-formats.png){ loading=lazy }
+  ![Formatos de exportación](/assets/screenshots/export/export-formats-es.png){ loading=lazy }
   <figcaption>Formatos de exportación disponibles</figcaption>
 </figure>
 
@@ -364,7 +364,7 @@ El panel de exportación muestra una vista previa en vivo que se actualiza al ca
 En HTML y Markdown, alterna entre vista renderizada y código fuente:
 
 <figure markdown="span">
-  ![Alternar vista previa](../../assets/screenshots/export/preview-toggle.png){ loading=lazy }
+  ![Alternar vista previa](/assets/screenshots/export/preview-toggle-es.png){ loading=lazy }
   <figcaption>Alternar entre vista previa renderizada y sin formato</figcaption>
 </figure>
 
@@ -374,7 +374,7 @@ En HTML y Markdown, alterna entre vista renderizada y código fuente:
     - **Markdown**: encabezados, negrita/cursiva, bloques de código, enlaces
     - Ideal para revisar el aspecto final
 
-    ![Markdown renderizado](../../assets/screenshots/export/preview-markdown-rendered.png){ loading=lazy }
+    ![Markdown renderizado](/assets/screenshots/export/preview-markdown-rendered-es.png){ loading=lazy }
 
 === "Modo sin formato"
 
@@ -383,7 +383,7 @@ En HTML y Markdown, alterna entre vista renderizada y código fuente:
     - Markdown: sintaxis (`#`, `**negrita**`, etc.)
     - Útil para copiar o depurar formato
 
-    ![Markdown sin formato](../../assets/screenshots/export/preview-markdown-raw.png){ loading=lazy }
+    ![Markdown sin formato](/assets/screenshots/export/preview-markdown-raw-es.png){ loading=lazy }
 
 #### Otros formatos
 
@@ -392,7 +392,7 @@ En HTML y Markdown, alterna entre vista renderizada y código fuente:
 - **DocTags / DocLang / tokens**: vista en bruto
 
 <figure markdown="span">
-  ![Vista previa JSON](../../assets/screenshots/export/preview-json.png){ loading=lazy }
+  ![Vista previa JSON](/assets/screenshots/export/preview-json-es.png){ loading=lazy }
   <figcaption>Salida JSON formateada</figcaption>
 </figure>
 

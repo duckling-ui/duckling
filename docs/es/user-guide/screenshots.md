@@ -3,7 +3,7 @@
 Esta página ofrece un recorrido visual por la interfaz de Duckling. Todas las capturas están en modo oscuro.
 
 !!! note "Estado de las capturas"
-    Algunas imágenes pueden mostrar marcadores de posición. Consulte la [guía de capturas](../../assets/screenshots/SCREENSHOT_GUIDE.md) para instrucciones de captura.
+    Algunas imágenes pueden mostrar marcadores de posición. Consulte la [guía de capturas](/assets/screenshots/SCREENSHOT_GUIDE.md) para instrucciones de captura.
 
 ## Interfaz principal
 
@@ -14,35 +14,35 @@ Esta página ofrece un recorrido visual por la interfaz de Duckling. Todas las c
 === "Estado vacío"
 
     <figure markdown="span">
-      ![Zona vacía](../../assets/screenshots/ui/dropzone-empty.png){ loading=lazy }
+      ![Zona vacía](/assets/screenshots/ui/dropzone-empty-es.png){ loading=lazy }
       <figcaption>Lista para recibir archivos</figcaption>
     </figure>
 
 === "Arrastrar (hover)"
 
     <figure markdown="span">
-      ![Zona al arrastrar](../../assets/screenshots/ui/dropzone-hover.svg){ loading=lazy }
+      ![Zona al arrastrar](/assets/screenshots/ui/dropzone-hover-es.png){ loading=lazy }
       <figcaption>Retroalimentación visual al arrastrar archivos</figcaption>
     </figure>
 
 === "Subiendo"
 
     <figure markdown="span">
-      ![Subida en curso](../../assets/screenshots/ui/dropzone-uploading.svg){ loading=lazy }
+      ![Subida en curso](/assets/screenshots/ui/dropzone-uploading-es.png){ loading=lazy }
       <figcaption>Indicador de progreso de la subida</figcaption>
     </figure>
 
 === "Varios archivos"
 
     <figure markdown="span">
-      ![Varios archivos](../../assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
+      ![Varios archivos](/assets/screenshots/ui/dropzone-batch.png){ loading=lazy }
       <figcaption>Varios archivos seleccionados para subir</figcaption>
     </figure>
 
 ### Barra superior
 
 <figure markdown="span">
-  ![Barra superior](../../assets/screenshots/ui/header.png){ loading=lazy }
+  ![Barra superior](/assets/screenshots/ui/header-es.png){ loading=lazy }
   <figcaption>Barra de la aplicación con ajustes e idioma</figcaption>
 </figure>
 
@@ -51,14 +51,14 @@ Esta página ofrece un recorrido visual por la interfaz de Duckling. Todas las c
 === "Lista del historial"
 
     <figure markdown="span">
-      ![Panel de historial](../../assets/screenshots/ui/history-panel.png){ loading=lazy }
+      ![Panel de historial](/assets/screenshots/ui/history-panel-es.png){ loading=lazy }
       <figcaption>Lista de conversiones anteriores</figcaption>
     </figure>
 
 === "Búsqueda"
 
     <figure markdown="span">
-      ![Búsqueda en historial](../../assets/screenshots/ui/history-search.png){ loading=lazy }
+      ![Búsqueda en historial](/arch.png){ loading=lazy }
       <figcaption>Búsqueda en el historial de conversiones</figcaption>
     </figure>
 
@@ -71,35 +71,35 @@ Esta página ofrece un recorrido visual por la interfaz de Duckling. Todas las c
 === "Resumen"
 
     <figure markdown="span">
-      ![Ajustes OCR](../../assets/screenshots/settings/settings-ocr-es.png){ loading=lazy }
+      ![Ajustes OCR](/assets/screenshots/settings/settings-ocr-es.png){ loading=lazy }
       <figcaption>Opciones de configuración OCR</figcaption>
     </figure>
 
 === "Instalar backend"
 
     <figure markdown="span">
-      ![Instalación OCR](../../assets/screenshots/settings/settings-ocr-install-es.png){ loading=lazy }
+      ![Instalación OCR](/assets/screenshots/settings/settings-ocr-install-es.png){ loading=lazy }
       <figcaption>Instalación del backend con un clic</figcaption>
     </figure>
 
 === "Aviso de Tesseract"
 
     <figure markdown="span">
-      ![Tesseract](../../assets/screenshots/settings/settings-ocr-install-es.png){ loading=lazy }
+      ![Tesseract](/assets/screenshots/settings/settings-ocr-install-es.png){ loading=lazy }
       <figcaption>Instrucciones de instalación manual de Tesseract</figcaption>
     </figure>
 
 ### Ajustes de tablas
 
 <figure markdown="span">
-  ![Ajustes de tablas](../../assets/screenshots/settings/settings-tables.svg){ loading=lazy }
+  ![Ajustes de tablas](/assets/screenshots/settings/settings-tables-es.png){ loading=lazy }
   <figcaption>Configuración de extracción de tablas</figcaption>
 </figure>
 
 ### Ajustes de imágenes
 
 <figure markdown="span">
-  ![Ajustes de imágenes](../../assets/screenshots/settings/settings-images.svg){ loading=lazy }
+  ![Ajustes de imágenes](/assets/screenshots/settings/settings-images-es.png){ loading=lazy }
   <figcaption>Opciones de extracción de imágenes</figcaption>
 </figure>
 
@@ -108,35 +108,35 @@ Esta página ofrece un recorrido visual por la interfaz de Duckling. Todas las c
 === "Todas las opciones"
 
     <figure markdown="span">
-      ![Ajustes de enriquecimiento](../../assets/screenshots/settings/settings-enrichment.png){ loading=lazy }
+      ![Ajustes de enriquecimiento](/assets/screenshots/settings/settings-enrichment-es.png){ loading=lazy }
       <figcaption>Enriquecimiento del documento: código, fórmulas, clasificación de imágenes y descripción</figcaption>
     </figure>
 
 === "Mensaje de advertencia"
 
     <figure markdown="span">
-      ![Advertencia de enriquecimiento](../../assets/screenshots/settings/settings-enrichment-warning.png){ loading=lazy }
+      ![Advertencia de enriquecimiento](/assets/screenshots/settings/settings-enrichment-warning-es.png){ loading=lazy }
       <figcaption>Advertencia cuando están activas funciones de enriquecimiento lentas</figcaption>
     </figure>
 
 ### Ajustes de rendimiento
 
 <figure markdown="span">
-  ![Ajustes de rendimiento](../../assets/screenshots/settings/settings-performance.svg){ loading=lazy }
+  ![Ajustes de rendimiento](/assets/screenshots/settings/settings-performance-es.png){ loading=lazy }
   <figcaption>Configuración del rendimiento de procesamiento</figcaption>
 </figure>
 
 ### Ajustes de fragmentación (chunking)
 
 <figure markdown="span">
-  ![Ajustes de chunking](../../assets/screenshots/settings/settings-chunking.svg){ loading=lazy }
+  ![Ajustes de chunking](/assets/screenshots/settings/settings-chunking-es.png){ loading=lazy }
   <figcaption>Configuración de fragmentos para RAG</figcaption>
 </figure>
 
 ### Ajustes de salida
 
 <figure markdown="span">
-  ![Ajustes de salida](../../assets/screenshots/settings/settings-output.svg){ loading=lazy }
+  ![Ajustes de salida](/assets/screenshots/settings/settings-output-es.png){ loading=lazy }
   <figcaption>Selección del formato de salida predeterminado</figcaption>
 </figure>
 
@@ -149,14 +149,14 @@ Esta página ofrece un recorrido visual por la interfaz de Duckling. Todas las c
 === "Todos los formatos"
 
     <figure markdown="span">
-      ![Formatos de exportación](../../assets/screenshots/export/export-formats.png){ loading=lazy }
+      ![Formatos de exportación](/assets/screenshots/export/export-formats-es.png){ loading=lazy }
       <figcaption>Formatos de exportación disponibles</figcaption>
     </figure>
 
 === "Formato seleccionado"
 
     <figure markdown="span">
-      ![Formato seleccionado](../../assets/screenshots/export/export-format-selected.png){ loading=lazy }
+      ![Formato seleccionado](/assets/screenshots/export/export-format-selected-es.png){ loading=lazy }
       <figcaption>Formato seleccionado con marca de verificación</figcaption>
     </figure>
 
@@ -165,42 +165,42 @@ Esta página ofrece un recorrido visual por la interfaz de Duckling. Todas las c
 === "Alternar renderizado / sin formato"
 
     <figure markdown="span">
-      ![Alternar vista previa](../../assets/screenshots/export/preview-toggle.png){ loading=lazy }
+      ![Alternar vista previa](/assets/screenshots/export/preview-toggle-es.png){ loading=lazy }
       <figcaption>Alternar entre vista renderizada y código fuente</figcaption>
     </figure>
 
 === "Markdown renderizado"
 
     <figure markdown="span">
-      ![Markdown renderizado](../../assets/screenshots/export/preview-markdown-rendered.png){ loading=lazy }
+      ![Markdown renderizado](/assets/screenshots/export/preview-markdown-rendered-es.png){ loading=lazy }
       <figcaption>Markdown renderizado con formato</figcaption>
     </figure>
 
 === "Markdown sin formato"
 
     <figure markdown="span">
-      ![Markdown sin formato](../../assets/screenshots/export/preview-markdown-raw.png){ loading=lazy }
+      ![Markdown sin formato](/assets/screenshots/export/preview-markdown-raw-es.png){ loading=lazy }
       <figcaption>Fuente Markdown sin renderizar</figcaption>
     </figure>
 
 === "HTML renderizado"
 
     <figure markdown="span">
-      ![HTML renderizado](../../assets/screenshots/export/preview-html-rendered.png){ loading=lazy }
+      ![HTML renderizado](/assets/screenshots/export/preview-html-rendered-es.png){ loading=lazy }
       <figcaption>HTML renderizado con estilos</figcaption>
     </figure>
 
 === "HTML sin formato"
 
     <figure markdown="span">
-      ![HTML sin formato](../../assets/screenshots/export/preview-html-raw.png){ loading=lazy }
+      ![HTML sin formato](/assets/screenshots/export/preview-html-raw-es.png){ loading=lazy }
       <figcaption>Código fuente HTML sin renderizar</figcaption>
     </figure>
 
 === "JSON"
 
     <figure markdown="span">
-      ![Vista previa JSON](../../assets/screenshots/export/preview-json.png){ loading=lazy }
+      ![Vista previa JSON](/assets/screenshots/export/preview-json-es.png){ loading=lazy }
       <figcaption>Salida JSON con formato legible</figcaption>
     </figure>
 
@@ -213,21 +213,21 @@ Esta página ofrece un recorrido visual por la interfaz de Duckling. Todas las c
 === "En curso"
 
     <figure markdown="span">
-      ![Conversión en curso](../../assets/screenshots/features/conversion-progress.svg){ loading=lazy }
+      ![Conversión en curso](/assets/screenshots/features/conversion-progress-es.png){ loading=lazy }
       <figcaption>Documento en procesamiento</figcaption>
     </figure>
 
 === "Completada"
 
     <figure markdown="span">
-      ![Conversión completada](../../assets/screenshots/features/conversion-complete-es.png){ loading=lazy }
+      ![Conversión completada](/assets/screenshots/features/conversion-complete-es.png){ loading=lazy }
       <figcaption>Conversión correcta con estadísticas</figcaption>
     </figure>
 
 === "Puntuación de confianza"
 
     <figure markdown="span">
-      ![Indicador de confianza](../../assets/screenshots/features/confidence-display.svg){ loading=lazy }
+      ![Indicador de confianza](/assets/screenshots/features/confidence-display-es.png){ loading=lazy }
       <figcaption>Porcentaje de confianza del OCR</figcaption>
     </figure>
 
@@ -236,21 +236,21 @@ Esta página ofrece un recorrido visual por la interfaz de Duckling. Todas las c
 === "Cuadrícula de miniaturas"
 
     <figure markdown="span">
-      ![Galería de imágenes](../../assets/screenshots/features/images-gallery.png){ loading=lazy }
+      ![Galería de imágenes](/assets/screenshots/features/images-gallery-es.png){ loading=lazy }
       <figcaption>Imágenes extraídas como miniaturas</figcaption>
     </figure>
 
 === "Acciones al pasar el cursor"
 
     <figure markdown="span">
-      ![Imágenes con hover](../../assets/screenshots/features/images-hover.png){ loading=lazy }
+      ![Imágenes con hover](/assets/screenshots/features/images-hover.png){ loading=lazy }
       <figcaption>Botones ver y descargar al pasar el cursor</figcaption>
     </figure>
 
 === "Visor a pantalla completa"
 
     <figure markdown="span">
-      ![Lightbox de imágenes](../../assets/screenshots/features/images-lightbox.png){ loading=lazy }
+      ![Lightbox de imágenes](/assets/screenshots/features/images-lightbox.png){ loading=lazy }
       <figcaption>Visor a tamaño completo con navegación</figcaption>
     </figure>
 
@@ -259,20 +259,20 @@ Esta página ofrece un recorrido visual por la interfaz de Duckling. Todas las c
 === "Lista de tablas"
 
     <figure markdown="span">
-      ![Lista de tablas](../../assets/screenshots/features/tables-list.svg){ loading=lazy }
+      ![Lista de tablas](/assets/screenshots/features/tables-list-es.png){ loading=lazy }
       <figcaption>Tablas extraídas con vistas previas</figcaption>
     </figure>
 
 === "Opciones de descarga"
 
     <figure markdown="span">
-      ![Descarga de tablas](../../assets/screenshots/features/tables-download.svg){ loading=lazy }
+      ![Descarga de tablas](/assets/screenshots/features/tables-download-es.png){ loading=lazy }
       <figcaption>Exportación a CSV e imagen</figcaption>
     </figure>
 
 ### Fragmentos RAG
 
 <figure markdown="span">
-  ![Lista de fragmentos](../../assets/screenshots/features/chunks-list.png){ loading=lazy }
+  ![Lista de fragmentos](/assets/screenshots/features/chunks-list-es.png){ loading=lazy }
   <figcaption>Fragmentos del documento con metadatos</figcaption>
 </figure>

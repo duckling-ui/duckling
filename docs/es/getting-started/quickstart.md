@@ -60,7 +60,7 @@ Elija su método preferido:
 Abra `http://localhost:3000` en el navegador.
 
 <figure markdown="span">
-  ![Interfaz de Duckling](../../assets/screenshots/ui/main-spanish.png){ loading=lazy }
+  ![Interfaz de Duckling](/assets/screenshots/ui/main-spanish.png){ loading=lazy }
   <figcaption>La interfaz principal de Duckling</figcaption>
 </figure>
 
@@ -77,7 +77,7 @@ El progreso de la conversión se muestra en tiempo real.
 Cuando termine, elija el formato de exportación:
 
 <figure markdown="span">
-  ![Conversión completada](../../assets/screenshots/features/conversion-complete.png){ loading=lazy }
+  ![Conversión completada](/assets/screenshots/features/conversion-complete-es.png){ loading=lazy }
   <figcaption>Conversión completada con opciones de exportación</figcaption>
 </figure>
 

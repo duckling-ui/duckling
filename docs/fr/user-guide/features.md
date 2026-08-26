@@ -33,7 +33,7 @@ Activer dans **Paramètres → Chunking** ou exporter des chunks RAG.
 Glissez-déposez des fichiers sur la zone de dépôt pour un téléversement immédiat. L’interface valide les types de fichiers et affiche la progression du téléversement.
 
 <figure markdown="span">
-  ![Zone de dépôt vide](../../assets/screenshots/ui/dropzone-empty-fr.png){ loading=lazy }
+  ![Zone de dépôt vide](/assets/screenshots/ui/dropzone-empty-fr.png){ loading=lazy }
   <figcaption>Zone de dépôt prête à recevoir des fichiers</figcaption>
 </figure>
 
@@ -115,7 +115,7 @@ Duckling peut installer automatiquement les moteurs OCR lorsque vous les sélect
 4. Cliquez pour lancer l’installation via pip
 
 <figure markdown="span">
-  ![Paramètres OCR](../../assets/screenshots/settings/settings-ocr-fr.png){ loading=lazy }
+  ![Paramètres OCR](/assets/screenshots/settings/settings-ocr-fr.png){ loading=lazy }
   <figcaption>Paramètres OCR et choix du moteur</figcaption>
 </figure>
 
@@ -127,7 +127,7 @@ Duckling peut installer automatiquement les moteurs OCR lorsque vous les sélect
       - Windows : téléchargement depuis [GitHub releases](https://github.com/UB-Mannheim/tesseract/wiki)
 
 <figure markdown="span">
-  ![Avis Tesseract](../../assets/screenshots/settings/settings-ocr-install-fr.png){ loading=lazy }
+  ![Avis Tesseract](/assets/screenshots/settings/settings-ocr-install-fr.png){ loading=lazy }
   <figcaption>Tesseract nécessite une installation manuelle sur le système</figcaption>
 </figure>
 
@@ -206,12 +206,12 @@ Après conversion, les images extraites s’affichent dans une galerie :
 - **Télécharger** : téléchargement depuis la galerie ou la lightbox
 
 <figure markdown="span">
-  ![Galerie d’images](../../assets/screenshots/features/images-gallery.png){ loading=lazy }
+  ![Galerie d’images](/assets/screenshots/features/images-gallery-fr.png){ loading=lazy }
   <figcaption>Images extraites affichées en miniatures</figcaption>
 </figure>
 
 <figure markdown="span">
-  ![Lightbox](../../assets/screenshots/features/images-lightbox.png){ loading=lazy }
+  ![Lightbox](/assets/screenshots/features/images-lightbox.png){ loading=lazy }
   <figcaption>Vue plein écran avec navigation</figcaption>
 </figure>
 
@@ -241,7 +241,7 @@ Activez les enrichissements dans **Paramètres**, section **Enrichissement des d
 4. Les paramètres sont enregistrés automatiquement
 
 <figure markdown="span">
-  ![Paramètres d’enrichissement](../../assets/screenshots/settings/settings-enrichment.png){ loading=lazy }
+  ![Paramètres d’enrichissement](/assets/screenshots/settings/settings-enrichment-fr.png){ loading=lazy }
   <figcaption>Panneau d’enrichissement des documents</figcaption>
 </figure>
 
@@ -249,7 +249,7 @@ Activez les enrichissements dans **Paramètres**, section **Enrichissement des d
     Les enrichissements, surtout **Description d’images** et **Enrichissement des formules**, allongent notablement le traitement (inférence de modèles). Un avertissement s’affiche lorsqu’ils sont activés.
 
 <figure markdown="span">
-  ![Avertissement enrichissement](../../assets/screenshots/settings/settings-enrichment-warning.png){ loading=lazy }
+  ![Avertissement enrichissement](/assets/screenshots/settings/settings-enrichment-warning-fr.png){ loading=lazy }
   <figcaption>Avertissement lorsque des options lentes sont activées</figcaption>
 </figure>
 
@@ -361,7 +361,7 @@ Générez des segments de document adaptés à la génération augmentée par r�
 | **Segments RAG** | `.chunks.json` | Segments pour applications RAG |
 
 <figure markdown="span">
-  ![Formats d’export](../../assets/screenshots/export/export-formats.png){ loading=lazy }
+  ![Formats d’export](/assets/screenshots/export/export-formats-fr.png){ loading=lazy }
   <figcaption>Formats d’export disponibles</figcaption>
 </figure>
 
@@ -380,7 +380,7 @@ Le panneau d’export affiche un aperçu en direct qui se met à jour selon le f
 Pour HTML et Markdown, basculez entre vue rendue et code source :
 
 <figure markdown="span">
-  ![Basculer l’aperçu](../../assets/screenshots/export/preview-toggle.png){ loading=lazy }
+  ![Basculer l’aperçu](/assets/screenshots/export/preview-toggle.png){ loading=lazy }
   <figcaption>Basculer entre aperçu rendu et brut</figcaption>
 </figure>
 
@@ -390,7 +390,7 @@ Pour HTML et Markdown, basculez entre vue rendue et code source :
     - **Markdown** : titres, gras/italique, blocs de code, liens
     - Idéal pour vérifier le rendu visuel
 
-    ![Markdown rendu](../../assets/screenshots/export/preview-markdown-rendered.png){ loading=lazy }
+    ![Markdown rendu](/assets/screenshots/export/preview-markdown-rendered-fr.png){ loading=lazy }
 
 === "Mode brut"
 
@@ -399,7 +399,7 @@ Pour HTML et Markdown, basculez entre vue rendue et code source :
     - Markdown : syntaxe (`#`, `**gras**`, etc.)
     - Utile pour copier le contenu ou déboguer la mise en forme
 
-    ![Markdown brut](../../assets/screenshots/export/preview-markdown-raw.png){ loading=lazy }
+    ![Markdown brut](/assets/screenshots/export/preview-markdown-raw-fr.png){ loading=lazy }
 
 #### Autres formats
 
@@ -408,7 +408,7 @@ Pour HTML et Markdown, basculez entre vue rendue et code source :
 - **DocTags / DocLang / jetons** : affichage brut
 
 <figure markdown="span">
-  ![Aperçu JSON](../../assets/screenshots/export/preview-json.png){ loading=lazy }
+  ![Aperçu JSON](/assets/screenshots/export/preview-json-fr.png){ loading=lazy }
   <figcaption>Sortie JSON mise en forme</figcaption>
 </figure>
 
