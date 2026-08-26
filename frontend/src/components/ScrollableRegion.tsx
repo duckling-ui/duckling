@@ -28,6 +28,7 @@ export interface ScrollableRegionProps {
   children: ReactNode;
   "aria-label": string;
   className?: string;
+  "data-testid"?: string;
 }
 
 /**
@@ -38,6 +39,7 @@ export function ScrollableRegion({
   children,
   "aria-label": ariaLabel,
   className = "",
+  "data-testid": dataTestId,
 }: ScrollableRegionProps) {
   return (
     <div
@@ -45,6 +47,7 @@ export function ScrollableRegion({
       tabIndex={0}
       role="region"
       aria-label={ariaLabel}
+      data-testid={dataTestId}
     >
       {children}
     </div>

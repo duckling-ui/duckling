@@ -124,6 +124,7 @@ export default function HistoryPanel({
             exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="fixed left-0 top-0 h-full w-full max-w-md bg-dark-900 border-r border-dark-700 z-50 overflow-hidden flex flex-col"
+            data-testid="history-panel"
           >
             {/* Header */}
             <div className="sticky top-0 bg-dark-900/95 backdrop-blur-sm border-b border-dark-700 p-6">
@@ -136,6 +137,7 @@ export default function HistoryPanel({
                   onClick={onClose}
                   className="p-2 hover:bg-dark-800 rounded-lg transition-colors"
                   aria-label={t("actions.close")}
+                  data-testid="close-history-panel"
                 >
                   <svg
                     className="w-5 h-5 text-dark-400"
@@ -168,6 +170,7 @@ export default function HistoryPanel({
                 </svg>
                 <input
                   type="search"
+                  data-testid="history-panel-search"
                   placeholder={t("historyPanel.searchPlaceholder")}
                   aria-label={t("historyPanel.searchPlaceholder")}
                   value={searchQuery}

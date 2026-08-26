@@ -2,26 +2,68 @@
 
 This guide lists all screenshots needed for the Duckling documentation. All screenshots should be captured in **dark mode** for consistency with the application's default theme.
 
+## Automated capture (recommended)
+
+Use the Playwright harness under `scripts/screenshots/` to regenerate localized UI screenshots in CI or locally. It drives the frontend at **1400×900 @2x**, sets each locale via `localStorage` (`duckling.locale`), mocks `/api/*` responses (no Docling backend required), and writes PNGs to `docs/assets/screenshots/`.
+
+```bash
+# From repo root (installs Playwright + Chromium on first run)
+./scripts/capture-screenshots.sh
+
+# Or run directly:
+cd scripts/screenshots && npm ci && npx playwright install chromium && npm run capture
+```
+
+**CI:** GitHub Actions workflow [`.github/workflows/screenshots.yml`](../../../.github/workflows/screenshots.yml) (`workflow_dispatch`) captures all locales and uploads PNG artifacts for review.
+
+**Currently automated:** main UI, header, dropzone (empty/hover/uploading), history panel + search, settings sections (OCR, tables, images, pipeline, PDF, performance, chunking, enrichment, output, OCR install notice), and—when a live backend is running—PDF conversion/export shots (progress, conversion complete, export formats, preview toggle, markdown/HTML rendered/raw, JSON preview, images gallery/hover, tables list/download, chunks list).
+
+**Sample PDF fixture:** `./scripts/capture-screenshots.sh` regenerates `scripts/screenshots/fixtures/sample-document.pdf` via `fixtures/generate-sample-pdf.py` (requires `reportlab` + `Pillow` from `fixtures/requirements.txt`). The PDF includes headings, body text, two embedded images (logo + chart), and a structured table so `features/images-gallery-*` and `features/tables-download-*` show realistic extracted content.
+
+**Live backend mode (default):** set `SCREENSHOTS_LIVE_BACKEND=1` (default in `./scripts/capture-screenshots.sh`). Playwright clears backend history, uploads `sample-document.pdf`, disables slow enrichment models for faster capture, and waits for real Docling conversion via the backend on `:5001`. Use `SCREENSHOTS_LIVE_BACKEND=0` for mock-only UI captures without conversion.
+
+**Mock-only mode:** skips conversion/export shots that require the backend; settings and empty UI states still capture with mocked `/api/*` responses.
+
+Locale file naming:
+
+| Locale | Main overview | Other shots (example) |
+|--------|---------------|------------------------|
+| English | `ui/main-english.png` | `settings/settings-ocr.png` |
+| German | `ui/main-german.png` | `settings/settings-ocr-de.png` |
+| French | `ui/main-french.png` | `settings/settings-ocr-fr.png` |
+| Spanish | `ui/main-spanish.png` | `settings/settings-ocr-es.png` |
+
+Stable selectors use `data-testid` / `data-section` hooks in the React UI—see `tests/test_screenshot_automation.py`.
+
+---
+
 ## Directory Structure
 
-Screenshots are organized by locale. Each locale has its own `images` directory:
+Screenshots live under **`docs/assets/screenshots/`**, grouped by category (`ui/`, `settings/`, `export/`, `features/`). Documentation pages should reference them with **absolute site-root paths** such as `/assets/screenshots/ui/main-english.png` so localized pages under `/de/`, `/fr/`, and `/es/` do not resolve images under `/de/assets/` (404 → placeholder fallback).
 
-- **English (default)**: `docs/images/`
-- **Spanish**: `docs/es/images/`
-- **French**: `docs/fr/images/`
-- **German**: `docs/de/images/`
+After editing docs or adding new captures, run:
 
-When capturing screenshots for a specific locale, ensure the UI language is set to that locale before capturing, and save the screenshots in the corresponding locale's `images` directory.
+```bash
+./scripts/capture-screenshots.sh
+python3 scripts/normalize_doc_screenshot_paths.py
+python -m pytest tests/test_doc_screenshots.py tests/test_screenshot_automation.py -v
+```
+
+Legacy per-locale `docs/images/` paths may still appear in older notes; prefer `docs/assets/screenshots/` for new captures.
+
+When capturing screenshots for a specific locale, ensure the UI language is set to that locale before capturing. The Playwright harness verifies `document.documentElement.lang` and a locale-specific hero heading before each capture.
+
+Localized homepages (`docs/index.md`, `docs/{de,fr,es}/index.md`) must reference `/assets/screenshots/ui/main-{locale}.png` (not bare `main-german.png`, `fr/main-french.png`, or relative `../assets/...` paths).
 
 ## Capture Settings
 
-- **Resolution**: 1920x1080 or 2x retina (3840x2160)
+- **Resolution**: 1400×900 viewport at 2× device scale (Playwright default) or 1920×1080 manual
 - **Format**: PNG
 - **Theme**: Dark mode (default)
-- **Browser**: Chrome or Firefox (for consistent rendering)
-- **Window Size**: Maximize or use a consistent width (1400px recommended)
+- **Browser**: Chromium via Playwright (recommended for CI) or Chrome/Firefox manually
+- **Window Size**: 1400px width (Playwright) or maximize manually
 
-### macOS Screenshot Commands
+### macOS Screenshot Commands (manual fallback)
 
 - `⌘ + Shift + 4` - Select area to capture
 - `⌘ + Shift + 4 + Space` - Capture specific window
@@ -31,11 +73,11 @@ When capturing screenshots for a specific locale, ensure the UI language is set 
 
 ## Required Screenshots
 
-All screenshots listed below should be captured for each locale and stored in the respective locale's `images` directory. For example:
-- English: `docs/images/dropzone-empty.png`
-- Spanish: `docs/es/images/dropzone-empty.png`
-- French: `docs/fr/images/dropzone-empty.png`
-- German: `docs/de/images/dropzone-empty.png`
+All screenshots listed below should be captured for each locale under `docs/assets/screenshots/`. For example:
+- English: `docs/assets/screenshots/ui/dropzone-empty.png`
+- German: `docs/assets/screenshots/ui/dropzone-empty-de.png`
+- French: `docs/assets/screenshots/ui/dropzone-empty-fr.png`
+- Spanish: `docs/assets/screenshots/ui/dropzone-empty-es.png`
 
 ### 1. Main UI (`ui/` subdirectory)
 

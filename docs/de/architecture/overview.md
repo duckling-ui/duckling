@@ -4,7 +4,7 @@ Architektur und Datenfluss in Duckling auf hoher Ebene.
 
 ## Architekturdiagramm
 
-![Systemarchitektur](../arch.png)
+![Systemarchitektur](/arch.png)
 
 ## Detaillierte Schichtenansicht
 

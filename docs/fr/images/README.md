@@ -1,36 +1,16 @@
-# Captures d’écran (français)
+# Captures d'écran (Français)
 
-Ce répertoire contient les captures pour la documentation en français.
-
-## Arborescence
-
-Organiser les fichiers par sous-dossiers :
-
-- `ui/` — Interface principale (zone de dépôt, en-tête, historique)
-- `settings/` — Panneau des paramètres
-- `export/` — Export et aperçu
-- `features/` — Fonctions (images, tableaux, segments, etc.)
-
-## Utilisation dans la doc
-
-Références relatives en Markdown :
+Les captures pour la documentation française se trouvent dans **`docs/assets/screenshots/`** et doivent être référencées avec des chemins absolus :
 
 ```markdown
-![Description](images/ui/dropzone-empty.png)
+![Zone de dépôt vide](/assets/screenshots/ui/dropzone-empty-fr.png)
 ```
 
-Depuis les fichiers sous `fr/` :
+Guide complet : [SCREENSHOT_GUIDE.md](/assets/screenshots/SCREENSHOT_GUIDE.md)
 
-```markdown
-![Description](images/ui/dropzone-empty.png)
+Régénérer toutes les langues :
+
+```bash
+./scripts/capture-screenshots.sh
+python3 scripts/normalize_doc_screenshot_paths.py
 ```
-
-Dans un sous-dossier, ajuster le chemin :
-
-```markdown
-![Description](../images/ui/dropzone-empty.png)
-```
-
-**Important :** régler l’interface sur **Français** avant de capturer.
-
-Guide complet : [SCREENSHOT_GUIDE.md](../../assets/screenshots/SCREENSHOT_GUIDE.md).

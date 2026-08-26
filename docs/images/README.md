@@ -1,32 +1,16 @@
 # English Screenshots
 
-This directory contains screenshots for the English (default) locale documentation.
-
-## Directory Structure
-
-Organize screenshots into subdirectories:
-
-- `ui/` - Main interface screenshots (dropzone, header, history)
-- `settings/` - Settings panel screenshots
-- `export/` - Export options and preview screenshots
-- `features/` - Feature-specific screenshots (images, tables, chunks, etc.)
-
-## Usage in Documentation
-
-Reference screenshots from markdown files using relative paths:
+Screenshots for the English documentation live under **`docs/assets/screenshots/`** and are referenced with absolute site-root paths:
 
 ```markdown
-![Description](images/ui/dropzone-empty.png)
+![Drop zone empty](/assets/screenshots/ui/dropzone-empty.png)
 ```
 
-For files in the root `docs/` directory, use:
-```markdown
-![Description](images/ui/dropzone-empty.png)
-```
+See [SCREENSHOT_GUIDE.md](/assets/screenshots/SCREENSHOT_GUIDE.md) for capture instructions and the full manifest.
 
-For files in subdirectories, adjust the path accordingly:
-```markdown
-![Description](../images/ui/dropzone-empty.png)
-```
+Regenerate all locales with:
 
-See [SCREENSHOT_GUIDE.md](../assets/screenshots/SCREENSHOT_GUIDE.md) for complete capture instructions.
+```bash
+./scripts/capture-screenshots.sh
+python3 scripts/normalize_doc_screenshot_paths.py
+```

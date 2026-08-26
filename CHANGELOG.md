@@ -9,9 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Playwright-based documentation screenshot automation (`scripts/screenshots/`, `./scripts/capture-screenshots.sh`, `.github/workflows/screenshots.yml`) for localized UI captures in **en**, **de**, **fr**, and **es**; live backend mode uploads `fixtures/sample-document.pdf` (ReportLab-generated PDF with embedded images and a structured table) for conversion/export screenshots (mock-only mode via `SCREENSHOTS_LIVE_BACKEND=0`).
+
+### Fixed
+
+- Documentation screenshot capture: HTML preview shots now screenshot the iframe directly; raw markdown/HTML waits for `<pre>` content after resetting preview mode; history panels clear search and reset backend history to a single `sample-document.pdf` entry per locale; images hover targets the gallery card wrapper to avoid overlay pointer interception.
+
 ### Documentation
 
 - Expanded user guide, API reference, deployment, and Docker docs for docling-serve parity (pipeline/VLM/ASR, advanced chunking, expanded formats, API key, server config, orchestration topology). Added `docs/deployment/server-config.md` with **de/fr/es** localized mirrors.
+- Fixed localized screenshots gallery and homepage image paths to use absolute `/assets/screenshots/...` URLs so **de/fr/es** settings-panel captures (tables, images, performance, chunking, output) load correctly instead of falling back to SVG placeholders.
+- Audited all **en/de/fr/es** documentation for screenshot references: normalized paths via `scripts/normalize_doc_screenshot_paths.py`, expanded Playwright capture coverage (history search, hover/upload states, export previews, images/tables/chunks tabs), and added `tests/test_doc_screenshots.py` guardrails against missing assets, SVG placeholders, blank preview PNGs, inconsistent history panels, and wrong locale paths.
 
 ### Planned
 

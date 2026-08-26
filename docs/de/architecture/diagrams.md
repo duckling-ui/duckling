@@ -238,7 +238,7 @@ graph LR
 
 Wenn Mermaid nicht gerendert werden kann, stehen statische Bilder bereit:
 
-- [Systemarchitektur](../arch.png)
+- [Systemarchitektur](/arch.png)
 - [Detaillierte Schichtenansicht](../Detailed-Layer-View.png)
 - [Konvertierungspipeline](../ConversionPipeline.png)
 - [Batch-Verarbeitung](../BatchProcessing.png)

@@ -91,3 +91,10 @@ logs/
 tmp/
 temp/
 
+# Playwright screenshot automation artifacts
+screenshots-report/
+screenshots-test-results/
+scripts/screenshots/node_modules/
+scripts/screenshots/test-results/
+scripts/screenshots/playwright-report/
+

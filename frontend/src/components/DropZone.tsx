@@ -252,7 +252,7 @@ export default function DropZone({
   });
 
   return (
-    <div className="w-full">
+    <div className="w-full" data-testid="dropzone-root">
       {/* Mode Toggle */}
       <div className="flex justify-center mb-3">
         <div
@@ -386,6 +386,7 @@ export default function DropZone({
               type="file"
               className="hidden"
               multiple
+              data-testid="dropzone-file-input"
               onChange={handleNativeMultiFileInputChange}
               disabled={disabled || isUploading}
             />

@@ -1,0 +1,51 @@
+name: Capture Documentation Screenshots
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload_artifact:
+        description: Upload PNG artifacts for review
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    name: Playwright screenshot capture
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            frontend/package-lock.json
+            scripts/screenshots/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Install screenshot tooling
+        working-directory: scripts/screenshots
+        run: |
+          npm ci
+          npx playwright install chromium --with-deps
+
+      - name: Capture localized screenshots
+        working-directory: scripts/screenshots
+        run: npm run capture
+
+      - name: Upload screenshot artifacts
+        if: inputs.upload_artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-screenshots
+          path: docs/assets/screenshots/**/*.png
+          if-no-files-found: error
