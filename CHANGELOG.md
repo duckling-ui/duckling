@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expanded user guide, API reference, deployment, and Docker docs for docling-serve parity (pipeline/VLM/ASR, advanced chunking, expanded formats, API key, server config, orchestration topology). Added `docs/deployment/server-config.md` with **de/fr/es** localized mirrors.
 - Fixed localized screenshots gallery and homepage image paths to use absolute `/assets/screenshots/...` URLs so **de/fr/es** settings-panel captures (tables, images, performance, chunking, output) load correctly instead of falling back to SVG placeholders.
 - Audited all **en/de/fr/es** documentation for screenshot references: normalized paths via `scripts/normalize_doc_screenshot_paths.py`, expanded Playwright capture coverage (history search, hover/upload states, export previews, images/tables/chunks tabs), and added `tests/test_doc_screenshots.py` guardrails against missing assets, SVG placeholders, blank preview PNGs, inconsistent history panels, and wrong locale paths.
+- Fixed MkDocs link warning in `SCREENSHOT_GUIDE.md` by linking the screenshot CI workflow via GitHub Actions URL instead of a relative path outside the docs tree.
 
 ### Planned
 

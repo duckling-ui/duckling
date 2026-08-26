@@ -14,7 +14,7 @@ Use the Playwright harness under `scripts/screenshots/` to regenerate localized 
 cd scripts/screenshots && npm ci && npx playwright install chromium && npm run capture
 ```
 
-**CI:** GitHub Actions workflow [`.github/workflows/screenshots.yml`](../../../.github/workflows/screenshots.yml) (`workflow_dispatch`) captures all locales and uploads PNG artifacts for review.
+**CI:** GitHub Actions workflow [Capture Documentation Screenshots](https://github.com/duckling-ui/duckling/actions/workflows/screenshots.yml) (`workflow_dispatch`) captures all locales and uploads PNG artifacts for review.
 
 **Currently automated:** main UI, header, dropzone (empty/hover/uploading), history panel + search, settings sections (OCR, tables, images, pipeline, PDF, performance, chunking, enrichment, output, OCR install notice), and—when a live backend is running—PDF conversion/export shots (progress, conversion complete, export formats, preview toggle, markdown/HTML rendered/raw, JSON preview, images gallery/hover, tables list/download, chunks list).
 
