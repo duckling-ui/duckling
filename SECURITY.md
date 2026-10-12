@@ -4,6 +4,7 @@
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 0.2.0  | :white_check_mark: (unreleased) |
 | 0.1.0  | :white_check_mark:                |
 | 0.0.14  | :white_check_mark:                |
 | 0.0.13  | :white_check_mark:                |
@@ -29,6 +30,8 @@ Last audit: August 21, 2026 (product surface notes updated through 2026-08-21 fo
 - **2026-08-20**: Docker publish Trivy gate: Ray and docling-jobkit moved to optional `backend/requirements-orchestration.txt` (not installed in default API/worker images) because Ray ships Java JARs with HIGH findings in `ray_dist.jar` until upstream releases patched Jackson/httpcore versions. RQ/Redis remain in `backend/requirements.txt`.
 - **2026-08-19**: Added optional API authentication with `DUCKLING_API_KEY` (`X-Api-Key`), structured logging toggle (`DUCKLING_LOG_FORMAT=text|json`), and server config-file loading (`DUCKLING_CONFIG_FILE`). Compose stacks now include Redis and worker scaffolding for RQ/Ray-oriented deployment patterns.
 - **2026-08-04**: Converter OCR option construction filters kwargs to fields accepted by the installed Docling OCR model (`extra="forbid"`), so settings such as `bitmap_area_threshold` do not break current `OcrMacOptions` (and similar) when Docling removes those fields.
+- **2026-10-12**: **Issue #67 prebuilt runtime hardening**: frontend compose tmpfs for nginx paths owned by UID 1000; backend entrypoint forces one Gunicorn worker for local in-memory jobs; Tesseract via CLI options (no tesserocr/cysignals in worker threads); OCR fail-closed by default (`allow_fallback_without_ocr`).
+- **2026-09-08**: **docling-serve library integration** (unreleased 0.2.0): embeds docling-serve via `backend/asgi.py` exposing `/v1` OpenAPI on port 5001; `DUCKLING_API_KEY` maps to `DOCLING_SERVE_API_KEY`; optional `DUCKLING_USE_DOCLING_SERVE_ENGINE` routes `/api/convert` through docling-serve. New dependency file `backend/requirements-docling-serve.txt` (includes docling-jobkit for `/v1`); Ray remains optional in `requirements-orchestration.txt`. Review Trivy scan on image bumps.
 - **2026-08-21**: **0.1.0** release: docling-serve parity for conversion, chunking, and pipeline settings; expanded input/output formats; optional `DUCKLING_API_KEY`; Redis/worker compose topology; and Dependabot/npm audit remediation on frontend lockfile and backend dev dependency minimums. Supported-version table now lists 0.1.0.
 - **2026-06-10**: Backend Docker OS hardening: `backend/Dockerfile` runs `apt-get upgrade` on the Bookworm base so publish Trivy gates pick up Debian security fixes for packages such as `libgnutls30` and `openssl`/`libssl3`.
 - **2026-06-10**: Docker image hardening: `backend/scripts/harden_python_packages.py` replaces Dockerfile `--no-deps` force-reinstall so `pip`/`wheel` remain functional at runtime (OCR auto-install, settings) while stale dist-info cleanup still supports Trivy gates.

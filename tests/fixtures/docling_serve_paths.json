@@ -1,0 +1,13 @@
+[
+  "/v1/convert/source",
+  "/v1/convert/file",
+  "/v1/convert/source/async",
+  "/v1/convert/file/async",
+  "/v1/convert/source/batch",
+  "/v1/status/poll/{task_id}",
+  "/v1/result/{task_id}",
+  "/v1/chunk/hybrid/source",
+  "/v1/chunk/hybrid/file",
+  "/v1/chunk/hierarchical/source",
+  "/v1/chunk/hierarchical/file"
+]

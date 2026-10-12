@@ -30,9 +30,16 @@ When adding new UI surfaces referenced in docs, add stable `data-testid` / `data
 
 When adding a new **output export format**, register it consistently: `backend/config.py` (`SUPPORTED_OUTPUT_FORMATS`), conversion export in `backend/services/converter.py`, export/history/file-manager extension maps, `backend/routes/convert.py` valid formats and MIME types, legacy `/api/formats` in `backend/duckling.py`, frontend `FORMAT_INFO` in `ExportOptions.tsx`, `getExtension()` in `useConversion.ts`, all four `frontend/src/locales/*/common.json` entries, and [docs/user-guide/formats.md](docs/user-guide/formats.md) plus localized mirrors. See the DocLang export change set (stable in **0.0.14**) and expanded format surface in **0.1.0** as references.
 
-When wiring Docling OCR engine options in `backend/services/converter.py`, use `_resolve_ocr_mode` / `_instantiate_ocr_options` so settings map to current Docling `OcrMode` + `scale`, and kwargs removed in newer Docling releases (for example `bitmap_area_threshold`) are dropped instead of raising pydantic `extra_forbidden` errors. Keep `backend/requirements.txt` on current stable floors (`docling>=2.118.0`, `docling-core>=2.90.0,<3.0.0`).
+When wiring Docling OCR engine options in `backend/services/converter.py`, use `_resolve_ocr_mode` / `_instantiate_ocr_options` so settings map to current Docling `OcrMode` + `scale`, and kwargs removed in newer Docling releases (for example `bitmap_area_threshold`) are dropped instead of raising pydantic `extra_forbidden` errors. Keep `backend/requirements.txt` on current stable floors (`docling>=2.118.0`, `docling-core>=2.90.0,<3.0.0`). For **Tesseract**, always use `TesseractCliOcrOptions` (not `TesseractOcrOptions`/`tesserocr`) and map UI codes via `TESSERACT_LANGUAGE_MAP` (`en`→`eng`). OCR failures must fail closed unless `allow_fallback_without_ocr` is true (issue #67).
 
-When adding pipeline/chunking settings for docling-serve parity, update all of these together to avoid drift: `backend/config.py` defaults, `backend/routes/settings.py` GET/PUT validators, `backend/services/converter.py` runtime wiring, `frontend/src/types/index.ts`, `frontend/src/components/SettingsPanel.tsx`, locale strings, and user-facing docs (`docs/user-guide/configuration.md`, `docs/api/settings.md`, localized mirrors under `docs/{de,fr,es}/`).
+When adding pipeline/chunking settings for docling-serve parity, update all of these together to avoid drift: `backend/config.py` defaults, `backend/routes/settings.py` GET/PUT validators, `backend/services/converter.py` runtime wiring, `backend/services/settings_mapper.py`, `frontend/src/types/index.ts`, `frontend/src/components/SettingsPanel.tsx`, locale strings, and user-facing docs (`docs/user-guide/configuration.md`, `docs/api/settings.md`, localized mirrors under `docs/{de,fr,es}/`).
+
+### docling-serve `/v1` integration
+
+- ASGI entry: `backend/asgi.py` (docling-serve + Flask `/api` mount).
+- Dependencies: `backend/requirements-docling-serve.txt` (install after `requirements.txt`).
+- Contract tests: `tests/test_docling_serve_contract.py`, `backend/tests/test_settings_mapper.py`.
+- Upgrade process: [docs/deployment/docling-serve-upgrade.md](docs/deployment/docling-serve-upgrade.md).
 
 When cutting a stable release, bump `frontend/package.json` (and lockfile), `frontend/src/App.tsx` (`APP_VERSION`), `mkdocs.yml` mike `default`, `scripts/get_version.py` fallback, `.github/workflows/deploy-docs.yml` fallback, `docs/versions.json`, roll `[Unreleased]` into `CHANGELOG.md` / `docs/**/changelog.md`, and update `SECURITY.md` supported versions. Keep `tests/test_get_version.py` version-agreement assertions in sync.
 
@@ -338,6 +345,8 @@ To avoid merge-only validation loops, pull requests run **Docker publish rehears
 When changing Dockerfiles, compose runtime settings, or publish automation, update:
 
 - keep frontend runtime base current (`frontend/Dockerfile` currently pins `nginx:1.29-alpine3.22`) and preserve the `apk upgrade --no-cache` hardening step so Trivy OS-package gates do not regress
+- keep frontend compose tmpfs for `/var/cache/nginx` and `/var/run` owned by UID/GID **1000** (`nginxuser`) so read-only non-root nginx does not restart-loop (issue #67 A)
+- keep `backend/entrypoint.sh` forcing **1** Gunicorn worker when `DUCKLING_ENGINE_KIND=local`
 
 
 - `tests/test_docker_hardening.py`

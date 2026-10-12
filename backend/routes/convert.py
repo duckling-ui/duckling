@@ -38,7 +38,8 @@ import logging
 from services.converter import converter_service, ConversionStatus
 from services.file_manager import file_manager
 from services.history import history_service
-from config import DEFAULT_CONVERSION_SETTINGS, OUTPUT_FOLDER, BACKEND_DIR
+from services.docling_serve_adapter import use_docling_serve_engine, submit_file_conversion
+from config import DEFAULT_CONVERSION_SETTINGS, OUTPUT_FOLDER, BACKEND_DIR, SERVER_CONFIG
 from routes.settings import load_settings
 from models.conversion_options import merge_settings
 from utils.security import validate_job_id, get_validated_output_dir, validate_url_safe_for_request
@@ -75,6 +76,69 @@ def _apply_job_options(settings: dict, payload: dict) -> dict:
     if isinstance(to_formats, list) and to_formats:
         settings["requested_output_formats"] = to_formats
     return settings
+
+
+def _history_on_complete(completed_job):
+    """Update history when a conversion job finishes."""
+    status = "completed" if completed_job.status == ConversionStatus.COMPLETED else "failed"
+    duration = None
+    if completed_job.completed_at and completed_job.created_at:
+        duration = (completed_job.completed_at - completed_job.created_at).total_seconds()
+    ocr_backend = getattr(completed_job, "ocr_backend_used", None) or (
+        completed_job.settings.get("ocr", {}) or {}
+    ).get("backend")
+    history_service.update_status(
+        job_id=completed_job.id,
+        status=status,
+        confidence=completed_job.confidence,
+        error_message=completed_job.error,
+        output_path=str(completed_job.output_paths.get("markdown", "")),
+        processing_duration_seconds=duration,
+        ocr_backend_used=ocr_backend,
+        page_count=getattr(completed_job, "page_count", None),
+        cpu_usage_avg_during_conversion=getattr(completed_job, "cpu_usage_avg_during_conversion", None),
+        performance_device_used=getattr(completed_job, "performance_device_used", None),
+        images_classify_enabled=getattr(completed_job, "images_classify_enabled", None),
+        content_hash=getattr(completed_job, "content_hash", None),
+        external_task_id=getattr(completed_job, "external_task_id", None),
+        engine=getattr(completed_job, "engine", None),
+    )
+    document_path = getattr(completed_job, "document_json_path", None)
+    if document_path:
+        history_service.update_document_path(completed_job.id, document_path)
+
+
+def _start_job_conversion(job, on_complete=None):
+    """Start conversion via docling-serve (when enabled) or legacy converter_service."""
+    callback = on_complete or _history_on_complete
+    # Persist processing so multi-worker / history fallback does not mis-report pending as failed (#67 B)
+    try:
+        history_service.update_status(job_id=job.id, status="processing")
+    except Exception as exc:
+        logger.warning("Failed to mark job %s as processing in history: %s", job.id, exc)
+    if use_docling_serve_engine():
+        submit_file_conversion(
+            job,
+            job.input_path,
+            job.original_filename,
+            on_complete=callback,
+            history_updater=_history_on_complete,
+        )
+    else:
+        converter_service.start_conversion(job, on_complete=callback)
+
+
+def _history_status_message(status: str) -> str:
+    """Human-readable message for history fallback (do not call pending/processing 'failed')."""
+    if status == "completed":
+        return "Conversion completed"
+    if status == "failed":
+        return "Conversion failed"
+    if status == "processing":
+        return "Conversion in progress"
+    if status == "pending":
+        return "Conversion queued"
+    return f"Conversion status: {status}"
 
 
 # Allowed extensions for URL downloads (same as file uploads)
@@ -568,38 +632,12 @@ def upload_and_convert():
         settings=settings,
         file_size=file_size,
         source_type="upload",
+        engine=(SERVER_CONFIG.get("engine", {}) or {}).get("kind", "local"),
+        page_range=settings.get("page_range"),
+        requested_output_formats=settings.get("requested_output_formats"),
     )
 
-    # Define callback to update history when conversion completes
-    def on_complete(completed_job):
-        status = "completed" if completed_job.status == ConversionStatus.COMPLETED else "failed"
-        duration = None
-        if completed_job.completed_at and completed_job.created_at:
-            duration = (completed_job.completed_at - completed_job.created_at).total_seconds()
-        ocr_backend = getattr(completed_job, "ocr_backend_used", None) or (
-            completed_job.settings.get("ocr", {}) or {}
-        ).get("backend")
-        history_service.update_status(
-            job_id=completed_job.id,
-            status=status,
-            confidence=completed_job.confidence,
-            error_message=completed_job.error,
-            output_path=str(completed_job.output_paths.get("markdown", "")),
-            processing_duration_seconds=duration,
-            ocr_backend_used=ocr_backend,
-            page_count=getattr(completed_job, "page_count", None),
-            cpu_usage_avg_during_conversion=getattr(completed_job, "cpu_usage_avg_during_conversion", None),
-            performance_device_used=getattr(completed_job, "performance_device_used", None),
-            images_classify_enabled=getattr(completed_job, "images_classify_enabled", None),
-            content_hash=getattr(completed_job, "content_hash", None),
-        )
-        # Save document path if available
-        document_path = getattr(completed_job, "document_json_path", None)
-        if document_path:
-            history_service.update_document_path(completed_job.id, document_path)
-
-    # Start async conversion
-    converter_service.start_conversion(job, on_complete=on_complete)
+    _start_job_conversion(job)
 
     return jsonify({
         "job_id": job.id,
@@ -670,38 +708,12 @@ def convert_from_url():
         settings=settings,
         file_size=file_size,
         source_type="url",
+        engine=(SERVER_CONFIG.get("engine", {}) or {}).get("kind", "local"),
+        page_range=settings.get("page_range"),
+        requested_output_formats=settings.get("requested_output_formats"),
     )
 
-    # Define callback to update history when conversion completes
-    def on_complete(completed_job):
-        status = "completed" if completed_job.status == ConversionStatus.COMPLETED else "failed"
-        duration = None
-        if completed_job.completed_at and completed_job.created_at:
-            duration = (completed_job.completed_at - completed_job.created_at).total_seconds()
-        ocr_backend = getattr(completed_job, "ocr_backend_used", None) or (
-            completed_job.settings.get("ocr", {}) or {}
-        ).get("backend")
-        history_service.update_status(
-            job_id=completed_job.id,
-            status=status,
-            confidence=completed_job.confidence,
-            error_message=completed_job.error,
-            output_path=str(completed_job.output_paths.get("markdown", "")),
-            processing_duration_seconds=duration,
-            ocr_backend_used=ocr_backend,
-            page_count=getattr(completed_job, "page_count", None),
-            cpu_usage_avg_during_conversion=getattr(completed_job, "cpu_usage_avg_during_conversion", None),
-            performance_device_used=getattr(completed_job, "performance_device_used", None),
-            images_classify_enabled=getattr(completed_job, "images_classify_enabled", None),
-            content_hash=getattr(completed_job, "content_hash", None),
-        )
-        # Save document path if available
-        document_path = getattr(completed_job, "document_json_path", None)
-        if document_path:
-            history_service.update_document_path(completed_job.id, document_path)
-
-    # Start async conversion
-    converter_service.start_conversion(job, on_complete=on_complete)
+    _start_job_conversion(job)
 
     return jsonify({
         "job_id": job.id,
@@ -783,35 +795,12 @@ def convert_from_urls_batch():
                 settings=settings,
                 file_size=file_size,
                 source_type="batch",
+                engine=(SERVER_CONFIG.get("engine", {}) or {}).get("kind", "local"),
+                page_range=settings.get("page_range"),
+                requested_output_formats=settings.get("requested_output_formats"),
             )
 
-            # Define callback to update history when conversion completes
-            def on_complete(completed_job):
-                status = "completed" if completed_job.status == ConversionStatus.COMPLETED else "failed"
-                duration = None
-                if completed_job.completed_at and completed_job.created_at:
-                    duration = (completed_job.completed_at - completed_job.created_at).total_seconds()
-                ocr_backend = getattr(completed_job, "ocr_backend_used", None) or (
-                    completed_job.settings.get("ocr", {}) or {}
-                ).get("backend")
-                history_service.update_status(
-                    job_id=completed_job.id,
-                    status=status,
-                    confidence=completed_job.confidence,
-                    error_message=completed_job.error,
-                    output_path=str(completed_job.output_paths.get("markdown", "")),
-                    processing_duration_seconds=duration,
-                    ocr_backend_used=ocr_backend,
-                    page_count=getattr(completed_job, "page_count", None),
-                    content_hash=getattr(completed_job, "content_hash", None),
-                )
-                # Save document path if available
-                document_path = getattr(completed_job, "document_json_path", None)
-                if document_path:
-                    history_service.update_document_path(completed_job.id, document_path)
-
-            # Start async conversion
-            converter_service.start_conversion(job, on_complete=on_complete)
+            _start_job_conversion(job)
 
             jobs.append({
                 "job_id": job.id,
@@ -910,35 +899,12 @@ def upload_and_convert_batch():
             settings=settings,
             file_size=file_size,
             source_type="batch",
+            engine=(SERVER_CONFIG.get("engine", {}) or {}).get("kind", "local"),
+            page_range=settings.get("page_range"),
+            requested_output_formats=settings.get("requested_output_formats"),
         )
 
-        # Define callback to update history when conversion completes
-        def on_complete(completed_job):
-            status = "completed" if completed_job.status == ConversionStatus.COMPLETED else "failed"
-            duration = None
-            if completed_job.completed_at and completed_job.created_at:
-                duration = (completed_job.completed_at - completed_job.created_at).total_seconds()
-            ocr_backend = getattr(completed_job, "ocr_backend_used", None) or (
-                completed_job.settings.get("ocr", {}) or {}
-            ).get("backend")
-            history_service.update_status(
-                job_id=completed_job.id,
-                status=status,
-                confidence=completed_job.confidence,
-                error_message=completed_job.error,
-                output_path=str(completed_job.output_paths.get("markdown", "")),
-                processing_duration_seconds=duration,
-                ocr_backend_used=ocr_backend,
-                page_count=getattr(completed_job, "page_count", None),
-                content_hash=getattr(completed_job, "content_hash", None),
-            )
-            # Save document path if available
-            document_path = getattr(completed_job, "document_json_path", None)
-            if document_path:
-                history_service.update_document_path(completed_job.id, document_path)
-
-        # Start async conversion
-        converter_service.start_conversion(job, on_complete=on_complete)
+        _start_job_conversion(job)
 
         jobs.append({
             "job_id": job.id,
@@ -966,7 +932,7 @@ def upload_and_convert_batch():
 
 @convert_bp.route("/convert/batch/connectors", methods=["POST"])
 def convert_with_connectors():
-    """Accept connector-based batch requests (jobkit integration point)."""
+    """Accept connector-based batch requests (docling-jobkit integration)."""
     if not request.is_json:
         raise BadRequest("Content-Type must be application/json")
     data = request.get_json() or {}
@@ -977,12 +943,37 @@ def convert_with_connectors():
     if not isinstance(target, dict) or not target.get("kind"):
         raise BadRequest("target.kind is required")
 
+    engine_kind = (SERVER_CONFIG.get("engine", {}) or {}).get("kind", "local")
+    if use_docling_serve_engine() and engine_kind in ("rq", "ray"):
+        client = None
+        try:
+            from starlette.testclient import TestClient
+            from asgi import app as asgi_app, DOCLING_SERVE_ENABLED
+
+            if DOCLING_SERVE_ENABLED:
+                client = TestClient(asgi_app, raise_server_exceptions=False)
+                response = client.post(
+                    "/v1/convert/source/batch",
+                    json={"sources": sources, "target": target, "options": data.get("options") or {}},
+                )
+                if response.status_code in (200, 202):
+                    payload = response.json()
+                    return jsonify({
+                        "status": "accepted",
+                        "message": "Connector batch submitted to docling-serve",
+                        "sources_count": len(sources),
+                        "target_kind": target.get("kind"),
+                        "task_id": payload.get("task_id"),
+                    }), 202
+        except Exception as exc:
+            logger.warning("connector batch delegation failed: %s", exc)
+
     return jsonify({
         "status": "accepted",
         "message": "Connector batch request accepted",
         "sources_count": len(sources),
         "target_kind": target.get("kind"),
-        "note": "Connector execution requires RQ/Ray worker integration.",
+        "note": "Set DUCKLING_USE_DOCLING_SERVE_ENGINE=true and engine rq/ray for execution.",
     }), 202
 
 
@@ -1001,25 +992,32 @@ def get_conversion_status(job_id: str):
     job = converter_service.get_job(job_id)
 
     if not job:
-        # Check history for completed jobs
+        # Fallback when this worker does not hold the in-memory job (issue #67 B)
         history_entry = history_service.get_entry(job_id)
         if history_entry:
-            return jsonify({
+            hist_status = history_entry.get("status") or "pending"
+            progress = 100 if hist_status == "completed" else (50 if hist_status == "processing" else 0)
+            payload = {
                 "job_id": job_id,
-                "status": history_entry["status"],
-                "progress": 100 if history_entry["status"] == "completed" else 0,
-                "message": "Conversion completed" if history_entry["status"] == "completed" else "Conversion failed",
+                "status": hist_status,
+                "progress": progress,
+                "message": _history_status_message(hist_status),
                 "confidence": history_entry.get("confidence"),
-                "error": history_entry.get("error_message")
-            })
+                "error": history_entry.get("error_message"),
+                "ocr_backend_used": history_entry.get("ocr_backend_used"),
+            }
+            return jsonify(payload)
         raise NotFound(f"Job {job_id} not found")
 
     response = {
         "job_id": job.id,
         "status": job.status.value,
         "progress": job.progress,
-        "message": job.message
+        "message": job.message,
+        "ocr_backend_used": getattr(job, "ocr_backend_used", None),
     }
+    if getattr(job, "ocr_warning", None):
+        response["ocr_warning"] = job.ocr_warning
 
     if job.status == ConversionStatus.COMPLETED:
         response["confidence"] = job.confidence
@@ -1059,7 +1057,7 @@ def get_conversion_result(job_id: str):
                 "message": "Conversion not yet completed"
             }), 202
 
-        return jsonify({
+        payload = {
             "job_id": job.id,
             "status": "completed",
             "confidence": job.confidence,
@@ -1068,8 +1066,12 @@ def get_conversion_result(job_id: str):
             "images_count": len(job.extracted_images),
             "tables_count": len(job.extracted_tables),
             "chunks_count": len(job.chunks),
-            "completed_at": job.completed_at.isoformat() if job.completed_at else None
-        })
+            "completed_at": job.completed_at.isoformat() if job.completed_at else None,
+            "ocr_backend_used": getattr(job, "ocr_backend_used", None),
+        }
+        if getattr(job, "ocr_warning", None):
+            payload["ocr_warning"] = job.ocr_warning
+        return jsonify(payload)
 
     # Fallback: Check history and output directory (for multi-worker scenarios)
     history_entry = history_service.get_entry(job_id)

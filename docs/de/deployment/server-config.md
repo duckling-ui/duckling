@@ -18,9 +18,9 @@ Siehe die vollständige englische Referenz in [Server Configuration](../../deplo
 
 | Modus | Verhalten |
 |-------|-----------|
-| **local** (Standard) | Konvertierungen im API-Prozess |
+| **local** (Standard) | Konvertierungen im API-Prozess; Gunicorn **1** Worker (Issue #67) |
 | **rq** / **ray** | Adapter vorhanden; verteilte Ausführung erfordert Worker-Integration |
 
-Compose definiert `redis`- und `rq-worker`-Dienste. Ray/jobkit: optional `backend/requirements-orchestration.txt`.
+Compose definiert `redis`- und `rq-worker`-Dienste. Ray/jobkit: optional `backend/requirements-orchestration.txt`. Frontend-tmpfs für nginx muss UID/GID **1000** besitzen.
 
 Weitere Details: [Skalierung](scaling.md), [Sicherheit](security.md), [Konvertierungs-API](../api/conversion.md#connector-batch-endpoint).

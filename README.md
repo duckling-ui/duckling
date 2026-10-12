@@ -13,7 +13,7 @@
 
 A modern, user-friendly browser-based graphical interface for [Docling](https://github.com/docling-project/docling) - the powerful document conversion library by IBM.
 
-**Current release:** [0.1.0](https://github.com/duckling-ui/duckling/releases/tag/v0.1.0) — docling-serve parity for conversion, chunking, and pipeline settings; expanded formats; optional API key auth; Redis/worker compose topology; and Dependabot/npm audit remediation. See [CHANGELOG.md](CHANGELOG.md).
+**Current release:** [0.1.0](https://github.com/duckling-ui/duckling/releases/tag/v0.1.0) — docling-serve parity for conversion settings; embedded **docling-serve `/v1` API** (OpenAPI at `/docs`); optional API key auth; Redis/worker compose topology. See [CHANGELOG.md](CHANGELOG.md).
 
 ![Duckling Screenshot](docs/assets/screenshots/ui/main-english.png)
 
@@ -116,9 +116,12 @@ A modern, user-friendly browser-based graphical interface for [Docling](https://
    ```bash
    cd backend
    source venv/bin/activate
-   python duckling.py
+   pip install -r requirements.txt -r requirements-docling-serve.txt
+   uvicorn asgi:app --host 0.0.0.0 --port 5001 --reload
    ```
-   The API will be available at `http://localhost:5001`
+   Or Flask-only (legacy): `python duckling.py`
+
+   The API will be available at `http://localhost:5001` (`/api/*` Duckling UI API, `/v1/*` docling-serve OpenAPI, `/docs` interactive schema).
 
 2. **Start the frontend** (in another terminal):
    ```bash
@@ -224,7 +227,8 @@ Settings can be configured through the UI or via the API. All settings are organ
 | Setting | Description | Default |
 |---------|-------------|---------|
 | `enabled` | Enable/disable OCR | `true` |
-| `backend` | OCR engine (easyocr, tesseract, ocrmac, rapidocr) | `easyocr` |
+| `backend` | OCR engine (easyocr, tesseract, ocrmac, rapidocr); `tesseract` uses the CLI binary | `tesseract` |
+| `allow_fallback_without_ocr` | If false (default), OCR failures fail the job instead of silently converting without OCR | `false` |
 | `language` | Primary language for recognition | `en` |
 | `mode` | Docling OCR region mode (`default` / `full_page` / `layout_regions` / `pdf_aware_layout_regions`) | `default` |
 | `scale` | OCR render scale (72 DPI × scale) | `3.0` |

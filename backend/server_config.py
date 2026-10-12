@@ -31,6 +31,7 @@ DEFAULT_SERVER_CONFIG: Dict[str, Any] = {
     },
     "enable_remote_services": False,
     "allow_custom_vlm_config": False,
+    "use_docling_serve_engine": False,
 }
 
 
@@ -84,6 +85,7 @@ def get_server_config(project_root: Path) -> Dict[str, Any]:
         },
         "enable_remote_services": os.getenv("DUCKLING_ENABLE_REMOTE_SERVICES", str(cfg["enable_remote_services"])).lower() == "true",
         "allow_custom_vlm_config": os.getenv("DUCKLING_ALLOW_CUSTOM_VLM_CONFIG", str(cfg["allow_custom_vlm_config"])).lower() == "true",
+        "use_docling_serve_engine": os.getenv("DUCKLING_USE_DOCLING_SERVE_ENGINE", str(cfg.get("use_docling_serve_engine", False))).lower() == "true",
     }
     cfg = _deep_merge(cfg, env_cfg)
     cfg["project_root"] = str(project_root)

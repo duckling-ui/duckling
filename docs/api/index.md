@@ -22,9 +22,28 @@ The React UI reads `VITE_API_KEY` at build time and sends `X-Api-Key` automatica
 
 When no API key is configured, the API remains open on the local network — restrict access with a reverse proxy in production.
 
+## docling-serve `/v1` (standard HTTP API)
+
+Duckling embeds [docling-serve](https://github.com/docling-project/docling-serve) and exposes the **exact upstream `/v1` OpenAPI** on the same host:
+
+```
+http://localhost:5001/v1/...
+http://localhost:5001/docs
+```
+
+See [docling-serve /v1 API](docling-serve-v1.md) for endpoints, examples, and auth. Duckling-specific product APIs remain under `/api/*` below.
+
 ## Sections
 
 <div class="grid cards" markdown>
+
+-   :material-api:{ .lg .middle } __docling-serve /v1__
+
+    ---
+
+    Standard Docling HTTP API (OpenAPI)
+
+    [:octicons-arrow-right-24: /v1 API](docling-serve-v1.md)
 
 -   :material-file-document-multiple:{ .lg .middle } __Conversion__
 

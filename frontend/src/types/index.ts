@@ -53,6 +53,8 @@ export interface OcrSettings {
   force_full_page_ocr: boolean;
   use_gpu: boolean;
   confidence_threshold: number;
+  /** When false (default), OCR failures fail the job instead of silently converting without OCR */
+  allow_fallback_without_ocr?: boolean;
   /** @deprecated Removed from Docling OcrOptions (2.116+); ignored by backend */
   bitmap_area_threshold?: number;
 }

@@ -57,6 +57,29 @@ else:
     SITE_DIR = PROJECT_ROOT / "site"
 
 
+def flask_api_prefix() -> str:
+    """
+    URL prefix for Flask-registered routes.
+
+    When ``asgi.py`` mounts this app at ``/api``, Starlette strips that prefix
+    before invoking WSGI, so internal routes must omit ``/api``.
+    """
+    return "" if os.getenv("DUCKLING_ASGI_MOUNTED") == "1" else "/api"
+
+
+def api_route_path(subpath: str) -> str:
+    """Build a Flask route path (internal WSGI path)."""
+    subpath = subpath if subpath.startswith("/") else f"/{subpath}"
+    prefix = flask_api_prefix()
+    return f"{prefix}{subpath}" if prefix else subpath
+
+
+def public_api_path(subpath: str) -> str:
+    """Build the external URL path clients use (always under ``/api``)."""
+    subpath = subpath if subpath.startswith("/") else f"/{subpath}"
+    return f"/api{subpath}"
+
+
 def build_docs():
     """Build the MkDocs documentation site."""
     if not DOCS_DIR.exists():
@@ -191,8 +214,10 @@ def create_app(config_class=None):
     app.config.from_object(config_class)
 
     # Enable CORS for frontend communication
+    api_prefix = flask_api_prefix()
+    cors_pattern = r"/*" if not api_prefix else r"/api/*"
     CORS(app, resources={
-        r"/api/*": {
+        cors_pattern: {
             "origins": getattr(config_class, "CORS_ORIGINS", ["http://localhost:3000", "http://localhost:5173"]),
             "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
             "allow_headers": ["Content-Type", "Authorization", "X-Api-Key"]
@@ -205,12 +230,16 @@ def create_app(config_class=None):
         if not api_key:
             return None
         path = request.path or ""
-        if path == "/api/health" or path.startswith("/api/docs/site"):
+        health_path = api_route_path("/health")
+        docs_site_path = api_route_path("/docs/site")
+        if path == health_path or path.startswith(docs_site_path):
             return None
-        if path.startswith("/api/"):
-            provided = request.headers.get("X-Api-Key", "")
-            if provided != api_key:
-                return jsonify({"error": "Unauthorized", "message": "Invalid API key"}), 401
+        if api_prefix:
+            if not path.startswith(f"{api_prefix}/"):
+                return None
+        provided = request.headers.get("X-Api-Key", "")
+        if provided != api_key:
+            return jsonify({"error": "Unauthorized", "message": "Invalid API key"}), 401
         return None
 
     # Initialize database
@@ -229,12 +258,12 @@ def create_app(config_class=None):
             logger.warning(f"History reconciliation failed: {e}")
 
     # Register blueprints
-    app.register_blueprint(convert_bp, url_prefix="/api")
-    app.register_blueprint(settings_bp, url_prefix="/api")
-    app.register_blueprint(history_bp, url_prefix="/api")
+    app.register_blueprint(convert_bp, url_prefix=api_prefix)
+    app.register_blueprint(settings_bp, url_prefix=api_prefix)
+    app.register_blueprint(history_bp, url_prefix=api_prefix)
 
     # Health check endpoint
-    @app.route("/api/health")
+    @app.route(api_route_path("/health"))
     def health_check():
         """Health check endpoint."""
         return jsonify({
@@ -243,7 +272,7 @@ def create_app(config_class=None):
         })
 
     # Supported formats endpoint
-    @app.route("/api/formats")
+    @app.route(api_route_path("/formats"))
     def get_formats():
         """Get supported input and output formats."""
         return jsonify({
@@ -284,7 +313,7 @@ def create_app(config_class=None):
         })
 
     # Documentation endpoints - serve from MkDocs built site
-    @app.route("/api/docs")
+    @app.route(api_route_path("/docs"))
     def list_docs():
         """List available documentation pages from the MkDocs site."""
         docs = []
@@ -598,13 +627,13 @@ def create_app(config_class=None):
 
         return jsonify({
             "docs": sorted(docs, key=lambda x: x["name"]),
-            "base_url": f"/api/docs/site/{requested_lang}",
+            "base_url": f"{public_api_path('/docs/site')}/{requested_lang}",
             "site_built": site_exists,
             "language": requested_lang,
             "available_languages": ["en", "es", "fr", "de"]
         })
 
-    @app.route("/api/docs/build", methods=["POST"])
+    @app.route(api_route_path("/docs/build"), methods=["POST"])
     def build_docs_endpoint():
         """Manually trigger a documentation build."""
         success = build_docs()
@@ -619,8 +648,8 @@ def create_app(config_class=None):
                 "message": "Failed to build documentation. Check server logs for details."
             }), 500
 
-    @app.route("/api/docs/site/")
-    @app.route("/api/docs/site/<path:path>")
+    @app.route(api_route_path("/docs/site/"))
+    @app.route(api_route_path("/docs/site/<path:path>"))
     def serve_docs_site(path=""):
         """Serve the MkDocs built site."""
         site_exists = SITE_DIR.exists() and (SITE_DIR / "index.html").exists()
@@ -631,7 +660,7 @@ def create_app(config_class=None):
                 site_exists = True
 
         if not site_exists:
-            abort(404, "Documentation site not built. Run 'mkdocs build' or POST to /api/docs/build")
+            abort(404, f"Documentation site not built. Run 'mkdocs build' or POST to {public_api_path('/docs/build')}")
 
         # Security: Sanitize and validate the path parameter
         # Remove any path traversal attempts and normalize the path
@@ -760,8 +789,9 @@ def create_app(config_class=None):
     return app
 
 
-# Create the application instance
-app = create_app()
+# Create the application instance (standalone WSGI only; ASGI composite calls create_app() separately)
+if os.getenv("DUCKLING_ASGI_MOUNTED") != "1":
+    app = create_app()
 
 
 if __name__ == "__main__":

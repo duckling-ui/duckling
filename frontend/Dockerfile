@@ -31,8 +31,8 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 # Copy built files from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Create non-root user
-RUN adduser -D -g '' nginxuser \
+# Create non-root user with stable UID/GID 1000 (matches compose tmpfs ownership)
+RUN adduser -D -u 1000 -g '' nginxuser \
     && chown -R nginxuser:nginxuser /usr/share/nginx/html \
     && chown -R nginxuser:nginxuser /var/cache/nginx \
     && chown -R nginxuser:nginxuser /var/log/nginx \

@@ -397,11 +397,12 @@ services:
     security_opt: ["no-new-privileges:true"]
     tmpfs:
       - /tmp
-      - /var/cache/nginx
-      - /var/run
+      # Must match frontend image nginxuser UID/GID 1000 (avoids restart loops)
+      - /var/cache/nginx:uid=1000,gid=1000,mode=0755
+      - /var/run:uid=1000,gid=1000,mode=0755
 ```
 
-These settings reduce container mutation and privilege escalation risk while preserving required writable runtime paths.
+These settings reduce container mutation and privilege escalation risk while preserving required writable runtime paths. Nginx temp/PID directories must be owned by `nginxuser` (UID 1000); root-owned tmpfs mounts cause permission denied restart loops (see [issue #67](https://github.com/duckling-ui/duckling/issues/67)).
 
 ## Networking
 

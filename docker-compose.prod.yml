@@ -46,8 +46,9 @@ services:
       - no-new-privileges:true
     tmpfs:
       - /tmp
-      - /var/cache/nginx
-      - /var/run
+      # uid/gid must match frontend Dockerfile nginxuser (1000); root-owned tmpfs causes restart loops
+      - /var/cache/nginx:uid=1000,gid=1000,mode=0755
+      - /var/run:uid=1000,gid=1000,mode=0755
     deploy:
       resources:
         limits:

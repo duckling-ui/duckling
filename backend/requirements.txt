@@ -26,6 +26,7 @@ pytest>=8.3.5,<9
 pytest-cov>=5.0.0,<7
 werkzeug==3.1.6
 gunicorn==23.0.0
+pytesseract>=0.3.13
 # pymdown-extensions 10.21.2+ requires markdown>=3.6 (was 3.5.1; conflict broke pip on CI)
 markdown>=3.6,<4
 # Image-scan hardening (Trivy): minimum-safe versions; Docker build enforces upgrades.

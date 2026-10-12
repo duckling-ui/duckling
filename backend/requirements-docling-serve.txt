@@ -1,0 +1,7 @@
+# docling-serve stack for /v1 API equality (install after requirements.txt).
+# Includes docling-jobkit (RQ mode); Ray extras remain in requirements-orchestration.txt.
+#
+#   pip install -r requirements.txt -r requirements-docling-serve.txt
+#
+docling-serve>=1.32.0,<2.0.0
+uvicorn[standard]>=0.29.0,<1.0.0
