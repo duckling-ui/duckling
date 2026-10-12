@@ -41,34 +41,6 @@ export default defineConfig({
         target: 'http://localhost:5001',
         changeOrigin: true,
       },
-      '/v1': {
-        target: 'http://localhost:5001',
-        changeOrigin: true,
-      },
-      '/docs': {
-        target: 'http://localhost:5001',
-        changeOrigin: true,
-      },
-      '/openapi-3.0.json': {
-        target: 'http://localhost:5001',
-        changeOrigin: true,
-      },
-      '/scalar': {
-        target: 'http://localhost:5001',
-        changeOrigin: true,
-      },
-      '/health': {
-        target: 'http://localhost:5001',
-        changeOrigin: true,
-      },
-      '/ready': {
-        target: 'http://localhost:5001',
-        changeOrigin: true,
-      },
-      '/version': {
-        target: 'http://localhost:5001',
-        changeOrigin: true,
-      },
     },
   },
 })

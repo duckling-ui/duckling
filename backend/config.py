@@ -159,14 +159,12 @@ DEFAULT_CONVERSION_SETTINGS = {
     "ocr": {
         "enabled": True,
         "language": "en",
-        "backend": "tesseract",  # tesseract (Docker image), easyocr, rapidocr, ocrmac (macOS)
+        "backend": "ocrmac",  # ocrmac (macOS native), easyocr, tesseract, rapidocr
         "mode": "default",  # Docling OcrMode: default, full_page, layout_regions, pdf_aware_layout_regions
         "scale": 3.0,  # OCR render scale (72 DPI × scale); Docling default is 3.0
         "force_full_page_ocr": False,  # Deprecated shim → mode=full_page when True
         "use_gpu": False,
         "confidence_threshold": 0.5,
-        # When false (default), OCR init/convert failures fail the job instead of silently converting without OCR (#67 E)
-        "allow_fallback_without_ocr": False,
     },
     "tables": {
         "enabled": True,

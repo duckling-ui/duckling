@@ -282,7 +282,6 @@ nav:
       - DoclingDocument: docling/docling-document.md
   - API Reference:
       - api/index.md
-      - docling-serve /v1: api/docling-serve-v1.md
       - Conversion: api/conversion.md
       - Settings: api/settings.md
       - History: api/history.md
@@ -296,7 +295,6 @@ nav:
       - Production: deployment/production.md
       - Scaling: deployment/scaling.md
       - Server Config: deployment/server-config.md
-      - Issue 67 closeout: deployment/issue-67-closeout.md
       - Security: deployment/security.md
   - Contributing:
       - contributing/index.md

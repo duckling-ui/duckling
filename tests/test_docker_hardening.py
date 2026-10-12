@@ -20,8 +20,6 @@ def test_frontend_dockerfile_runs_as_non_root():
     assert "USER nginxuser" in dockerfile
     assert "FROM nginx:1.29-alpine3.22 AS production" in dockerfile
     assert "RUN apk upgrade --no-cache" in dockerfile
-    # Stable UID for compose tmpfs ownership (issue #67 A)
-    assert "adduser -D -u 1000" in dockerfile
 
 
 def test_prod_compose_has_restricted_runtime_defaults():
@@ -31,24 +29,6 @@ def test_prod_compose_has_restricted_runtime_defaults():
     assert "- ALL" in compose
     assert "no-new-privileges:true" in compose
     assert "tmpfs:" in compose
-    assert "/var/cache/nginx:uid=1000,gid=1000,mode=0755" in compose
-    assert "/var/run:uid=1000,gid=1000,mode=0755" in compose
-
-
-def test_prebuilt_compose_nginx_tmpfs_owned_by_nginxuser():
-    compose = _read("docker-compose.prebuilt.yml")
-    assert "/var/cache/nginx:uid=1000,gid=1000,mode=0755" in compose
-    assert "/var/run:uid=1000,gid=1000,mode=0755" in compose
-
-
-def test_backend_entrypoint_forces_one_worker_for_local_engine():
-    entrypoint = _read("backend/entrypoint.sh")
-    dockerfile = _read("backend/Dockerfile")
-    assert "DUCKLING_ENGINE_KIND" in entrypoint
-    assert 'WORKERS="${DUCKLING_GUNICORN_WORKERS:-1}"' in entrypoint
-    assert "forcing 1 worker" in entrypoint
-    assert 'ENTRYPOINT ["/app/entrypoint.sh"]' in dockerfile
-    assert "chmod +x /app/entrypoint.sh" in dockerfile
 
 
 def test_publish_workflow_has_security_gates():
@@ -141,21 +121,6 @@ def test_backend_dockerfile_enforces_cve_fix_versions():
     assert "remove_legacy_metadata" in script
     assert "remove_legacy_ensurepip_wheels" not in script
     assert "importlib.import_module(\"pip\")" in script
-
-
-def test_backend_dockerfile_uses_asgi_entrypoint():
-    dockerfile = _read("backend/Dockerfile")
-    entrypoint = _read("backend/entrypoint.sh")
-    assert "requirements-docling-serve.txt" in dockerfile
-    assert 'ENTRYPOINT ["/app/entrypoint.sh"]' in dockerfile
-    assert "uvicorn.workers.UvicornWorker" in entrypoint
-    assert "asgi:app" in entrypoint
-
-
-def test_backend_requirements_docling_serve_file_exists():
-    req = _read("backend/requirements-docling-serve.txt")
-    assert "docling-serve>=" in req
-    assert "uvicorn" in req
 
 
 def test_docker_build_script_supports_dual_registry_push():

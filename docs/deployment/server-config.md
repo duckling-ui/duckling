@@ -27,20 +27,6 @@ Session conversion settings (OCR, pipeline kind, chunking, etc.) remain in the d
 | `DUCKLING_RAY_ADDRESS` | *(empty)* | Ray cluster address when using Ray mode |
 | `DUCKLING_ENABLE_REMOTE_SERVICES` | `false` | Allow remote service integrations (server flag) |
 | `DUCKLING_ALLOW_CUSTOM_VLM_CONFIG` | `false` | Allow `pipeline.vlm_custom_config` dict in conversion settings |
-| `DUCKLING_USE_DOCLING_SERVE_ENGINE` | `false` | Route `/api/convert` through embedded docling-serve (UI still uses `job_id`) |
-
-When `DUCKLING_API_KEY` is set, Duckling maps it to `DOCLING_SERVE_API_KEY` at startup so `/v1/*` and `/api/*` share one key.
-
-## docling-serve `/v1` API
-
-Duckling embeds docling-serve as a library (`backend/asgi.py`). The full upstream OpenAPI is available at `/docs` on port **5001** (or via frontend proxy at `/v1`, `/docs`, `/health`). See [docling-serve /v1 API](../api/docling-serve-v1.md) and the [upgrade playbook](docling-serve-upgrade.md).
-
-Install stack:
-
-```bash
-pip install -r backend/requirements.txt -r backend/requirements-docling-serve.txt
-uvicorn asgi:app --host 0.0.0.0 --port 5001
-```
 
 Frontend clients can send the API key via build-time env `VITE_API_KEY`; the UI adds `X-Api-Key` on every request when set.
 
@@ -79,23 +65,6 @@ Equivalent JSON is supported when the file ends in `.json`.
 | **`local`** (default) | Conversions run in-process on the API server (background thread queue) | API container only |
 | **`rq`** | RQ adapter selected; falls back to local execution until worker integration is complete | `redis` + `rq-worker` services in `docker-compose.yml` |
 | **`ray`** | Ray adapter selected; requires optional `backend/requirements-orchestration.txt` | Optional Ray cluster |
-
-### Gunicorn workers and local engine
-
-The production entrypoint ([`backend/entrypoint.sh`](../../backend/entrypoint.sh)) sets Gunicorn workers from `DUCKLING_ENGINE_KIND`:
-
-| Engine | Default workers | Override |
-|--------|-----------------|----------|
-| `local` | **1** (forced) | Multi-worker local mode is unsupported: jobs live in process memory |
-| `rq` / `ray` | `2` | `DUCKLING_GUNICORN_WORKERS` |
-
-Do not run multiple Gunicorn processes with `DUCKLING_ENGINE_KIND=local` — status polls can hit a worker that does not hold the in-memory job (issue #67 B). Use RQ for horizontal scale.
-
-### OCR notes (Tesseract)
-
-- The **Tesseract** UI option uses Docling `TesseractCliOcrOptions` (system `tesseract` binary), not `tesserocr`.
-- UI language codes (`en`, `ru`) map to traineddata ids (`eng`, `rus`).
-- OCR failures fail the job by default. Set `ocr.allow_fallback_without_ocr: true` only if you explicitly want a no-OCR retry.
 
 Install Ray/jobkit extras only when needed:
 

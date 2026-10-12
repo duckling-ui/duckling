@@ -18,9 +18,9 @@ Référence complète (anglais) : [Server Configuration](../../deployment/server
 
 | Mode | Comportement |
 |------|--------------|
-| **local** (défaut) | Conversions dans le processus API ; Gunicorn **1** worker (issue #67) |
+| **local** (défaut) | Conversions dans le processus API |
 | **rq** / **ray** | Adaptateurs présents ; exécution distribuée via workers |
 
-Compose inclut les services `redis` et `rq-worker`. Ray/jobkit : optionnel via `backend/requirements-orchestration.txt`. Les tmpfs nginx du frontend doivent appartenir à UID/GID **1000**.
+Compose inclut les services `redis` et `rq-worker`. Ray/jobkit : optionnel via `backend/requirements-orchestration.txt`.
 
 Voir aussi [Mise à l'échelle](scaling.md), [Sécurité](security.md), [API Conversion](../api/conversion.md#connector-batch-endpoint).

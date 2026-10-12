@@ -71,12 +71,7 @@ from utils.content_store import (
     load_metadata,
 )
 from services.chunker_factory import build_chunker
-from services.ocr_resolver import resolve_ocr_settings
-
 logger = logging.getLogger(__name__)
-
-# Docling model execution is not thread-safe; serialize convert() calls.
-_docling_conversion_lock = threading.Lock()
 
 
 # Language code mapping for EasyOCR
@@ -179,82 +174,27 @@ OCRMAC_LANGUAGE_MAP = {
 }
 
 
-# UI / ISO-639-1 codes → Tesseract traineddata identifiers (issue #67 D)
-TESSERACT_LANGUAGE_MAP = {
-    "en": "eng",
-    "de": "deu",
-    "fr": "fra",
-    "es": "spa",
-    "it": "ita",
-    "pt": "por",
-    "nl": "nld",
-    "pl": "pol",
-    "ru": "rus",
-    "ja": "jpn",
-    "zh": "chi_sim",
-    "zh-cn": "chi_sim",
-    "zh-tw": "chi_tra",
-    "ko": "kor",
-    "ar": "ara",
-    "hi": "hin",
-    "th": "tha",
-    "vi": "vie",
-    "tr": "tur",
-    "uk": "ukr",
-    "cs": "ces",
-    "el": "ell",
-    "he": "heb",
-    "id": "ind",
-    "ms": "msa",
-    "sv": "swe",
-    "da": "dan",
-    "fi": "fin",
-    "no": "nor",
-}
-
-
-def _map_tesseract_lang_token(token: str) -> str:
-    """Map a single UI language token to a Tesseract traineddata id."""
-    raw = token.strip().replace("_", "-")
-    if not raw:
-        return ""
-    lower = raw.lower()
-    if lower in TESSERACT_LANGUAGE_MAP:
-        return TESSERACT_LANGUAGE_MAP[lower]
-    # Already a traineddata id (eng, rus, chi_sim, ...)
-    if lower in set(TESSERACT_LANGUAGE_MAP.values()) or len(lower) >= 3:
-        return lower
-    return lower
-
-
-def _normalize_ocr_language(backend: str, language) -> List[str]:
+def _normalize_ocr_language(backend: str, language: str) -> List[str]:
     """
     Normalize the configured OCR language to what the backend expects.
 
     - EasyOCR uses EasyOCR language identifiers (mapped elsewhere).
-    - Tesseract expects traineddata ids (eng, rus); UI uses en/ru (issue #67 D).
+    - Tesseract typically accepts ISO-639-2/3 or engine-specific codes.
     - OcrMac uses Vision locale tags (e.g., 'en-US'); passing 'en' will fail.
     - RapidOCR language support is model-dependent; leave as-is.
     """
-    if isinstance(language, list):
-        tokens = [str(t).strip() for t in language if str(t).strip()]
-    elif isinstance(language, str):
-        # Support "en+ru" / "en,ru" multilingual selections
-        tokens = [t for t in language.replace(",", "+").split("+") if t.strip()]
-    else:
+    if not isinstance(language, str):
         return []
 
-    if not tokens:
+    lang = language.strip()
+    if not lang:
         return []
-
-    if backend == "tesseract":
-        mapped = [_map_tesseract_lang_token(t) for t in tokens]
-        return [m for m in mapped if m]
 
     if backend != "ocrmac":
-        return tokens
+        return [lang]
 
-    lang = tokens[0].replace("_", "-")
+    # Normalize separators (e.g., en_US -> en-US)
+    lang = lang.replace("_", "-")
 
     # Accept already-valid Vision locale tags
     if lang in OCRMAC_ALLOWED_LANGUAGES:
@@ -357,12 +297,10 @@ class ConversionJob:
         self.page_count = 0
         self.document_metadata: Dict = {}
         self.ocr_backend_used: Optional[str] = None  # Actual backend used (or "none" if fallback)
-        self.ocr_warning: Optional[str] = None  # Set when OCR fallback without OCR was used
         self.cpu_usage_avg_during_conversion: Optional[float] = None
         self.performance_device_used: Optional[str] = None  # cpu, cuda, mps, auto
         self.images_classify_enabled: Optional[bool] = None
         self.engine: str = (SERVER_CONFIG.get("engine", {}) or {}).get("kind", "local")
-        self.external_task_id: Optional[str] = None
         self.page_range = (self.settings or {}).get("page_range")
         self.requested_output_formats = (self.settings or {}).get("requested_output_formats")
 
@@ -379,7 +317,7 @@ class ConverterService:
     _job_queue: queue.Queue = None
     _worker_thread: threading.Thread = None
     _worker_running: bool = False
-    _max_concurrent_jobs: int = 1  # Docling convert() is not thread-safe in one process
+    _max_concurrent_jobs: int = 2  # Process max 2 jobs at a time
 
     def __init__(self):
         """Initialize the converter service."""
@@ -422,14 +360,10 @@ class ConverterService:
                     **common_kwargs,
                 )
             elif backend == "tesseract":
-                # Use CLI options (tesseract binary) — avoids tesserocr/cysignals main-thread crash (issue #67 C)
-                tess_langs = _normalize_ocr_language("tesseract", language)
-                if not tess_langs:
-                    tess_langs = ["eng"]
-                print(f"[OCR] Creating TesseractCli options with lang={tess_langs}")
+                print(f"[OCR] Creating Tesseract options with lang={language}")
                 return _instantiate_ocr_options(
-                    TesseractCliOcrOptions,
-                    lang=tess_langs,
+                    TesseractOcrOptions,
+                    lang=[language],  # Tesseract uses standard language codes
                     **common_kwargs,
                 )
             elif backend == "ocrmac":
@@ -967,8 +901,6 @@ class ConverterService:
         except Exception as e:
             print(f"[converter] Cache check skipped: {e}")
 
-        job.settings = resolve_ocr_settings(job.settings or {})
-
         stop_event = threading.Event()
         cpu_samples_container: list = []  # [list] - thread appends result here
 
@@ -1000,43 +932,36 @@ class ConverterService:
             # Try to get converter and convert, with fallback for OCR errors
             result = None
             conversion_error = None
-            page_range = job.settings.get("page_range")
 
             try:
                 # Get converter with job-specific settings
                 converter = self._get_converter(job.settings)
                 job.progress = 30
-                with _docling_conversion_lock:
-                    if page_range and isinstance(page_range, (list, tuple)) and len(page_range) == 2:
-                        result = converter.convert(job.input_path, page_range=tuple(page_range))
-                    else:
-                        result = converter.convert(job.input_path)
+                page_range = job.settings.get("page_range")
+                if page_range and isinstance(page_range, (list, tuple)) and len(page_range) == 2:
+                    result = converter.convert(job.input_path, page_range=tuple(page_range))
+                else:
+                    result = converter.convert(job.input_path)
             except Exception as ocr_error:
                 error_str = str(ocr_error)
                 print(f"[converter] Conversion error: {error_str}")
                 import traceback
                 traceback.print_exc()
 
-                # Narrow OCR-related indicators (avoid bare "CUDA"/"GPU" matching unrelated failures) — issue #67 E
+                # Check if it's an OCR-related error that we should retry without OCR
                 ocr_error_indicators = [
                     "meta tensor", "EasyOCR", "tesseract", "ocrmac", "rapidocr",
-                    "OcrOptions", "No module named", "cannot import",
-                    "signal only works in main thread", "cysignals",
+                    "OCR", "OcrOptions", "No module named", "cannot import",
+                    "CUDA", "cuda", "GPU", "gpu"
                 ]
                 is_ocr_error = any(indicator.lower() in error_str.lower() for indicator in ocr_error_indicators)
-                # Also treat explicit OCR keyword carefully (word boundary-ish)
-                if not is_ocr_error and ("ocr" in error_str.lower() or "ocr " in error_str.lower()):
-                    is_ocr_error = True
 
-                allow_fallback = bool(
-                    (job.settings.get("ocr") or {}).get("allow_fallback_without_ocr", False)
-                )
-
-                if is_ocr_error and ocr_enabled and allow_fallback:
-                    print(f"[converter] OCR error detected; allow_fallback_without_ocr=true, retrying without OCR...")
+                if is_ocr_error:
+                    print(f"[converter] OCR error detected, retrying without OCR...")
                     job.message = "OCR failed, retrying without OCR..."
                     job.progress = 25
 
+                    # Disable OCR and try again
                     fallback_settings = job.settings.copy()
                     fallback_settings["ocr"] = fallback_settings.get("ocr", {}).copy()
                     fallback_settings["ocr"]["enabled"] = False
@@ -1044,25 +969,17 @@ class ConverterService:
                     try:
                         converter = self._get_converter(fallback_settings)
                         job.progress = 30
-                        with _docling_conversion_lock:
-                            if page_range and isinstance(page_range, (list, tuple)) and len(page_range) == 2:
-                                result = converter.convert(job.input_path, page_range=tuple(page_range))
-                            else:
-                                result = converter.convert(job.input_path)
+                        if page_range and isinstance(page_range, (list, tuple)) and len(page_range) == 2:
+                            result = converter.convert(job.input_path, page_range=tuple(page_range))
+                        else:
+                            result = converter.convert(job.input_path)
                         job.ocr_backend_used = "none"
-                        job.ocr_warning = (
-                            f"OCR was requested but failed ({error_str[:300]}); converted without OCR"
-                        )
-                        job.settings = fallback_settings
+                        job.settings = fallback_settings  # Use effective settings for content hash
                         job.message = "Converted without OCR (OCR initialization failed)"
-                        print(f"[converter] Successfully converted without OCR (opt-in fallback)")
+                        print(f"[converter] Successfully converted without OCR")
                     except Exception as fallback_error:
                         print(f"[converter] Fallback conversion also failed: {fallback_error}")
                         conversion_error = fallback_error
-                elif is_ocr_error and ocr_enabled and not allow_fallback:
-                    # Fail closed: do not silently produce empty OCR-less output (issue #67 E)
-                    print(f"[converter] OCR error; failing closed (allow_fallback_without_ocr=false)")
-                    conversion_error = ocr_error
                 else:
                     conversion_error = ocr_error
 

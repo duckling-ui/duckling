@@ -9,14 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- docling-serve library integration: `/v1` OpenAPI at `/docs`, ASGI composite `backend/asgi.py`, contract tests, optional `DUCKLING_USE_DOCLING_SERVE_ENGINE`. See [docling-serve /v1 API](api/docling-serve-v1.md).
-
-### Fixed
-
-- [Issue #67](https://github.com/duckling-ui/duckling/issues/67): nginx tmpfs ownership for non-root frontend; one Gunicorn worker for local engine; Tesseract CLI OCR + language map; fail-closed OCR by default. See [Server Configuration](deployment/server-config.md).
-
 ### Documentation
 
 - Expanded user guide, API reference, deployment, and Docker docs for docling-serve parity: pipeline/VLM/ASR, advanced chunking, expanded formats, `page_range`/`to_formats`, API key auth, server config file, and Redis/worker topology. Added [Server Configuration](deployment/server-config.md). Localized **de/fr/es** mirrors updated for API, user guide, deployment, and Docker guides.

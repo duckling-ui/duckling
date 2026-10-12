@@ -30,9 +30,9 @@ RUN apt-get update && apt-get upgrade -y --no-install-recommends \
 
 # Python dependencies for production; drop compilers after pip to reduce CI disk use.
 FROM base AS python-deps
-COPY requirements.txt requirements-docling-serve.txt ./
+COPY requirements.txt .
 COPY scripts/harden_python_packages.py scripts/harden_python_packages.py
-RUN pip install -r requirements.txt -r requirements-docling-serve.txt \
+RUN pip install -r requirements.txt \
   && python scripts/harden_python_packages.py \
   && apt-get purge -y --auto-remove build-essential \
   && rm -rf /var/lib/apt/lists/* /tmp/* /root/.cache
@@ -40,9 +40,9 @@ RUN pip install -r requirements.txt -r requirements-docling-serve.txt \
 # Development stage
 FROM base AS development
 
-COPY requirements.txt requirements-docling-serve.txt ./
+COPY requirements.txt .
 COPY scripts/harden_python_packages.py scripts/harden_python_packages.py
-RUN pip install -r requirements.txt -r requirements-docling-serve.txt \
+RUN pip install -r requirements.txt \
   && python scripts/harden_python_packages.py
 
 COPY . .
@@ -52,7 +52,7 @@ RUN mkdir -p /app/uploads /app/outputs /app/data
 
 EXPOSE 5001
 
-CMD ["uvicorn", "asgi:app", "--host", "0.0.0.0", "--port", "5001"]
+CMD ["python", "duckling.py"]
 
 # Production stage (reuses python-deps; no second pip install)
 FROM python-deps AS production
@@ -62,8 +62,7 @@ COPY . .
 
 # Create directories with proper permissions
 RUN mkdir -p /app/uploads /app/outputs /app/data \
-  && chmod -R 755 /app/uploads /app/outputs /app/data \
-  && chmod +x /app/entrypoint.sh
+  && chmod -R 755 /app/uploads /app/outputs /app/data
 
 # Create non-root user for security
 RUN useradd --create-home --shell /bin/bash appuser \
@@ -74,5 +73,5 @@ EXPOSE 5001
 # Health check without extra runtime tools
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD python -c "import sys, urllib.request; urllib.request.urlopen('http://localhost:5001/api/health', timeout=5); sys.exit(0)" || exit 1
-# Entrypoint: 1 Gunicorn worker for local in-memory jobs; multi-worker for RQ/Ray (issue #67 B)
-ENTRYPOINT ["/app/entrypoint.sh"]
+# Run with Gunicorn for production
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "4", "--threads", "2", "--timeout", "300", "--access-logfile", "-", "--error-logfile", "-", "duckling:app"]

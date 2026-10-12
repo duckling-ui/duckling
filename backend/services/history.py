@@ -44,10 +44,6 @@ class HistoryService:
         settings: Dict[str, Any] = None,
         file_size: float = None,
         source_type: str = None,
-        engine: str = None,
-        external_task_id: str = None,
-        page_range=None,
-        requested_output_formats=None,
     ) -> Dict[str, Any]:
         """
         Create a new history entry.
@@ -74,12 +70,6 @@ class HistoryService:
                 settings=json.dumps(settings) if settings else None,
                 file_size=file_size,
                 source_type=source_type,
-                engine=engine,
-                external_task_id=external_task_id,
-                page_range=json.dumps(page_range) if page_range is not None else None,
-                requested_output_formats=json.dumps(requested_output_formats)
-                if requested_output_formats is not None
-                else None,
             )
             session.add(entry)
             session.commit()
@@ -102,8 +92,6 @@ class HistoryService:
         performance_device_used: str = None,
         images_classify_enabled: bool = None,
         content_hash: str = None,
-        external_task_id: str = None,
-        engine: str = None,
     ) -> Optional[Dict[str, Any]]:
         """
         Update the status of a conversion entry.
@@ -151,10 +139,6 @@ class HistoryService:
                 entry.images_classify_enabled = "true" if images_classify_enabled else "false"
             if content_hash is not None:
                 entry.content_hash = content_hash
-            if external_task_id is not None:
-                entry.external_task_id = external_task_id
-            if engine is not None:
-                entry.engine = engine
 
             if status in ["completed", "failed"]:
                 entry.completed_at = datetime.utcnow()

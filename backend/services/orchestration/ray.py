@@ -1,4 +1,4 @@
-"""Ray orchestration adapter (docling-jobkit integration)."""
+"""Ray orchestration adapter."""
 
 from __future__ import annotations
 
@@ -12,8 +12,6 @@ class RayOrchestrator(JobOrchestrator):
         self._available = False
         try:
             import ray  # noqa: F401
-            import docling_jobkit  # noqa: F401
-
             self._available = True
         except Exception:
             self._available = False
@@ -23,3 +21,4 @@ class RayOrchestrator(JobOrchestrator):
 
     def get_name(self) -> str:
         return "ray" if self._available else "ray-fallback-local"
+

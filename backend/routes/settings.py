@@ -92,8 +92,8 @@ OCR_PACKAGES = {
         "packages": ["pytesseract"],
         "pip_installable": True,
         "system_dependency": True,
-        "description": "Tesseract OCR via CLI (Docling TesseractCliOcrOptions)",
-        "note": "Requires the tesseract binary on PATH (brew install tesseract / apt-get install tesseract-ocr). Does not use tesserocr."
+        "description": "Tesseract OCR - Classic OCR engine",
+        "note": "Requires Tesseract to be installed on your system (brew install tesseract / apt-get install tesseract-ocr)"
     },
     "ocrmac": {
         "packages": ["ocrmac"],
@@ -127,23 +127,16 @@ def check_ocr_backend_installed(backend: str) -> dict:
             result["installed"] = True
             result["available"] = True
         elif backend == "tesseract":
-            # Runtime uses Docling TesseractCliOcrOptions (tesseract binary), not tesserocr (#67 C)
-            import shutil
-
-            binary = shutil.which("tesseract")
-            if not binary:
-                result["error"] = "tesseract binary not found on PATH"
-            else:
-                result["installed"] = True
-                try:
-                    import pytesseract
-
-                    pytesseract.get_tesseract_version()
-                    result["available"] = True
-                except Exception:
-                    # Binary present; still treat as available for CLI OCR path
-                    logging.exception("tesseract binary found but pytesseract probe failed; marking available")
-                    result["available"] = True
+            import pytesseract
+            result["installed"] = True
+            # Check if tesseract binary is available
+            try:
+                pytesseract.get_tesseract_version()
+                result["available"] = True
+            except Exception:
+                # Log detailed error server-side but do not expose exception details to the client
+                logging.exception("pytesseract installed but Tesseract binary not found")
+                result["error"] = "pytesseract installed but Tesseract binary not found"
         elif backend == "ocrmac":
             if platform.system() != "Darwin":
                 result["error"] = "OcrMac is only available on macOS"
@@ -739,14 +732,7 @@ def get_ocr_settings():
                 "default": 0.5,
                 "min": 0.0,
                 "max": 1.0
-            },
-            "allow_fallback_without_ocr": {
-                "description": (
-                    "When true, OCR init/convert failures retry without OCR. "
-                    "Default false: fail the job so image-only documents are not silently empty (issue #67 E)."
-                ),
-                "default": False,
-            },
+            }
         }
     })
 
@@ -764,10 +750,6 @@ def update_ocr_settings():
     if "enabled" in ocr_settings:
         if not isinstance(ocr_settings["enabled"], bool):
             return jsonify({"error": "enabled must be a boolean"}), 400
-
-    if "allow_fallback_without_ocr" in ocr_settings:
-        if not isinstance(ocr_settings["allow_fallback_without_ocr"], bool):
-            return jsonify({"error": "allow_fallback_without_ocr must be a boolean"}), 400
 
     if "language" in ocr_settings:
         if not isinstance(ocr_settings["language"], str):

@@ -11,18 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **docling-serve library integration**: ASGI composite app (`backend/asgi.py`) mounts upstream docling-serve at `/v1`, `/docs`, `/health` and Duckling Flask at `/api`. New `backend/requirements-docling-serve.txt`, nginx/Vite proxy routes, contract tests (`tests/test_docling_serve_contract.py`), settings mapper, and optional `DUCKLING_USE_DOCLING_SERVE_ENGINE` delegation for `/api/convert`. Docs: [docling-serve /v1 API](docs/api/docling-serve-v1.md), [upgrade playbook](docs/deployment/docling-serve-upgrade.md).
 - Playwright-based documentation screenshot automation (`scripts/screenshots/`, `./scripts/capture-screenshots.sh`, `.github/workflows/screenshots.yml`) for localized UI captures in **en**, **de**, **fr**, and **es**; live backend mode uploads `fixtures/sample-document.pdf` (ReportLab-generated PDF with embedded images and a structured table) for conversion/export screenshots (mock-only mode via `SCREENSHOTS_LIVE_BACKEND=0`).
 
 ### Fixed
 
-- **[Issue #67](https://github.com/duckling-ui/duckling/issues/67) prebuilt Docker runtime blockers:**
-  - **A:** Frontend compose tmpfs for `/var/cache/nginx` and `/var/run` use `uid=1000,gid=1000` matching `nginxuser`; Dockerfile pins `adduser -u 1000` (fixes nginx restart loop).
-  - **B:** Production `entrypoint.sh` forces **1** Gunicorn worker for `DUCKLING_ENGINE_KIND=local`; history marks jobs `processing`; status fallback no longer labels pending as failed.
-  - **C:** Tesseract uses `TesseractCliOcrOptions` (CLI binary) instead of `TesseractOcrOptions`/`tesserocr` (avoids cysignals main-thread crash).
-  - **D:** UI language codes map to Tesseract traineddata ids (`en`→`eng`, `ru`→`rus`, multilingual `en+ru`).
-  - **E:** OCR failures **fail closed** by default; opt-in `ocr.allow_fallback_without_ocr`; status/result expose `ocr_backend_used` / `ocr_warning`.
-- Batch PDF conversions hanging at "OCR failed, retrying without OCR...": serialize Docling `convert()` calls, process one job at a time, resolve/disable unavailable OCR backends before conversion starts; default OCR backend is `tesseract` with `pytesseract` in requirements.
 - Documentation screenshot capture: HTML preview shots now screenshot the iframe directly; raw markdown/HTML waits for `<pre>` content after resetting preview mode; history panels clear search and reset backend history to a single `sample-document.pdf` entry per locale; images hover targets the gallery card wrapper to avoid overlay pointer interception.
 
 ### Documentation

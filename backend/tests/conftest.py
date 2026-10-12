@@ -33,8 +33,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Ensure tests never connect to the developer's real history DB.
 # This must run before importing modules that initialize the SQLAlchemy engine.
-# Ensure tests use standalone /api/* Flask routes (not ASGI-mounted paths).
-os.environ.pop("DUCKLING_ASGI_MOUNTED", None)
+os.environ["DUCKLING_DATABASE_URL"] = "sqlite:///:memory:"
 
 from config import TestingConfig
 from duckling import create_app
@@ -60,7 +59,6 @@ def _stub_converter_start_conversion(monkeypatch):
 @pytest.fixture(scope="session")
 def app():
     """Create application for testing."""
-    os.environ.pop("DUCKLING_ASGI_MOUNTED", None)
     app = create_app(TestingConfig)
 
     with app.app_context():
