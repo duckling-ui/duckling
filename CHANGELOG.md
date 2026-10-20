@@ -12,10 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Playwright-based documentation screenshot automation (`scripts/screenshots/`, `./scripts/capture-screenshots.sh`, `.github/workflows/screenshots.yml`) for localized UI captures in **en**, **de**, **fr**, and **es**; live backend mode uploads `fixtures/sample-document.pdf` (ReportLab-generated PDF with embedded images and a structured table) for conversion/export screenshots (mock-only mode via `SCREENSHOTS_LIVE_BACKEND=0`).
+- **Issue [#68](https://github.com/duckling-ui/duckling/issues/68):** PDF page renderer selection (`pdf.page_renderer`: `auto` / `docling_default` / `pymupdf`), MuPDF prerender path via PyMuPDF, font preflight for non-embedded custom-encoded fonts, Cyrillic native-vs-export mismatch warnings, and `effective_renderer` / `effective_pdf_backend` on conversion status/result. Docker image installs Liberation/DejaVu fonts for MuPDF substitution.
 
 ### Fixed
 
 - Documentation screenshot capture: HTML preview shots now screenshot the iframe directly; raw markdown/HTML waits for `<pre>` content after resetting preview mode; history panels clear search and reset backend history to a single `sample-document.pdf` entry per locale; images hover targets the gallery card wrapper to avoid overlay pointer interception.
+- **Issue [#68](https://github.com/duckling-ui/duckling/issues/68):** `pdf_backend` is now applied on `PdfFormatOption.backend` (it was previously passed into `PdfPipelineOptions` and silently dropped). Deprecated `dlparse_v2` UI option removed/aliased to `docling_parse` with a warning. `pipeline.force_backend_text` is wired through to Docling.
 
 ### Documentation
 

@@ -4,6 +4,7 @@ const baseSettings = {
   pipeline: { kind: 'standard', vlm_preset: 'default', vlm_custom_config: null, force_backend_text: false },
   pdf: {
     pdf_backend: 'docling_parse',
+    page_renderer: 'auto',
     image_export_mode: 'placeholder',
     do_pdf_heading_hierarchy: false,
     pdf_heading_hierarchy_options: {
@@ -161,7 +162,8 @@ export async function installApiMocks(page: Page): Promise<void> {
       return json(route, {
         pdf: baseSettings.pdf,
         options: {
-          pdf_backend: ['docling_parse', 'pypdfium2'],
+          pdf_backend: ['docling_parse', 'docling_parse_v4', 'pypdfium2', 'managed_pdfium'],
+          page_renderer: ['auto', 'docling_default', 'pymupdf'],
           image_export_mode: ['placeholder', 'embedded', 'referenced'],
         },
       });

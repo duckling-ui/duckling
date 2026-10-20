@@ -562,19 +562,43 @@ export default function SettingsPanel({ isOpen, onClose }: SettingsPanelProps) {
                     onChange={(vlm_preset) => pipeline?.updatePipeline?.({ vlm_preset })}
                     disabled={pipeline?.isUpdating || pipeline?.pipeline?.kind !== "vlm"}
                   />
+                  <ToggleSetting
+                    label={t("settings.pipeline.forceBackendText.label")}
+                    description={t("settings.pipeline.forceBackendText.description")}
+                    checked={pipeline?.pipeline?.force_backend_text ?? false}
+                    onChange={(force_backend_text) => pipeline?.updatePipeline?.({ force_backend_text })}
+                    disabled={pipeline?.isUpdating}
+                  />
                 </SettingsSection>
 
                 <SettingsSection sectionId="pdf" title={t("settings.sections.pdf")} icon="document">
                   <SelectSetting
                     label={t("settings.pdf.backend.label")}
                     description={t("settings.pdf.backend.description")}
-                    value={pdf?.pdf?.pdf_backend ?? "docling_parse"}
+                    value={
+                      pdf?.pdf?.pdf_backend === "dlparse_v2"
+                        ? "docling_parse"
+                        : (pdf?.pdf?.pdf_backend ?? "docling_parse")
+                    }
                     options={[
                       { value: "docling_parse", label: "docling_parse" },
-                      { value: "dlparse_v2", label: "dlparse_v2" },
-                      { value: "pypdfium2", label: "pypdfium2" },
+                      { value: "docling_parse_v4", label: "docling_parse_v4" },
+                      { value: "pypdfium2", label: "pypdfium2 (PDFium)" },
+                      { value: "managed_pdfium", label: "managed_pdfium" },
                     ]}
                     onChange={(pdf_backend) => pdf?.updatePdf?.({ pdf_backend })}
+                    disabled={pdf?.isUpdating}
+                  />
+                  <SelectSetting
+                    label={t("settings.pdf.pageRenderer.label")}
+                    description={t("settings.pdf.pageRenderer.description")}
+                    value={pdf?.pdf?.page_renderer ?? "auto"}
+                    options={[
+                      { value: "auto", label: "auto" },
+                      { value: "docling_default", label: "docling_default (PDFium)" },
+                      { value: "pymupdf", label: "pymupdf (MuPDF)" },
+                    ]}
+                    onChange={(page_renderer) => pdf?.updatePdf?.({ page_renderer })}
                     disabled={pdf?.isUpdating}
                   />
                   <SelectSetting

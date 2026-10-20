@@ -26,6 +26,9 @@ RUN apt-get update && apt-get upgrade -y --no-install-recommends \
   libgomp1 \
   poppler-utils \
   tesseract-ocr \
+  # Font substitutes for MuPDF prerender of PDFs with non-embedded fonts (issue #68)
+  fonts-liberation \
+  fonts-dejavu-core \
   && rm -rf /var/lib/apt/lists/*
 
 # Python dependencies for production; drop compilers after pip to reduce CI disk use.

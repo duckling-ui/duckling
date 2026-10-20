@@ -1027,12 +1027,19 @@ def get_conversion_status(job_id: str):
         response["images_count"] = len(job.extracted_images)
         response["tables_count"] = len(job.extracted_tables)
         response["chunks_count"] = len(job.chunks)
+        response["ocr_backend_used"] = getattr(job, "ocr_backend_used", None)
+        response["effective_pdf_backend"] = getattr(job, "effective_pdf_backend", None)
+        response["effective_renderer"] = getattr(job, "effective_renderer", None)
         if job.result:
             response["preview"] = job.result.get("markdown_preview", "")[:1000]
             response["page_count"] = job.result.get("page_count")
+            response["warnings"] = job.result.get("warnings") or []
 
     if job.status == ConversionStatus.FAILED:
         response["error"] = job.error
+        warnings = getattr(job, "conversion_warnings", None) or []
+        if warnings:
+            response["warnings"] = warnings
 
     return jsonify(response)
 

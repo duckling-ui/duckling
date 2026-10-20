@@ -16,7 +16,8 @@ Bereitstellungsoptionen (`DUCKLING_API_KEY`, Orchestrierung, Logging) siehe [Ser
 |------|-------|----------|
 | `kind` | `standard`, `vlm`, `asr` | ASR für Audio/Video, wenn Docling ASR verfügbar |
 | `vlm_preset` | Docling-Preset | Bei `kind=vlm` |
-| `pdf_backend` | `docling_parse`, `pypdfium2` | PDF-Parser |
+| `pdf_backend` | `docling_parse`, `docling_parse_v4`, `pypdfium2`, `managed_pdfium` | PDF-Parser (PDFium-Seitenbilder; siehe `page_renderer`) |
+| `page_renderer` | `auto`, `docling_default`, `pymupdf` | Seitenrasterizer für Full-Page-OCR/VLM (Issue #68) |
 | `image_export_mode` | `placeholder`, `embedded`, `referenced` | Bilddarstellung in Exporten |
 
 ## Erweiterte Chunking-Einstellungen

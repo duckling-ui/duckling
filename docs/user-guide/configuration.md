@@ -442,6 +442,7 @@ Choose how Docling processes documents. Configure in **Settings → Pipeline** o
 | `kind` | `standard`, `vlm`, `asr` | Conversion pipeline |
 | `vlm_preset` | Docling preset name | Used when `kind=vlm` for PDF/image VLM pipelines |
 | `vlm_custom_config` | JSON object | Advanced VLM options (server must set `allow_custom_vlm_config`) |
+| `force_backend_text` | boolean | Prefer native PDF text over OCR replacement (helps mixed digital/scanned docs; [issue #68](https://github.com/duckling-ui/duckling/issues/68)) |
 
 - **Standard** — default Docling PDF/document pipeline (OCR, tables, layout).
 - **VLM** — vision-language model pipeline for PDFs and images.
@@ -455,9 +456,21 @@ Configure in **Settings → PDF** or `GET/PUT /api/settings/pdf`.
 
 | Setting | Values | Description |
 |---------|--------|-------------|
-| `pdf_backend` | `docling_parse`, `pypdfium2` | PDF parsing backend |
+| `pdf_backend` | `docling_parse`, `docling_parse_v4`, `pypdfium2`, `managed_pdfium` | PDF **parser** backend. In Docling 2.118 these share the **PDFium** page-image family for OCR/VLM. Deprecated alias `dlparse_v2` maps to `docling_parse`. |
+| `page_renderer` | `auto`, `docling_default`, `pymupdf` | Page-image **rasterizer** for full-page OCR/VLM. `auto` selects MuPDF when non-embedded custom-encoded fonts are detected ([issue #68](https://github.com/duckling-ui/duckling/issues/68)). |
 | `image_export_mode` | `placeholder`, `embedded`, `referenced` | How images appear in exports |
 | `do_pdf_heading_hierarchy` | boolean | Build heading hierarchy from PDF structure |
+
+### Fragile PDFs (non-embedded custom fonts)
+
+Some PDFs keep a usable Unicode text layer but PDFium drops glyphs (often Cyrillic) from the page image used by full-page OCR/VLM. Duckling:
+
+1. Runs a **font preflight** and warns when non-embedded custom-encoded fonts are present
+2. With `page_renderer=auto`, **prerenders pages with MuPDF** before Docling when that risk coincides with full-page OCR or VLM
+3. Compares native PDF text vs export **Cyrillic coverage** and attaches a `result.warnings` entry on large mismatches
+4. Exposes `effective_renderer` and `effective_pdf_backend` on status/result (completion alone is not proof of content integrity)
+
+For mixed scanned/digital documents, prefer `force_backend_text` or OCR mode `pdf_aware_layout_regions` so digital pages keep native text.
 
 ---
 

@@ -66,6 +66,7 @@ GET /api/settings/pdf
 {
   "pdf": {
     "pdf_backend": "docling_parse",
+    "page_renderer": "auto",
     "image_export_mode": "placeholder",
     "do_pdf_heading_hierarchy": false,
     "pdf_heading_hierarchy_options": {
@@ -76,8 +77,13 @@ GET /api/settings/pdf
     }
   },
   "options": {
-    "pdf_backend": ["docling_parse", "pypdfium2"],
+    "pdf_backend": ["docling_parse", "docling_parse_v4", "pypdfium2", "managed_pdfium"],
+    "page_renderer": ["auto", "docling_default", "pymupdf"],
     "image_export_mode": ["placeholder", "embedded", "referenced"]
+  },
+  "notes": {
+    "pdf_backend": "Parser backends share the PDFium page-image family; use page_renderer for MuPDF (issue #68).",
+    "page_renderer": "auto picks MuPDF prerender when non-embedded custom-encoded fonts meet full-page OCR/VLM."
   }
 }
 ```
@@ -92,6 +98,7 @@ Content-Type: application/json
 ```json
 {
   "pdf_backend": "pypdfium2",
+  "page_renderer": "pymupdf",
   "image_export_mode": "embedded",
   "do_pdf_heading_hierarchy": true
 }

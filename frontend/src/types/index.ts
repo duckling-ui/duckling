@@ -116,6 +116,8 @@ export interface PipelineSettings {
 
 export interface PdfSettings {
   pdf_backend: string;
+  /** Page-image renderer for OCR/VLM: auto | docling_default | pymupdf (issue #68) */
+  page_renderer?: 'auto' | 'docling_default' | 'pymupdf' | string;
   image_export_mode: 'placeholder' | 'embedded' | 'referenced';
   do_pdf_heading_hierarchy: boolean;
   pdf_heading_hierarchy_options: {

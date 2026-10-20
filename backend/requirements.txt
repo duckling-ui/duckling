@@ -16,6 +16,8 @@ psutil>=5.9.0
 flask-cors==6.0.0
 docling>=2.118.0  # latest stable; OcrMode/scale (2.116+); DocLang export needs core with export_to_doclang
 docling-core>=2.90.0,<3.0.0  # DocLang 0.7 serializer; docling 2.118 pins core>=2.90,<3
+# MuPDF page prerender + PDF font preflight (issue #68 Cyrillic/PDFium glyph loss)
+pymupdf>=1.24.0,<2
 sqlalchemy==2.0.36
 python-dotenv>=1.1.0,<2
 PyYAML>=6.0.2

@@ -234,6 +234,16 @@ Settings can be configured through the UI or via the API. All settings are organ
 
 **Supported Languages**: English, German, French, Spanish, Italian, Portuguese, Dutch, Polish, Russian, Japanese, Chinese (Simplified/Traditional), Korean, Arabic, Hindi, Thai, Vietnamese, Turkish, Ukrainian, Czech, Greek, Hebrew, Indonesian, Malay, Swedish, Danish, Finnish, Norwegian
 
+#### PDF / page rendering (issue [#68](https://github.com/duckling-ui/duckling/issues/68))
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `pdf.pdf_backend` | Docling PDF **parser** (`docling_parse`, `pypdfium2`, …). Stock backends share the PDFium page-image family. | `docling_parse` |
+| `pdf.page_renderer` | Page-image rasterizer for full-page OCR/VLM: `auto`, `docling_default`, `pymupdf` | `auto` |
+| `pipeline.force_backend_text` | Prefer native PDF text over OCR replacement | `false` |
+
+`auto` selects MuPDF prerender when non-embedded custom-encoded fonts are detected and full-page OCR or VLM will consume page images. Conversion `result.warnings` may flag Cyrillic coverage mismatches; status/result also expose `effective_renderer` and `effective_pdf_backend`.
+
 #### Table Settings
 
 | Setting | Description | Default |

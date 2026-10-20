@@ -143,10 +143,14 @@ DEFAULT_CONVERSION_SETTINGS = {
         "kind": "standard",  # standard, vlm, asr
         "vlm_preset": "default",
         "vlm_custom_config": None,
+        # Prefer native PDF text over OCR replacement when Docling supports it (issue #68).
         "force_backend_text": False,
     },
     "pdf": {
+        # Parser backend (Docling). All stock backends share the PDFium page-image family.
         "pdf_backend": "docling_parse",
+        # Page-image renderer for OCR/VLM: auto | docling_default | pymupdf (issue #68).
+        "page_renderer": "auto",
         "image_export_mode": "placeholder",  # placeholder, embedded, referenced
         "do_pdf_heading_hierarchy": False,
         "pdf_heading_hierarchy_options": {

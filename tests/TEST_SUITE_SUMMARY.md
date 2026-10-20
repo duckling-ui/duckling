@@ -16,6 +16,8 @@ This repository contains multiple test suites:
   - `backend/tests/test_harden_python_packages.py`: Docker image hardening script keeps pip runtime working (no `--no-deps`, no ensurepip wheel deletion)
   - `backend/tests/test_api.py`: DocLang export format listed on `/api/formats` and `/api/settings/formats` (`test_output_formats_includes_doclang`, `test_settings_formats_includes_doclang`); Document Tokens extension is `.tokens.json` (`test_settings_formats_document_tokens_extension_matches_on_disk`)
   - `backend/tests/test_converter.py`: OcrMac language normalization, `force_full_page_ocr` → `OcrMode.FULL_PAGE` shim, and `_instantiate_ocr_options` dropping fields forbidden by newer Docling OCR models (`bitmap_area_threshold`)
+  - `backend/tests/test_pdf_issue68.py`: PDF backend resolution (`dlparse_v2` alias), page renderer auto→MuPDF on font risk, Cyrillic script-mismatch warnings, `PdfFormatOption.backend` wiring, `force_backend_text`, and MuPDF prerender smoke (issue #68)
+  - `tests/test_docker_hardening.py`: also asserts `pymupdf` in backend requirements and Liberation/DejaVu fonts in the backend Dockerfile (issue #68)
   - `POST /api/convert/batch`: mixed valid/rejected files (202) and all-rejected batches (400)
   - History reconciliation tests in `backend/tests/test_history.py` (`create_entry_from_disk`, `reconcile_from_disk`) and `backend/tests/test_api.py` (`POST /api/history/reconcile`)
 - **Frontend (Vitest)**: UI and hook tests in `frontend/src/tests/`

@@ -213,12 +213,20 @@
       "vlmPreset": {
         "label": "VLM-Voreinstellung",
         "description": "Voreinstellungs-ID bei Pipeline-Art VLM"
+      },
+      "forceBackendText": {
+        "label": "Nativen PDF-Text bevorzugen",
+        "description": "Digitalen PDF-Text behalten statt ihn durch OCR zu ersetzen (empfohlen bei gemischten Dokumenten)"
       }
     },
     "pdf": {
       "backend": {
-        "label": "PDF-Backend",
-        "description": "Auswahl des Docling-PDF-Backends"
+        "label": "PDF-Parser-Backend",
+        "description": "Docling-PDF-Parser. Stock-Backends teilen die PDFium-Seitenbildfamilie für OCR/VLM; Seitenrenderer für MuPDF wählen."
+      },
+      "pageRenderer": {
+        "label": "Seitenrenderer",
+        "description": "Rasterizer für Full-Page-OCR/VLM. Auto nutzt MuPDF bei nicht eingebetteten Custom-Fonts."
       },
       "imageExportMode": {
         "label": "Bild-Exportmodus",

@@ -210,12 +210,20 @@
       "vlmPreset": {
         "label": "Preset VLM",
         "description": "ID del preset usado cuando el tipo de pipeline es VLM"
+      },
+      "forceBackendText": {
+        "label": "Preferir texto PDF nativo",
+        "description": "Conservar el texto PDF digital en lugar de reemplazarlo con OCR (recomendado para documentos mixtos)"
       }
     },
     "pdf": {
       "backend": {
-        "label": "Backend PDF",
-        "description": "Selección del backend PDF de Docling"
+        "label": "Backend de análisis PDF",
+        "description": "Analizador PDF de Docling. Los backends estándar comparten la familia de imágenes PDFium para OCR/VLM; use el renderizador de página para MuPDF."
+      },
+      "pageRenderer": {
+        "label": "Renderizador de página",
+        "description": "Rasterizador para OCR de página completa / VLM. Auto usa MuPDF cuando detecta fuentes no incrustadas con codificación personalizada."
       },
       "imageExportMode": {
         "label": "Modo de exportación de imágenes",

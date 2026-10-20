@@ -450,7 +450,8 @@ In **Einstellungen → PDF** oder per `GET/PUT /api/settings/pdf`:
 
 | Einstellung | Werte | Beschreibung |
 |-------------|-------|--------------|
-| `pdf_backend` | `docling_parse`, `pypdfium2` | PDF-Parser |
+| `pdf_backend` | `docling_parse`, `docling_parse_v4`, `pypdfium2`, `managed_pdfium` | PDF-**Parser**. Stock-Backends teilen die PDFium-Seitenbildfamilie für OCR/VLM ([Issue #68](https://github.com/duckling-ui/duckling/issues/68)). |
+| `page_renderer` | `auto`, `docling_default`, `pymupdf` | Seiten-**Rasterizer** für Full-Page-OCR/VLM; `auto` wählt MuPDF bei riskanten Fonts. |
 | `image_export_mode` | `placeholder`, `embedded`, `referenced` | Bilder in Exporten |
 | `do_pdf_heading_hierarchy` | boolean | Überschriftenhierarchie aus PDF |
 

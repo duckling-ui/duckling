@@ -24,6 +24,7 @@ Last audit: August 21, 2026 (product surface notes updated through 2026-08-21 fo
 
 ### Product surface notes
 
+- **2026-10-12**: **Issue #68 PDF renderer integrity**: conversion may complete while page images lose glyphs (e.g. Cyrillic) under PDFium. Duckling adds font preflight warnings, optional MuPDF prerender (`pdf.page_renderer`), Cyrillic coverage mismatch warnings on results, and `effective_renderer` metadata so operators do not treat HTTP success alone as content integrity. Prefer native text (`force_backend_text` / `pdf_aware_layout_regions`) for digital pages.
 - **2026-08-04**: Aligned with Docling **2.118.0** / docling-core **2.90.x** (`<3`): OCR uses `OcrMode` + `scale`; `bitmap_area_threshold` removed from Docling and Duckling defaults. DocLang export via `export_to_doclang()` continues to emit `.dclg.xml` (`application/xml`) matching Docling CLI; serializer follows DocLang spec **0.7**.
 - **2026-08-20**: Dependabot remediation branch: frontend lockfile refreshed (`axios` 1.19+, `vitest` 4.1.11+, `vite`/`postcss` patches) with npm overrides for transitive CVEs; backend bumps `python-dotenv` and `pytest`/`pytest-cov` minimums. Target: clear GitHub Dependabot open alerts on default branch.
 - **2026-08-20**: Docker publish Trivy gate: Ray and docling-jobkit moved to optional `backend/requirements-orchestration.txt` (not installed in default API/worker images) because Ray ships Java JARs with HIGH findings in `ray_dist.jar` until upstream releases patched Jackson/httpcore versions. RQ/Redis remain in `backend/requirements.txt`.

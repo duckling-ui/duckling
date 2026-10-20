@@ -1665,18 +1665,58 @@ def update_pipeline_settings():
 @settings_bp.route("/settings/pdf", methods=["GET"])
 def get_pdf_settings():
     """Get PDF pipeline settings."""
+    from services.pdf_backends import PAGE_RENDERER_CHOICES, available_pdf_backend_names
+
     settings = load_settings()
     return jsonify({
         "pdf": settings.get("pdf", DEFAULT_CONVERSION_SETTINGS["pdf"]),
+        "options": {
+            "pdf_backend": available_pdf_backend_names(),
+            "page_renderer": list(PAGE_RENDERER_CHOICES),
+            "image_export_mode": ["placeholder", "embedded", "referenced"],
+        },
+        "notes": {
+            "pdf_backend": (
+                "Parser backends (docling_parse, pypdfium2, …) share the PDFium page-image "
+                "renderer family in Docling 2.118. Use page_renderer=pymupdf for MuPDF rasters "
+                "(issue #68). dlparse_v2 is a deprecated alias of docling_parse."
+            ),
+            "page_renderer": (
+                "auto picks MuPDF prerender when non-embedded custom-encoded fonts are detected "
+                "and full-page OCR or VLM will consume page images."
+            ),
+        },
     })
 
 
 @settings_bp.route("/settings/pdf", methods=["PUT"])
 def update_pdf_settings():
     """Update PDF pipeline settings."""
+    from services.pdf_backends import PAGE_RENDERER_CHOICES, PDF_BACKEND_ALIASES, available_pdf_backend_names
+
     if not request.is_json:
         return jsonify({"error": "Content-Type must be application/json"}), 400
-    pdf_settings = request.get_json()
+    pdf_settings = request.get_json() or {}
+    if not isinstance(pdf_settings, dict):
+        return jsonify({"error": "Body must be a JSON object"}), 400
+
+    if "pdf_backend" in pdf_settings:
+        backend = str(pdf_settings["pdf_backend"] or "").strip().lower()
+        allowed = set(available_pdf_backend_names()) | set(PDF_BACKEND_ALIASES.keys())
+        if backend and backend not in allowed:
+            return jsonify({
+                "error": f"Invalid pdf_backend '{pdf_settings['pdf_backend']}'",
+                "allowed": sorted(allowed),
+            }), 400
+
+    if "page_renderer" in pdf_settings:
+        renderer = str(pdf_settings["page_renderer"] or "").strip().lower()
+        if renderer and renderer not in PAGE_RENDERER_CHOICES:
+            return jsonify({
+                "error": f"Invalid page_renderer '{pdf_settings['page_renderer']}'",
+                "allowed": list(PAGE_RENDERER_CHOICES),
+            }), 400
+
     current_settings = load_settings()
     current_settings["pdf"] = {
         **current_settings.get("pdf", {}),

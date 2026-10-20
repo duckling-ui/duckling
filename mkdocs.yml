@@ -295,6 +295,7 @@ nav:
       - Production: deployment/production.md
       - Scaling: deployment/scaling.md
       - Server Config: deployment/server-config.md
+      - Issue 68 closeout: deployment/issue-68-closeout.md
       - Security: deployment/security.md
   - Contributing:
       - contributing/index.md

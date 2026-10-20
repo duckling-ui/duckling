@@ -102,6 +102,15 @@ def test_backend_requirements_pin_dependabot_security_fixes():
     assert "pytest==7.4.3" not in requirements
 
 
+def test_backend_includes_pymupdf_for_issue68_prerender():
+    """MuPDF prerender + font preflight (issue #68) require pymupdf and font packages."""
+    requirements = _read("backend/requirements.txt")
+    dockerfile = _read("backend/Dockerfile")
+    assert "pymupdf>=" in requirements
+    assert "fonts-liberation" in dockerfile
+    assert "fonts-dejavu-core" in dockerfile
+
+
 def test_frontend_lockfile_pins_patched_runtime_deps():
     lockfile = _read("frontend/package-lock.json")
     assert '"node_modules/axios"' in lockfile

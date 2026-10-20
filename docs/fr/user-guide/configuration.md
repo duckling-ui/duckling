@@ -441,7 +441,7 @@ Référence : [Configuration serveur](../deployment/server-config.md).
 
 ## Paramètres PDF
 
-**Paramètres → PDF** ou `GET/PUT /api/settings/pdf` — backend, mode d'images, hiérarchie de titres.
+**Paramètres → PDF** ou `GET/PUT /api/settings/pdf` — `pdf_backend` (analyseur), `page_renderer` (`auto` / `docling_default` / `pymupdf` pour le raster OCR/VLM, [issue #68](https://github.com/duckling-ui/duckling/issues/68)), mode d'images, hiérarchie de titres.
 
 ---
 

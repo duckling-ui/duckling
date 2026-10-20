@@ -28,6 +28,7 @@ import json
 import logging
 import base64
 import io
+import copy
 import queue
 from datetime import datetime
 from pathlib import Path
@@ -71,6 +72,14 @@ from utils.content_store import (
     load_metadata,
 )
 from services.chunker_factory import build_chunker
+from services.pdf_backends import resolve_pdf_backend
+from services.pdf_preflight import (
+    detect_script_coverage_mismatch,
+    extract_native_text_sample,
+    inspect_pdf_fonts,
+)
+from services.pdf_renderer import prerender_pdf_with_mupdf, resolve_page_renderer
+
 logger = logging.getLogger(__name__)
 
 
@@ -280,7 +289,7 @@ class ConversionJob:
         self.id = job_id
         self.input_path = input_path
         self.original_filename = original_filename
-        self.settings = settings or DEFAULT_CONVERSION_SETTINGS.copy()
+        self.settings = copy.deepcopy(settings) if settings else copy.deepcopy(DEFAULT_CONVERSION_SETTINGS)
         self.status = ConversionStatus.PENDING
         self.progress = 0
         self.message = "Queued for processing"
@@ -297,6 +306,9 @@ class ConversionJob:
         self.page_count = 0
         self.document_metadata: Dict = {}
         self.ocr_backend_used: Optional[str] = None  # Actual backend used (or "none" if fallback)
+        self.effective_pdf_backend: Optional[str] = None
+        self.effective_renderer: Optional[str] = None  # pdfium | pymupdf (issue #68)
+        self.conversion_warnings: List[str] = []
         self.cpu_usage_avg_during_conversion: Optional[float] = None
         self.performance_device_used: Optional[str] = None  # cpu, cuda, mps, auto
         self.images_classify_enabled: Optional[bool] = None
@@ -446,6 +458,7 @@ class ConverterService:
 
         pdf_settings = settings.get("pdf", {})
         pipeline_settings = settings.get("pipeline", {})
+        resolved_backend = resolve_pdf_backend(pdf_settings.get("pdf_backend", "docling_parse"))
         picture_classification_enabled = bool(
             enrichment_settings.get("picture_classification", False) or image_settings.get("classify", False)
         )
@@ -464,7 +477,8 @@ class ConverterService:
             "do_chart_extraction": enrichment_settings.get("chart_extraction", False),
             "do_pdf_heading_hierarchy": pdf_settings.get("do_pdf_heading_hierarchy", False),
             "image_export_mode": pdf_settings.get("image_export_mode", "placeholder"),
-            "pdf_backend": pdf_settings.get("pdf_backend", "docling_parse"),
+            # Prefer native PDF text when set (helps mixed digital/scanned docs; issue #68).
+            "force_backend_text": bool(pipeline_settings.get("force_backend_text", False)),
         }
         heading_opts = pdf_settings.get("pdf_heading_hierarchy_options") or {}
         if heading_opts:
@@ -544,8 +558,11 @@ class ConverterService:
                 logger.warning("Docling ASR classes unavailable; falling back to standard pipeline")
 
         if not format_options:
+            # pdf_backend is a PdfFormatOption.backend class, not a PdfPipelineOptions field
+            # (previously the string was silently dropped by model_fields filtering).
             pdf_format_option = PdfFormatOption(
                 pipeline_options=pipeline_options,
+                backend=resolved_backend.backend_cls,
             )
             image_format_option = ImageFormatOption(
                 pipeline_options=pipeline_options,
@@ -916,12 +933,91 @@ class ConverterService:
             job.status = ConversionStatus.PROCESSING
             job.progress = 10
             job.message = "Starting document conversion..."
+            job.conversion_warnings = []
 
             # Check if OCR is enabled for status message
             ocr_enabled = job.settings.get("ocr", {}).get("enabled", True)
             ocr_language = job.settings.get("ocr", {}).get("language", "en")
             ocr_backend = job.settings.get("ocr", {}).get("backend", "easyocr")
+            ocr_mode = str(job.settings.get("ocr", {}).get("mode", "default") or "default")
+            if job.settings.get("ocr", {}).get("force_full_page_ocr"):
+                ocr_mode = "full_page"
+            pipeline_kind = str(
+                (job.settings.get("pipeline") or {}).get("kind", "standard") or "standard"
+            )
             job.ocr_backend_used = ocr_backend if ocr_enabled else "none"
+
+            pdf_settings = job.settings.get("pdf") or {}
+            resolved_backend = resolve_pdf_backend(pdf_settings.get("pdf_backend", "docling_parse"))
+            job.effective_pdf_backend = resolved_backend.name
+            job.conversion_warnings.extend(resolved_backend.warnings)
+
+            input_path = Path(job.input_path)
+            is_pdf = input_path.suffix.lower() == ".pdf"
+            preflight = None
+            native_text_for_check = ""
+            convert_path = job.input_path
+
+            if is_pdf:
+                job.message = "Inspecting PDF fonts and native text..."
+                preflight = inspect_pdf_fonts(input_path)
+                job.conversion_warnings.extend(preflight.warnings)
+                native_text_for_check = preflight.native_text_sample or extract_native_text_sample(
+                    input_path
+                )
+
+                # Auto-prefer native text on risky digital PDFs when user left default OCR mode
+                # and did not already force backend text (avoids full-page OCR replacing good text).
+                pipeline_settings = job.settings.setdefault("pipeline", {})
+                if (
+                    preflight.has_font_risk
+                    and ocr_enabled
+                    and ocr_mode in {"default", ""}
+                    and not pipeline_settings.get("force_backend_text")
+                ):
+                    pipeline_settings["force_backend_text"] = True
+                    job.conversion_warnings.append(
+                        "Enabled force_backend_text automatically due to non-embedded "
+                        "custom-encoded fonts (issue #68). Disable OCR or set OCR mode "
+                        "full_page with page_renderer=pymupdf if you need raster OCR."
+                    )
+
+                requested_renderer = pdf_settings.get("page_renderer", "auto")
+                _requested, effective_renderer, renderer_warnings = resolve_page_renderer(
+                    requested_renderer,
+                    preflight=preflight,
+                    ocr_enabled=ocr_enabled,
+                    ocr_mode=ocr_mode,
+                    pipeline_kind=pipeline_kind,
+                )
+                job.conversion_warnings.extend(renderer_warnings)
+                job.effective_renderer = effective_renderer
+
+                if effective_renderer == "pymupdf":
+                    job.message = "Prerendering PDF pages with MuPDF..."
+                    job.progress = 15
+                    try:
+                        ocr_scale = float((job.settings.get("ocr") or {}).get("scale", 3.0) or 3.0)
+                    except (TypeError, ValueError):
+                        ocr_scale = 3.0
+                    dpi = max(72.0, 72.0 * ocr_scale)
+                    prerender_path = Path(job.input_path).parent / f"{job.id}_mupdf_prerender.pdf"
+                    try:
+                        prerender_pdf_with_mupdf(input_path, prerender_path, dpi=dpi)
+                        convert_path = str(prerender_path)
+                        job.conversion_warnings.append(
+                            f"Used MuPDF page prerender at {dpi:.0f} DPI "
+                            f"(effective_renderer=pymupdf; pdf_backend={resolved_backend.name})."
+                        )
+                    except Exception as prerender_exc:
+                        logger.exception("MuPDF prerender failed; falling back to Docling/PDFium")
+                        job.effective_renderer = "pdfium"
+                        job.conversion_warnings.append(
+                            f"MuPDF prerender failed ({prerender_exc}); "
+                            "falling back to Docling/PDFium page images."
+                        )
+            else:
+                job.effective_renderer = "n/a"
 
             job.progress = 20
             if ocr_enabled:
@@ -932,16 +1028,16 @@ class ConverterService:
             # Try to get converter and convert, with fallback for OCR errors
             result = None
             conversion_error = None
+            page_range = job.settings.get("page_range")
 
             try:
                 # Get converter with job-specific settings
                 converter = self._get_converter(job.settings)
                 job.progress = 30
-                page_range = job.settings.get("page_range")
                 if page_range and isinstance(page_range, (list, tuple)) and len(page_range) == 2:
-                    result = converter.convert(job.input_path, page_range=tuple(page_range))
+                    result = converter.convert(convert_path, page_range=tuple(page_range))
                 else:
-                    result = converter.convert(job.input_path)
+                    result = converter.convert(convert_path)
             except Exception as ocr_error:
                 error_str = str(ocr_error)
                 print(f"[converter] Conversion error: {error_str}")
@@ -970,9 +1066,9 @@ class ConverterService:
                         converter = self._get_converter(fallback_settings)
                         job.progress = 30
                         if page_range and isinstance(page_range, (list, tuple)) and len(page_range) == 2:
-                            result = converter.convert(job.input_path, page_range=tuple(page_range))
+                            result = converter.convert(convert_path, page_range=tuple(page_range))
                         else:
-                            result = converter.convert(job.input_path)
+                            result = converter.convert(convert_path)
                         job.ocr_backend_used = "none"
                         job.settings = fallback_settings  # Use effective settings for content hash
                         job.message = "Converted without OCR (OCR initialization failed)"
@@ -1257,8 +1353,32 @@ class ConverterService:
                 job.progress = 100
                 job.status = ConversionStatus.COMPLETED
 
-                if result.status.name == "SUCCESS":
+                warnings: List[str] = list(job.conversion_warnings or [])
+                if hasattr(result, "errors") and result.errors:
+                    warnings.extend(str(e) for e in result.errors)
+
+                # Detect implausible Cyrillic loss vs native PDF text (issue #68).
+                if is_pdf and native_text_for_check:
+                    mismatch = detect_script_coverage_mismatch(
+                        native_text_for_check,
+                        md_content or "",
+                    )
+                    if mismatch:
+                        warnings.append(mismatch)
+
+                # Deduplicate while preserving order
+                seen_warn = set()
+                deduped_warnings: List[str] = []
+                for w in warnings:
+                    if w not in seen_warn:
+                        seen_warn.add(w)
+                        deduped_warnings.append(w)
+                job.conversion_warnings = deduped_warnings
+
+                if result.status.name == "SUCCESS" and not deduped_warnings:
                     job.message = "Conversion completed successfully"
+                elif deduped_warnings:
+                    job.message = "Conversion completed with warnings (check result.warnings)"
                 else:
                     job.message = "Conversion completed with some warnings"
 
@@ -1269,7 +1389,10 @@ class ConverterService:
                     "images_count": len(job.extracted_images),
                     "tables_count": len(job.extracted_tables),
                     "chunks_count": len(job.chunks),
-                    "warnings": [str(e) for e in result.errors] if hasattr(result, 'errors') and result.errors else []
+                    "warnings": deduped_warnings,
+                    "effective_pdf_backend": job.effective_pdf_backend,
+                    "effective_renderer": job.effective_renderer,
+                    "ocr_backend_used": job.ocr_backend_used,
                 }
 
             else:

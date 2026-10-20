@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- [Issue #68](https://github.com/duckling-ui/duckling/issues/68): MuPDF page prerender (`pdf.page_renderer`), PDF font preflight, Cyrillic coverage mismatch warnings, and effective renderer metadata on conversion results. See [Configuration](user-guide/configuration.md) and [PDF settings API](api/settings.md).
+
+### Fixed
+
+- [Issue #68](https://github.com/duckling-ui/duckling/issues/68): PDF backend selection is applied to Docling’s `PdfFormatOption`; `dlparse_v2` treated as a deprecated alias; `force_backend_text` honored.
+
 ### Documentation
 
 - Expanded user guide, API reference, deployment, and Docker docs for docling-serve parity: pipeline/VLM/ASR, advanced chunking, expanded formats, `page_range`/`to_formats`, API key auth, server config file, and Redis/worker topology. Added [Server Configuration](deployment/server-config.md). Localized **de/fr/es** mirrors updated for API, user guide, deployment, and Docker guides.

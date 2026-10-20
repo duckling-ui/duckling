@@ -210,12 +210,20 @@
       "vlmPreset": {
         "label": "VLM Preset",
         "description": "Preset ID used when Pipeline Kind is VLM"
+      },
+      "forceBackendText": {
+        "label": "Prefer Native PDF Text",
+        "description": "Keep digital PDF text instead of replacing it with OCR (recommended for mixed scanned/digital documents)"
       }
     },
     "pdf": {
       "backend": {
-        "label": "PDF Backend",
-        "description": "Docling PDF backend selection"
+        "label": "PDF Parser Backend",
+        "description": "Docling PDF parser. Stock backends share the PDFium page-image family for OCR/VLM; use Page Renderer for MuPDF."
+      },
+      "pageRenderer": {
+        "label": "Page Renderer",
+        "description": "Rasterizer for full-page OCR/VLM. Auto uses MuPDF when non-embedded custom-encoded fonts are detected."
       },
       "imageExportMode": {
         "label": "Image Export Mode",
